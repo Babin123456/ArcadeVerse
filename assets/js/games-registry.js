@@ -39,6 +39,20 @@ const GAMES_REGISTRY = [
     tags: ["Arcade", "Retro", "Paddle"],
     stars: 32,
     featured: true
+  },
+  {
+    id: "flappy-jet_babin",
+    title: "Flappy Cyber Jet",
+    category: "Action",
+    icon: "🚀",
+    description: "Endless side-scrolling cyber jet thruster runner with procedural neon laser conduits.",
+    author: "Babin Bid",
+    github: "Babin123456",
+    role: "Contributor",
+    path: "games/flappy-jet_babin/index.html",
+    tags: ["Action", "Canvas", "Physics"],
+    stars: 18,
+    featured: false
   }
 ];
 
@@ -49,5 +63,12 @@ const CONTRIBUTORS_REGISTRY = [
     avatarInitial: "D",
     role: "Project Admin (NSOC '26)",
     contributions: ["Quantum Memory Matrix", "Arcade Core Engine"]
+  },
+  {
+    name: "Babin Bid",
+    github: "Babin123456",
+    avatarInitial: "B",
+    role: "Contributor (NSOC '26)",
+    contributions: ["Flappy Cyber Jet"]
   }
 ];

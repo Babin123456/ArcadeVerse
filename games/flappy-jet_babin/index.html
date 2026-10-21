@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flappy Cyber Jet | ArcadeVerse</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <div class="title-wrap">
+        <h1 class="game-title">🚀 FLAPPY CYBER JET</h1>
+        <span class="game-subtitle">Nexus Spring of Code – Winter Edition 2026</span>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-pill">SCORE: <span id="current-score">0</span></div>
+        <div class="stat-pill high">BEST: <span id="high-score">0</span></div>
+        <button id="sound-toggle-btn" class="icon-btn" title="Toggle Sound">🔊</button>
+      </div>
+    </header>
+
+    <div class="canvas-wrap">
+      <canvas id="gameCanvas" width="480" height="640"></canvas>
+
+      <!-- Start Overlay -->
+      <div id="start-overlay" class="overlay active">
+        <div class="overlay-panel">
+          <div class="cyber-badge">SYSTEM READY</div>
+          <h2>PILOT INITIALIZED</h2>
+          <p>Guide your cyber jet through the neon laser conduits.</p>
+          <div class="instructions-box">
+            <div class="key-hint"><span>SPACE</span> or <span>CLICK / TAP</span> to Engage Thrusters</div>
+          </div>
+          <button id="start-btn" class="btn-launch">LAUNCH JET ▶</button>
+        </div>
+      </div>
+
+      <!-- Game Over Overlay -->
+      <div id="gameover-overlay" class="overlay hidden">
+        <div class="overlay-panel">
+          <div class="cyber-badge danger">SIGNAL LOST</div>
+          <h2>MISSION FAILED</h2>
+          <div class="score-summary">
+            <div class="summary-item">
+              <span class="summary-label">Final Distance</span>
+              <span id="final-score" class="summary-value">0</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Sector Record</span>
+              <span id="best-score" class="summary-value highlight">0</span>
+            </div>
+          </div>
+          <button id="restart-btn" class="btn-launch">REBOOT ENGINE 🔄</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="game-footer">
+      <span>Built with pure HTML5 Canvas & Web Audio API by <strong>@Babin123456</strong></span>
+    </footer>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
