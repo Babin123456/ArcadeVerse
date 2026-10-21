@@ -137,6 +137,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, { passive: true });
 
+  // Mobile Navigation Drawer Controller
+  const navHamburger = document.getElementById("nav-hamburger");
+  const mobileNavDrawer = document.getElementById("mobile-nav-drawer");
+  const mobileNavBackdrop = document.getElementById("mobile-nav-backdrop");
+
+  function toggleMobileNav(forceClose = false) {
+    if (!navHamburger || !mobileNavDrawer || !mobileNavBackdrop) return;
+    const isOpening = forceClose ? false : !mobileNavDrawer.classList.contains("active");
+
+    navHamburger.classList.toggle("active", isOpening);
+    navHamburger.setAttribute("aria-expanded", isOpening ? "true" : "false");
+    mobileNavDrawer.classList.toggle("active", isOpening);
+    mobileNavDrawer.setAttribute("aria-hidden", isOpening ? "false" : "true");
+    mobileNavBackdrop.classList.toggle("active", isOpening);
+    mobileNavBackdrop.setAttribute("aria-hidden", isOpening ? "false" : "true");
+    document.body.style.overflow = isOpening ? "hidden" : "auto";
+  }
+
+  if (navHamburger) {
+    navHamburger.addEventListener("click", () => toggleMobileNav());
+  }
+
+  if (mobileNavBackdrop) {
+    mobileNavBackdrop.addEventListener("click", () => toggleMobileNav(true));
+  }
+
+  // Close mobile drawer when pressing Escape or clicking an internal link
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && mobileNavDrawer && mobileNavDrawer.classList.contains("active")) {
+      toggleMobileNav(true);
+    }
+  });
+
+  if (mobileNavDrawer) {
+    mobileNavDrawer.querySelectorAll(".nav-item").forEach((item) => {
+      item.addEventListener("click", () => toggleMobileNav(true));
+    });
+  }
+
   // Initial render
   renderGames();
 });
