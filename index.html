@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="favorites-system-babin/favorites.css">
 </head>
 <body>
   <!-- Ambient background lighting -->
@@ -126,6 +127,7 @@
             <button class="pill" data-category="Action">Action</button>
             <button class="pill" data-category="Strategy">Strategy</button>
             <button class="pill" data-category="Rhythm">Rhythm</button>
+            <button class="pill favorites-pill" data-category="favorites">❤️ Favorites <span id="favorites-count-badge" class="fav-badge-counter">0</span></button>
           </div>
         </div>
       </div>
@@ -256,6 +258,7 @@
 
   <!-- Scripts -->
   <script src="assets/js/games-registry.js"></script>
+  <script src="favorites-system-babin/favorites.js"></script>
   <script src="assets/js/app.js"></script>
 </body>
 </html>

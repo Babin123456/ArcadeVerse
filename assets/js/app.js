@@ -34,7 +34,15 @@ document.addEventListener("DOMContentLoaded", () => {
     gamesGrid.innerHTML = "";
 
     const filtered = GAMES_REGISTRY.filter((game) => {
-      const matchesCategory = currentCategory === "all" || game.category.toLowerCase() === currentCategory.toLowerCase();
+      let matchesCategory = false;
+      if (currentCategory === "all") {
+        matchesCategory = true;
+      } else if (currentCategory === "favorites") {
+        matchesCategory = window.FavoritesManager ? window.FavoritesManager.isFavorite(game.id) : false;
+      } else {
+        matchesCategory = game.category.toLowerCase() === currentCategory.toLowerCase();
+      }
+
       const matchesSearch = 
         game.title.toLowerCase().includes(searchQuery) ||
         game.description.toLowerCase().includes(searchQuery) ||
@@ -44,12 +52,26 @@ document.addEventListener("DOMContentLoaded", () => {
       return matchesCategory && matchesSearch;
     });
 
+    if (currentCategory === "favorites" && filtered.length === 0) {
+      const emptyBox = document.createElement("div");
+      emptyBox.className = "favorites-empty-box";
+      emptyBox.innerHTML = `
+        <span class="favorites-empty-icon">💔</span>
+        <h3>No Favorite Games Yet</h3>
+        <p>Click the heart icon on any game card in the catalog to pin your favorite games here for instant launch!</p>
+      `;
+      gamesGrid.appendChild(emptyBox);
+      return;
+    }
+
     filtered.forEach((game) => {
+      const isFav = window.FavoritesManager ? window.FavoritesManager.isFavorite(game.id) : false;
       const card = document.createElement("div");
       card.className = "game-card";
       card.innerHTML = `
         <div class="game-card-preview">
           <span class="game-category-tag">${game.category}</span>
+          <button class="btn-fav-toggle ${isFav ? 'favorited' : ''}" data-id="${game.id}" title="${isFav ? 'Remove from Favorites' : 'Add to Favorites'}">♥</button>
           <div class="game-icon">${game.icon}</div>
         </div>
         <div class="game-card-body">
@@ -66,6 +88,19 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         </div>
       `;
+
+      const favBtn = card.querySelector(".btn-fav-toggle");
+      favBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (window.FavoritesManager) {
+          const nowFav = window.FavoritesManager.toggle(game.id);
+          favBtn.classList.toggle("favorited", nowFav);
+          favBtn.title = nowFav ? "Remove from Favorites" : "Add to Favorites";
+          if (currentCategory === "favorites") {
+            renderGames();
+          }
+        }
+      });
 
       const playBtn = card.querySelector(".btn-play-trigger");
       playBtn.addEventListener("click", (e) => {

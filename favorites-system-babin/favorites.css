@@ -1,0 +1,88 @@
+/* Favorites Button & Empty State Styles */
+.btn-fav-toggle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(6px);
+  z-index: 2;
+}
+
+.btn-fav-toggle:hover {
+  transform: scale(1.15);
+  background: rgba(244, 63, 94, 0.2);
+  border-color: #f43f5e;
+  color: #f43f5e;
+}
+
+.btn-fav-toggle.favorited {
+  color: #f43f5e;
+  border-color: #f43f5e;
+  background: rgba(244, 63, 94, 0.25);
+  box-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+}
+
+.favorites-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fav-badge-counter {
+  display: inline-block;
+  background: rgba(244, 63, 94, 0.25);
+  color: #f43f5e;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  transition: all 0.2s;
+}
+
+.fav-badge-counter.has-items {
+  background: #f43f5e;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
+}
+
+.favorites-empty-box {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px dashed rgba(244, 63, 94, 0.3);
+  border-radius: 14px;
+  animation: fadeIn 0.3s ease;
+}
+
+.favorites-empty-icon {
+  font-size: 2.8rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.favorites-empty-box h3 {
+  font-size: 1.2rem;
+  color: #f8fafc;
+  margin-bottom: 8px;
+}
+
+.favorites-empty-box p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
