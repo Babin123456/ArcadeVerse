@@ -1,0 +1,23 @@
+{
+  "name": "ArcadeVerse - Open Source Gaming Platform",
+  "short_name": "ArcadeVerse",
+  "description": "An open-source community arcade gaming station built with pure HTML5, CSS3, and JavaScript for Nexus Spring Of Code 2026.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#070b14",
+  "theme_color": "#00f0ff",
+  "icons": [
+    {
+      "src": "assets/public/favicon.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/public/favicon.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+}

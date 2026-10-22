@@ -191,7 +191,24 @@ body {
 
 .pixel-badge {
   font-size: 1.4rem;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-logo-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 6px;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.45));
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.logo:hover .brand-logo-img {
+  transform: rotate(-6deg) scale(1.08);
+  filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.75));
 }
 
 .gradient-accent {
