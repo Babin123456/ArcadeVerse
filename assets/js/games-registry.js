@@ -437,7 +437,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 37,
+    "commits": 147,
     "gamesCount": 2,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -453,7 +453,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 19,
+    "commits": 94,
     "gamesCount": 10,
     "mechanicsBonus": 2,
     "platformPRs": 29,
@@ -473,44 +473,11 @@ const CONTRIBUTORS_REGISTRY = [
     ]
   },
   {
-    "name": "mistu7debnath",
-    "github": "mistu7debnath",
-    "avatarInitial": "M",
-    "role": "Contributor (NSOC '26)",
-    "commits": 2,
-    "gamesCount": 4,
-    "mechanicsBonus": 1,
-    "platformPRs": 0,
-    "qualityPRs": 0,
-    "bonusPts": 0,
-    "contributions": [
-      "Bubble Pop: Bubble Burst Arena",
-      "Cyber Runner: Neon Rush",
-      "Flappy Cyber Jet",
-      "Neon Grid Defense: Core Protocol"
-    ]
-  },
-  {
-    "name": "Harsh Jaiswani",
-    "github": "hrshjswniii",
-    "avatarInitial": "H",
-    "role": "Active Contributor (NSOC '26)",
-    "commits": 2,
-    "gamesCount": 0,
-    "mechanicsBonus": 0,
-    "platformPRs": 0,
-    "qualityPRs": 1,
-    "bonusPts": 0,
-    "contributions": [
-      "Quality & Bug Fix PR"
-    ]
-  },
-  {
     "name": "Joita Paul",
     "github": "joitapaul",
     "avatarInitial": "J",
     "role": "Active Contributor (NSOC '26)",
-    "commits": 1,
+    "commits": 8,
     "gamesCount": 4,
     "mechanicsBonus": 0,
     "platformPRs": 0,
@@ -521,6 +488,24 @@ const CONTRIBUTORS_REGISTRY = [
       "Neon Drift Racer",
       "Prism Pulse: Laser Labyrinth",
       "Quantum Pinball: Reactor Run"
+    ]
+  },
+  {
+    "name": "mistu7debnath",
+    "github": "mistu7debnath",
+    "avatarInitial": "M",
+    "role": "Contributor (NSOC '26)",
+    "commits": 6,
+    "gamesCount": 4,
+    "mechanicsBonus": 1,
+    "platformPRs": 0,
+    "qualityPRs": 0,
+    "bonusPts": 0,
+    "contributions": [
+      "Bubble Pop: Bubble Burst Arena",
+      "Cyber Runner: Neon Rush",
+      "Flappy Cyber Jet",
+      "Neon Grid Defense: Core Protocol"
     ]
   },
   {
@@ -536,6 +521,51 @@ const CONTRIBUTORS_REGISTRY = [
     "bonusPts": 0,
     "contributions": [
       "Astro Infinite Jumper"
+    ]
+  },
+  {
+    "name": "ArcadeVerse Contributor",
+    "github": "arcadeverse",
+    "avatarInitial": "A",
+    "role": "Puzzle Developer (NSOC '26)",
+    "commits": 1,
+    "gamesCount": 1,
+    "mechanicsBonus": 0,
+    "platformPRs": 0,
+    "qualityPRs": 0,
+    "bonusPts": 0,
+    "contributions": [
+      "Circuit Connect"
+    ]
+  },
+  {
+    "name": "Harsh Jaiswani",
+    "github": "hrshjswniii",
+    "avatarInitial": "H",
+    "role": "Active Contributor (NSOC '26)",
+    "commits": 5,
+    "gamesCount": 0,
+    "mechanicsBonus": 0,
+    "platformPRs": 0,
+    "qualityPRs": 1,
+    "bonusPts": 0,
+    "contributions": [
+      "Quality & Platform Contribution"
+    ]
+  },
+  {
+    "name": "Abhishek",
+    "github": "abhishekcse2004",
+    "avatarInitial": "A",
+    "role": "Contributor (NSOC '26)",
+    "commits": 1,
+    "gamesCount": 0,
+    "mechanicsBonus": 0,
+    "platformPRs": 0,
+    "qualityPRs": 0,
+    "bonusPts": 0,
+    "contributions": [
+      "Quality & Platform Contribution"
     ]
   }
 ];

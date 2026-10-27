@@ -46,105 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
   // Initial verified contributors from repository
-  let contributorsData = [
-    {
-      login: "DebasmitaBose0",
-      name: "Debasmita Bose",
-      role: "Project Admin & Lead",
-      avatar_url: "https://avatars.githubusercontent.com/u/144198639?v=4",
-      commits: 37,
-      gamesCount: 2,
-      mechanicsBonus: 2,
-      platformPRs: 2,
-      qualityPRs: 0,
-      bonusPts: 0,
-      games: ["Quantum Memory Matrix", "Cyber Neon Pong"]
-    },
-    {
-      login: "Babin123456",
-      name: "Babin Bid",
-      role: "Arcade Developer",
-      avatar_url: "https://avatars.githubusercontent.com/u/265290994?v=4",
-      commits: 19,
-      gamesCount: 10,
-      mechanicsBonus: 2,
-      platformPRs: 29,
-      qualityPRs: 1,
-      bonusPts: 0,
-      games: [
-        "Cryptic Wordle Hack",
-        "Cyber Snake Matrix",
-        "Cyber Tower Stacker",
-        "Neon Beat Runner",
-        "Quantum 2048",
-        "Quantum Minesweeper",
-        "Space Invaders 2026",
-        "Synth-Wave Simon Says",
-        "Tactical Fleet Commander",
-        "Whack-A-Bug Panic"
-      ]
-    },
-    {
-      login: "mistu7debnath",
-      name: "mistu7debnath",
-      role: "Contributor",
-      avatar_url: "https://avatars.githubusercontent.com/u/132514330?v=4",
-      commits: 2,
-      gamesCount: 4,
-      mechanicsBonus: 1,
-      platformPRs: 0,
-      qualityPRs: 0,
-      bonusPts: 0,
-      games: ["Bubble Burst Arena", "Cyber Runner", "Flappy Cyber Jet", "Neon Grid Defense"]
-    },
-    {
-      login: "hrshjswniii",
-      name: "Harsh Jaiswani",
-      role: "Active Contributor",
-      avatar_url: "https://avatars.githubusercontent.com/u/127110189?v=4",
-      commits: 2,
-      gamesCount: 0,
-      mechanicsBonus: 0,
-      platformPRs: 0,
-      qualityPRs: 1,
-      bonusPts: 0,
-      games: []
-    },
-    {
-      login: "joitapaul",
-      name: "Joita Paul",
-      role: "Active Contributor",
-      avatar_url: "https://avatars.githubusercontent.com/u/104523098?v=4",
-      commits: 1,
-      gamesCount: 4,
-      mechanicsBonus: 0,
-      platformPRs: 0,
-      qualityPRs: 1,
-      bonusPts: 0,
-      games: ["Neon Asteroid Escape", "Neon Drift Racer", "Prism Pulse", "Quantum Pinball"]
-    },
-    {
-      login: "pragna7",
-      name: "Pragna Seetha",
-      role: "Contributor",
-      avatar_url: "https://github.com/pragna7.png",
-      commits: 1,
-      gamesCount: 1,
-      mechanicsBonus: 0,
-      platformPRs: 0,
-      qualityPRs: 0,
-      bonusPts: 0,
-      games: ["Astro Infinite Jumper"]
-    }
-  ];
+  let contributorsData = [];
 
   // Sync contributors data with local CONTRIBUTORS_REGISTRY and GAMES_REGISTRY
   function loadRegistryContributors() {
     if (typeof CONTRIBUTORS_REGISTRY === "undefined" || !Array.isArray(CONTRIBUTORS_REGISTRY)) return;
 
-    CONTRIBUTORS_REGISTRY.forEach(regUser => {
-      const existing = contributorsData.find(c => c.login && c.login.toLowerCase() === regUser.github.toLowerCase());
-      
+    contributorsData = CONTRIBUTORS_REGISTRY.map(regUser => {
       let userGames = [];
       if (typeof GAMES_REGISTRY !== "undefined" && Array.isArray(GAMES_REGISTRY)) {
         userGames = GAMES_REGISTRY.filter(g => g.github && g.github.toLowerCase() === regUser.github.toLowerCase());
@@ -152,30 +60,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const gamesCount = userGames.length > 0 ? userGames.length : (regUser.gamesCount || 0);
       const gamesList = userGames.length > 0 ? userGames.map(g => g.title) : (regUser.contributions || []);
 
-      if (existing) {
-        if (regUser.name) existing.name = regUser.name;
-        if (regUser.commits) existing.commits = Math.max(existing.commits || 0, regUser.commits);
-        existing.gamesCount = Math.max(existing.gamesCount || 0, gamesCount);
-        existing.mechanicsBonus = regUser.mechanicsBonus !== undefined ? regUser.mechanicsBonus : (existing.mechanicsBonus || 0);
-        existing.platformPRs = regUser.platformPRs !== undefined ? regUser.platformPRs : (existing.platformPRs || 0);
-        existing.qualityPRs = regUser.qualityPRs !== undefined ? regUser.qualityPRs : (existing.qualityPRs || 0);
-        existing.bonusPts = regUser.bonusPts !== undefined ? regUser.bonusPts : (existing.bonusPts || 0);
-        if (gamesList.length > 0) existing.games = gamesList;
-      } else {
-        contributorsData.push({
-          login: regUser.github,
-          name: regUser.name,
-          role: regUser.role || "Community Contributor",
-          avatar_url: `https://github.com/${regUser.github}.png`,
-          commits: regUser.commits || 1,
-          gamesCount: gamesCount,
-          mechanicsBonus: regUser.mechanicsBonus || 0,
-          platformPRs: regUser.platformPRs || 0,
-          qualityPRs: regUser.qualityPRs || 0,
-          bonusPts: regUser.bonusPts || 0,
-          games: gamesList
-        });
-      }
+      return {
+        login: regUser.github,
+        name: regUser.name,
+        role: regUser.role || "Community Contributor",
+        avatar_url: `https://github.com/${regUser.github}.png`,
+        commits: regUser.commits || 1,
+        gamesCount: gamesCount,
+        mechanicsBonus: regUser.mechanicsBonus || 0,
+        platformPRs: regUser.platformPRs || 0,
+        qualityPRs: regUser.qualityPRs || 0,
+        bonusPts: regUser.bonusPts || 0,
+        games: gamesList
+      };
     });
   }
 
@@ -788,9 +685,24 @@ document.addEventListener("DOMContentLoaded", () => {
     renderTable();
   }
 
+  function detectRepo() {
+    if (repoInput && repoInput.value.trim() && repoInput.value.trim() !== "DebasmitaBose0/ArcadeVerse") {
+      return repoInput.value.trim();
+    }
+    if (typeof window !== "undefined" && window.location) {
+      if (window.location.hostname.endsWith(".github.io")) {
+        const owner = window.location.hostname.split(".")[0];
+        const pathSegments = window.location.pathname.split("/").filter(Boolean);
+        const repoName = pathSegments.length > 0 ? pathSegments[0] : "ArcadeVerse";
+        return `${owner}/${repoName}`;
+      }
+    }
+    return repoInput ? repoInput.value.trim() : "DebasmitaBose0/ArcadeVerse";
+  }
+
   if (fetchBtn) {
     fetchBtn.addEventListener("click", () => {
-      const repo = repoInput ? repoInput.value.trim() : "DebasmitaBose0/ArcadeVerse";
+      const repo = detectRepo();
       fetchBtn.disabled = true;
       fetchBtn.innerHTML = `<i data-lucide="loader-2" class="spin" style="width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px;"></i> Syncing...`;
       if (window.lucide) lucide.createIcons();
@@ -806,9 +718,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initial Run: Sync verified registry data first and render podium/table
   loadRegistryContributors();
+  const activeRepo = detectRepo();
+  if (repoInput) repoInput.value = activeRepo;
   const initialAdmin = contributorsData.find(c => c.login.toLowerCase() === "debasmitabose0");
   if (initialAdmin) updateAdminSpotlight(initialAdmin);
   renderPodium();
   renderTable();
-  fetchLiveGitHubContributions("DebasmitaBose0/ArcadeVerse", false);
+  fetchLiveGitHubContributions(activeRepo, false);
 });
