@@ -1,0 +1,19 @@
+{
+  "id": "pixel-sprite-studio-babin",
+  "title": "Retro Pixel Sprite Studio",
+  "category": "Graphics",
+  "type": "standalone-tool",
+  "lucideIcon": "layout-grid",
+  "description": "In-browser 16x16 and 32x32 sprite matrix editor generating zero-asset pure Canvas rendering code and 2D arrays.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "entryHtml": "sprite-editor.html",
+  "tags": [
+    "PixelArt",
+    "Sprite",
+    "Canvas",
+    "DevTools",
+    "ZeroAsset",
+    "NSOC26"
+  ]
+}
