@@ -1,0 +1,19 @@
+{
+  "id": "latency-bench-babin",
+  "title": "Hardware Latency & Input Jitter Benchmark",
+  "category": "Performance",
+  "type": "standalone-tool",
+  "lucideIcon": "gauge",
+  "description": "Hardware benchmark diagnostics measuring requestAnimationFrame jitter, input dispatch latency, GC frame pauses, and arcade tier grading.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "entryHtml": "benchmark.html",
+  "tags": [
+    "Performance",
+    "Benchmark",
+    "Latency",
+    "InputLag",
+    "DevTools",
+    "NSOC26"
+  ]
+}
