@@ -634,6 +634,26 @@ const FEATURES_REGISTRY = [
     "path": "others/high-score-vault-babin/vault.html"
   },
   {
+    "id": "keybind-studio-babin",
+    "title": "Universal Keybind Remapper Studio",
+    "category": "Controls",
+    "type": "standalone-tool",
+    "lucideIcon": "keyboard",
+    "description": "Universal keyboard and arcade fightstick remapper with interactive visual keyboard heatmap and input adapter script.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "folder": "others/keybind-studio-babin",
+    "tags": [
+      "Controls",
+      "Keyboard",
+      "Remapper",
+      "Keybinds",
+      "DevTools",
+      "NSOC26"
+    ],
+    "path": "others/keybind-studio-babin/keybind.html"
+  },
+  {
     "id": "latency-bench-babin",
     "title": "Hardware Latency & Input Jitter Benchmark",
     "category": "Performance",
@@ -988,7 +1008,7 @@ const CONTRIBUTORS_REGISTRY = [
     "role": "Arcade Developer (NSOC '26)",
     "gamesCount": 10,
     "mechanicsBonus": 2,
-    "platformPRs": 28,
+    "platformPRs": 29,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
