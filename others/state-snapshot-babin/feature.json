@@ -1,0 +1,19 @@
+{
+  "id": "state-snapshot-babin",
+  "title": "State Snapshot Debug Time Machine",
+  "category": "DevTools",
+  "type": "standalone-tool",
+  "lucideIcon": "history",
+  "description": "Developer state checkpoint time machine with visual timeline scrubbing, state diffing, and checkpoint restoration.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "entryHtml": "time-machine.html",
+  "tags": [
+    "Debugging",
+    "TimeMachine",
+    "State",
+    "DevTools",
+    "Snapshots",
+    "NSOC26"
+  ]
+}
