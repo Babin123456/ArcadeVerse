@@ -614,6 +614,26 @@ const FEATURES_REGISTRY = [
     "css": "others/global-search-babin/search-modal.css"
   },
   {
+    "id": "high-score-vault-babin",
+    "title": "High Score Vault & Analytics",
+    "category": "Platform",
+    "type": "standalone-tool",
+    "lucideIcon": "medal",
+    "description": "Consolidated arcade personal best ledger, progression trend graphs, and SVG achievement certificate generator.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "folder": "others/high-score-vault-babin",
+    "tags": [
+      "HighScores",
+      "Analytics",
+      "Ledger",
+      "PersonalBest",
+      "DevTools",
+      "NSOC26"
+    ],
+    "path": "others/high-score-vault-babin/vault.html"
+  },
+  {
     "id": "leaderboard-export-babin",
     "title": "Leaderboard Analytics & Export Engine",
     "category": "Analytics",
@@ -908,7 +928,7 @@ const CONTRIBUTORS_REGISTRY = [
     "role": "Arcade Developer (NSOC '26)",
     "gamesCount": 10,
     "mechanicsBonus": 2,
-    "platformPRs": 24,
+    "platformPRs": 25,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
