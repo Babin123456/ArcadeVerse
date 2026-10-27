@@ -845,6 +845,26 @@ const FEATURES_REGISTRY = [
     "path": "others/speedrun-timer-babin/timer.html"
   },
   {
+    "id": "state-snapshot-babin",
+    "title": "State Snapshot Debug Time Machine",
+    "category": "DevTools",
+    "type": "standalone-tool",
+    "lucideIcon": "history",
+    "description": "Developer state checkpoint time machine with visual timeline scrubbing, state diffing, and checkpoint restoration.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "folder": "others/state-snapshot-babin",
+    "tags": [
+      "Debugging",
+      "TimeMachine",
+      "State",
+      "DevTools",
+      "Snapshots",
+      "NSOC26"
+    ],
+    "path": "others/state-snapshot-babin/time-machine.html"
+  },
+  {
     "id": "theme-customizer-babin",
     "title": "Cyber Theme & Palette Customizer",
     "category": "Theme",
@@ -968,7 +988,7 @@ const CONTRIBUTORS_REGISTRY = [
     "role": "Arcade Developer (NSOC '26)",
     "gamesCount": 10,
     "mechanicsBonus": 2,
-    "platformPRs": 27,
+    "platformPRs": 28,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
