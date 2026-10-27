@@ -1,0 +1,19 @@
+{
+  "id": "vision-simulator-babin",
+  "title": "Colorblind & Vision Accessibility Simulator",
+  "category": "Accessibility",
+  "type": "standalone-tool",
+  "lucideIcon": "eye",
+  "description": "Interactive CVD colorblindness matrix simulator, WCAG 2.1 contrast ratio calculator, and game accessibility audit reporter.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "entryHtml": "simulator.html",
+  "tags": [
+    "Accessibility",
+    "Colorblind",
+    "WCAG",
+    "Contrast",
+    "DevTools",
+    "NSOC26"
+  ]
+}
