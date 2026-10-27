@@ -708,6 +708,26 @@ const FEATURES_REGISTRY = [
     "path": "others/replay-recorder-babin/recorder.html"
   },
   {
+    "id": "sfx-generator-babin",
+    "title": "Retro Procedural SFX Generator",
+    "category": "Audio",
+    "type": "standalone-tool",
+    "lucideIcon": "volume-2",
+    "description": "Procedural 8-bit sound effects workshop synthesizing laser, jump, explosion, coin, and powerup audio with Vanilla JS code export.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "folder": "others/sfx-generator-babin",
+    "tags": [
+      "Audio",
+      "Synthesizer",
+      "SFX",
+      "WebAudio",
+      "DevTools",
+      "NSOC26"
+    ],
+    "path": "others/sfx-generator-babin/sfx.html"
+  },
+  {
     "id": "sound-engine-babin",
     "title": "Retro Audio & SFX Engine",
     "category": "Audio",
@@ -807,7 +827,7 @@ const CONTRIBUTORS_REGISTRY = [
     "role": "Arcade Developer (NSOC '26)",
     "gamesCount": 10,
     "mechanicsBonus": 2,
-    "platformPRs": 19,
+    "platformPRs": 20,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
