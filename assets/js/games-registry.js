@@ -634,6 +634,26 @@ const FEATURES_REGISTRY = [
     "path": "others/high-score-vault-babin/vault.html"
   },
   {
+    "id": "latency-bench-babin",
+    "title": "Hardware Latency & Input Jitter Benchmark",
+    "category": "Performance",
+    "type": "standalone-tool",
+    "lucideIcon": "gauge",
+    "description": "Hardware benchmark diagnostics measuring requestAnimationFrame jitter, input dispatch latency, GC frame pauses, and arcade tier grading.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "folder": "others/latency-bench-babin",
+    "tags": [
+      "Performance",
+      "Benchmark",
+      "Latency",
+      "InputLag",
+      "DevTools",
+      "NSOC26"
+    ],
+    "path": "others/latency-bench-babin/benchmark.html"
+  },
+  {
     "id": "leaderboard-export-babin",
     "title": "Leaderboard Analytics & Export Engine",
     "category": "Analytics",
@@ -928,7 +948,7 @@ const CONTRIBUTORS_REGISTRY = [
     "role": "Arcade Developer (NSOC '26)",
     "gamesCount": 10,
     "mechanicsBonus": 2,
-    "platformPRs": 25,
+    "platformPRs": 26,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
