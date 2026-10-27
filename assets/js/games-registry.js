@@ -42,6 +42,26 @@ const GAMES_REGISTRY = [
     "difficulty": "All Skill Levels"
   },
   {
+    "id": "circuit-connect_arshi",
+    "title": "Circuit Connect",
+    "category": "Puzzle",
+    "lucideIcon": "circuit-board",
+    "description": "Rotate circuit tiles to connect the power source to the destination. Solve increasingly complex grids with logic and spatial reasoning!",
+    "author": "ArcadeVerse Contributor",
+    "github": "arcadeverse",
+    "role": "Puzzle Developer",
+    "path": "games/circuit-connect_arshi/index.html",
+    "tags": [
+      "Puzzle",
+      "Logic",
+      "Spatial",
+      "Circuit",
+      "Rotation"
+    ],
+    "stars": 25,
+    "featured": true
+  },
+  {
     "id": "cryptic-wordle_babin",
     "title": "Cryptic Wordle Hack",
     "category": "Puzzle",
