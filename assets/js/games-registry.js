@@ -633,6 +633,26 @@ const FEATURES_REGISTRY = [
     "css": "others/leaderboard-export-babin/export-engine.css"
   },
   {
+    "id": "pixel-sprite-studio-babin",
+    "title": "Retro Pixel Sprite Studio",
+    "category": "Graphics",
+    "type": "standalone-tool",
+    "lucideIcon": "layout-grid",
+    "description": "In-browser 16x16 and 32x32 sprite matrix editor generating zero-asset pure Canvas rendering code and 2D arrays.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "folder": "others/pixel-sprite-studio-babin",
+    "tags": [
+      "PixelArt",
+      "Sprite",
+      "Canvas",
+      "DevTools",
+      "ZeroAsset",
+      "NSOC26"
+    ],
+    "path": "others/pixel-sprite-studio-babin/sprite-editor.html"
+  },
+  {
     "id": "player-stats-babin",
     "title": "Player Stats & Streak Tracker",
     "category": "Analytics",
@@ -827,7 +847,7 @@ const CONTRIBUTORS_REGISTRY = [
     "role": "Arcade Developer (NSOC '26)",
     "gamesCount": 10,
     "mechanicsBonus": 2,
-    "platformPRs": 20,
+    "platformPRs": 21,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
