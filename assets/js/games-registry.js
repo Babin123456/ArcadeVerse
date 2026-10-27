@@ -921,6 +921,26 @@ const FEATURES_REGISTRY = [
       "Virtual"
     ],
     "path": "others/virtual-gamepad-babin/gamepad.html"
+  },
+  {
+    "id": "vision-simulator-babin",
+    "title": "Colorblind & Vision Accessibility Simulator",
+    "category": "Accessibility",
+    "type": "standalone-tool",
+    "lucideIcon": "eye",
+    "description": "Interactive CVD colorblindness matrix simulator, WCAG 2.1 contrast ratio calculator, and game accessibility audit reporter.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "folder": "others/vision-simulator-babin",
+    "tags": [
+      "Accessibility",
+      "Colorblind",
+      "WCAG",
+      "Contrast",
+      "DevTools",
+      "NSOC26"
+    ],
+    "path": "others/vision-simulator-babin/simulator.html"
   }
 ];
 
@@ -948,7 +968,7 @@ const CONTRIBUTORS_REGISTRY = [
     "role": "Arcade Developer (NSOC '26)",
     "gamesCount": 10,
     "mechanicsBonus": 2,
-    "platformPRs": 26,
+    "platformPRs": 27,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
