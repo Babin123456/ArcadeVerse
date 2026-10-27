@@ -1,0 +1,19 @@
+{
+  "id": "high-score-vault-babin",
+  "title": "High Score Vault & Analytics",
+  "category": "Platform",
+  "type": "standalone-tool",
+  "lucideIcon": "medal",
+  "description": "Consolidated arcade personal best ledger, progression trend graphs, and SVG achievement certificate generator.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "entryHtml": "vault.html",
+  "tags": [
+    "HighScores",
+    "Analytics",
+    "Ledger",
+    "PersonalBest",
+    "DevTools",
+    "NSOC26"
+  ]
+}

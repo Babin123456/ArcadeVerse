@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High Score Vault & Analytics | ArcadeVerse</title>
+  <link rel="stylesheet" href="vault.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="vault-container">
+    <header class="header">
+      <div class="header-title-box">
+        <h1>High Score <span>Vault & Analytics</span></h1>
+        <p class="header-subtitle">Cross-game personal best ledger, progression trend graphs, and verified achievement certificate exporter.</p>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-secondary" id="btn-export-csv">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Export CSV
+        </button>
+        <a href="../../index.html" class="btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          Back to Hub
+        </a>
+      </div>
+    </header>
+
+    <!-- Stat Counters -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Recorded Sessions</div>
+        <div class="stat-val" id="total-sessions-val">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Unique Games Conquered</div>
+        <div class="stat-val" id="unique-games-val" style="color: var(--accent-cyan);">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">All-Time Highest Score</div>
+        <div class="stat-val" id="highest-score-val" style="color: var(--accent-amber);">0</div>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="workbench-grid">
+      <!-- Analytics Charts & Ledger -->
+      <div class="panel">
+        <div class="section-label">Personal Best Comparison (Top Games)</div>
+        <div class="chart-box" id="analytics-chart-container"></div>
+
+        <div class="section-label" style="margin-top: 10px;">Recent Score Sessions</div>
+        <div style="overflow-x: auto;">
+          <table class="scores-table">
+            <thead>
+              <tr>
+                <th>Game</th>
+                <th>Score</th>
+                <th>Difficulty</th>
+                <th>Date</th>
+                <th>Certificate</th>
+              </tr>
+            </thead>
+            <tbody id="scores-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Add Score Form -->
+      <div class="panel">
+        <div class="section-label">Log New Score</div>
+        <form id="add-score-form" style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="form-group">
+            <label for="form-game">Game Title</label>
+            <input type="text" id="form-game" class="form-input" required placeholder="e.g. Cyber Runner">
+          </div>
+          <div class="form-group">
+            <label for="form-score">Score Achieved</label>
+            <input type="number" id="form-score" class="form-input" required placeholder="e.g. 15400">
+          </div>
+          <div class="form-group">
+            <label for="form-difficulty">Difficulty</label>
+            <select id="form-difficulty" class="form-input">
+              <option value="Normal">Normal</option>
+              <option value="Hard">Hard</option>
+              <option value="Extreme">Extreme</option>
+              <option value="Casual">Casual</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="form-player">Player Name</label>
+            <input type="text" id="form-player" class="form-input" value="Arcade Pilot">
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top: 8px; justify-content: center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Record High Score
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="score-ledger.js"></script>
+  <script src="analytics-chart.js"></script>
+  <script src="card-generator.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      function refreshData() {
+        const records = ScoreLedger.getRecords();
+        const bests = ScoreLedger.getPersonalBests();
+
+        // Update stats
+        document.getElementById("total-sessions-val").textContent = records.length;
+        document.getElementById("unique-games-val").textContent = bests.length;
+        const highest = records.length > 0 ? Math.max(...records.map(r => r.score)) : 0;
+        document.getElementById("highest-score-val").textContent = highest.toLocaleString();
+
+        // Render chart
+        AnalyticsChart.renderBarChart(document.getElementById("analytics-chart-container"), bests);
+
+        // Render table
+        const tbody = document.getElementById("scores-table-body");
+        tbody.innerHTML = "";
+        records.slice(0, 10).forEach(r => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td style="font-weight: 600;">${r.gameTitle}</td>
+            <td class="score-badge">${r.score.toLocaleString()}</td>
+            <td style="color: #94a3b8;">${r.difficulty}</td>
+            <td style="color: #64748b;">${r.date}</td>
+            <td>
+              <button class="btn btn-secondary btn-cert" data-id="${r.id}" style="padding: 3px 8px; font-size: 0.72rem;">
+                Download Card
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // Certificate click listeners
+        document.querySelectorAll(".btn-cert").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const id = btn.dataset.id;
+            const rec = records.find(item => item.id === id);
+            if (rec) {
+              const playerName = document.getElementById("form-player").value || "Arcade Pilot";
+              ScoreCardGenerator.downloadCard(rec, playerName);
+            }
+          });
+        });
+      }
+
+      // Add score form submission
+      document.getElementById("add-score-form").addEventListener("submit", e => {
+        e.preventDefault();
+        const game = document.getElementById("form-game").value.trim();
+        const score = Number(document.getElementById("form-score").value);
+        const difficulty = document.getElementById("form-difficulty").value;
+
+        ScoreLedger.addRecord({
+          gameTitle: game,
+          score,
+          difficulty
+        });
+
+        document.getElementById("form-game").value = "";
+        document.getElementById("form-score").value = "";
+        refreshData();
+      });
+
+      // Export CSV
+      document.getElementById("btn-export-csv").addEventListener("click", () => {
+        ScoreLedger.exportCSV();
+      });
+
+      refreshData();
+    });
+  </script>
+</body>
+</html>
