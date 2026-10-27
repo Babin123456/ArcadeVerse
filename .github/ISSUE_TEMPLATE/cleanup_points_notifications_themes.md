@@ -9,7 +9,7 @@ assignees: ""
 ## 📌 Issue Overview
 This issue addresses platform refinement and architectural consistency across **ArcadeVerse**:
 1. Removing the deprecated `others/` folder to streamline the repository into a pure, game-centric arcade station.
-2. Auditing and rectifying the in-application point system to ensure consistent scoring calculations and displays across all views without inventing new scoring rules or altering verified contributor records.
+2. Auditing and rectifying the in-application point system to establish a comprehensive multi-tier progression (from Novice Game Creator for 1 game up to Legendary Game Architect for 50+ games, and Apprentice up to Immortal Legend for points) with consistent calculations and displays without modifying verified historical records.
 3. Completely eliminating achievement-related toast notifications and their associated triggers while preserving point system calculations and unrelated notifications.
 4. Implementing a refined Dark/Light theme system featuring subtle dark textures in dark mode and warm cream-colored backgrounds in light mode with high readability and WCAG accessibility.
 5. Updating all documentation (`README.md`, `CONTRIBUTING.md`, registry compiler, and GitHub workflows) to reflect the unified structure.
@@ -41,7 +41,7 @@ This issue addresses platform refinement and architectural consistency across **
 ## ✅ Acceptance Criteria
 - [ ] The `others/` directory is completely removed, and zero 404 console errors occur on `index.html` or `leaderboard.html`.
 - [ ] All achievement-related toast notifications and trigger functions are completely removed.
-- [ ] In-application point calculation is consistent across table rows, podium cards, admin spotlight, and tooltip formulas.
+- [ ] In-application point calculation is consistent across table rows, podium cards, admin spotlight, and tooltip formulas, featuring a comprehensive multi-tier progression (1 to 50+ games, 1 to 5000+ points).
 - [ ] Existing verified contributor statistics and game titles remain intact without arbitrary record inflation or missing data.
 - [ ] Dark mode presents subtle, premium dark textures with consistent text contrast.
 - [ ] Light mode applies warm cream-colored backgrounds (`#fbf8f2` / `#f5f0e6`) with high contrast, legible typography.

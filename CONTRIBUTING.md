@@ -78,6 +78,33 @@ $$\mathbf{Arcade\ Score} = (\text{Games} \times 100) + (\text{Mechanics} \times 
 - 🛠️ **Quality & Bug Fix PR:** `+25 pts` per merged bug fix, responsive styling, or documentation enhancement
 - 📦 **Merged Git Commits:** `+5 pts` per verified commit (rewards sustained, iterative code development)
 
+#### 🏆 Contributor Badges & Tier Progression
+
+ArcadeVerse automatically calculates and displays your badges across two dynamic recognition tracks:
+
+| Track | Rank / Title Badge | Requirement | Recognition Scope |
+| :--- | :--- | :--- | :--- |
+| **Games Dedicated** | 👑 **Legendary Game Architect** | **50+ Games** in `games/` | Supreme Arcade Architect honors + Hall of Fame Crown |
+| **Games Dedicated** | ⚡ **Mythic Game Creator** | **35–49 Games** in `games/` | Mythic badge + Frontpage Permanent Showcase |
+| **Games Dedicated** | 🏆 **Grandmaster Game Designer** | **25–34 Games** in `games/` | Grandmaster badge + Developer Spotlight |
+| **Games Dedicated** | 🎖️ **Master Game Architect** | **15–24 Games** in `games/` | Master Creator badge + Top Hall of Fame Spotlight |
+| **Games Dedicated** | 🚀 **Veteran Game Developer** | **10–14 Games** in `games/` | Veteran badge + Hall of Fame Feature |
+| **Games Dedicated** | ⚡ **Hyper Game Developer** | **7–9 Games** in `games/` | Elite Game Developer badge + Podium Feature |
+| **Games Dedicated** | 🎮 **Senior Arcade Developer** | **5–6 Games** in `games/` | Senior Developer badge + Profile Highlight |
+| **Games Dedicated** | 🕹️ **Arcade Developer** | **3–4 Games** in `games/` | Verified Game Developer badge + Showcase |
+| **Games Dedicated** | 🛠️ **Junior Game Crafter** | **2 Games** in `games/` | Junior Crafter badge + Library Feature |
+| **Games Dedicated** | 🧭 **Novice Game Creator** | **1 Game** in `games/` | Entry Game Creator badge (Minimum 1 game requirement) |
+| **Platform & Core** | 🌟 **Immortal Arcade Legend** | **5,000+ Points** | Supreme Hall of Honor Legend |
+| **Platform & Core** | 💎 **Grandmaster Core Architect** | **3,000–4,999 Points** | Grandmaster Core Badge + Podium Feature Priority |
+| **Platform & Core** | 🛡️ **Master Core Architect** | **2,000–2,999 Points** | Master Core badge + Hall of Fame Lead feature |
+| **Platform & Core** | 🔧 **Senior Platform Engineer** | **1,200–1,999 Points** | Senior Engineer badge + Contributor Spotlight |
+| **Platform & Core** | 💎 **Elite Contributor** | **750–1,199 Points** | Elite Contributor badge + Permanent Hall of Fame |
+| **Platform & Core** | 🎖️ **Distinguished Contributor** | **400–749 Points** | Distinguished Contributor badge + Top Standings |
+| **Platform & Core** | 💻 **Platform Contributor** | **200–399 Points** | Platform Contributor badge + Feature Author Feature |
+| **Platform & Core** | 📈 **Rising Contributor** | **100–199 Points** | Rising Contributor badge + Live Standings Listing |
+| **Platform & Core** | 🌱 **Active Contributor** | **25–99 Points** | Active Contributor badge + Registry Entry |
+| **Platform & Core** | 🎯 **Apprentice Contributor** | **1–24 Points** | Welcome badge + Community Registry Entry |
+
 ---
 
 ## 🚀 Step-by-Step: How to Get Your PR Merged
@@ -319,6 +346,7 @@ Inside your game folder (`games/game-name_your-name/`), create `game.json`:
 > - The automated dynamic loader will display and activate your game on `index.html`.
 >
 > ⚠️ **STRICT COMPLIANCE & PA REVIEW NOTICE:**
+>
 > - If any contributor **does not obey these rules** (e.g. editing `index.html` or `games-registry.js`, omitting `game.json`, adding emojis/unauthorized files, or using non-compliant folder structures), I will **manually instruct them in the PR review to strictly follow the `CONTRIBUTING.md` file**.
 > - You will be required to reorganize your files and adhere strictly to these guidelines before your Pull Request can be approved or merged.
 
