@@ -804,6 +804,27 @@ const FEATURES_REGISTRY = [
     "css": "others/theme-customizer-babin/theme-customizer.css"
   },
   {
+    "id": "thumbnail-studio-babin",
+    "title": "Arcade Thumbnail & Promo Studio",
+    "category": "DevTools",
+    "type": "standalone-tool",
+    "lucideIcon": "image",
+    "description": "Promo card and thumbnail generator with retro CRT scanline shaders, aspect ratio framing, and ArcadeVerse watermark badges.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "folder": "others/thumbnail-studio-babin",
+    "tags": [
+      "Media",
+      "Thumbnail",
+      "Promo",
+      "Canvas",
+      "Shaders",
+      "DevTools",
+      "NSOC26"
+    ],
+    "path": "others/thumbnail-studio-babin/studio.html"
+  },
+  {
     "id": "virtual-gamepad-babin",
     "title": "Mobile Touch Virtual Gamepad",
     "category": "Input",
@@ -847,7 +868,7 @@ const CONTRIBUTORS_REGISTRY = [
     "role": "Arcade Developer (NSOC '26)",
     "gamesCount": 10,
     "mechanicsBonus": 2,
-    "platformPRs": 21,
+    "platformPRs": 22,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
