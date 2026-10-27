@@ -44,7 +44,8 @@ This issue addresses platform refinement and architectural consistency across **
 - [ ] In-application point calculation is consistent across table rows, podium cards, admin spotlight, and tooltip formulas, featuring a comprehensive multi-tier progression (1 to 50+ games, 1 to 5000+ points).
 - [ ] Existing verified contributor statistics and game titles remain intact without arbitrary record inflation or missing data.
 - [ ] Dark mode presents subtle, premium dark textures with consistent text contrast.
-- [ ] Light mode applies warm cream-colored backgrounds (`#fbf8f2` / `#f5f0e6`) with high contrast, legible typography.
+- [ ] Light mode applies warm cream-colored backgrounds (`#fcf9f2` / `#f5efe2`) where all text is strictly converted to black (`#000000` / `#111827`), ensuring crystal-clear legibility across the entire platform.
+- [ ] Hall of Fame point calculations and contributor badge tags are verified and rendered accurately across podium cards, standings table, and admin spotlight without undefined values or missing badges.
 - [ ] Theme toggle switch works seamlessly and persists choice via `localStorage`.
 - [ ] `node scripts/build-registry.js` executes with zero errors and outputs the updated `assets/js/games-registry.js`.
 - [ ] Documentation (`README.md`, `CONTRIBUTING.md`) accurately describes the streamlined repository architecture.

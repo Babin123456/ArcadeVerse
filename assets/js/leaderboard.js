@@ -154,11 +154,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (existing) {
         if (regUser.name) existing.name = regUser.name;
+        if (regUser.commits) existing.commits = Math.max(existing.commits || 0, regUser.commits);
         existing.gamesCount = Math.max(existing.gamesCount || 0, gamesCount);
-        existing.mechanicsBonus = regUser.mechanicsBonus || existing.mechanicsBonus || 0;
-        existing.platformPRs = regUser.platformPRs || existing.platformPRs || 0;
-        existing.qualityPRs = regUser.qualityPRs || existing.qualityPRs || 0;
-        existing.bonusPts = regUser.bonusPts || existing.bonusPts || 0;
+        existing.mechanicsBonus = regUser.mechanicsBonus !== undefined ? regUser.mechanicsBonus : (existing.mechanicsBonus || 0);
+        existing.platformPRs = regUser.platformPRs !== undefined ? regUser.platformPRs : (existing.platformPRs || 0);
+        existing.qualityPRs = regUser.qualityPRs !== undefined ? regUser.qualityPRs : (existing.qualityPRs || 0);
+        existing.bonusPts = regUser.bonusPts !== undefined ? regUser.bonusPts : (existing.bonusPts || 0);
         if (gamesList.length > 0) existing.games = gamesList;
       } else {
         contributorsData.push({
@@ -223,7 +224,8 @@ document.addEventListener("DOMContentLoaded", () => {
   //    - Apprentice Contributor (1–24 Arcade Points)
   function getContributorBadges(user) {
     const badges = [];
-    const isAdmin = user.login && user.login.toLowerCase() === "debasmitabose0";
+    const userHandle = (user.login || user.github || "").toLowerCase();
+    const isAdmin = userHandle === "debasmitabose0";
 
     // 1. Leadership Badge (Only for Project Lead)
     if (isAdmin) {
@@ -405,6 +407,12 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
+    badges.forEach(b => {
+      if (!b.title) {
+        b.title = `${b.category}: ${b.label}`;
+      }
+    });
+
     return badges;
   }
 
@@ -501,7 +509,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <a href="https://github.com/${item.login}" target="_blank" rel="noopener noreferrer" class="podium-handle">@${item.login}</a>
         
         <div class="podium-badges-container">
-          ${badges.map(b => `<span class="role-pill-badge ${b.tagClass}"><i data-lucide="${b.lucideIcon}"></i> ${b.label}</span>`).join("")}
+          ${badges.map(b => `<span class="role-pill-badge ${b.tagClass}" title="${b.title || b.label}"><i data-lucide="${b.lucideIcon}"></i> ${b.label}</span>`).join("")}
         </div>
 
         <div class="podium-score-pill">
@@ -572,7 +580,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </td>
         <td>
           <div class="contributor-badges-wrap">
-            ${badges.map(b => `<span class="role-pill-badge ${b.tagClass}"><i data-lucide="${b.lucideIcon}"></i> ${b.label}</span>`).join("")}
+            ${badges.map(b => `<span class="role-pill-badge ${b.tagClass}" title="${b.title || b.label}"><i data-lucide="${b.lucideIcon}"></i> ${b.label}</span>`).join("")}
           </div>
         </td>
         <td>
@@ -619,7 +627,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (adminBadgesContainer) {
       const badges = getContributorBadges(adminUser);
       adminBadgesContainer.innerHTML = badges.map(b => `
-        <span class="role-pill-badge ${b.tagClass}" title="${b.title}"><i data-lucide="${b.lucideIcon}"></i> ${b.role}</span>
+        <span class="role-pill-badge ${b.tagClass}" title="${b.title || b.label}"><i data-lucide="${b.lucideIcon}"></i> ${b.label}</span>
       `).join("");
       if (window.lucide) {
         lucide.createIcons();
@@ -723,11 +731,13 @@ document.addEventListener("DOMContentLoaded", () => {
           const qualityPRs = registryEntry?.qualityPRs ?? localEntry?.qualityPRs ?? (isAdmin ? 0 : 1);
           const bonusPts = registryEntry?.bonusPts ?? localEntry?.bonusPts ?? 0;
 
+          const commits = Math.max(user.contributions || 0, registryEntry?.commits || 0, localEntry?.commits || 0);
+
           return {
             login: user.login,
             name: displayName,
             avatar_url: user.avatar_url,
-            commits: user.contributions,
+            commits: commits,
             gamesCount: gamesCount,
             mechanicsBonus: mechanicsBonus,
             platformPRs: platformPRs,
@@ -737,6 +747,13 @@ document.addEventListener("DOMContentLoaded", () => {
               ? userGames.map(g => g.title) 
               : (localEntry?.games && localEntry.games.length > 0 ? localEntry.games : (isAdmin ? ["Quantum Memory Matrix", "Cyber Neon Pong"] : []))
           };
+        });
+
+        // Ensure all verified contributors from local registry remain present
+        contributorsData.forEach(c => {
+          if (!enrichedContributors.some(ec => ec.login.toLowerCase() === c.login.toLowerCase())) {
+            enrichedContributors.push(c);
+          }
         });
 
         contributorsData = enrichedContributors;
