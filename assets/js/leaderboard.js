@@ -66,12 +66,23 @@ document.addEventListener("DOMContentLoaded", () => {
       role: "Arcade Developer",
       avatar_url: "https://avatars.githubusercontent.com/u/265290994?v=4",
       commits: 19,
-      gamesCount: 1,
-      mechanicsBonus: 1,
-      platformPRs: 2,
+      gamesCount: 10,
+      mechanicsBonus: 2,
+      platformPRs: 29,
       qualityPRs: 1,
       bonusPts: 0,
-      games: ["Quantum 2048"]
+      games: [
+        "Cryptic Wordle Hack",
+        "Cyber Snake Matrix",
+        "Cyber Tower Stacker",
+        "Neon Beat Runner",
+        "Quantum 2048",
+        "Quantum Minesweeper",
+        "Space Invaders 2026",
+        "Synth-Wave Simon Says",
+        "Tactical Fleet Commander",
+        "Whack-A-Bug Panic"
+      ]
     },
     {
       login: "mistu7debnath",
@@ -79,12 +90,12 @@ document.addEventListener("DOMContentLoaded", () => {
       role: "Contributor",
       avatar_url: "https://avatars.githubusercontent.com/u/132514330?v=4",
       commits: 2,
-      gamesCount: 1,
+      gamesCount: 4,
       mechanicsBonus: 1,
       platformPRs: 0,
       qualityPRs: 0,
       bonusPts: 0,
-      games: ["Flappy Cyber Jet"]
+      games: ["Bubble Burst Arena", "Cyber Runner", "Flappy Cyber Jet", "Neon Grid Defense"]
     },
     {
       login: "hrshjswniii",
@@ -105,12 +116,25 @@ document.addEventListener("DOMContentLoaded", () => {
       role: "Active Contributor",
       avatar_url: "https://avatars.githubusercontent.com/u/104523098?v=4",
       commits: 1,
-      gamesCount: 0,
+      gamesCount: 4,
       mechanicsBonus: 0,
       platformPRs: 0,
       qualityPRs: 1,
       bonusPts: 0,
-      games: []
+      games: ["Neon Asteroid Escape", "Neon Drift Racer", "Prism Pulse", "Quantum Pinball"]
+    },
+    {
+      login: "pragna7",
+      name: "Pragna Seetha",
+      role: "Contributor",
+      avatar_url: "https://github.com/pragna7.png",
+      commits: 1,
+      gamesCount: 1,
+      mechanicsBonus: 0,
+      platformPRs: 0,
+      qualityPRs: 0,
+      bonusPts: 0,
+      games: ["Astro Infinite Jumper"]
     }
   ];
 

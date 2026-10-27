@@ -1,11 +1,10 @@
-name: Auto-Build Games & Features Registry
+name: Auto-Build Games Registry
 
 on:
   push:
     branches: [ main ]
     paths:
       - 'games/**/game.json'
-      - 'others/**/feature.json'
 
 permissions:
   contents: write

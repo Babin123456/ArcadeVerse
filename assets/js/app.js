@@ -97,49 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Dynamic Background Plugin Loader for features in others/
-  function initBackgroundPlugins() {
-    if (typeof FEATURES_REGISTRY === "undefined" || !Array.isArray(FEATURES_REGISTRY)) return;
-    FEATURES_REGISTRY.filter((f) => f.type === "background-plugin").forEach((plugin) => {
-      if (plugin.css && !document.querySelector(`link[href*="${plugin.css}"]`)) {
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = plugin.css;
-        document.head.appendChild(link);
-      }
-      if (plugin.js && !document.querySelector(`script[src*="${plugin.js}"]`)) {
-        const script = document.createElement("script");
-        script.src = plugin.js;
-        script.defer = true;
-        document.body.appendChild(script);
-      }
-    });
-  }
-  initBackgroundPlugins();
-
-  // Dynamic Tools Pill Injection
-  const categoryPillsContainer = document.getElementById("category-pills");
-  const standaloneTools = (typeof FEATURES_REGISTRY !== "undefined" && Array.isArray(FEATURES_REGISTRY))
-    ? FEATURES_REGISTRY.filter((f) => f.type === "standalone-tool").map((t) => ({ ...t, isTool: true }))
-    : [];
-
-  if (categoryPillsContainer && standaloneTools.length > 0 && !document.querySelector('.pill[data-category="tools"]')) {
-    const toolsPill = document.createElement("button");
-    toolsPill.className = "pill pill-tools";
-    toolsPill.setAttribute("data-category", "tools");
-    toolsPill.innerHTML = `<span><i data-lucide="wrench" style="width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px;"></i>Arcade Tools</span> <span class="favorites-count-badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">${standaloneTools.length}</span>`;
-    categoryPillsContainer.appendChild(toolsPill);
-    if (window.lucide) {
-      lucide.createIcons();
-    }
-    toolsPill.addEventListener("click", () => {
-      document.querySelectorAll(".category-pills .pill").forEach((p) => p.classList.remove("active"));
-      toolsPill.classList.add("active");
-      currentCategory = "tools";
-      renderGames();
-    });
-  }
-
   // Update Stats
   if (totalGamesCount) totalGamesCount.textContent = GAMES_REGISTRY.length;
   if (totalContributorsCount) totalContributorsCount.textContent = CONTRIBUTORS_REGISTRY.length;
@@ -150,9 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     gamesGrid.innerHTML = "";
     const favs = getFavorites();
 
-    const currentDataSet = (currentCategory === "tools") 
-      ? standaloneTools 
-      : GAMES_REGISTRY;
+    const currentDataSet = GAMES_REGISTRY;
 
     let filtered = currentDataSet.filter((item) => {
       let matchesCategory = false;
@@ -160,8 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
         matchesCategory = true;
       } else if (currentCategory === "favorites") {
         matchesCategory = favs.has(item.id);
-      } else if (currentCategory === "tools") {
-        matchesCategory = true;
       } else {
         matchesCategory = item.category.toLowerCase() === currentCategory.toLowerCase();
       }
@@ -250,15 +203,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement("div");
       card.className = "game-card";
       card.setAttribute("data-game-id", game.id);
-      const isTool = Boolean(game.isTool);
-      const iconName = game.lucideIcon || (isTool ? "tool" : "gamepad-2");
+      const iconName = game.lucideIcon || "gamepad-2";
       const iconHtml = `<i data-lucide="${iconName}"></i>`;
       const favorited = favs.has(game.id);
-      const actionText = isTool ? 'Launch Tool <i data-lucide="external-link" style="width: 13px; height: 13px; vertical-align: middle; margin-left: 2px;"></i>' : 'Play Now <i data-lucide="play" style="width: 13px; height: 13px; vertical-align: middle; margin-left: 2px;"></i>';
+      const actionText = 'Play Now <i data-lucide="play" style="width: 13px; height: 13px; vertical-align: middle; margin-left: 2px;"></i>';
 
       card.innerHTML = `
         <div class="game-card-preview">
-          <span class="game-category-tag ${isTool ? 'tool-tag' : ''}">${game.category}</span>
+          <span class="game-category-tag">${game.category}</span>
           <button class="btn-card-favorite ${favorited ? "favorited" : ""}" data-id="${game.id}" aria-label="${favorited ? "Remove from Favorites" : "Save to Favorites"}" aria-pressed="${favorited ? "true" : "false"}" title="${favorited ? "Remove from Favorites" : "Save to Favorites"}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="fav-heart-icon">
               <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
