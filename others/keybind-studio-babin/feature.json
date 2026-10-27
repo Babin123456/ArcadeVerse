@@ -1,0 +1,19 @@
+{
+  "id": "keybind-studio-babin",
+  "title": "Universal Keybind Remapper Studio",
+  "category": "Controls",
+  "type": "standalone-tool",
+  "lucideIcon": "keyboard",
+  "description": "Universal keyboard and arcade fightstick remapper with interactive visual keyboard heatmap and input adapter script.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "entryHtml": "keybind.html",
+  "tags": [
+    "Controls",
+    "Keyboard",
+    "Remapper",
+    "Keybinds",
+    "DevTools",
+    "NSOC26"
+  ]
+}
