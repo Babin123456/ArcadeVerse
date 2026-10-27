@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>State Snapshot Time Machine | ArcadeVerse DevTools</title>
+  <link rel="stylesheet" href="time-machine.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="machine-container">
+    <header class="header">
+      <div class="header-title-box">
+        <h1>State Snapshot <span>Time Machine</span></h1>
+        <p class="header-subtitle">Developer checkpoint debugger with visual timeline scrubbing, state diffing, and checkpoint inspection.</p>
+      </div>
+      <div>
+        <a href="../../index.html" class="btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          Back to Hub
+        </a>
+      </div>
+    </header>
+
+    <!-- Timeline Scrubber Card -->
+    <div class="timeline-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="section-label">Checkpoint Timeline Scrubber</div>
+        <button class="btn btn-secondary" id="btn-clear-snapshots" style="padding: 4px 10px; font-size: 0.75rem;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/></svg>
+          Reset Snapshots
+        </button>
+      </div>
+      <div id="scrubber-container"></div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="workbench-grid">
+      <!-- Active Snapshot & Diff -->
+      <div class="panel">
+        <div class="section-label">Active Checkpoint State (JSON)</div>
+        <div class="code-box" id="state-inspector"></div>
+
+        <div class="section-label" style="margin-top: 10px;">Mutation Delta Diff</div>
+        <div class="diff-box" id="diff-container"></div>
+      </div>
+
+      <!-- Capture New Snapshot -->
+      <div class="panel">
+        <div class="section-label">Record New Debug Checkpoint</div>
+        <form id="add-snapshot-form" style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="form-group">
+            <label for="snap-game">Game Title</label>
+            <input type="text" id="snap-game" class="form-input" value="Space Invaders Retro" required>
+          </div>
+          <div class="form-group">
+            <label for="snap-label">Checkpoint Label</label>
+            <input type="text" id="snap-label" class="form-input" placeholder="e.g. Wave 4 Final Stand" required>
+          </div>
+          <div class="form-group">
+            <label for="snap-score">Current Score</label>
+            <input type="number" id="snap-score" class="form-input" value="16500" required>
+          </div>
+          <div class="form-group">
+            <label for="snap-json">State Payload (JSON)</label>
+            <textarea id="snap-json" class="form-input" rows="4" style="font-family: monospace; font-size: 0.78rem;">{ "playerHp": 1, "wave": 4, "enemiesRemaining": 4, "speedMultiplier": 2.0 }</textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="justify-content: center; margin-top: 4px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Commit Checkpoint
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="snapshot-core.js"></script>
+  <script src="storage-diff.js"></script>
+  <script src="timeline-controller.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const scrubberEl = document.getElementById("scrubber-container");
+      const inspectorEl = document.getElementById("state-inspector");
+      const diffEl = document.getElementById("diff-container");
+
+      const timeline = new TimelineController(scrubberEl, inspectorEl, diffEl);
+      let snapshots = SnapshotCore.getSnapshots();
+
+      timeline.render(snapshots);
+
+      // Form submission
+      document.getElementById("add-snapshot-form").addEventListener("submit", e => {
+        e.preventDefault();
+        const game = document.getElementById("snap-game").value.trim();
+        const label = document.getElementById("snap-label").value.trim();
+        const score = document.getElementById("snap-score").value;
+        let payload = {};
+        try {
+          payload = JSON.parse(document.getElementById("snap-json").value);
+        } catch (err) {
+          alert("Invalid JSON payload: " + err.message);
+          return;
+        }
+
+        SnapshotCore.createSnapshot(game, label, score, payload);
+        snapshots = SnapshotCore.getSnapshots();
+        timeline.activeIndex = snapshots.length - 1;
+        timeline.render(snapshots);
+
+        document.getElementById("snap-label").value = "";
+      });
+
+      // Reset
+      document.getElementById("btn-clear-snapshots").addEventListener("click", () => {
+        SnapshotCore.clearAll();
+        snapshots = SnapshotCore.getSnapshots();
+        timeline.activeIndex = 0;
+        timeline.render(snapshots);
+      });
+    });
+  </script>
+</body>
+</html>
