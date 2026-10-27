@@ -633,6 +633,26 @@ const FEATURES_REGISTRY = [
     "css": "others/leaderboard-export-babin/export-engine.css"
   },
   {
+    "id": "particle-lab-babin",
+    "title": "Particle FX & Physics Spark Lab",
+    "category": "Graphics",
+    "type": "standalone-tool",
+    "lucideIcon": "sparkles",
+    "description": "Interactive 60fps 2D Canvas particle physics workshop with explosion, thruster, and spark presets with Vanilla JS code export.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "folder": "others/particle-lab-babin",
+    "tags": [
+      "Graphics",
+      "Particles",
+      "Physics",
+      "Canvas",
+      "DevTools",
+      "NSOC26"
+    ],
+    "path": "others/particle-lab-babin/particle-lab.html"
+  },
+  {
     "id": "pixel-sprite-studio-babin",
     "title": "Retro Pixel Sprite Studio",
     "category": "Graphics",
@@ -868,7 +888,7 @@ const CONTRIBUTORS_REGISTRY = [
     "role": "Arcade Developer (NSOC '26)",
     "gamesCount": 10,
     "mechanicsBonus": 2,
-    "platformPRs": 22,
+    "platformPRs": 23,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
