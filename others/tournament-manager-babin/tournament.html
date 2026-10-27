@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arcade Tournament Bracket Manager | ArcadeVerse</title>
+  <link rel="stylesheet" href="tournament.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="tournament-container">
+    <header class="header">
+      <div class="header-title-box">
+        <h1>Arcade <span>Tournament Bracket</span></h1>
+        <p class="header-subtitle">Single-elimination championship organizer, match scoring, and automatic winner progression for ArcadeVerse eSports.</p>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-secondary" id="btn-export-json">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Export JSON
+        </button>
+        <a href="../../index.html" class="btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          Back to Hub
+        </a>
+      </div>
+    </header>
+
+    <!-- Setup Panel -->
+    <div class="setup-panel">
+      <div class="form-group">
+        <label for="tourney-name">Tournament Title</label>
+        <input type="text" id="tourney-name" class="form-input" value="Nexus Arcade Cup 2026">
+      </div>
+
+      <div class="form-group">
+        <label for="tourney-players">Players (Comma-Separated, 4 to 16)</label>
+        <input type="text" id="tourney-players" class="form-input" value="Player Alpha, Player Beta, Player Gamma, Player Delta, Player Echo, Player Zeta, Player Eta, Player Theta">
+      </div>
+
+      <button class="btn btn-primary" id="btn-generate-bracket" style="height: 38px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-2.34M14 14.66V17c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2.34M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        Generate Bracket
+      </button>
+    </div>
+
+    <!-- Bracket Interactive Container -->
+    <div class="bracket-wrapper" id="bracket-container"></div>
+  </div>
+
+  <script src="bracket-engine.js"></script>
+  <script src="storage-sync.js"></script>
+  <script src="match-controller.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      let activeTournament = TournamentStorageSync.getActive();
+      const container = document.getElementById("bracket-container");
+
+      const matchController = new MatchController(container, (roundIdx, matchIdx, s1, s2) => {
+        activeTournament = BracketEngine.resolveMatch(activeTournament, roundIdx, matchIdx, s1, s2);
+        TournamentStorageSync.saveActive(activeTournament);
+        matchController.renderBracket(activeTournament);
+      });
+
+      if (!activeTournament) {
+        // Initial sample 8-player bracket
+        const defaultPlayers = [
+          "Player Alpha", "Player Beta", "Player Gamma", "Player Delta",
+          "Player Echo", "Player Zeta", "Player Eta", "Player Theta"
+        ];
+        activeTournament = BracketEngine.createTournament("Nexus Arcade Cup 2026", "ArcadeVerse Catalog", defaultPlayers);
+        TournamentStorageSync.saveActive(activeTournament);
+      }
+
+      matchController.renderBracket(activeTournament);
+
+      // Create new bracket
+      document.getElementById("btn-generate-bracket").addEventListener("click", () => {
+        const title = document.getElementById("tourney-name").value.trim() || "ArcadeVerse Championship";
+        const rawPlayers = document.getElementById("tourney-players").value.split(",").map(p => p.trim()).filter(Boolean);
+
+        if (rawPlayers.length < 4) {
+          alert("Please provide at least 4 player names!");
+          return;
+        }
+
+        activeTournament = BracketEngine.createTournament(title, "ArcadeVerse Catalog", rawPlayers);
+        TournamentStorageSync.saveActive(activeTournament);
+        matchController.renderBracket(activeTournament);
+      });
+
+      // Export JSON
+      document.getElementById("btn-export-json").addEventListener("click", () => {
+        if (activeTournament) {
+          TournamentStorageSync.exportJSON(activeTournament);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
