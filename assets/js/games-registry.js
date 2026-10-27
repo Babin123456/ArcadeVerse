@@ -845,6 +845,26 @@ const FEATURES_REGISTRY = [
     "path": "others/thumbnail-studio-babin/studio.html"
   },
   {
+    "id": "tournament-manager-babin",
+    "title": "Arcade Tournament Bracket Manager",
+    "category": "Platform",
+    "type": "standalone-tool",
+    "lucideIcon": "trophy",
+    "description": "Interactive tournament bracket generator with single-elimination trees, match scoring, and championship certificate export.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "folder": "others/tournament-manager-babin",
+    "tags": [
+      "Tournament",
+      "Bracket",
+      "eSports",
+      "Multiplayer",
+      "DevTools",
+      "NSOC26"
+    ],
+    "path": "others/tournament-manager-babin/tournament.html"
+  },
+  {
     "id": "virtual-gamepad-babin",
     "title": "Mobile Touch Virtual Gamepad",
     "category": "Input",
@@ -888,7 +908,7 @@ const CONTRIBUTORS_REGISTRY = [
     "role": "Arcade Developer (NSOC '26)",
     "gamesCount": 10,
     "mechanicsBonus": 2,
-    "platformPRs": 23,
+    "platformPRs": 24,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
