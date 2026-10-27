@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retro Pixel Sprite Studio | ArcadeVerse DevTools</title>
+  <link rel="stylesheet" href="sprite-editor.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="studio-container">
+    <header class="header">
+      <div class="header-title-box">
+        <h1>Retro Pixel <span>Sprite Studio</span></h1>
+        <p class="header-subtitle">In-browser 16x16 and 32x32 sprite matrix designer generating zero-asset Canvas rendering code for zero-dependency arcade games.</p>
+      </div>
+      <div>
+        <a href="../../index.html" class="btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          Back to Hub
+        </a>
+      </div>
+    </header>
+
+    <!-- Toolbar -->
+    <div class="toolbar-card">
+      <div class="tool-group">
+        <button class="tool-btn active" id="tool-pencil" title="Pencil">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+          Pencil
+        </button>
+        <button class="tool-btn" id="tool-eraser" title="Eraser">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/></svg>
+          Eraser
+        </button>
+        <button class="tool-btn" id="tool-fill" title="Flood Fill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"/><path d="m5 2 5 5"/></svg>
+          Fill
+        </button>
+        <button class="tool-btn" id="tool-symmetry" title="Toggle Horizontal Symmetry">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M4 12h16"/></svg>
+          Symmetry
+        </button>
+      </div>
+
+      <div class="tool-group" style="margin-left: auto;">
+        <button class="tool-btn" id="btn-undo" title="Undo">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+        </button>
+        <button class="tool-btn" id="btn-redo" title="Redo">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"/></svg>
+        </button>
+        <button class="tool-btn" id="btn-clear" title="Clear Grid">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+          Clear
+        </button>
+        <select id="grid-size-select" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-color); padding: 5px 8px; border-radius: 6px;">
+          <option value="16">16 x 16</option>
+          <option value="24">24 x 24</option>
+          <option value="32">32 x 32</option>
+        </select>
+        <select id="palette-select" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-color); padding: 5px 8px; border-radius: 6px;">
+          <option value="cyberpunk">Cyberpunk Neon</option>
+          <option value="pico8">PICO-8</option>
+          <option value="gameboy">GameBoy DMG</option>
+          <option value="nes">NES 8-Bit</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Palette Swatches Bar -->
+    <div class="toolbar-card" style="padding: 10px 18px;">
+      <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">PALETTE:</span>
+      <div class="palette-swatches" id="palette-swatches"></div>
+    </div>
+
+    <!-- Main Studio Grid -->
+    <div class="studio-grid">
+      <!-- Canvas Panel -->
+      <div class="canvas-panel">
+        <canvas id="pixel-canvas" width="400" height="400"></canvas>
+        <div style="display: flex; gap: 10px; width: 100%;">
+          <button class="btn btn-secondary" id="btn-download-png" style="flex: 1; justify-content: center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Export PNG
+          </button>
+        </div>
+      </div>
+
+      <!-- Code Output Panel -->
+      <div class="code-panel">
+        <div class="section-label">Generated Zero-Asset Canvas Function</div>
+        <div class="code-box" id="code-output"></div>
+        <div style="display: flex; gap: 10px; margin-top: auto;">
+          <button class="btn btn-primary" id="btn-copy-code" style="flex: 1; justify-content: center;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Copy JS Function to Clipboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="palette-manager.js"></script>
+  <script src="canvas-grid.js"></script>
+  <script src="matrix-exporter.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const canvas = document.getElementById("pixel-canvas");
+      const gridEngine = new CanvasGridEngine(canvas, 16);
+      const palette = new PaletteManager("cyberpunk");
+
+      function renderSwatches() {
+        const container = document.getElementById("palette-swatches");
+        container.innerHTML = "";
+        palette.getColors().forEach(color => {
+          const swatch = document.createElement("div");
+          swatch.className = "swatch" + (color === "transparent" ? " transparent" : "");
+          if (color !== "transparent") swatch.style.backgroundColor = color;
+          if (color === palette.getColor()) swatch.classList.add("active");
+
+          swatch.addEventListener("click", () => {
+            palette.setColor(color);
+            document.querySelectorAll(".swatch").forEach(s => s.classList.remove("active"));
+            swatch.classList.add("active");
+            if (gridEngine.tool === "eraser") {
+              setTool("pencil");
+            }
+          });
+          container.appendChild(swatch);
+        });
+      }
+
+      function updateCodeOutput() {
+        const code = SpriteMatrixExporter.toCanvasFunction(gridEngine.grid, "drawPlayerSprite");
+        document.getElementById("code-output").textContent = code;
+      }
+
+      function setTool(toolName) {
+        gridEngine.tool = toolName;
+        document.querySelectorAll(".tool-btn").forEach(btn => btn.classList.remove("active"));
+        const activeBtn = document.getElementById(`tool-${toolName}`);
+        if (activeBtn) activeBtn.classList.add("active");
+      }
+
+      // Pointer event listeners
+      canvas.addEventListener("pointerdown", e => {
+        gridEngine.isDrawing = true;
+        gridEngine.saveState();
+        const { x, y } = gridEngine.getCellFromPointer(e.clientX, e.clientY);
+        handleCellAction(x, y);
+      });
+
+      canvas.addEventListener("pointermove", e => {
+        if (!gridEngine.isDrawing) return;
+        const { x, y } = gridEngine.getCellFromPointer(e.clientX, e.clientY);
+        if (gridEngine.tool === "pencil" || gridEngine.tool === "eraser") {
+          handleCellAction(x, y);
+        }
+      });
+
+      window.addEventListener("pointerup", () => {
+        if (gridEngine.isDrawing) {
+          gridEngine.isDrawing = false;
+          updateCodeOutput();
+        }
+      });
+
+      function handleCellAction(x, y) {
+        if (gridEngine.tool === "pencil") {
+          gridEngine.setCell(x, y, palette.getColor());
+        } else if (gridEngine.tool === "eraser") {
+          gridEngine.setCell(x, y, "transparent");
+        } else if (gridEngine.tool === "fill") {
+          const target = gridEngine.grid[y][x];
+          gridEngine.floodFill(x, y, target, palette.getColor());
+        }
+        gridEngine.render();
+      }
+
+      // Tool Buttons
+      document.getElementById("tool-pencil").addEventListener("click", () => setTool("pencil"));
+      document.getElementById("tool-eraser").addEventListener("click", () => setTool("eraser"));
+      document.getElementById("tool-fill").addEventListener("click", () => setTool("fill"));
+      document.getElementById("tool-symmetry").addEventListener("click", () => {
+        gridEngine.symmetryMode = !gridEngine.symmetryMode;
+        document.getElementById("tool-symmetry").classList.toggle("active", gridEngine.symmetryMode);
+        gridEngine.render();
+      });
+
+      document.getElementById("btn-undo").addEventListener("click", () => {
+        gridEngine.undo();
+        updateCodeOutput();
+      });
+      document.getElementById("btn-redo").addEventListener("click", () => {
+        gridEngine.redo();
+        updateCodeOutput();
+      });
+      document.getElementById("btn-clear").addEventListener("click", () => {
+        gridEngine.clear();
+        updateCodeOutput();
+      });
+
+      document.getElementById("grid-size-select").addEventListener("change", e => {
+        gridEngine.setSize(Number(e.target.value));
+        updateCodeOutput();
+      });
+
+      document.getElementById("palette-select").addEventListener("change", e => {
+        palette.setPalette(e.target.value);
+        renderSwatches();
+      });
+
+      document.getElementById("btn-copy-code").addEventListener("click", () => {
+        const code = document.getElementById("code-output").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          const btn = document.getElementById("btn-copy-code");
+          const orig = btn.innerHTML;
+          btn.textContent = "Copied to Clipboard!";
+          setTimeout(() => btn.innerHTML = orig, 2000);
+        });
+      });
+
+      document.getElementById("btn-download-png").addEventListener("click", () => {
+        const url = SpriteMatrixExporter.toDataURL(gridEngine.grid);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `sprite_${gridEngine.size}x${gridEngine.size}.png`;
+        a.click();
+      });
+
+      // Sample retro alien sprite for default view
+      const cx = 8;
+      const samplePoints = [
+        [3,2], [4,2], [3,3], [4,3], [5,4], [4,5], [3,5], [2,5],
+        [2,6], [3,6], [4,6], [5,6], [6,6], [7,6], [2,7], [4,7],
+        [5,7], [7,7], [1,8], [2,8], [3,8], [4,8], [5,8], [6,8], [7,8]
+      ];
+      samplePoints.forEach(([x, y]) => {
+        gridEngine.setCell(x, y, "#38bdf8");
+        gridEngine.setCell(15 - x, y, "#38bdf8");
+      });
+
+      renderSwatches();
+      gridEngine.render();
+      updateCodeOutput();
+    });
+  </script>
+</body>
+</html>
