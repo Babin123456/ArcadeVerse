@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Particle FX & Physics Spark Lab | ArcadeVerse DevTools</title>
+  <link rel="stylesheet" href="particle-lab.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="lab-container">
+    <header class="header">
+      <div class="header-title-box">
+        <h1>Particle FX <span>Physics Lab</span></h1>
+        <p class="header-subtitle">Interactive 60fps 2D Canvas particle engine with physics simulation and zero-dependency Vanilla JS code export.</p>
+      </div>
+      <div>
+        <a href="../../index.html" class="btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          Back to Hub
+        </a>
+      </div>
+    </header>
+
+    <!-- Presets -->
+    <div class="presets-bar">
+      <div class="section-label">Arcade Presets</div>
+      <button class="preset-chip active" data-preset="explosion">Supernova Explosion</button>
+      <button class="preset-chip" data-preset="laserSpark">Laser Impact</button>
+      <button class="preset-chip" data-preset="thruster">Jet Thruster</button>
+      <button class="preset-chip" data-preset="coinSparkle">Coin Shimmer</button>
+      <button class="btn btn-secondary" id="btn-burst-now" style="margin-left: auto; padding: 4px 12px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Trigger Burst
+      </button>
+    </div>
+
+    <!-- Workbench -->
+    <div class="workbench-grid">
+      <!-- Interactive Stage -->
+      <div class="stage-panel">
+        <canvas id="particle-canvas" width="600" height="380"></canvas>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Click or drag anywhere inside the canvas to emit particles</span>
+
+        <div style="width: 100%;">
+          <div class="section-label" style="margin-bottom: 8px;">Generated Vanilla JS Function</div>
+          <div class="code-box" id="code-output"></div>
+          <button class="btn btn-primary" id="btn-copy-code" style="width: 100%; justify-content: center; margin-top: 10px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Copy Snippet to Clipboard
+          </button>
+        </div>
+      </div>
+
+      <!-- Controls Panel -->
+      <div class="controls-panel">
+        <div class="section-label">Physics & Dynamics</div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Particle Count</span>
+            <span id="val-count">60</span>
+          </div>
+          <input type="range" id="input-count" min="10" max="200" value="60">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Max Speed</span>
+            <span id="val-speed">8</span>
+          </div>
+          <input type="range" id="input-speed" min="1" max="20" value="8">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Spread Angle</span>
+            <span id="val-spread">360°</span>
+          </div>
+          <input type="range" id="input-spread" min="10" max="360" value="360">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Gravity</span>
+            <span id="val-gravity">0.12</span>
+          </div>
+          <input type="range" id="input-gravity" min="-0.2" max="0.5" step="0.02" value="0.12">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Friction (Drag)</span>
+            <span id="val-friction">0.96</span>
+          </div>
+          <input type="range" id="input-friction" min="0.85" max="1.0" step="0.01" value="0.96">
+        </div>
+
+        <div class="control-group">
+          <div class="control-header">
+            <span>Blend Mode</span>
+          </div>
+          <select id="select-blend" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-color); padding: 6px; border-radius: 6px;">
+            <option value="lighter">Lighter (Additive Glow)</option>
+            <option value="source-over">Standard (Opaque)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="particle-engine.js"></script>
+  <script src="emitter-presets.js"></script>
+  <script src="code-exporter.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const canvas = document.getElementById("particle-canvas");
+      const emitter = new ParticleEmitter(canvas);
+      let currentPreset = ParticlePresetManager.getPreset("explosion");
+      emitter.params = currentPreset;
+
+      function updateUI() {
+        document.getElementById("input-count").value = emitter.params.count;
+        document.getElementById("val-count").textContent = emitter.params.count;
+        document.getElementById("input-speed").value = emitter.params.speedMax;
+        document.getElementById("val-speed").textContent = emitter.params.speedMax;
+        document.getElementById("input-spread").value = emitter.params.spread;
+        document.getElementById("val-spread").textContent = emitter.params.spread + "°";
+        document.getElementById("input-gravity").value = emitter.params.gravity;
+        document.getElementById("val-gravity").textContent = emitter.params.gravity;
+        document.getElementById("input-friction").value = emitter.params.friction;
+        document.getElementById("val-friction").textContent = emitter.params.friction;
+        document.getElementById("select-blend").value = emitter.params.blendMode;
+
+        const code = ParticleCodeExporter.toVanillaSnippet(emitter.params, "spawnExplosionSparks");
+        document.getElementById("code-output").textContent = code;
+      }
+
+      // Presets
+      document.querySelectorAll(".preset-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+          document.querySelectorAll(".preset-chip").forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          currentPreset = ParticlePresetManager.getPreset(chip.dataset.preset);
+          emitter.params = currentPreset;
+          updateUI();
+          emitter.burst(canvas.width / 2, canvas.height / 2);
+        });
+      });
+
+      // Slider changes
+      document.getElementById("input-count").addEventListener("input", e => {
+        emitter.params.count = Number(e.target.value);
+        updateUI();
+      });
+      document.getElementById("input-speed").addEventListener("input", e => {
+        emitter.params.speedMax = Number(e.target.value);
+        updateUI();
+      });
+      document.getElementById("input-spread").addEventListener("input", e => {
+        emitter.params.spread = Number(e.target.value);
+        updateUI();
+      });
+      document.getElementById("input-gravity").addEventListener("input", e => {
+        emitter.params.gravity = Number(e.target.value);
+        updateUI();
+      });
+      document.getElementById("input-friction").addEventListener("input", e => {
+        emitter.params.friction = Number(e.target.value);
+        updateUI();
+      });
+      document.getElementById("select-blend").addEventListener("change", e => {
+        emitter.params.blendMode = e.target.value;
+        updateUI();
+      });
+
+      // Canvas interaction
+      function getCanvasPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: ((e.clientX - rect.left) / rect.width) * canvas.width,
+          y: ((e.clientY - rect.top) / rect.height) * canvas.height
+        };
+      }
+
+      canvas.addEventListener("pointerdown", e => {
+        const pos = getCanvasPos(e);
+        emitter.originX = pos.x;
+        emitter.originY = pos.y;
+        emitter.burst(pos.x, pos.y);
+      });
+
+      canvas.addEventListener("pointermove", e => {
+        if (e.buttons === 1) {
+          const pos = getCanvasPos(e);
+          emitter.originX = pos.x;
+          emitter.originY = pos.y;
+          emitter.burst(pos.x, pos.y);
+        }
+      });
+
+      document.getElementById("btn-burst-now").addEventListener("click", () => {
+        emitter.burst(canvas.width / 2, canvas.height / 2);
+      });
+
+      document.getElementById("btn-copy-code").addEventListener("click", () => {
+        const code = document.getElementById("code-output").textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          const btn = document.getElementById("btn-copy-code");
+          const orig = btn.innerHTML;
+          btn.textContent = "Copied to Clipboard!";
+          setTimeout(() => btn.innerHTML = orig, 2000);
+        });
+      });
+
+      updateUI();
+      emitter.burst(canvas.width / 2, canvas.height / 2);
+    });
+  </script>
+</body>
+</html>
