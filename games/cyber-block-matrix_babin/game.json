@@ -1,0 +1,15 @@
+{
+  "id": "cyber-block-matrix",
+  "title": "Cyber Block Matrix",
+  "category": "Puzzle",
+  "lucideIcon": "layout-grid",
+  "description": "Engage in high-velocity tetromino matrix drops with ghost projection, hold queues, combo multipliers, and synthetic audio FX.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": ["Puzzle", "Classic", "Retro", "Tetris"],
+  "stars": 30,
+  "featured": true,
+  "difficulty": "Medium",
+  "releaseDate": "2026-10-29"
+}

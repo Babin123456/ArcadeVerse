@@ -157,7 +157,7 @@ flowchart TB
         G1["games/memory-matrix_debasmita/"]
         G2["games/cyber-brick-breaker_babin/"]
         G3["games/neon-rhythm-blaster_babin/"]
-        GN["games/&lt;game-name_author&gt;/"]
+        GN["games/game-name_author/"]
     end
 
     subgraph CI["02 | GITHUB ACTIONS AUTOMATION"]
@@ -322,14 +322,9 @@ Assigned manually by the Project Admin on the evaluation sheet upon merging:
 
 Dynamically synthesized in real time on [leaderboard.html](leaderboard.html):
 
-\[
-\mathbf{Arcade\ Score} =
-(\text{Games} \times 100) +
-(\text{Mechanics} \times 25) +
-(\text{Features} \times 50) +
-(\text{Fixes} \times 25) +
-(\mathbf{Commits} \times \mathbf{5})
-\]
+$$
+\mathbf{Arcade\ Score} = (\text{Games} \times 100) + (\text{Mechanics} \times 25) + (\text{Features} \times 50) + (\text{Fixes} \times 25) + (\mathbf{Commits} \times \mathbf{5})
+$$
 
 ---
 
@@ -338,7 +333,7 @@ Dynamically synthesized in real time on [leaderboard.html](leaderboard.html):
 The **Accessibility Hub** (`assets/js/a11y-engine.js` & `assets/css/a11y-engine.css`) introduces sensory customization directly onto `document.documentElement`:
 
 | Mode | Target Class | Visual Effect |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | **Reduced Motion** | `.a11y-reduced-motion` | Eliminates glow orbs, ambient grids, pulses, and forced instant transitions |
 | **High Contrast** | `.a11y-high-contrast` | 7:1+ contrast ratio, bold 2px borders, pure solid black/white canvas |
 | **Large Typography** | `.a11y-large-text` | 118% base font-size scaling across hero, catalog cards, and controls |
@@ -353,6 +348,8 @@ All preferences are stored in `localStorage` under `arcadeverse_a11y_prefs` and 
 Before creating a Pull Request, contributors can validate their game directory locally using the pre-flight validator:
 
 ```bash
+npm test
+# or
 npm run validate
 # or
 node scripts/validate-games.js

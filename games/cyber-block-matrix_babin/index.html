@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cyber Block Matrix — ArcadeVerse</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="matrix-arcade-wrapper">
+    <!-- Header Toolbar -->
+    <header class="matrix-header">
+      <div class="header-branding">
+        <svg class="header-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect width="18" height="18" x="3" y="3" rx="2"/>
+          <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+        </svg>
+        <h1 class="game-title">Cyber Block <span class="neon-cyan">Matrix</span></h1>
+      </div>
+      <div class="header-actions">
+        <button id="btn-sound-toggle" class="btn-tool" type="button" aria-label="Toggle Sound" title="Toggle Sound">
+          <svg class="icon-sound" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+          </svg>
+        </button>
+        <button id="btn-how-to-play" class="btn-tool" type="button" aria-label="How to Play" title="How to Play">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Game Station -->
+    <main class="matrix-container" id="main-content">
+      <!-- Left Side Panel: Hold Queue & Controls -->
+      <aside class="side-panel left-panel">
+        <div class="panel-box hold-box">
+          <span class="panel-label">HOLD (C)</span>
+          <canvas id="hold-canvas" width="100" height="100" class="mini-canvas" aria-label="Held Piece"></canvas>
+        </div>
+
+        <div class="panel-box stats-box">
+          <span class="panel-label">METRICS</span>
+          <div class="stat-unit">
+            <span class="stat-tag">SCORE</span>
+            <span id="score-display" class="stat-val font-code">0</span>
+          </div>
+          <div class="stat-unit">
+            <span class="stat-tag">LINES</span>
+            <span id="lines-display" class="stat-val font-code">0</span>
+          </div>
+          <div class="stat-unit">
+            <span class="stat-tag">LEVEL</span>
+            <span id="level-display" class="stat-val font-code">1</span>
+          </div>
+          <div class="stat-unit">
+            <span class="stat-tag">HIGH SCORE</span>
+            <span id="highscore-display" class="stat-val font-code font-cyan">0</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Playfield Matrix -->
+      <section class="canvas-viewport-wrapper">
+        <div class="canvas-glass-card">
+          <canvas id="matrix-canvas" width="300" height="600" class="main-matrix-canvas" aria-label="Tetromino Playfield Matrix" tabindex="0"></canvas>
+          <div id="game-overlay" class="game-overlay">
+            <div class="overlay-card">
+              <h2 id="overlay-title" class="overlay-heading">CYBER BLOCK MATRIX</h2>
+              <p id="overlay-subtitle" class="overlay-text">Stack neon polyominos, complete horizontal matrices, and achieve terminal velocity.</p>
+              <button id="btn-start" class="btn-primary" type="button">START RUN</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Side Panel: Next Preview & Quick Hotkeys -->
+      <aside class="side-panel right-panel">
+        <div class="panel-box next-box">
+          <span class="panel-label">NEXT PIECE</span>
+          <canvas id="next-canvas" width="100" height="100" class="mini-canvas" aria-label="Next Piece"></canvas>
+        </div>
+
+        <div class="panel-box hints-box">
+          <span class="panel-label">TERMINAL KEYS</span>
+          <div class="key-hint-list">
+            <div class="hint-item"><kbd>A</kbd> / <kbd>&larr;</kbd> Left</div>
+            <div class="hint-item"><kbd>D</kbd> / <kbd>&rarr;</kbd> Right</div>
+            <div class="hint-item"><kbd>W</kbd> / <kbd>&uarr;</kbd> Rotate</div>
+            <div class="hint-item"><kbd>S</kbd> / <kbd>&darr;</kbd> Soft Drop</div>
+            <div class="hint-item"><kbd>Space</kbd> Hard Drop</div>
+            <div class="hint-item"><kbd>C</kbd> Hold Piece</div>
+            <div class="hint-item"><kbd>P</kbd> Pause</div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Mobile Virtual Touch Pad -->
+    <nav class="mobile-touch-toolbar" aria-label="Mobile Game Controls">
+      <div class="touch-row dpad-row">
+        <button id="btn-touch-left" class="btn-touch" type="button" aria-label="Move Left">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button id="btn-touch-rotate" class="btn-touch btn-accent" type="button" aria-label="Rotate Piece">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        </button>
+        <button id="btn-touch-right" class="btn-touch" type="button" aria-label="Move Right">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+      <div class="touch-row action-row">
+        <button id="btn-touch-hold" class="btn-touch btn-small" type="button" aria-label="Hold Piece">
+          <span class="touch-label">HOLD</span>
+        </button>
+        <button id="btn-touch-down" class="btn-touch" type="button" aria-label="Soft Drop">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <button id="btn-touch-drop" class="btn-touch btn-special" type="button" aria-label="Hard Drop">
+          <span class="touch-label">DROP</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- How to Play Modal Dialog -->
+    <div id="modal-rules" class="rules-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-rules-title">
+      <div class="rules-modal-card">
+        <div class="rules-modal-header">
+          <h2 id="modal-rules-title">Operation: Cyber Block Matrix</h2>
+          <button id="btn-close-rules" class="btn-close-rules" type="button" aria-label="Close Rules Dialog">&times;</button>
+        </div>
+        <div class="rules-modal-body">
+          <p><strong>Objective:</strong> Guide descending polyomino blocks into complete horizontal matrix lines. Complete lines disintegrate and award Arcade points.</p>
+          
+          <h3>Scoring Matrix:</h3>
+          <ul>
+            <li><strong>Single Clear (1 Line):</strong> 100 &times; Level</li>
+            <li><strong>Double Clear (2 Lines):</strong> 300 &times; Level</li>
+            <li><strong>Triple Clear (3 Lines):</strong> 500 &times; Level</li>
+            <li><strong>Matrix Tetris (4 Lines):</strong> 800 &times; Level</li>
+          </ul>
+
+          <h3>Special Techniques:</h3>
+          <ul>
+            <li><strong>Ghost Projection:</strong> A translucent neon silhouette projects the exact landing placement of the current falling piece.</li>
+            <li><strong>Hold Buffer (C):</strong> Swap the active tetromino into the hold slot for tactical preservation. You can only hold once per drop.</li>
+            <li><strong>Hard Drop (Space):</strong> Instantly slam the active piece into position with zero drop delay.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
