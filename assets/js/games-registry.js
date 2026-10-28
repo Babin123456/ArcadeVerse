@@ -63,10 +63,10 @@ const GAMES_REGISTRY = [
   },
   {
     "id": "cosmic-surge_debasmita",
-    "title": "Cosmic Surge: Quantum Leap",
+    "title": "Cosmic Surge: Galaxy Defender",
     "category": "Arcade",
     "lucideIcon": "zap",
-    "description": "Navigate a pulsating energy core through rotating hazard rings, collect quantum flux orbs, and execute precision warp surges.",
+    "description": "Pilot a neon starfighter through cosmic asteroid belts, blast rogue drone fleets, collect quantum energy cores, and deploy EMP nova blasts.",
     "author": "Debasmita Bose",
     "github": "DebasmitaBose0",
     "role": "Project Admin & Lead (NSOC '26)",
@@ -74,11 +74,11 @@ const GAMES_REGISTRY = [
     "tags": [
       "Arcade",
       "Action",
-      "Neon",
-      "Reflex",
+      "Space",
+      "Shooter",
       "NSOC26"
     ],
-    "stars": 38,
+    "stars": 45,
     "featured": true,
     "difficulty": "Intermediate",
     "releaseDate": "2026-10-28"
@@ -546,14 +546,14 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 173,
+    "commits": 174,
     "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
     "qualityPRs": 0,
     "bonusPts": 0,
     "contributions": [
-      "Cosmic Surge: Quantum Leap",
+      "Cosmic Surge: Galaxy Defender",
       "Cyber Neon Pong",
       "Quantum Memory Matrix"
     ]
