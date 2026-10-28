@@ -5964,3 +5964,29 @@ textarea:focus-visible,
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Trophy Card Engine Integration */
+#modal-share-card-btn:hover {
+  color: #00f5ff;
+  border-color: #00f5ff;
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.4);
+}
+.trophy-badge-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(0, 245, 255, 0.08);
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  color: #00f5ff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.trophy-badge-btn:hover {
+  background: rgba(0, 245, 255, 0.18);
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.35);
+  transform: translateY(-1px);
+}
