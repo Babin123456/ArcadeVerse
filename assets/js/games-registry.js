@@ -62,6 +62,28 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "cosmic-surge_debasmita",
+    "title": "Cosmic Surge: Quantum Leap",
+    "category": "Arcade",
+    "lucideIcon": "zap",
+    "description": "Navigate a pulsating energy core through rotating hazard rings, collect quantum flux orbs, and execute precision warp surges.",
+    "author": "Debasmita Bose",
+    "github": "DebasmitaBose0",
+    "role": "Project Admin & Lead (NSOC '26)",
+    "path": "games/cosmic-surge_debasmita/index.html",
+    "tags": [
+      "Arcade",
+      "Action",
+      "Neon",
+      "Reflex",
+      "NSOC26"
+    ],
+    "stars": 38,
+    "featured": true,
+    "difficulty": "Intermediate",
+    "releaseDate": "2026-10-28"
+  },
+  {
     "id": "cryptic-wordle_babin",
     "title": "Cryptic Wordle Hack",
     "category": "Puzzle",
@@ -525,12 +547,13 @@ const CONTRIBUTORS_REGISTRY = [
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
     "commits": 173,
-    "gamesCount": 2,
+    "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
     "qualityPRs": 0,
     "bonusPts": 0,
     "contributions": [
+      "Cosmic Surge: Quantum Leap",
       "Cyber Neon Pong",
       "Quantum Memory Matrix"
     ]
@@ -540,7 +563,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 110,
+    "commits": 106,
     "gamesCount": 13,
     "mechanicsBonus": 2,
     "platformPRs": 29,
