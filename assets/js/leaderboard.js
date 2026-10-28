@@ -526,6 +526,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Update Dedicated Admin Card at the top with live metadata
   function updateAdminSpotlight(adminUser) {
     if (!adminUser || !adminMetaInfo) return;
+    if (typeof GAMES_REGISTRY !== "undefined" && Array.isArray(GAMES_REGISTRY)) {
+      const userGames = GAMES_REGISTRY.filter(g => g.github && g.github.toLowerCase() === "debasmitabose0");
+      if (userGames.length > 0) {
+        adminUser.gamesCount = userGames.length;
+        adminUser.games = userGames.map(g => g.title);
+      }
+    }
     const score = calculateScore(adminUser);
     adminMetaInfo.textContent = `${adminUser.commits} Commits • ${adminUser.gamesCount} Games • ${score} pts`;
 
@@ -573,7 +580,16 @@ document.addEventListener("DOMContentLoaded", () => {
           const cached = JSON.parse(cachedRaw);
           const isFresh = (Date.now() - cached.timestamp) < CACHE_TTL;
           if (isFresh && Array.isArray(cached.data) && cached.data.length > 0) {
-            contributorsData = cached.data;
+            contributorsData = cached.data.map(user => {
+              if (typeof GAMES_REGISTRY !== "undefined" && Array.isArray(GAMES_REGISTRY)) {
+                const uGames = GAMES_REGISTRY.filter(g => g.github && g.github.toLowerCase() === (user.login || "").toLowerCase());
+                if (uGames.length > 0) {
+                  user.gamesCount = uGames.length;
+                  user.games = uGames.map(g => g.title);
+                }
+              }
+              return user;
+            });
             const adminItem = contributorsData.find(c => c.login && c.login.toLowerCase() === "debasmitabose0");
             if (adminItem) updateAdminSpotlight(adminItem);
 
