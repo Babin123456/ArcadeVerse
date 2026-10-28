@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cyber Rogue Protocol | ArcadeVerse</title>
+  <meta name="description" content="Hack and crawl through procedurally generated mainframe sector grids with turn-based tactical combat, fog of war, and security drone encounters!">
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/public/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="crp-app">
+    <!-- Header -->
+    <header class="crp-header">
+      <div class="crp-title-group">
+        <a href="../../index.html" class="crp-back-link" aria-label="Back to ArcadeVerse Catalog">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          ArcadeVerse
+        </a>
+        <h1 class="crp-title">Cyber Rogue <span class="gradient-text">Protocol</span></h1>
+      </div>
+
+      <div class="crp-header-actions">
+        <button id="btn-sound" class="crp-btn-icon" type="button" aria-label="Toggle Sound" title="Toggle Sound">
+          <svg id="icon-sound-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+          <svg id="icon-sound-off" class="hidden" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="btn-help" class="crp-btn-pill" type="button">How to Play</button>
+      </div>
+    </header>
+
+    <!-- Character Status Bar -->
+    <section class="crp-status-hud" aria-label="Player Stats">
+      <div class="crp-stat-item">
+        <span class="crp-stat-label">FLOOR DEPTH</span>
+        <strong id="floor-display" class="crp-stat-val">B-1</strong>
+      </div>
+      <div class="crp-stat-item">
+        <span class="crp-stat-label">HEALTH</span>
+        <div class="crp-bar-wrapper">
+          <div id="hp-bar" class="crp-bar hp" style="width: 100%;"></div>
+        </div>
+        <span id="hp-text" class="crp-sub-stat">100 / 100</span>
+      </div>
+      <div class="crp-stat-item">
+        <span class="crp-stat-label">SHIELD</span>
+        <div class="crp-bar-wrapper">
+          <div id="shield-bar" class="crp-bar shield" style="width: 50%;"></div>
+        </div>
+        <span id="shield-text" class="crp-sub-stat">50 / 50</span>
+      </div>
+      <div class="crp-stat-item">
+        <span class="crp-stat-label">DATA CREDITS</span>
+        <strong id="credits-display" class="crp-stat-val">0</strong>
+      </div>
+    </section>
+
+    <!-- Main Grid Canvas -->
+    <div class="crp-grid-container">
+      <canvas id="dungeon-canvas" width="500" height="500" role="img" aria-label="Cyber Rogue dungeon map grid. Move using arrow keys or WASD." tabindex="0"></canvas>
+
+      <!-- Start Overlay -->
+      <div id="start-overlay" class="crp-overlay active">
+        <div class="crp-overlay-card">
+          <div class="crp-badge">CYBERNETIC ROGUELIKE</div>
+          <h2>Infiltrate Sub-Level B1</h2>
+          <p>Guide your infiltration probe through procedurally generated security sectors. Avoid lethal drone lasers, collect access keys, recharge shields, and reach the exit portal to descend deeper.</p>
+          <button id="btn-start" class="crp-btn-primary" type="button">Begin Infiltration</button>
+        </div>
+      </div>
+
+      <!-- Game Over Overlay -->
+      <div id="game-over-overlay" class="crp-overlay">
+        <div class="crp-overlay-card danger">
+          <div class="crp-badge danger">SIGNAL DESTROYED</div>
+          <h2>Probe Terminated</h2>
+          <p>Security drones eliminated your unit. Final Depth: <strong id="final-depth" class="highlight">B-1</strong> • Credits: <strong id="final-credits" class="highlight">0</strong></p>
+          <button id="btn-restart" class="crp-btn-primary" type="button">Re-Deploy Probe</button>
+        </div>
+      </div>
+
+      <!-- Victory Floor Descent Overlay -->
+      <div id="descent-overlay" class="crp-overlay">
+        <div class="crp-overlay-card victory">
+          <div class="crp-badge success">SECTOR CLEARED</div>
+          <h2>Access Granted!</h2>
+          <p>Core firewall bypassed. Descending to next security sector...</p>
+          <button id="btn-next-floor" class="crp-btn-primary" type="button">Descend to Next Floor</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal Combat / Action Log -->
+    <div class="crp-terminal-log" id="action-log" aria-live="polite">
+      <p class="log-entry info">> Mainframe infiltration probe initialized.</p>
+    </div>
+
+    <!-- Mobile D-Pad Directional Controls -->
+    <div class="crp-dpad" aria-label="Directional controls">
+      <div class="dpad-row">
+        <button class="dpad-btn" id="dpad-up" type="button" aria-label="Move Up">▲</button>
+      </div>
+      <div class="dpad-row middle">
+        <button class="dpad-btn" id="dpad-left" type="button" aria-label="Move Left">◀</button>
+        <button class="dpad-btn center-wait" id="dpad-wait" type="button" aria-label="Wait Turn">●</button>
+        <button class="dpad-btn" id="dpad-right" type="button" aria-label="Move Right">▶</button>
+      </div>
+      <div class="dpad-row">
+        <button class="dpad-btn" id="dpad-down" type="button" aria-label="Move Down">▼</button>
+      </div>
+    </div>
+
+    <!-- Instructions Modal Drawer -->
+    <div id="help-modal" class="crp-modal">
+      <div class="crp-modal-content">
+        <div class="crp-modal-header">
+          <h3>How to Play: Cyber Rogue Protocol</h3>
+          <button id="btn-close-help" class="crp-btn-close" aria-label="Close Instructions">&times;</button>
+        </div>
+        <div class="crp-modal-body">
+          <p><strong>Movement:</strong> Use <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> or <kbd>Arrow Keys</kbd> (or the on-screen D-Pad) to move your probe 1 tile per turn. Press <kbd>Space</kbd> or the center button to wait a turn.</p>
+          <h4>Map Entities:</h4>
+          <ul>
+            <li><strong>@ (Cyan Probe):</strong> Your player character unit.</li>
+            <li><strong>&lt;!&gt; (Red Security Drone):</strong> Patrols and attacks within line-of-sight. Bump into bots to attack them.</li>
+            <li><strong>[K] (Gold Keycard):</strong> Unlocks the security exit portal for the current floor.</li>
+            <li><strong>[+] (Cyan Data Cache):</strong> Restores 25 shield energy points and grants nano-credits.</li>
+            <li><strong>[H] (Green Nano-Stitch):</strong> Restores 35 health points.</li>
+            <li><strong>[E] (Exit Terminal):</strong> Unlocks after finding the floor keycard to descend deeper!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
