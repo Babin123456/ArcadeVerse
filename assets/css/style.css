@@ -5965,25 +5965,9 @@ textarea:focus-visible,
   }
 }
 
-/* Universal Accessibility (a11y) Global Modifiers */
-html.a11y-reduced-motion *,
-html.a11y-reduced-motion *::before,
-html.a11y-reduced-motion *::after {
-  animation-duration: 0.001s !important;
-  transition-duration: 0.001s !important;
-  scroll-behavior: auto !important;
-}
-html.a11y-high-contrast {
-  filter: contrast(125%) brightness(105%);
-}
-html.a11y-high-contrast .cyber-grid,
-html.a11y-high-contrast .glow-orb {
-  display: none !important;
-}
-html.a11y-large-text body {
-  font-size: 115% !important;
-}
-html.a11y-focus-highlight *:focus-visible {
-  outline: 4px solid #00f5ff !important;
-  outline-offset: 4px !important;
+/* Speedrun Split Timer Button Integration */
+#modal-speedrun-btn:hover {
+  color: #00f5ff;
+  border-color: #00f5ff;
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.4);
 }
