@@ -1,0 +1,19 @@
+{
+  "title": "Time Warp: Chrono Shift",
+  "category": "Puzzle",
+  "lucideIcon": "history",
+  "description": "Manipulate time and record ghost replays to solve temporal chambers, coordinate with past selves, and escape unstable quantum anomalies.",
+  "author": "mistu7debnath",
+  "github": "mistu7debnath",
+  "role": "Contributor",
+  "tags": [
+    "Puzzle",
+    "Platformer",
+    "Arcade",
+    "Sci-Fi",
+    "NSOC26"
+  ],
+  "stars": 25,
+  "featured": true,
+  "difficulty": "All Skill Levels"
+}

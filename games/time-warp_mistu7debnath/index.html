@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Time Warp: Chrono Shift | ArcadeVerse</title>
+  <meta name="description" content="Manipulate time and record ghost replays to solve temporal chambers, coordinate with past selves, and escape unstable quantum anomalies.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/public/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
+</head>
+<body>
+  <div class="tw-app" id="tw-app">
+    <!-- Main Game Container -->
+    <main class="tw-container" id="tw-container">
+      
+      <!-- Top In-Game HUD -->
+      <header class="tw-hud" id="tw-hud" aria-label="Game Heads Up Display">
+        <!-- Left Section: Quick Action Buttons & Level Badge -->
+        <div class="tw-hud-left">
+          <button id="tw-btn-sound" class="tw-hud-btn" type="button" aria-label="Toggle Sound" title="Toggle Sound (M)">
+            <!-- Sound On Icon -->
+            <svg class="tw-icon tw-icon-sound-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            </svg>
+            <!-- Sound Off Icon -->
+            <svg class="tw-icon tw-icon-sound-off tw-hidden" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </button>
+
+          <button id="tw-btn-restart" class="tw-hud-btn" type="button" aria-label="Restart Chamber" title="Restart Chamber">
+            <svg class="tw-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+          </button>
+
+          <button id="tw-btn-pause" class="tw-hud-btn" type="button" aria-label="Pause Game" title="Pause Game (P / ESC)">
+            <svg class="tw-icon tw-icon-pause" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+            <svg class="tw-icon tw-icon-play tw-hidden" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </button>
+
+          <div class="tw-level-badge" id="tw-level-badge" title="Active Chamber">
+            <span class="tw-badge-label">CHAMBER</span>
+            <span class="tw-badge-val" id="tw-hud-level">01</span>
+          </div>
+        </div>
+
+        <!-- Center Section: Mission Stats (Timer & Fragments) -->
+        <div class="tw-hud-center">
+          <div class="tw-stat-card" title="Chamber Elapsed Time">
+            <svg class="tw-mini-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span class="tw-stat-text" id="tw-hud-time">00:00.0</span>
+          </div>
+
+          <div class="tw-stat-card" title="Chrono Shards Collected">
+            <svg class="tw-mini-icon tw-icon-shard" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="12 2 19 8 12 22 5 8 12 2"></polygon>
+            </svg>
+            <span class="tw-stat-text" id="tw-hud-fragments">0 / 3</span>
+          </div>
+
+          <div class="tw-stat-card tw-stat-score" title="Score">
+            <span class="tw-stat-label">SCORE</span>
+            <span class="tw-stat-text tw-accent" id="tw-hud-score">0</span>
+          </div>
+        </div>
+
+        <!-- Right Section: Temporal Gauges (Rewind Energy & Ghost Status) -->
+        <div class="tw-hud-right">
+          <!-- Rewind Buffer Bar -->
+          <div class="tw-gauge-wrap" title="Hold [R] to Rewind Time">
+            <div class="tw-gauge-header">
+              <span class="tw-gauge-title">
+                <svg class="tw-gauge-icon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                </svg>
+                REWIND [R]
+              </span>
+              <span class="tw-gauge-val" id="tw-hud-rewind-val">6.0s</span>
+            </div>
+            <div class="tw-gauge-track">
+              <div class="tw-gauge-fill" id="tw-hud-rewind-bar" style="width: 100%;"></div>
+            </div>
+          </div>
+
+          <!-- Ghost Status Pill -->
+          <div class="tw-ghost-pill" id="tw-ghost-pill" title="Press [E] to summon Ghost Replay">
+            <svg class="tw-ghost-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 3 2.5-3 2.5 3 2.5-3 3 3V10a8 8 0 0 0-8-8z"></path>
+              <circle cx="9" cy="10" r="1"></circle>
+              <circle cx="15" cy="10" r="1"></circle>
+            </svg>
+            <span class="tw-ghost-status" id="tw-hud-ghost-status">GHOST: READY [E]</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Active Game Viewport & Canvas -->
+      <div class="tw-viewport" id="tw-viewport">
+        <canvas id="tw-canvas" width="960" height="600" role="img" aria-label="Time Warp: Chrono Shift 2D puzzle platformer gameplay canvas"></canvas>
+
+        <!-- Temporal Warp Screen Effect Overlay (used during rewind) -->
+        <div class="tw-rewind-overlay tw-hidden" id="tw-rewind-overlay" aria-hidden="true">
+          <div class="tw-rewind-scanlines"></div>
+          <div class="tw-rewind-badge">
+            <svg class="tw-rewind-spin" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span>TEMPORAL REWIND ACTIVE</span>
+          </div>
+        </div>
+
+        <!-- Ghost Recording / Active Status Toast -->
+        <div class="tw-ghost-banner tw-hidden" id="tw-ghost-banner" aria-live="polite">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 3 2.5-3 2.5 3 2.5-3 3 3V10a8 8 0 0 0-8-8z"></path>
+          </svg>
+          <span id="tw-ghost-banner-text">CHRONO GHOST ACTIVE (5.0s)</span>
+        </div>
+      </div>
+
+      <!-- Responsive Mobile Touch Controls -->
+      <footer class="tw-touch-controls" id="tw-touch-controls" aria-label="On-screen game controls">
+        <div class="tw-touch-left">
+          <button id="tw-touch-left" class="tw-touch-btn" type="button" aria-label="Move Left">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <button id="tw-touch-right" class="tw-touch-btn" type="button" aria-label="Move Right">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <div class="tw-touch-right">
+          <button id="tw-touch-rewind" class="tw-touch-btn tw-touch-accent-rewind" type="button" aria-label="Rewind Time">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span class="tw-touch-label">REWIND</span>
+          </button>
+
+          <button id="tw-touch-ghost" class="tw-touch-btn tw-touch-accent-ghost" type="button" aria-label="Spawn Ghost">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 3 2.5-3 2.5 3 2.5-3 3 3V10a8 8 0 0 0-8-8z"></path>
+            </svg>
+            <span class="tw-touch-label">GHOST</span>
+          </button>
+
+          <button id="tw-touch-jump" class="tw-touch-btn tw-touch-accent-jump" type="button" aria-label="Jump">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="19" x2="12" y2="5"></line>
+              <polyline points="5 12 12 5 19 12"></polyline>
+            </svg>
+            <span class="tw-touch-label">JUMP</span>
+          </button>
+        </div>
+      </footer>
+    </main>
+
+    <!-- ============================================== -->
+    <!-- MODALS & OVERLAYS                              -->
+    <!-- ============================================== -->
+
+    <!-- 1. MAIN MENU MODAL -->
+    <div class="tw-modal-backdrop" id="tw-menu-modal">
+      <div class="tw-modal-card tw-menu-card" role="dialog" aria-modal="true" aria-labelledby="tw-title">
+        <div class="tw-card-glow"></div>
+        
+        <div class="tw-brand-header">
+          <div class="tw-logo-icon">
+            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 14 14"></polyline>
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"></path>
+            </svg>
+          </div>
+          <h1 id="tw-title" class="tw-title">TIME WARP</h1>
+          <p class="tw-subtitle">CHRONO SHIFT &bull; TEMPORAL PUZZLE PLATFORMER</p>
+          <p class="tw-tagline">&ldquo;Every mistake leaves a trace.&rdquo;</p>
+        </div>
+
+        <div class="tw-stats-ribbon">
+          <div class="tw-ribbon-item">
+            <span class="tw-ribbon-lbl">BEST SCORE</span>
+            <span class="tw-ribbon-val" id="tw-menu-best-score">0</span>
+          </div>
+          <div class="tw-ribbon-item">
+            <span class="tw-ribbon-lbl">CHAMBERS UNLOCKED</span>
+            <span class="tw-ribbon-val" id="tw-menu-unlocked">1 / 5</span>
+          </div>
+          <div class="tw-ribbon-item">
+            <span class="tw-ribbon-lbl">SHARDS HARVESTED</span>
+            <span class="tw-ribbon-val" id="tw-menu-shards">0 / 15</span>
+          </div>
+        </div>
+
+        <div class="tw-btn-stack">
+          <button id="tw-btn-play" class="tw-btn tw-btn-primary" type="button">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>ENTER CHAMBERS</span>
+          </button>
+
+          <button id="tw-btn-levels" class="tw-btn tw-btn-secondary" type="button">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>SELECT CHAMBER</span>
+          </button>
+
+          <button id="tw-btn-how" class="tw-btn tw-btn-tertiary" type="button">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>HOW TO PLAY</span>
+          </button>
+        </div>
+
+        <div class="tw-menu-footer">
+          <span>VANILLA HTML5 CANVAS &bull; NSOC 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. HOW TO PLAY MODAL -->
+    <div class="tw-modal-backdrop tw-hidden" id="tw-how-modal">
+      <div class="tw-modal-card tw-how-card" role="dialog" aria-modal="true" aria-labelledby="tw-how-title">
+        <div class="tw-card-header">
+          <div class="tw-header-left">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <h2 id="tw-how-title">CHRONO LAB OPERATOR MANUAL</h2>
+          </div>
+          <button id="tw-btn-close-how" class="tw-modal-close" type="button" aria-label="Close Instructions">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="tw-card-body tw-how-body">
+          <!-- Section 1: Keyboard Controls -->
+          <div class="tw-guide-section">
+            <h3 class="tw-guide-title">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M6 16h12"></path>
+              </svg>
+              KEYBOARD & TOUCH CONTROLS
+            </h3>
+            <div class="tw-controls-grid">
+              <div class="tw-control-row">
+                <span class="tw-key-capsule">A / D &bull; &larr; / &rarr;</span>
+                <span class="tw-key-desc">Run horizontally across platforms</span>
+              </div>
+              <div class="tw-control-row">
+                <span class="tw-key-capsule">SPACE &bull; W &bull; &uarr;</span>
+                <span class="tw-key-desc">Jump / Leap across gaps and obstacles</span>
+              </div>
+              <div class="tw-control-row">
+                <span class="tw-key-capsule tw-key-rewind">HOLD R</span>
+                <span class="tw-key-desc">Rewind time up to 6 seconds into the past</span>
+              </div>
+              <div class="tw-control-row">
+                <span class="tw-key-capsule tw-key-ghost">PRESS E</span>
+                <span class="tw-key-desc">Summon Replay Ghost to replay your past actions</span>
+              </div>
+              <div class="tw-control-row">
+                <span class="tw-key-capsule">P &bull; ESC</span>
+                <span class="tw-key-desc">Pause or resume chamber simulation</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Core Mechanics & Puzzle Rules -->
+          <div class="tw-guide-section">
+            <h3 class="tw-guide-title">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              TEMPORAL GHOST & REWIND MECHANICS
+            </h3>
+            <div class="tw-mechanics-list">
+              <div class="tw-mech-item">
+                <div class="tw-mech-icon tw-ghost-icon-box">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 3 2.5-3 2.5 3 2.5-3 3 3V10a8 8 0 0 0-8-8z"></path>
+                  </svg>
+                </div>
+                <div class="tw-mech-content">
+                  <h4>The Ghost Replay (Press E)</h4>
+                  <p>When you trigger a ghost replay, a translucent echo of your recent movements is projected into reality. The ghost replays your recorded movements and <strong>has real physical mass</strong> to hold down pressure plates while you sprint through unlocked blast doors!</p>
+                </div>
+              </div>
+
+              <div class="tw-mech-item">
+                <div class="tw-mech-icon tw-rewind-icon-box">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                    <path d="M3 3v5h5"></path>
+                  </svg>
+                </div>
+                <div class="tw-mech-content">
+                  <h4>Rewind Time (Hold R)</h4>
+                  <p>Made a mistake or fell into a trap? Hold R to reverse the time stream. Your position smoothly walks backward through the 6-second circular memory buffer. Release R anytime to resume forward gameplay seamlessly.</p>
+                </div>
+              </div>
+
+              <div class="tw-mech-item">
+                <div class="tw-mech-icon tw-plate-icon-box">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="16" width="18" height="5" rx="1"></rect>
+                    <line x1="12" y1="12" x2="12" y2="16"></line>
+                  </svg>
+                </div>
+                <div class="tw-mech-content">
+                  <h4>Pressure Plates & Blast Doors</h4>
+                  <p>Step onto cyan pressure plates to disengage heavy blast doors. Stepping off allows doors to seal shut immediately. Coordinate with your ghost self to keep doors retracted while navigating distant exits.</p>
+                </div>
+              </div>
+
+              <div class="tw-mech-item">
+                <div class="tw-mech-icon tw-hazard-icon-box">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 2 22 22 22 12 2"></polygon>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                </div>
+                <div class="tw-mech-content">
+                  <h4>Laser Fields & Temporal Hazards</h4>
+                  <p>Lethal energy grids and bottomless chasms cause temporal collapse. If caught, immediately hold R to rewind out of danger, or respawn at the chamber origin.</p>
+                </div>
+              </div>
+
+              <div class="tw-mech-item">
+                <div class="tw-mech-icon tw-portal-icon-box">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <path d="M12 3a9 9 0 0 1 9 9M12 21a9 9 0 0 1-9-9"></path>
+                  </svg>
+                </div>
+                <div class="tw-mech-content">
+                  <h4>Chrono Shards & Exit Portal</h4>
+                  <p>Collect optional floating time fragments for maximum bonus score, then step into the swirling Temporal Rift Portal to stabilize the chamber and advance.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tw-card-actions">
+          <button id="tw-btn-how-start" class="tw-btn tw-btn-primary" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>LAUNCH SIMULATION</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. LEVEL SELECT MODAL -->
+    <div class="tw-modal-backdrop tw-hidden" id="tw-levels-modal">
+      <div class="tw-modal-card tw-levels-card" role="dialog" aria-modal="true" aria-labelledby="tw-levels-title">
+        <div class="tw-card-header">
+          <div class="tw-header-left">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <h2 id="tw-levels-title">TEMPORAL CHAMBERS MATRIX</h2>
+          </div>
+          <button id="tw-btn-close-levels" class="tw-modal-close" type="button" aria-label="Close Level Selection">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="tw-card-body">
+          <div class="tw-levels-grid" id="tw-levels-grid">
+            <!-- Dynamically populated chamber cards -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. PAUSE MODAL -->
+    <div class="tw-modal-backdrop tw-hidden" id="tw-pause-modal">
+      <div class="tw-modal-card tw-pause-card" role="dialog" aria-modal="true" aria-labelledby="tw-pause-title">
+        <div class="tw-card-header tw-center-header">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="6" y="4" width="4" height="16"></rect>
+            <rect x="14" y="4" width="4" height="16"></rect>
+          </svg>
+          <h2 id="tw-pause-title">TEMPORAL SUSPENSION</h2>
+          <p class="tw-pause-sub">Simulation halted &bull; All chronological vectors frozen</p>
+        </div>
+
+        <div class="tw-btn-stack">
+          <button id="tw-btn-resume" class="tw-btn tw-btn-primary" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>RESUME CHAMBER</span>
+          </button>
+
+          <button id="tw-btn-pause-restart" class="tw-btn tw-btn-secondary" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span>RESTART CHAMBER</span>
+          </button>
+
+          <button id="tw-btn-pause-how" class="tw-btn tw-btn-tertiary" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>OPERATOR MANUAL</span>
+          </button>
+
+          <button id="tw-btn-pause-menu" class="tw-btn tw-btn-danger" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>ABORT TO MENU</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. CHAMBER COMPLETE MODAL -->
+    <div class="tw-modal-backdrop tw-hidden" id="tw-complete-modal">
+      <div class="tw-modal-card tw-complete-card" role="dialog" aria-modal="true" aria-labelledby="tw-complete-title">
+        <div class="tw-card-glow tw-glow-gold"></div>
+
+        <div class="tw-complete-header">
+          <div class="tw-complete-icon">
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h2 id="tw-complete-title" class="tw-title-gold">CHAMBER STABILIZED!</h2>
+          <p class="tw-complete-sub" id="tw-complete-level-title">Chamber 01: First Moment</p>
+        </div>
+
+        <div class="tw-results-grid">
+          <div class="tw-result-box">
+            <span class="tw-res-lbl">COMPLETION TIME</span>
+            <span class="tw-res-val" id="tw-res-time">00:14.2</span>
+          </div>
+          <div class="tw-result-box">
+            <span class="tw-res-lbl">CHRONO SHARDS</span>
+            <span class="tw-res-val tw-res-shards" id="tw-res-shards">3 / 3</span>
+          </div>
+          <div class="tw-result-box">
+            <span class="tw-res-lbl">REWINDS ENGAGED</span>
+            <span class="tw-res-val" id="tw-res-rewinds">1</span>
+          </div>
+          <div class="tw-result-box">
+            <span class="tw-res-lbl">CHAMBER SCORE</span>
+            <span class="tw-res-val tw-accent" id="tw-res-score">+1,250</span>
+          </div>
+        </div>
+
+        <div class="tw-btn-stack">
+          <button id="tw-btn-next-level" class="tw-btn tw-btn-primary" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span id="tw-next-btn-text">ADVANCE TO NEXT CHAMBER</span>
+          </button>
+
+          <button id="tw-btn-replay-level" class="tw-btn tw-btn-secondary" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span>OPTIMIZE RUN (REPLAY)</span>
+          </button>
+
+          <button id="tw-btn-complete-menu" class="tw-btn tw-btn-tertiary" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            </svg>
+            <span>CHAMBERS HUB</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. PARADOX / FAILURE MODAL -->
+    <div class="tw-modal-backdrop tw-hidden" id="tw-failed-modal">
+      <div class="tw-modal-card tw-failed-card" role="dialog" aria-modal="true" aria-labelledby="tw-failed-title">
+        <div class="tw-card-header tw-center-header">
+          <div class="tw-danger-icon">
+            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <h2 id="tw-failed-title" class="tw-title-danger">TEMPORAL PARADOX!</h2>
+          <p class="tw-failed-sub" id="tw-failed-reason">Lethal quantum hazard contact detected.</p>
+        </div>
+
+        <div class="tw-tip-box">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span><strong>CHRONO ADVICE:</strong> Hold [R] to rewind before the incident, or restart from safety.</span>
+        </div>
+
+        <div class="tw-btn-stack">
+          <button id="tw-btn-fail-rewind" class="tw-btn tw-btn-rewind-action" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span>REWIND OUT OF ANOMALY</span>
+          </button>
+
+          <button id="tw-btn-fail-restart" class="tw-btn tw-btn-secondary" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span>RESTART CHAMBER</span>
+          </button>
+
+          <button id="tw-btn-fail-menu" class="tw-btn tw-btn-tertiary" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            </svg>
+            <span>RETURN TO MENU</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Game Logic Script -->
+  <script src="game.js"></script>
+</body>
+</html>
