@@ -1,0 +1,36 @@
+/* Interactive Game Rating Widget */
+.game-rating-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.rate-star-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  color: #475569;
+  transition: transform 0.15s ease, color 0.15s ease;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.rate-star-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.rate-star-btn:hover,
+.rate-star-btn:hover ~ .rate-star-btn {
+  transform: scale(1.2);
+  color: #fbbf24;
+}
+
+.rate-star-btn.voted {
+  color: #fbbf24;
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.5));
+}
