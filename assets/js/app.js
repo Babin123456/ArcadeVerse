@@ -291,6 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   function closeGameModal() {
+    if (window.SplitTimer) window.SplitTimer.hideHUD();
     activeGame = null;
     gameModal.classList.remove("active");
     gameModal.setAttribute("aria-hidden", "true");

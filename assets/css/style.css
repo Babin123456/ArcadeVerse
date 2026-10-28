@@ -5964,3 +5964,10 @@ textarea:focus-visible,
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Speedrun Split Timer Button Integration */
+#modal-speedrun-btn:hover {
+  color: #00f5ff;
+  border-color: #00f5ff;
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.4);
+}
