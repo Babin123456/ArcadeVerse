@@ -238,17 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
               `).join('')}
               <span class="rating-badge">${displayScore}</span>
             </div>
-            <button type="button" class="btn-card-trophy" data-action="open-trophy-card" data-game="${game.title}" data-score="${(game.stars || 25) * 100} PTS" data-player="${game.author}" data-rank="Verified Creator" data-badge="NSOC 2026" title="Generate Trophy Card" aria-label="Generate Trophy Card for ${game.title}">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
-                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-                <path d="M4 22h16"/>
-                <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
-                <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
-                <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
-              </svg>
-              <span>Trophy</span>
-            </button>
           </div>
           <div class="game-card-footer">
             <div class="contributor-meta">
@@ -281,7 +270,18 @@ document.addEventListener("DOMContentLoaded", () => {
         openGameModal(game, playBtn);
       });
 
-      card.addEventListener("click", () => openGameModal(game, card));
+      // Prevent game launch modal when clicking rating stars or interactive controls
+      card.addEventListener("click", (e) => {
+        if (e.target.closest(".rate-star-btn, .game-rating-stars, .btn-card-favorite")) {
+          return;
+        }
+        openGameModal(game, card);
+      });
+
+      const ratingWidget = card.querySelector(".game-rating-stars");
+      if (ratingWidget) {
+        ratingWidget.addEventListener("click", (e) => e.stopPropagation());
+      }
       gamesGrid.appendChild(card);
     });
 
@@ -302,14 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateModalFavoriteButton(isFavorite(game.id));
 
-    const modalTrophyBtn = document.getElementById("modal-trophy-btn");
-    if (modalTrophyBtn) {
-      modalTrophyBtn.dataset.game = game.title;
-      modalTrophyBtn.dataset.score = `${(game.stars || 25) * 100} PTS`;
-      modalTrophyBtn.dataset.player = game.author;
-      modalTrophyBtn.dataset.rank = `${game.category} Master`;
-      modalTrophyBtn.dataset.badge = "NSOC 2026";
-    }
+
 
     // Record game play in Recently Played drawer
     if (window.ArcadeRecent && typeof window.ArcadeRecent.recordPlayed === "function") {

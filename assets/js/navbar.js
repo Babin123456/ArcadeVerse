@@ -169,4 +169,37 @@
       }
     });
   });
+
+  // Page Transition Circular Loader Engine
+  function bindPageTransitionLoader() {
+    const loader = document.getElementById('page-transition-loader');
+    if (!loader) return;
+
+    // Smoothly hide on page load
+    loader.classList.remove('active');
+
+    // Intercept clicks on links moving between index and leaderboard
+    document.querySelectorAll('a[href]').forEach((link) => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+      if (
+        (href.includes('leaderboard.html') || href.includes('index.html')) &&
+        !href.startsWith('http') &&
+        !href.startsWith('#')
+      ) {
+        link.addEventListener('click', (e) => {
+          // If middle click or holding ctrl/cmd, allow default new tab
+          if (e.metaKey || e.ctrlKey || e.button !== 0) return;
+          e.preventDefault();
+          loader.classList.add('active');
+          setTimeout(() => {
+            window.location.href = href;
+          }, 140);
+        });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', bindPageTransitionLoader);
+
 })();
