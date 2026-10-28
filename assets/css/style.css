@@ -5964,3 +5964,9 @@ textarea:focus-visible,
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Global Audio Toggle Layout Integration */
+.nav-actions {
+  display: flex;
+  align-items: center;
+}
