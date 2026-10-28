@@ -475,6 +475,27 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "time-warp_mistu7debnath",
+    "title": "Time Warp: Chrono Shift",
+    "category": "Puzzle",
+    "lucideIcon": "history",
+    "description": "Manipulate time and record ghost replays to solve temporal chambers, coordinate with past selves, and escape unstable quantum anomalies.",
+    "author": "mistu7debnath",
+    "github": "mistu7debnath",
+    "role": "Contributor",
+    "path": "games/time-warp_mistu7debnath/index.html",
+    "tags": [
+      "Puzzle",
+      "Platformer",
+      "Arcade",
+      "Sci-Fi",
+      "NSOC26"
+    ],
+    "stars": 25,
+    "featured": true,
+    "difficulty": "All Skill Levels"
+  },
+  {
     "id": "whack-a-bug_babin",
     "title": "Whack-A-Bug Panic",
     "category": "Arcade",
@@ -503,7 +524,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 157,
+    "commits": 172,
     "gamesCount": 2,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -519,7 +540,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 96,
+    "commits": 110,
     "gamesCount": 13,
     "mechanicsBonus": 2,
     "platformPRs": 29,
@@ -542,6 +563,25 @@ const CONTRIBUTORS_REGISTRY = [
     ]
   },
   {
+    "name": "mistu7debnath",
+    "github": "mistu7debnath",
+    "avatarInitial": "M",
+    "role": "Contributor (NSOC '26)",
+    "commits": 7,
+    "gamesCount": 5,
+    "mechanicsBonus": 1,
+    "platformPRs": 0,
+    "qualityPRs": 0,
+    "bonusPts": 0,
+    "contributions": [
+      "Bubble Pop: Bubble Burst Arena",
+      "Cyber Runner: Neon Rush",
+      "Flappy Cyber Jet",
+      "Neon Grid Defense: Core Protocol",
+      "Time Warp: Chrono Shift"
+    ]
+  },
+  {
     "name": "Joita Paul",
     "github": "joitapaul",
     "avatarInitial": "J",
@@ -557,24 +597,6 @@ const CONTRIBUTORS_REGISTRY = [
       "Neon Drift Racer",
       "Prism Pulse: Laser Labyrinth",
       "Quantum Pinball: Reactor Run"
-    ]
-  },
-  {
-    "name": "mistu7debnath",
-    "github": "mistu7debnath",
-    "avatarInitial": "M",
-    "role": "Contributor (NSOC '26)",
-    "commits": 6,
-    "gamesCount": 4,
-    "mechanicsBonus": 1,
-    "platformPRs": 0,
-    "qualityPRs": 0,
-    "bonusPts": 0,
-    "contributions": [
-      "Bubble Pop: Bubble Burst Arena",
-      "Cyber Runner: Neon Rush",
-      "Flappy Cyber Jet",
-      "Neon Grid Defense: Core Protocol"
     ]
   },
   {
