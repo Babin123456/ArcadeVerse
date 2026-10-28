@@ -1,0 +1,20 @@
+{
+  "title": "Cyber Brick Breaker",
+  "category": "Arcade",
+  "lucideIcon": "layout-grid",
+  "description": "Shatter holographic neon brick barriers with precision multi-angle paddle physics, laser power-ups, and particle chain explosions!",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Arcade",
+    "Physics",
+    "Reflex",
+    "Retro",
+    "NSOC26"
+  ],
+  "stars": 35,
+  "featured": true,
+  "difficulty": "Intermediate",
+  "releaseDate": "2026-10-28"
+}

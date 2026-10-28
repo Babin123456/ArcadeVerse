@@ -1,0 +1,20 @@
+{
+  "title": "Cyber Rogue Protocol",
+  "category": "Puzzle",
+  "lucideIcon": "terminal",
+  "description": "Hack and crawl through procedurally generated mainframe sector grids with turn-based tactical combat, fog of war, and security drone encounters!",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Puzzle",
+    "Roguelike",
+    "Turn-Based",
+    "Strategy",
+    "NSOC26"
+  ],
+  "stars": 34,
+  "featured": true,
+  "difficulty": "Intermediate",
+  "releaseDate": "2026-10-28"
+}
