@@ -1,0 +1,20 @@
+{
+  "title": "Neon Rhythm Blaster",
+  "category": "Arcade",
+  "lucideIcon": "music",
+  "description": "Hit high-tempo falling energy notes across a 4-lane synthesizer matrix with precision timing, combo streaks, and synthesized audio!",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Arcade",
+    "Rhythm",
+    "Music",
+    "Reflex",
+    "NSOC26"
+  ],
+  "stars": 32,
+  "featured": true,
+  "difficulty": "Advanced",
+  "releaseDate": "2026-10-28"
+}
