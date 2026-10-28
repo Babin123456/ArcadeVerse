@@ -81,6 +81,28 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "cyber-brick-breaker_babin",
+    "title": "Cyber Brick Breaker",
+    "category": "Arcade",
+    "lucideIcon": "layout-grid",
+    "description": "Shatter holographic neon brick barriers with precision multi-angle paddle physics, laser power-ups, and particle chain explosions!",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/cyber-brick-breaker_babin/index.html",
+    "tags": [
+      "Arcade",
+      "Physics",
+      "Reflex",
+      "Retro",
+      "NSOC26"
+    ],
+    "stars": 35,
+    "featured": true,
+    "difficulty": "Intermediate",
+    "releaseDate": "2026-10-28"
+  },
+  {
     "id": "cyber-neon-pong_debasmita",
     "title": "Cyber Neon Pong",
     "category": "Arcade",
@@ -97,6 +119,28 @@ const GAMES_REGISTRY = [
     ],
     "stars": 32,
     "featured": true
+  },
+  {
+    "id": "cyber-rogue_babin",
+    "title": "Cyber Rogue Protocol",
+    "category": "Puzzle",
+    "lucideIcon": "terminal",
+    "description": "Hack and crawl through procedurally generated mainframe sector grids with turn-based tactical combat, fog of war, and security drone encounters!",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/cyber-rogue_babin/index.html",
+    "tags": [
+      "Puzzle",
+      "Roguelike",
+      "Turn-Based",
+      "Strategy",
+      "NSOC26"
+    ],
+    "stars": 34,
+    "featured": true,
+    "difficulty": "Intermediate",
+    "releaseDate": "2026-10-28"
   },
   {
     "id": "cyber-runner_mistu7debnath",
@@ -252,6 +296,28 @@ const GAMES_REGISTRY = [
     ],
     "stars": 25,
     "featured": false
+  },
+  {
+    "id": "neon-rhythm-blaster_babin",
+    "title": "Neon Rhythm Blaster",
+    "category": "Arcade",
+    "lucideIcon": "music",
+    "description": "Hit high-tempo falling energy notes across a 4-lane synthesizer matrix with precision timing, combo streaks, and synthesized audio!",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/neon-rhythm-blaster_babin/index.html",
+    "tags": [
+      "Arcade",
+      "Rhythm",
+      "Music",
+      "Reflex",
+      "NSOC26"
+    ],
+    "stars": 32,
+    "featured": true,
+    "difficulty": "Advanced",
+    "releaseDate": "2026-10-28"
   },
   {
     "id": "neon-runner_babin",
@@ -437,7 +503,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 152,
+    "commits": 157,
     "gamesCount": 2,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -453,17 +519,20 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 93,
-    "gamesCount": 10,
+    "commits": 96,
+    "gamesCount": 13,
     "mechanicsBonus": 2,
     "platformPRs": 29,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
       "Cryptic Wordle Hack",
+      "Cyber Brick Breaker",
+      "Cyber Rogue Protocol",
       "Cyber Snake Matrix",
       "Cyber Tower Stacker",
       "Neon Beat Runner",
+      "Neon Rhythm Blaster",
       "Quantum 2048",
       "Quantum Minesweeper",
       "Space Invaders 2026",
