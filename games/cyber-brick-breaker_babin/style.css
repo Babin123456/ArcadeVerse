@@ -1,0 +1,406 @@
+:root {
+  --bg-dark: #070a13;
+  --bg-card: rgba(15, 23, 42, 0.85);
+  --accent-cyan: #00f5ff;
+  --accent-magenta: #ec4899;
+  --accent-gold: #fbbf24;
+  --accent-emerald: #10b981;
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-glow: rgba(0, 245, 255, 0.35);
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Space Grotesk', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(0, 245, 255, 0.12) 0%, transparent 60%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.cbb-app {
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* Header */
+.cbb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cbb-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.cbb-back-link:hover {
+  color: var(--accent-cyan);
+  transform: translateX(-3px);
+}
+
+.cbb-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent-cyan), #38bdf8, var(--accent-magenta));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cbb-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cbb-btn-icon {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cbb-btn-icon:hover {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.cbb-btn-pill {
+  background: rgba(0, 245, 255, 0.08);
+  border: 1px solid var(--border-glow);
+  color: var(--accent-cyan);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cbb-btn-pill:hover {
+  background: rgba(0, 245, 255, 0.18);
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+/* Scoreboard HUD */
+.cbb-hud {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.cbb-hud-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.5rem 0.6rem;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.cbb-hud-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.15rem;
+}
+
+.cbb-hud-val {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.cbb-lives-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+}
+
+.heart-icon {
+  color: #475569;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.heart-icon.active {
+  color: #f43f5e;
+  filter: drop-shadow(0 0 6px rgba(244, 63, 94, 0.6));
+}
+
+/* Canvas Area */
+.cbb-canvas-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 600 / 700;
+  background: #090e1a;
+  border: 1.5px solid var(--border-glow);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 0 32px rgba(0, 245, 255, 0.15);
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: none;
+}
+
+/* Overlays */
+.cbb-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(7, 10, 19, 0.88);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 1.5rem;
+  z-index: 20;
+}
+
+.cbb-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.cbb-overlay-card {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--border-glow);
+  box-shadow: 0 0 40px rgba(0, 245, 255, 0.25);
+  border-radius: 16px;
+  padding: 2rem 1.8rem;
+  text-align: center;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.cbb-overlay-card.danger {
+  border-color: rgba(244, 63, 94, 0.5);
+  box-shadow: 0 0 40px rgba(244, 63, 94, 0.25);
+}
+
+.cbb-overlay-card.victory {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.25);
+}
+
+.cbb-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  background: rgba(0, 245, 255, 0.12);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 245, 255, 0.3);
+}
+
+.cbb-badge.danger {
+  background: rgba(244, 63, 94, 0.12);
+  color: #f43f5e;
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+.cbb-badge.success {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--accent-emerald);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.cbb-overlay-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.cbb-overlay-card p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.highlight {
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+}
+
+.cbb-btn-primary {
+  background: linear-gradient(135deg, var(--accent-cyan), #0284c7);
+  border: none;
+  color: #04101e;
+  font-size: 0.92rem;
+  font-weight: 800;
+  padding: 0.75rem 1.8rem;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 24px rgba(0, 245, 255, 0.35);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cbb-btn-primary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 32px rgba(0, 245, 255, 0.6);
+}
+
+.cbb-btn-primary:active {
+  transform: translateY(1px);
+}
+
+/* Footer Hints */
+.cbb-footer-hints {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+kbd {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+/* Modal Drawer */
+.cbb-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.cbb-modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.cbb-modal-content {
+  background: #0f172a;
+  border: 1px solid var(--border-glow);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 500px;
+  padding: 1.5rem;
+}
+
+.cbb-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.6rem;
+}
+
+.cbb-modal-header h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--accent-cyan);
+}
+
+.cbb-btn-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.cbb-btn-close:hover {
+  color: var(--text-primary);
+}
+
+.cbb-modal-body p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+  line-height: 1.5;
+}
+
+.cbb-modal-body ul {
+  margin-left: 1.2rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.cbb-modal-body h4 {
+  font-size: 0.9rem;
+  color: var(--accent-gold);
+  margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.hidden {
+  display: none !important;
+}

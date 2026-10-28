@@ -134,6 +134,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return a.title.localeCompare(b.title);
       } else if (currentSort === "stars") {
         return (b.stars || 0) - (a.stars || 0);
+      } else if (currentSort === "rating") {
+        const rA = (window.GameRatings && window.GameRatings.ratings[a.id]) || (a.stars || 0) * 0.1;
+        const rB = (window.GameRatings && window.GameRatings.ratings[b.id]) || (b.stars || 0) * 0.1;
+        return rB - rA;
       } else {
         // "featured": featured items first, then by stars
         if (a.featured && !b.featured) return -1;
@@ -292,6 +296,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   function closeGameModal() {
+    if (window.SplitTimer) window.SplitTimer.hideHUD();
     activeGame = null;
     gameModal.classList.remove("active");
     gameModal.setAttribute("aria-hidden", "true");

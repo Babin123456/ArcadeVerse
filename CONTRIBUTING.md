@@ -440,6 +440,7 @@ Before submitting your PR to me, make sure every box is checked:
 - [ ] Game contains **ONLY** `index.html`, `style.css`, `game.js`, and `game.json` (strictly 4 files — no `README.md`, no documentation files, and no extraneous assets/binaries)
 - [ ] Used **icons only (SVG / Lucide)** in the game UI — **NO emojis**
 - [ ] Added `game.json` (I have **NOT** edited `assets/js/games-registry.js` or `index.html`)
+- [ ] I ran `node scripts/validate-games.js` (or `npm run validate`) locally and confirmed zero errors
 - [ ] The PR says `Closes #issue-number` with a short summary
 - [ ] I understand that the Project Admin will add the `nsoc26` and level labels during review
 - [ ] I am not submitting multiple PRs at once
