@@ -125,6 +125,27 @@ const GAMES_REGISTRY = [
     "releaseDate": "2026-10-28"
   },
   {
+    "id": "cyber-brick-breaker_hrshjswniii",
+    "title": "Cyber Brick Breaker",
+    "category": "Arcade",
+    "lucideIcon": "grid",
+    "description": "High-velocity cyberpunk breakout with multi-angle canvas deflection, armored quantum bricks, plasma laser cannons, and procedural Web Audio chiptune synthesis.",
+    "author": "Harsh Jaiswani",
+    "github": "hrshjswniii",
+    "role": "Arcade Developer",
+    "path": "games/cyber-brick-breaker_hrshjswniii/index.html",
+    "tags": [
+      "Arcade",
+      "Retro",
+      "Breakout",
+      "Physics",
+      "WebAudio",
+      "NSOC26"
+    ],
+    "stars": 42,
+    "featured": true
+  },
+  {
     "id": "cyber-neon-pong_debasmita",
     "title": "Cyber Neon Pong",
     "category": "Arcade",
@@ -546,7 +567,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 174,
+    "commits": 176,
     "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -623,6 +644,21 @@ const CONTRIBUTORS_REGISTRY = [
     ]
   },
   {
+    "name": "Harsh Jaiswani",
+    "github": "hrshjswniii",
+    "avatarInitial": "H",
+    "role": "Active Contributor (NSOC '26)",
+    "commits": 6,
+    "gamesCount": 1,
+    "mechanicsBonus": 0,
+    "platformPRs": 0,
+    "qualityPRs": 1,
+    "bonusPts": 0,
+    "contributions": [
+      "Cyber Brick Breaker"
+    ]
+  },
+  {
     "name": "Pragna Seetha",
     "github": "pragna7",
     "avatarInitial": "P",
@@ -650,21 +686,6 @@ const CONTRIBUTORS_REGISTRY = [
     "bonusPts": 0,
     "contributions": [
       "Circuit Connect"
-    ]
-  },
-  {
-    "name": "Harsh Jaiswani",
-    "github": "hrshjswniii",
-    "avatarInitial": "H",
-    "role": "Active Contributor (NSOC '26)",
-    "commits": 5,
-    "gamesCount": 0,
-    "mechanicsBonus": 0,
-    "platformPRs": 0,
-    "qualityPRs": 1,
-    "bonusPts": 0,
-    "contributions": [
-      "Quality & Platform Contribution"
     ]
   },
   {
