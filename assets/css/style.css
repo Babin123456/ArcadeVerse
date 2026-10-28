@@ -5965,28 +5965,19 @@ textarea:focus-visible,
   }
 }
 
-/* Trophy Card Engine Integration */
-#modal-share-card-btn:hover {
-  color: #00f5ff;
-  border-color: #00f5ff;
-  box-shadow: 0 0 12px rgba(0, 245, 255, 0.4);
-}
-.trophy-badge-btn {
-  display: inline-flex;
+/* Game Ratings Star Badge & Controls */
+.game-card-rating-wrap {
+  display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 0.35rem 0.75rem;
-  border-radius: 8px;
-  background: rgba(0, 245, 255, 0.08);
-  border: 1px solid rgba(0, 245, 255, 0.3);
-  color: #00f5ff;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  margin-top: 4px;
 }
-.trophy-badge-btn:hover {
-  background: rgba(0, 245, 255, 0.18);
-  box-shadow: 0 0 16px rgba(0, 245, 255, 0.35);
-  transform: translateY(-1px);
+.rating-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
 }
