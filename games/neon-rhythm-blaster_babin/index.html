@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Neon Rhythm Blaster | ArcadeVerse</title>
+  <meta name="description" content="Hit high-tempo falling energy notes across a 4-lane synthesizer matrix with precision timing, combo streaks, and synthesized audio!">
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/public/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="nrb-app">
+    <!-- Header -->
+    <header class="nrb-header">
+      <div class="nrb-title-group">
+        <a href="../../index.html" class="nrb-back-link" aria-label="Back to ArcadeVerse Catalog">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          ArcadeVerse
+        </a>
+        <h1 class="nrb-title">Neon <span class="gradient-text">Rhythm Blaster</span></h1>
+      </div>
+
+      <div class="nrb-header-actions">
+        <button id="btn-sound" class="nrb-btn-icon" type="button" aria-label="Toggle Audio Synthesis" title="Toggle Sound">
+          <svg id="icon-sound-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+          <svg id="icon-sound-off" class="hidden" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="btn-help" class="nrb-btn-pill" type="button">How to Play</button>
+      </div>
+    </header>
+
+    <!-- Scoreboard HUD -->
+    <section class="nrb-hud" aria-label="Game HUD">
+      <div class="nrb-hud-card">
+        <span class="nrb-hud-label">SCORE</span>
+        <strong id="score-display" class="nrb-hud-val">0</strong>
+      </div>
+      <div class="nrb-hud-card">
+        <span class="nrb-hud-label">COMBO</span>
+        <strong id="combo-display" class="nrb-hud-val">0</strong>
+      </div>
+      <div class="nrb-hud-card">
+        <span class="nrb-hud-label">ACCURACY</span>
+        <strong id="accuracy-display" class="nrb-hud-val">100%</strong>
+      </div>
+      <div class="nrb-hud-card">
+        <span class="nrb-hud-label">BEST RECORD</span>
+        <strong id="best-display" class="nrb-hud-val">0</strong>
+      </div>
+    </section>
+
+    <!-- 4-Lane Rhythm Arena -->
+    <div class="nrb-arena-container">
+      <canvas id="rhythm-canvas" width="480" height="640" role="img" aria-label="Neon Rhythm Blaster 4-lane track arena. Press D, F, J, K or touch lane buttons when notes hit the target line." tabindex="0"></canvas>
+
+      <!-- Feedback Judgment Toast -->
+      <div id="judgment-banner" class="judgment-banner">READY</div>
+
+      <!-- Start Overlay -->
+      <div id="start-overlay" class="nrb-overlay active">
+        <div class="nrb-overlay-card">
+          <div class="nrb-badge">SYNTHESIZER TEMPO ENGINE</div>
+          <h2>Neon Beat Pulse</h2>
+          <p>4 lanes. High velocity cyber notes. Time your taps exactly as notes cross the target beam to maintain maximum multiplier combo streaks.</p>
+          <div class="key-preview">
+            <span class="key-pill">D</span>
+            <span class="key-pill">F</span>
+            <span class="key-pill">J</span>
+            <span class="key-pill">K</span>
+          </div>
+          <button id="btn-start" class="nrb-btn-primary" type="button">Start Session</button>
+        </div>
+      </div>
+
+      <!-- Game Over Overlay -->
+      <div id="game-over-overlay" class="nrb-overlay">
+        <div class="nrb-overlay-card danger">
+          <div class="nrb-badge danger">RHYTHM DESYNCED</div>
+          <h2>Session Complete</h2>
+          <p>Final Score: <strong id="final-score" class="highlight">0</strong></p>
+          <p>Max Combo: <strong id="final-combo" class="highlight">0</strong> • Accuracy: <strong id="final-acc" class="highlight">0%</strong></p>
+          <button id="btn-restart" class="nrb-btn-primary" type="button">Play Again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Touch Trigger Pads -->
+    <div class="nrb-touch-controls" aria-label="On-screen touch pads">
+      <button class="nrb-pad-btn" data-lane="0" type="button">D</button>
+      <button class="nrb-pad-btn" data-lane="1" type="button">F</button>
+      <button class="nrb-pad-btn" data-lane="2" type="button">J</button>
+      <button class="nrb-pad-btn" data-lane="3" type="button">K</button>
+    </div>
+
+    <!-- Instructions Modal Drawer -->
+    <div id="help-modal" class="nrb-modal">
+      <div class="nrb-modal-content">
+        <div class="nrb-modal-header">
+          <h3>How to Play: Neon Rhythm Blaster</h3>
+          <button id="btn-close-help" class="nrb-btn-close" aria-label="Close Instructions">&times;</button>
+        </div>
+        <div class="nrb-modal-body">
+          <p><strong>Controls:</strong> Press keyboard keys <kbd>D</kbd> (Lane 1), <kbd>F</kbd> (Lane 2), <kbd>J</kbd> (Lane 3), and <kbd>K</kbd> (Lane 4) or tap the touch pads below each lane.</p>
+          <h4>Timing Accuracy Windows:</h4>
+          <ul>
+            <li><strong>PERFECT (Cyan Glow):</strong> Hit exactly within ±45ms of the target line (100 pts + 1 Combo).</li>
+            <li><strong>GREAT (Purple Glow):</strong> Hit within ±90ms of target line (50 pts + 1 Combo).</li>
+            <li><strong>MISS:</strong> Note dropped or pressed too early. Resets your combo multiplier.</li>
+          </ul>
+          <h4>Multiplier Streaks:</h4>
+          <ul>
+            <li><strong>10+ Combo:</strong> 2x Score Multiplier.</li>
+            <li><strong>25+ Combo:</strong> 3x Score Multiplier.</li>
+            <li><strong>50+ Combo:</strong> 4x Hyper Multiplier.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
