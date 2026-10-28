@@ -121,6 +121,28 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "cyber-rogue_babin",
+    "title": "Cyber Rogue Protocol",
+    "category": "Puzzle",
+    "lucideIcon": "terminal",
+    "description": "Hack and crawl through procedurally generated mainframe sector grids with turn-based tactical combat, fog of war, and security drone encounters!",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/cyber-rogue_babin/index.html",
+    "tags": [
+      "Puzzle",
+      "Roguelike",
+      "Turn-Based",
+      "Strategy",
+      "NSOC26"
+    ],
+    "stars": 34,
+    "featured": true,
+    "difficulty": "Intermediate",
+    "releaseDate": "2026-10-28"
+  },
+  {
     "id": "cyber-runner_mistu7debnath",
     "title": "Cyber Runner: Neon Rush",
     "category": "Arcade",
@@ -481,7 +503,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 156,
+    "commits": 157,
     "gamesCount": 2,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -497,8 +519,8 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 95,
-    "gamesCount": 12,
+    "commits": 96,
+    "gamesCount": 13,
     "mechanicsBonus": 2,
     "platformPRs": 29,
     "qualityPRs": 1,
@@ -506,6 +528,7 @@ const CONTRIBUTORS_REGISTRY = [
     "contributions": [
       "Cryptic Wordle Hack",
       "Cyber Brick Breaker",
+      "Cyber Rogue Protocol",
       "Cyber Snake Matrix",
       "Cyber Tower Stacker",
       "Neon Beat Runner",
