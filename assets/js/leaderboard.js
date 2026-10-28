@@ -425,9 +425,14 @@ document.addEventListener("DOMContentLoaded", () => {
           <span><i data-lucide="git-commit" style="width: 0.8rem; height: 0.8rem;"></i> ${item.commits} Commit${item.commits === 1 ? '' : 's'}</span>
         </div>
 
-        <a href="https://github.com/${item.login}" target="_blank" rel="noopener noreferrer" class="podium-gh-btn" title="View GitHub profile">
-          <i data-lucide="external-link"></i> View Profile
-        </a>
+        <div class="podium-actions-row">
+          <a href="https://github.com/${item.login}" target="_blank" rel="noopener noreferrer" class="podium-gh-btn" title="View GitHub profile">
+            <i data-lucide="external-link"></i> Profile
+          </a>
+          <button type="button" class="podium-trophy-btn" data-action="open-trophy-card" data-player="${item.name || item.login}" data-score="${score} PTS" data-game="${slot.badgeLabel}" data-rank="${slot.badgeLabel}" data-badge="NSOC 2026" title="Generate Trophy Card">
+            <i data-lucide="trophy"></i> Trophy Card
+          </button>
+        </div>
       `;
 
       podiumContainer.appendChild(card);
@@ -509,6 +514,9 @@ document.addEventListener("DOMContentLoaded", () => {
             <a href="https://github.com/DebasmitaBose0/ArcadeVerse/pulls?q=author%3A${item.login}" target="_blank" rel="noopener noreferrer" class="activity-link-btn" title="View Pull Requests by @${item.login}">
               <i data-lucide="git-pull-request"></i> PRs
             </a>
+            <button type="button" class="activity-link-btn table-trophy-btn" data-action="open-trophy-card" data-player="${item.name || item.login}" data-score="${score} PTS" data-game="Verified Contributor" data-rank="#${rank} Contributor" data-badge="NSOC 2026" title="Generate Trophy Card">
+              <i data-lucide="trophy"></i> Trophy
+            </button>
           </div>
         </td>
         <td style="text-align: right;">

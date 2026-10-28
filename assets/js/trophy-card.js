@@ -191,10 +191,13 @@
         const trigger = e.target.closest('[data-action="open-trophy-card"]');
         if (trigger) {
           e.preventDefault();
+          e.stopPropagation();
           const game = trigger.dataset.game || 'Whack-A-Bug Panic';
           const score = trigger.dataset.score || '3,820';
           const player = trigger.dataset.player || 'ArcadePlayer';
-          this.showModal({ gameTitle: game, score, playerName: player });
+          const rank = trigger.dataset.rank || 'Gold Champion';
+          const badge = trigger.dataset.badge || 'NSOC 2026';
+          this.showModal({ gameTitle: game, score, playerName: player, rank, badge });
         }
       });
     },

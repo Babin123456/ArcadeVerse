@@ -84,6 +84,13 @@
             else s.classList.remove('voted');
           });
         }
+        const badge = card.querySelector('.rating-badge');
+        if (badge) {
+          badge.textContent = Number(score).toFixed(1);
+        }
+        if (window.SoundEngine && typeof window.SoundEngine.playClick === 'function') {
+          window.SoundEngine.playClick();
+        }
       }
     }
   };
