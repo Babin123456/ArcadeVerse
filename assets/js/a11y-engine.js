@@ -1,6 +1,6 @@
 /**
  * ArcadeVerse Universal Accessibility (a11y) Engine
- * Provides WCAG 2.1 AAA accommodations: Reduced Motion, High-Contrast, Dyslexia Font, Large Text
+ * Manages WCAG 2.1 compliance modes, sensory toggles, and drawer state.
  * Author: Babin Bid (@Babin123456)
  * Open Source for ArcadeVerse - NSOC Winter Edition 2026
  */
@@ -15,9 +15,9 @@
       reducedMotion: false,
       highContrast: false,
       largeText: false,
-      dyslexiaFont: false,
       focusHighlight: false
     },
+    lastFocusedElement: null,
 
     init() {
       this.loadPrefs();
@@ -29,7 +29,9 @@
     loadPrefs() {
       try {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        if (saved) Object.assign(this.prefs, saved);
+        if (saved && typeof saved === 'object') {
+          Object.assign(this.prefs, saved);
+        }
       } catch (_) {}
     },
 
@@ -41,23 +43,22 @@
 
     applyPrefs() {
       const root = document.documentElement;
-      root.classList.toggle('a11y-reduced-motion', this.prefs.reducedMotion);
-      root.classList.toggle('a11y-high-contrast', this.prefs.highContrast);
-      root.classList.toggle('a11y-large-text', this.prefs.largeText);
-      root.classList.toggle('a11y-dyslexia-font', this.prefs.dyslexiaFont);
-      root.classList.toggle('a11y-focus-highlight', this.prefs.focusHighlight);
+      root.classList.toggle('a11y-reduced-motion', Boolean(this.prefs.reducedMotion));
+      root.classList.toggle('a11y-high-contrast', Boolean(this.prefs.highContrast));
+      root.classList.toggle('a11y-large-text', Boolean(this.prefs.largeText));
+      root.classList.toggle('a11y-focus-highlight', Boolean(this.prefs.focusHighlight));
     },
 
     renderDrawer() {
-      // 1. Navbar Trigger Button
+      // 1. Navbar Trigger Button fallback if not present in static HTML
       const navActions = document.querySelector('.nav-actions');
       if (navActions && !document.getElementById('a11y-trigger-btn')) {
         const btn = document.createElement('button');
         btn.id = 'a11y-trigger-btn';
         btn.className = 'a11y-btn-trigger';
         btn.type = 'button';
-        btn.setAttribute('aria-label', 'Open Accessibility Settings');
-        btn.title = 'Accessibility Settings';
+        btn.setAttribute('aria-label', 'Open Accessibility Hub');
+        btn.title = 'Accessibility Hub';
         btn.innerHTML = `
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10"></circle>
@@ -68,7 +69,12 @@
             <circle cx="12" cy="12" r="4"></circle>
           </svg>
         `;
-        navActions.appendChild(btn);
+        const themeBtn = navActions.querySelector('.theme-toggle-btn');
+        if (themeBtn) {
+          navActions.insertBefore(btn, themeBtn);
+        } else {
+          navActions.appendChild(btn);
+        }
       }
 
       // 2. Sliding Drawer Modal
@@ -76,39 +82,41 @@
         const drawer = document.createElement('aside');
         drawer.id = 'a11y-drawer';
         drawer.className = 'a11y-drawer';
+        drawer.setAttribute('role', 'dialog');
+        drawer.setAttribute('aria-modal', 'true');
         drawer.setAttribute('aria-label', 'Accessibility Controls');
         drawer.innerHTML = `
           <div class="a11y-drawer-header">
             <h3>Accessibility Hub</h3>
-            <button id="a11y-close-btn" class="a11y-close-btn" aria-label="Close Accessibility Hub">&times;</button>
+            <button id="a11y-close-btn" class="a11y-close-btn" aria-label="Close Accessibility Hub" type="button">&times;</button>
           </div>
           <p class="a11y-desc">Customize sensory, motion, and contrast settings for an optimal arcade experience.</p>
           <div class="a11y-options-list">
-            <label class="a11y-toggle-row">
+            <label class="a11y-toggle-row" for="a11y-opt-motion">
               <div>
                 <strong class="a11y-toggle-title">Reduced Motion</strong>
-                <span class="a11y-toggle-sub">Stops ambient glow orbs and animations</span>
+                <span class="a11y-toggle-sub">Stops ambient glow orbs, grids, and transitions</span>
               </div>
               <input type="checkbox" id="a11y-opt-motion" class="a11y-checkbox" ${this.prefs.reducedMotion ? 'checked' : ''}>
             </label>
-            <label class="a11y-toggle-row">
+            <label class="a11y-toggle-row" for="a11y-opt-contrast">
               <div>
                 <strong class="a11y-toggle-title">High Contrast Mode</strong>
                 <span class="a11y-toggle-sub">Maximizes background & text legibility</span>
               </div>
               <input type="checkbox" id="a11y-opt-contrast" class="a11y-checkbox" ${this.prefs.highContrast ? 'checked' : ''}>
             </label>
-            <label class="a11y-toggle-row">
+            <label class="a11y-toggle-row" for="a11y-opt-largetext">
               <div>
                 <strong class="a11y-toggle-title">Large Typography</strong>
-                <span class="a11y-toggle-sub">Scales catalog text by 120%</span>
+                <span class="a11y-toggle-sub">Scales catalog text and cards by 118%</span>
               </div>
               <input type="checkbox" id="a11y-opt-largetext" class="a11y-checkbox" ${this.prefs.largeText ? 'checked' : ''}>
             </label>
-            <label class="a11y-toggle-row">
+            <label class="a11y-toggle-row" for="a11y-opt-focus">
               <div>
                 <strong class="a11y-toggle-title">Enhanced Focus Rings</strong>
-                <span class="a11y-toggle-sub">Bright neon outlines for keyboard navigation</span>
+                <span class="a11y-toggle-sub">High-visibility blue outlines for keyboard navigation</span>
               </div>
               <input type="checkbox" id="a11y-opt-focus" class="a11y-checkbox" ${this.prefs.focusHighlight ? 'checked' : ''}>
             </label>
@@ -121,6 +129,7 @@
         const backdrop = document.createElement('div');
         backdrop.id = 'a11y-backdrop';
         backdrop.className = 'a11y-backdrop';
+        backdrop.setAttribute('aria-hidden', 'true');
         document.body.appendChild(backdrop);
       }
     },
@@ -128,10 +137,13 @@
     bindEvents() {
       document.addEventListener('click', (e) => {
         if (e.target.closest('#a11y-trigger-btn')) {
+          e.preventDefault();
           this.openDrawer();
         } else if (e.target.closest('#a11y-close-btn, #a11y-backdrop')) {
+          e.preventDefault();
           this.closeDrawer();
         } else if (e.target.closest('#a11y-reset-btn')) {
+          e.preventDefault();
           this.resetPrefs();
         }
       });
@@ -155,14 +167,27 @@
           this.applyPrefs();
         }
       });
+
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const drawer = document.getElementById('a11y-drawer');
+          if (drawer && drawer.classList.contains('active')) {
+            this.closeDrawer();
+          }
+        }
+      });
     },
 
     openDrawer() {
       const drawer = document.getElementById('a11y-drawer');
       const backdrop = document.getElementById('a11y-backdrop');
       if (drawer && backdrop) {
+        this.lastFocusedElement = document.activeElement;
         drawer.classList.add('active');
         backdrop.classList.add('active');
+        const closeBtn = document.getElementById('a11y-close-btn');
+        if (closeBtn) closeBtn.focus();
       }
     },
 
@@ -172,6 +197,9 @@
       if (drawer && backdrop) {
         drawer.classList.remove('active');
         backdrop.classList.remove('active');
+        if (this.lastFocusedElement && typeof this.lastFocusedElement.focus === 'function') {
+          this.lastFocusedElement.focus();
+        }
       }
     },
 
@@ -180,7 +208,6 @@
         reducedMotion: false,
         highContrast: false,
         largeText: false,
-        dyslexiaFont: false,
         focusHighlight: false
       };
       this.savePrefs();
@@ -190,5 +217,9 @@
   };
 
   window.A11yEngine = A11yEngine;
-  document.addEventListener('DOMContentLoaded', () => A11yEngine.init());
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => A11yEngine.init());
+  } else {
+    A11yEngine.init();
+  }
 })();

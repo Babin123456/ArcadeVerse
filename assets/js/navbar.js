@@ -1,7 +1,7 @@
 /**
  * ArcadeVerse - Global Navigation & Theme Engine
  * Handles responsive mobile navigation drawer, hamburger button state,
- * ARIA accessibility attributes, navbar scroll effects,
+ * ARIA accessibility attributes, navbar scroll effects, Back to Top button,
  * and seamless Dark / Light Mode theme switching.
  */
 
@@ -59,66 +59,65 @@
     const menuBtn = document.getElementById("mobile-menu-btn");
     const mobileDrawer = document.getElementById("mobile-nav-drawer");
 
-    if (!menuBtn || !mobileDrawer) return;
-
-    function openMobileMenu() {
-      menuBtn.classList.add("active");
-      menuBtn.setAttribute("aria-expanded", "true");
-      mobileDrawer.classList.add("open");
-      mobileDrawer.setAttribute("aria-hidden", "false");
-    }
-
-    function closeMobileMenu() {
-      menuBtn.classList.remove("active");
-      menuBtn.setAttribute("aria-expanded", "false");
-      mobileDrawer.classList.remove("open");
-      mobileDrawer.setAttribute("aria-hidden", "true");
-    }
-
-    function toggleMobileMenu() {
-      const isOpen = mobileDrawer.classList.contains("open");
-      if (isOpen) {
-        closeMobileMenu();
-      } else {
-        openMobileMenu();
+    if (menuBtn && mobileDrawer) {
+      function openMobileMenu() {
+        menuBtn.classList.add("active");
+        menuBtn.setAttribute("aria-expanded", "true");
+        mobileDrawer.classList.add("open");
+        mobileDrawer.setAttribute("aria-hidden", "false");
       }
-    }
 
-    // Toggle button event
-    menuBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleMobileMenu();
-    });
+      function closeMobileMenu() {
+        menuBtn.classList.remove("active");
+        menuBtn.setAttribute("aria-expanded", "false");
+        mobileDrawer.classList.remove("open");
+        mobileDrawer.setAttribute("aria-hidden", "true");
+      }
 
-    // Close when clicking any nav link inside drawer
-    const drawerLinks = mobileDrawer.querySelectorAll("a");
-    drawerLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        closeMobileMenu();
+      function toggleMobileMenu() {
+        const isOpen = mobileDrawer.classList.contains("open");
+        if (isOpen) {
+          closeMobileMenu();
+        } else {
+          openMobileMenu();
+        }
+      }
+
+      menuBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleMobileMenu();
       });
-    });
 
-    // Close on click outside navbar
-    document.addEventListener("click", (e) => {
-      if (mobileDrawer.classList.contains("open") && navbar && !navbar.contains(e.target)) {
-        closeMobileMenu();
-      }
-    });
+      // Close when clicking any nav link inside drawer
+      const drawerLinks = mobileDrawer.querySelectorAll("a");
+      drawerLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          closeMobileMenu();
+        });
+      });
 
-    // Close on Escape key press
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && mobileDrawer.classList.contains("open")) {
-        closeMobileMenu();
-        menuBtn.focus();
-      }
-    });
+      // Close on click outside navbar
+      document.addEventListener("click", (e) => {
+        if (mobileDrawer.classList.contains("open") && navbar && !navbar.contains(e.target)) {
+          closeMobileMenu();
+        }
+      });
 
-    // Close if window is resized beyond mobile breakpoint
-    window.addEventListener("resize", () => {
-      if (window.innerWidth > 1100 && mobileDrawer.classList.contains("open")) {
-        closeMobileMenu();
-      }
-    }, { passive: true });
+      // Close on Escape key press
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && mobileDrawer.classList.contains("open")) {
+          closeMobileMenu();
+          menuBtn.focus();
+        }
+      });
+
+      // Close if window is resized beyond mobile breakpoint
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 1100 && mobileDrawer.classList.contains("open")) {
+          closeMobileMenu();
+        }
+      }, { passive: true });
+    }
 
     // Smooth navbar squeeze on scroll
     if (navbar) {
@@ -131,6 +130,25 @@
       }, { passive: true });
     }
 
+    // Back to Top Button Engine
+    const backToTopBtn = document.getElementById("back-to-top-btn");
+    if (backToTopBtn) {
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+          backToTopBtn.classList.add("visible");
+        } else {
+          backToTopBtn.classList.remove("visible");
+        }
+      }, { passive: true });
+
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      });
+    }
+
     // Ensure active navbar pill matches the current active page
     const currentPath = (window.location.pathname || "").toLowerCase();
     const isLeaderboard = currentPath.includes("leaderboard.html");
@@ -141,10 +159,13 @@
 
       if (isLeaderboard && href.includes("leaderboard.html")) {
         link.classList.add("active");
+        link.setAttribute("aria-current", "page");
       } else if (!isLeaderboard && href.includes("index.html")) {
         link.classList.add("active");
+        link.setAttribute("aria-current", "page");
       } else {
         link.classList.remove("active");
+        link.removeAttribute("aria-current");
       }
     });
   });
