@@ -1,0 +1,80 @@
+/* Global Audio Toggle & Equalizer Bar Styles */
+.sound-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(0, 245, 255, 0.25);
+  border-radius: 9999px;
+  padding: 6px 14px;
+  color: var(--text-primary, #f8fafc);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.1);
+  margin-right: 6px;
+}
+
+.sound-toggle-btn:hover {
+  border-color: #00f5ff;
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.sound-toggle-btn.sound-muted {
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #64748b;
+  box-shadow: none;
+}
+
+.sound-toggle-btn.sound-muted .eq-bar {
+  animation: none !important;
+  height: 3px !important;
+  background: #64748b !important;
+}
+
+.eq-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 14px;
+  width: 14px;
+}
+
+.eq-bar {
+  width: 2.5px;
+  background: #00f5ff;
+  border-radius: 1px;
+}
+
+.sound-active .bar-1 {
+  animation: eqJump 0.8s ease-in-out infinite alternate;
+  height: 8px;
+}
+
+.sound-active .bar-2 {
+  animation: eqJump 0.6s ease-in-out infinite 0.2s alternate;
+  height: 14px;
+}
+
+.sound-active .bar-3 {
+  animation: eqJump 0.9s ease-in-out infinite 0.4s alternate;
+  height: 6px;
+}
+
+@keyframes eqJump {
+  0% { height: 3px; }
+  50% { height: 14px; }
+  100% { height: 6px; }
+}
+
+@media (max-width: 600px) {
+  .sound-toggle-btn .sound-label {
+    display: none;
+  }
+  .sound-toggle-btn {
+    padding: 6px 10px;
+  }
+}
