@@ -1,0 +1,20 @@
+{
+  "title": "Cosmic Surge: Quantum Leap",
+  "category": "Arcade",
+  "lucideIcon": "zap",
+  "description": "Navigate a pulsating energy core through rotating hazard rings, collect quantum flux orbs, and execute precision warp surges.",
+  "author": "Debasmita Bose",
+  "github": "DebasmitaBose0",
+  "role": "Project Admin & Lead (NSOC '26)",
+  "tags": [
+    "Arcade",
+    "Action",
+    "Neon",
+    "Reflex",
+    "NSOC26"
+  ],
+  "stars": 38,
+  "featured": true,
+  "difficulty": "Intermediate",
+  "releaseDate": "2026-10-28"
+}
