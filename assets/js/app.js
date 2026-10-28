@@ -279,6 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Expose global helper to open game modal from plugins, search, or recent drawer
+  window.openGameModal = openGameModal;
   window.ArcadeApp = {
     openGame: (gameId) => {
       const game = GAMES_REGISTRY.find((g) => g.id === gameId);

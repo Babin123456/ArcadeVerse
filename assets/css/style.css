@@ -5964,3 +5964,32 @@ textarea:focus-visible,
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Daily Challenge & Quest Engine Integration */
+[data-theme="light"] .daily-quest-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.98) 100%);
+  border-color: rgba(59, 130, 246, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 0 20px rgba(59, 130, 246, 0.08);
+}
+
+[data-theme="light"] .daily-quest-header {
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .daily-quest-title {
+  color: #0f172a;
+}
+
+[data-theme="light"] .daily-quest-desc {
+  color: #475569;
+}
+
+[data-theme="light"] .daily-quest-desc strong {
+  color: #0f172a;
+}
+
+[data-theme="light"] .countdown-clock {
+  background: rgba(241, 245, 249, 0.9);
+  color: #0f172a;
+  border-color: rgba(0, 0, 0, 0.1);
+}
