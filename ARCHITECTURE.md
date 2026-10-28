@@ -1,6 +1,6 @@
-# 🏛️ ArcadeVerse — System Architecture & Workflow Specification
+# ArcadeVerse — System Architecture & Workflow Specification
 
-> **Nexus Spring Of Code – Winter Edition 2026**  
+> **Nexus Spring of Code – Winter Edition 2026**  
 > **Project Admin & Lead Architect:** Debasmita Bose ([@DebasmitaBose0](https://github.com/DebasmitaBose0))  
 > **Core Architecture:** 100% Pure Native Web Standards (Vanilla HTML5 + CSS3 + Modern JavaScript). Zero Bundlers, Zero Frameworks, Zero Backend Services.
 
@@ -8,7 +8,7 @@
 
 ## 1. Architectural Philosophy & Guiding Principles
 
-ArcadeVerse is an open-source web arcade platform engineered specifically for **high-concurrency open-source collaboration** during the 45-day **Nexus Spring Of Code – Winter Edition 2026**.
+ArcadeVerse is an open-source web arcade platform engineered specifically for **high-concurrency open-source collaboration** during the 45-day **Nexus Spring of Code – Winter Edition 2026**.
 
 To allow dozens of contributors to submit mini-games simultaneously without stepping on each other's code, ArcadeVerse enforces three architectural pillars:
 
@@ -59,29 +59,67 @@ When a contributor pushes a game folder into `games/` and their Pull Request is 
 ### Workflow Sequence Diagram
 
 ```mermaid
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "actorBkg": "#DBEAFE",
+    "actorBorder": "#2563EB",
+    "actorTextColor": "#172554",
+    "actorLineColor": "#64748B",
+    "signalColor": "#334155",
+    "signalTextColor": "#0F172A",
+    "labelBoxBkgColor": "#E0E7FF",
+    "labelBoxBorderColor": "#6366F1",
+    "labelTextColor": "#312E81",
+    "activationBkgColor": "#CFFAFE",
+    "activationBorderColor": "#0891B2",
+    "sequenceNumberColor": "#FFFFFF"
+  },
+  "sequence": {
+    "showSequenceNumbers": true,
+    "actorMargin": 35,
+    "messageMargin": 25,
+    "mirrorActors": false
+  }
+}}%%
+
 sequenceDiagram
     autonumber
+
     actor Contributor as Contributor (@username)
     participant Branch as Dedicated Git Branch
     participant PR as GitHub Pull Request
-    participant Admin as Project Admin (@DebasmitaBose0)
-    participant CI as GitHub Actions (.github/workflows/build-registry.yml)
+    actor Admin as Project Admin (@DebasmitaBose0)
+    participant CI as GitHub Actions
     participant Script as scripts/build-registry.js
     participant Registry as assets/js/games-registry.js
     participant Client as Client Browser (index.html)
 
-    Contributor->>Branch: Create games/game-name_author/ (4 files)
-    Contributor->>Branch: Run npm run validate (local verification)
-    Contributor->>PR: Open Pull Request to main
-    Admin->>PR: Review code, verify guidelines & approve merge
-    PR->>CI: Push to main trigger on games/**
-    CI->>Script: Run node scripts/build-registry.js
-    Script->>Script: Scan games/*/game.json
-    Script->>Script: Audit git shortlog -sne for commits
-    Script->>Registry: Compile window.GAMES_REGISTRY & CONTRIBUTORS_REGISTRY
-    CI->>Registry: Commit & push [skip ci] by github-actions[bot]
-    Client->>Registry: Load updated registry dynamically
-    Client->>Client: Render new game card in catalog & leaderboard
+    rect rgb(239, 246, 255)
+        Contributor->>Branch: Create game folder containing 4 files
+        Contributor->>Branch: Run npm run validate
+        Contributor->>PR: Open pull request targeting main
+        Admin->>PR: Review code and approve merge
+    end
+
+    rect rgb(236, 253, 245)
+        PR->>CI: Merge into main triggers workflow for games/**
+        CI->>Script: Run node scripts/build-registry.js
+        Script->>Script: Scan games/*/game.json
+        Script->>Script: Audit git shortlog -sne
+        Script->>Registry: Generate game and contributor registries
+        CI->>Registry: Commit and push generated registry [skip ci]
+    end
+
+    rect rgb(250, 245, 255)
+        Client->>Registry: Load updated registry
+        Registry-->>Client: Return game and contributor metadata
+        Client->>Client: Render catalog cards and leaderboard
+    end
+
+    Note over Contributor,Admin: Contribution, review and approval
+    Note over CI,Registry: Automated validation and registry generation
+    Note over Registry,Client: Static registry consumed by the browser
 ```
 
 ---
@@ -93,44 +131,101 @@ ArcadeVerse employs a decentralized data flow where static declarations are comp
 ### Architecture Topology Flowchart
 
 ```mermaid
-flowchart TD
-    subgraph Storage["Community Games Repository (games/)"]
+%%{init: {
+  "theme": "base",
+  "flowchart": {
+    "htmlLabels": true,
+    "curve": "linear",
+    "nodeSpacing": 35,
+    "rankSpacing": 45,
+    "padding": 12
+  },
+  "themeVariables": {
+    "fontFamily": "Arial, sans-serif",
+    "fontSize": "14px",
+    "lineColor": "#64748B",
+    "textColor": "#0F172A",
+    "clusterBkg": "#F8FAFC",
+    "clusterBorder": "#94A3B8"
+  }
+}}%%
+
+flowchart TB
+
+    subgraph STORAGE["01 | COMMUNITY GAMES REPOSITORY"]
+        direction LR
         G1["games/memory-matrix_debasmita/"]
         G2["games/cyber-brick-breaker_babin/"]
         G3["games/neon-rhythm-blaster_babin/"]
-        GN["games/<game-name_author>/"]
+        GN["games/&lt;game-name_author&gt;/"]
     end
 
-    subgraph CI["GitHub Actions Automation"]
-        Trigger["Push to main on games/**"]
+    subgraph CI["02 | GITHUB ACTIONS AUTOMATION"]
+        direction LR
+        Trigger(["Push or merge to main<br/>games/**"])
         Validator["scripts/validate-games.js"]
         Compiler["scripts/build-registry.js"]
+
         Trigger --> Validator
         Validator --> Compiler
     end
 
-    subgraph Output["Auto-Compiled Registry"]
-        RegistryFile["assets/js/games-registry.js"]
-        Compiler --> RegistryFile
+    subgraph OUTPUT["03 | AUTO-COMPILED REGISTRY"]
+        RegistryFile[("assets/js/games-registry.js<br/>GAMES_REGISTRY<br/>CONTRIBUTORS_REGISTRY")]
     end
 
-    subgraph Client["Browser Runtime Engine"]
-        Index["index.html (Home Hub)"]
-        App["assets/js/app.js"]
-        Daily["assets/js/daily-challenge.js"]
-        A11y["assets/js/a11y-engine.js"]
-        Leaderboard["assets/js/leaderboard.js"]
-        Modal["Game Player Modal (iframe sandbox)"]
+    subgraph CLIENT["04 | BROWSER RUNTIME ENGINE"]
+        direction TB
 
-        RegistryFile --> App
-        RegistryFile --> Daily
-        RegistryFile --> Leaderboard
+        Index["index.html<br/>Home Hub"]
+
+        subgraph MODULES["Client-Side Modules"]
+            direction LR
+            App["assets/js/app.js"]
+            Daily["assets/js/daily-challenge.js"]
+            A11y["assets/js/a11y-engine.js"]
+            Leaderboard["assets/js/leaderboard.js"]
+        end
+
+        Modal["Game Player Modal<br/>Sandboxed iframe"]
+
         Index --> App
+        Index --> Daily
+        Index --> A11y
+        Index --> Leaderboard
+
         App --> Modal
         Daily --> Modal
     end
 
-    Storage --> Trigger
+    G1 -.-> Trigger
+    G2 -.-> Trigger
+    G3 -.-> Trigger
+    GN -.-> Trigger
+
+    Compiler --> RegistryFile
+
+    RegistryFile --> App
+    RegistryFile --> Daily
+    RegistryFile --> Leaderboard
+
+    classDef storage fill:#DBEAFE,stroke:#2563EB,color:#172554,stroke-width:2px
+    classDef automation fill:#D1FAE5,stroke:#059669,color:#064E3B,stroke-width:2px
+    classDef output fill:#FEF3C7,stroke:#D97706,color:#78350F,stroke-width:3px
+    classDef client fill:#F3E8FF,stroke:#9333EA,color:#581C87,stroke-width:2px
+    classDef modal fill:#CFFAFE,stroke:#0891B2,color:#164E63,stroke-width:2px
+
+    class G1,G2,G3,GN storage
+    class Trigger,Validator,Compiler automation
+    class RegistryFile output
+    class Index,App,Daily,A11y,Leaderboard client
+    class Modal modal
+
+    style STORAGE fill:#EFF6FF,stroke:#2563EB,stroke-width:2px
+    style CI fill:#ECFDF5,stroke:#059669,stroke-width:2px
+    style OUTPUT fill:#FFFBEB,stroke:#D97706,stroke-width:2px
+    style CLIENT fill:#FAF5FF,stroke:#9333EA,stroke-width:2px
+    style MODULES fill:#F3E8FF,stroke:#A78BFA,stroke-width:1px
 ```
 
 ---
@@ -141,16 +236,72 @@ Games execute inside a sandboxed `<iframe>` within the main application. This en
 
 1. **CSS Collision Prevention:** Game stylesheets cannot bleed into the host application or navigation bar.
 2. **JavaScript Scope Isolation:** Global variables declared in games do not pollute the parent window.
-3. **Clean Teardown:** Closing the player modal terminates game loops and releases audio contexts instantly by clearing `iframe.src = ""`.
+3. **Clean Teardown:** Closing the player modal terminates game loops and releases audio contexts by clearing `iframe.src = ""`.
 
 ```mermaid
-flowchart LR
-    User["Player Clicks Game Card"] --> App["app.js: openGameModal(game)"]
-    App --> ModalDOM["DOM: #game-modal.active"]
-    ModalDOM --> Iframe["iframe.src = 'games/game-name_author/index.html'"]
-    Iframe --> Sandbox["Game Runtime (Canvas / Audio / Loop)"]
-    User2["Player Clicks Close Modal"] --> Close["app.js: closeGameModal()"]
-    Close --> Cleanup["iframe.src = '' (Memory Freed)"]
+%%{init: {
+  "theme": "base",
+  "flowchart": {
+    "curve": "linear",
+    "nodeSpacing": 35,
+    "rankSpacing": 45,
+    "htmlLabels": true
+  },
+  "themeVariables": {
+    "fontFamily": "Arial, sans-serif",
+    "fontSize": "14px",
+    "lineColor": "#64748B",
+    "textColor": "#0F172A"
+  }
+}}%%
+
+flowchart TB
+
+    User(["Player"])
+
+    subgraph OPEN["OPEN GAME | INITIALIZATION"]
+        direction LR
+        Click["Click game card"]
+        OpenFn["app.js<br/>openGameModal(game)"]
+        ModalDOM["DOM<br/>#game-modal.active"]
+        Iframe["Load game URL<br/>iframe.src = games/.../index.html"]
+        Runtime["Isolated Game Runtime<br/>Canvas · Audio · Game Loop"]
+
+        Click --> OpenFn
+        OpenFn --> ModalDOM
+        ModalDOM --> Iframe
+        Iframe --> Runtime
+    end
+
+    subgraph CLOSE["CLOSE GAME | CLEANUP"]
+        direction LR
+        CloseClick["Click close button"]
+        CloseFn["app.js<br/>closeGameModal()"]
+        Cleanup["Set iframe.src = ''"]
+        Teardown["Embedded document unloaded<br/>Game execution stopped"]
+
+        CloseClick --> CloseFn
+        CloseFn --> Cleanup
+        Cleanup --> Teardown
+    end
+
+    User --> Click
+    User --> CloseClick
+
+    classDef user fill:#E0E7FF,stroke:#4F46E5,color:#312E81,stroke-width:2px
+    classDef open fill:#DBEAFE,stroke:#2563EB,color:#172554,stroke-width:2px
+    classDef runtime fill:#D1FAE5,stroke:#059669,color:#064E3B,stroke-width:2px
+    classDef close fill:#FFEDD5,stroke:#EA580C,color:#7C2D12,stroke-width:2px
+    classDef teardown fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D,stroke-width:2px
+
+    class User user
+    class Click,OpenFn,ModalDOM,Iframe open
+    class Runtime runtime
+    class CloseClick,CloseFn,Cleanup close
+    class Teardown teardown
+
+    style OPEN fill:#EFF6FF,stroke:#2563EB,stroke-width:2px
+    style CLOSE fill:#FFF7ED,stroke:#EA580C,stroke-width:2px
 ```
 
 ---
@@ -159,16 +310,26 @@ flowchart LR
 
 ArcadeVerse maintains two independent scoring tiers:
 
-### 1. Official Nexus Spring Of Code (NSoC '26) Program Points
+### 1. Official Nexus Spring of Code (NSoC '26) Program Points
+
 Assigned manually by the Project Admin on the evaluation sheet upon merging:
+
 - `level1` (**3 points**): Documentation, typo corrections, small patches.
 - `level2` (**5 points**): UI layout enhancements, responsive design, components.
 - `level3` (**10 points**): Verified playable games in `games/`, canvas physics, core architecture.
 
 ### 2. In-App Arcade XP Formula (Live Hall of Fame)
+
 Dynamically synthesized in real time on [leaderboard.html](leaderboard.html):
 
-$$\mathbf{Arcade\ Score} = (\text{Games} \times 100) + (\text{Mechanics} \times 25) + (\text{Features} \times 50) + (\text{Fixes} \times 25) + (\mathbf{Commits} \times \mathbf{5})$$
+\[
+\mathbf{Arcade\ Score} =
+(\text{Games} \times 100) +
+(\text{Mechanics} \times 25) +
+(\text{Features} \times 50) +
+(\text{Fixes} \times 25) +
+(\mathbf{Commits} \times \mathbf{5})
+\]
 
 ---
 
@@ -177,7 +338,7 @@ $$\mathbf{Arcade\ Score} = (\text{Games} \times 100) + (\text{Mechanics} \times 
 The **Accessibility Hub** (`assets/js/a11y-engine.js` & `assets/css/a11y-engine.css`) introduces sensory customization directly onto `document.documentElement`:
 
 | Mode | Target Class | Visual Effect |
-| :--- | :--- | :--- |
+|:---|:---|:---|
 | **Reduced Motion** | `.a11y-reduced-motion` | Eliminates glow orbs, ambient grids, pulses, and forced instant transitions |
 | **High Contrast** | `.a11y-high-contrast` | 7:1+ contrast ratio, bold 2px borders, pure solid black/white canvas |
 | **Large Typography** | `.a11y-large-text` | 118% base font-size scaling across hero, catalog cards, and controls |
@@ -198,10 +359,11 @@ node scripts/validate-games.js
 ```
 
 The script audits:
+
 - Exact directory naming convention: `games/<game-name_your-name>/`
 - Presence of all 4 required files (`index.html`, `style.css`, `game.js`, `game.json`)
 - Strict JSON schema validity and required attributes
-- Prohibition of raw unicode emojis in markup in favor of SVG/Lucide icons
+- Prohibition of raw Unicode emojis in markup in favor of SVG/Lucide icons
 - Proper relative asset paths
 
 ---
