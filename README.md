@@ -12,6 +12,7 @@
     <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-Welcome%20%F0%9F%9A%80-10b981?style=for-the-badge" alt="PRs Welcome"></a>
     <a href="CODE_OF_CONDUCT.md"><img src="https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?style=for-the-badge" alt="Code of Conduct"></a>
     <a href="SECURITY.md"><img src="https://img.shields.io/badge/Security-Policy-e11d48?style=for-the-badge" alt="Security Policy"></a>
+    <a href="ARCHITECTURE.md"><img src="https://img.shields.io/badge/Architecture-Specification-8b5cf6?style=for-the-badge" alt="Architecture"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-f59e0b?style=for-the-badge&logo=open-source-initiative&logoColor=white" alt="License"></a>
   </p>
 </div>
@@ -33,6 +34,7 @@
 - 📁 **Isolated Directory Pattern (`games/game-name_your-name/`):** Every participant works inside their own isolated folder. **Zero Git merge conflicts!**
 - 🕹️ **Multi-Game Diversity:** Multiple contributors can build different versions of the same game idea without collision.
 - 📖 **Comprehensive Contributor Guide ([CONTRIBUTING.md](CONTRIBUTING.md)):** Detailed instructions, isolation rules, and architecture guidelines on how to contribute games.
+- 🏛️ **Automated CI Architecture ([ARCHITECTURE.md](ARCHITECTURE.md)):** Detailed architectural specifications and Mermaid workflow diagrams illustrating automated game registry compilation, client DOM hydration, and sensory accessibility engines.
 - 🛠️ **Conflict-Free Automated Contribution:** Contributors simply add their files along with `game.json` in `games/` — our automated GitHub Actions workflow compiles the registry without conflicts!
 - 🏆 **Live GitHub Hall of Fame ([leaderboard.html](leaderboard.html)):** Real-time contribution scoring, podium champions, and custom rank badges fetched directly from the GitHub REST API!
 
@@ -113,6 +115,7 @@ Simply open your project folder in File Explorer and **double-click `index.html`
 
 ArcadeVerse is built by and for the open-source community. All community contributions are protected and governed by the following official documents:
 
+- 🏛️ **[Architecture & Workflow Specification (ARCHITECTURE.md)](ARCHITECTURE.md)**: Deep dive into the zero-bundler pipeline, 4-file sandboxed game contract, automated continuous integration registry builder, and runtime execution model.
 - 📖 **[Contribution Guidelines (CONTRIBUTING.md)](CONTRIBUTING.md)**: Comprehensive guide on dual scoring systems, milestone tiers, folder conventions, and pull request workflows.
 - 🤝 **[Code of Conduct (CODE_OF_CONDUCT.md)](CODE_OF_CONDUCT.md)**: Community standards, inclusion pledges, anti-harassment policies, and enforcement guidelines.
 - 🛡️ **[Security Policy (SECURITY.md)](SECURITY.md)**: Private vulnerability reporting procedures, client-side web security constraints, and safety audits.

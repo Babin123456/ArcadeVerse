@@ -3374,14 +3374,42 @@ textarea:focus-visible,
   text-decoration: underline;
 }
 
-.games-count-pill, .commits-count-pill {
+.games-count-pill,
+.commits-count-pill,
+.files-count-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  white-space: nowrap;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border-subtle);
-  padding: 0.2rem 0.65rem;
+  padding: 0.24rem 0.7rem;
   border-radius: 999px;
   font-size: 0.82rem;
   color: #fff;
   font-weight: 700;
+  line-height: 1.2;
+}
+
+.commits-count-pill {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+  min-width: 58px;
+}
+
+.commits-count-pill i,
+.commits-count-pill svg,
+.games-count-pill i,
+.games-count-pill svg,
+.files-count-pill i,
+.files-count-pill svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .score-highlight {
@@ -5992,4 +6020,68 @@ textarea:focus-visible,
   background: rgba(241, 245, 249, 0.9);
   color: #0f172a;
   border-color: rgba(0, 0, 0, 0.1);
+}
+
+
+/* ===================================================
+   FLOATING BACK TO TOP BUTTON
+   =================================================== */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-surface-elevated, #1a1f2e);
+  color: var(--text-primary, #f8fafc);
+  border: 1px solid var(--border-medium, rgba(255, 255, 255, 0.15));
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 10px rgba(59, 130, 246, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top-btn:hover {
+  background: var(--accent-primary, #3b82f6);
+  color: #ffffff;
+  border-color: var(--accent-primary, #3b82f6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
+}
+
+.back-to-top-btn:active {
+  transform: translateY(0);
+}
+
+[data-theme="light"] .back-to-top-btn {
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .back-to-top-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+[data-theme="light"] .commits-count-pill {
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  color: #1d4ed8 !important;
+  font-weight: 700;
 }
