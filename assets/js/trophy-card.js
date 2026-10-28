@@ -365,7 +365,7 @@
         modal.innerHTML = `
           <div class="trophy-modal-content">
             <div class="trophy-modal-header">
-              <h3>Verified Achievement Certificate</h3>
+              <h3 class="trophy-modal-title">Verified Achievement Certificate</h3>
               <button class="trophy-modal-close" aria-label="Close Certificate Modal">&times;</button>
             </div>
             <div class="trophy-card-preview-wrap">

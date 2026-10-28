@@ -6345,3 +6345,12 @@ html {
 [data-theme="light"] .modal-controls .btn-close svg {
   stroke: #0f172a !important;
 }
+
+/* Explicit Light Mode Override for Certificate Modal Title */
+[data-theme="light"] .trophy-modal-header h3,
+[data-theme="light"] .trophy-modal-title,
+html.light-mode .trophy-modal-header h3,
+html.light-mode .trophy-modal-title {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
