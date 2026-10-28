@@ -165,7 +165,7 @@ function createCell(row, col, level) {
   if (row === level.emitter.row && col === level.emitter.col) {
     cell.classList.add("emitter");
     cell.setAttribute("aria-label", "Laser emitter");
-    cell.innerHTML = '<span class="endpoint-icon" aria-hidden="true">✦</span>';
+    cell.innerHTML = '<span class="endpoint-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 12 15 15 12 22 9 15 2 12 9 9"/></svg></span>';
     return cell;
   }
 
@@ -189,13 +189,19 @@ function createCell(row, col, level) {
     button.setAttribute("aria-label", `Mirror at row ${row + 1}, column ${col + 1}, angled ${mirror.orientation === "/" ? "slash" : "backslash"}. Rotate mirror.`);
     button.disabled = levelComplete;
     button.addEventListener("click", () => rotateMirror(mirrorIndex));
+    button.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        rotateMirror(mirrorIndex);
+      }
+    });
     return button;
   }
 
   if (level.blockers.some((blocker) => blocker.row === row && blocker.col === col)) {
     cell.classList.add("blocker");
     cell.setAttribute("aria-label", "Blocked tile");
-    cell.innerHTML = '<span class="blocker-icon" aria-hidden="true">✕</span>';
+    cell.innerHTML = '<span class="blocker-icon" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>';
     return cell;
   }
 

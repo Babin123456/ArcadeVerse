@@ -31,11 +31,32 @@ header {
 .brand {
   font-weight: 900;
   letter-spacing: .1em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand .star-icon {
+  color: var(--cyan);
 }
 
 .brand span {
   color: var(--cyan);
 }
+
+.dot-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.dot-green { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
+.dot-orange { background: #fb923c; box-shadow: 0 0 8px #fb923c; }
+.dot-pink { background: #f472b6; box-shadow: 0 0 8px #f472b6; }
+.dot-cyan { background: #38bdf8; box-shadow: 0 0 8px #38bdf8; }
+.dot-purple { background: #a855f7; box-shadow: 0 0 8px #a855f7; }
 
 button {
   cursor: pointer;
@@ -45,6 +66,12 @@ button {
   color: #edf1ff;
   padding: 10px 15px;
   font: inherit;
+  transition: all 0.2s ease;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
 }
 
 #start {

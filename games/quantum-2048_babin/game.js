@@ -8,8 +8,11 @@ class Quantum2048 {
   constructor() {
     this.size = 4;
     this.board = [];
-    this.score = 0;
-    this.bestScore = parseInt(localStorage.getItem("arcadeverse_q2048_best") || "0", 10);
+    let savedBest = 0;
+    try {
+      savedBest = parseInt(localStorage.getItem("arcadeverse_q2048_best") || "0", 10) || 0;
+    } catch (e) {}
+    this.bestScore = savedBest;
     this.previousState = null;
     this.soundEnabled = true;
     this.won = false;
@@ -183,7 +186,9 @@ class Quantum2048 {
 
     if (this.score > this.bestScore) {
       this.bestScore = this.score;
-      localStorage.setItem("arcadeverse_q2048_best", this.bestScore.toString());
+      try {
+        localStorage.setItem("arcadeverse_q2048_best", this.bestScore.toString());
+      } catch (e) {}
       if (this.bestScoreEl) this.bestScoreEl.textContent = this.bestScore;
     }
   }

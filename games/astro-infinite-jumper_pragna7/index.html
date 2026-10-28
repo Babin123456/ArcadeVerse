@@ -9,8 +9,11 @@
   <body>
     <main class="layout">
       <header>
-        <div class="brand">✦ ASTRO <span>INFINITE JUMPER</span></div>
-        <button id="help">How to Play</button>
+        <div class="brand">
+          <svg class="star-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7-6-4.6h7.6z"/></svg>
+          ASTRO <span>INFINITE JUMPER</span>
+        </div>
+        <button id="help" aria-label="How to play instructions">How to Play</button>
       </header>
 
       <section class="columns">
@@ -22,22 +25,22 @@
           </div>
 
           <div class="stage">
-            <canvas id="c" width="480" height="680"></canvas>
+            <canvas id="c" width="480" height="680" role="img" aria-label="Astro Infinite Jumper interactive game arena"></canvas>
             <div id="overlay">
               <div class="modal">
                 <small>ARCADE / SPACE SURVIVAL</small>
                 <h1 id="title">Astro Infinite Jumper</h1>
                 <p id="message">Bounce upward across floating platforms. Collect rocket boosters, land on springs, and dodge black holes!</p>
-                <button id="start">Start Jumping</button>
+                <button id="start" aria-label="Start Jumping">Start Jumping</button>
                 <p class="hint">← → or A / D to move · Space to pause</p>
               </div>
             </div>
           </div>
 
           <div class="touch">
-            <button id="left">←</button>
+            <button id="left" aria-label="Move left">←</button>
             <span>MOVE</span>
-            <button id="right">→</button>
+            <button id="right" aria-label="Move right">→</button>
           </div>
         </div>
 
@@ -50,11 +53,11 @@
 
           <article>
             <h2>Power-ups & hazards</h2>
-            <p>🟢 <b>Spring</b> — launches you higher.</p>
-            <p>🟠 <b>Rocket</b> — collect for a powerful burst.</p>
-            <p>💗 <b>Fragile platform</b> — breaks after landing.</p>
-            <p>🩵 <b>Moving platform</b> — time your landing.</p>
-            <p>🟣 <b>Black hole</b> — avoid it!</p>
+            <p><span class="dot-indicator dot-green" aria-hidden="true"></span> <b>Spring</b> — launches you higher.</p>
+            <p><span class="dot-indicator dot-orange" aria-hidden="true"></span> <b>Rocket</b> — collect for a powerful burst.</p>
+            <p><span class="dot-indicator dot-pink" aria-hidden="true"></span> <b>Fragile platform</b> — breaks after landing.</p>
+            <p><span class="dot-indicator dot-cyan" aria-hidden="true"></span> <b>Moving platform</b> — time your landing.</p>
+            <p><span class="dot-indicator dot-purple" aria-hidden="true"></span> <b>Black hole</b> — avoid it!</p>
           </article>
 
           <article>

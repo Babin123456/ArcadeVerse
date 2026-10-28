@@ -37,7 +37,17 @@
   let rows = [];
 
   // LocalStorage Stats
-  let stats = JSON.parse(localStorage.getItem("arcadeverse_cryptic_wordle_stats") || '{"played":0,"won":0,"streak":0,"maxStreak":0}');
+  let stats = { played: 0, won: 0, streak: 0, maxStreak: 0 };
+  try {
+    const saved = localStorage.getItem("arcadeverse_cryptic_wordle_stats");
+    if (saved) stats = JSON.parse(saved);
+  } catch (e) {}
+
+  function saveStats() {
+    try {
+      localStorage.setItem("arcadeverse_cryptic_wordle_stats", JSON.stringify(stats));
+    } catch (e) {}
+  }
 
   function updateStatsDisplay() {
     statPlayedEl.textContent = stats.played;
@@ -185,9 +195,9 @@
         stats.won++;
         stats.streak++;
         if (stats.streak > stats.maxStreak) stats.maxStreak = stats.streak;
-        localStorage.setItem("arcadeverse_cryptic_wordle_stats", JSON.stringify(stats));
+        saveStats();
 
-        showToast("DECRYPTION SUCCESSFUL! 🔓");
+        showToast("DECRYPTION SUCCESSFUL!");
         revealedWordEl.textContent = secretWord;
         updateStatsDisplay();
         setTimeout(() => statsModal.classList.add("active"), 1200);
@@ -196,9 +206,9 @@
         isGameOver = true;
         stats.played++;
         stats.streak = 0;
-        localStorage.setItem("arcadeverse_cryptic_wordle_stats", JSON.stringify(stats));
+        saveStats();
 
-        showToast("SYSTEM LOCKED! 🔐");
+        showToast("SYSTEM LOCKED - ACCESS DENIED");
         revealedWordEl.textContent = secretWord;
         updateStatsDisplay();
         setTimeout(() => statsModal.classList.add("active"), 1200);
@@ -213,8 +223,10 @@
   window.addEventListener("keydown", (e) => {
     if (isGameOver) return;
     if (e.key === "Enter") {
+      e.preventDefault();
       submitGuess();
     } else if (e.key === "Backspace") {
+      e.preventDefault();
       removeLetter();
     } else if (/^[a-zA-Z]$/.test(e.key)) {
       addLetter(e.key.toUpperCase());

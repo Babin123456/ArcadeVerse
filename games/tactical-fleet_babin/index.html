@@ -38,8 +38,12 @@
 
     <!-- Radar Controls Bar -->
     <div class="radar-actions-bar">
-      <button id="sonar-scan-btn" class="sonar-btn" title="Scan 2x2 grid sector (1 charge)">
-        📡 Sonar Scan: <strong id="sonar-charges">1</strong>
+      <button id="sonar-scan-btn" class="sonar-btn" title="Scan 2x2 grid sector (1 charge)" aria-label="Activate Sonar Scan">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          <path d="M2 12h20"/>
+        </svg>Sonar Scan: <strong id="sonar-charges">1</strong>
       </button>
       <span class="status-intel" id="status-intel">Awaiting coordinates...</span>
     </div>
@@ -59,10 +63,16 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3 id="result-title">Victory Achieved</h3>
-          <button id="close-result-btn" class="close-btn">&times;</button>
+          <button id="close-result-btn" class="close-btn" aria-label="Close modal">&times;</button>
         </div>
         <div class="modal-body text-center">
-          <div class="result-icon" id="result-icon">⚓</div>
+          <div class="result-icon" id="result-icon">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--accent-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="5" r="3"/>
+              <line x1="12" y1="22" x2="12" y2="8"/>
+              <path d="M5 12H2a10 10 0 0 0 20 0h-3"/>
+            </svg>
+          </div>
           <p id="result-message">All hostile fleet elements have been neutralized!</p>
           <div class="stats-recap">
             <div class="recap-row"><span>Total Turns:</span><strong id="final-turns">0</strong></div>

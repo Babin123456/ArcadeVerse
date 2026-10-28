@@ -38,30 +38,34 @@
 
     <!-- Canvas Matrix -->
     <div class="canvas-wrapper">
-      <canvas id="game-canvas" width="400" height="400"></canvas>
+      <canvas id="game-canvas" width="400" height="400" role="img" aria-label="Cyber Snake game matrix arena" tabindex="0"></canvas>
 
       <!-- Start Overlay -->
-      <div id="start-overlay" class="overlay active">
+      <div id="start-overlay" class="overlay active" role="dialog" aria-modal="true" aria-labelledby="start-title">
         <div class="overlay-card">
-          <div class="overlay-icon">🐍</div>
-          <h2>Cyber Snake Matrix</h2>
+          <div class="overlay-icon" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A8 8 0 0 1 4.07 10H5a1 1 0 0 1 0 2 6 6 0 0 0 6 6v-1a1 1 0 0 1 2 0v1a6 6 0 0 0 6-6 1 1 0 0 1 0-2h.93A8 8 0 0 1 13 16.93z"/></svg>
+          </div>
+          <h2 id="start-title">Cyber Snake Matrix</h2>
           <p>Navigate the cyber grid, consume quantum energy bits, and expand your cybernetic memory tail!</p>
-          <button id="start-btn" class="btn btn-primary">Initialize Protocol</button>
+          <button id="start-btn" class="btn btn-primary" aria-label="Initialize Protocol">Initialize Protocol</button>
           <span class="hint-text">Arrows or <strong>W • A • S • D</strong> to steer</span>
         </div>
       </div>
 
       <!-- Game Over Overlay -->
-      <div id="gameover-overlay" class="overlay">
+      <div id="gameover-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="gameover-title">
         <div class="overlay-card">
-          <div class="overlay-icon">💥</div>
-          <h2>Matrix Desync!</h2>
+          <div class="overlay-icon" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <h2 id="gameover-title">Matrix Desync!</h2>
           <div class="stats-recap">
             <div class="recap-row"><span>Energy Bits:</span><strong id="final-score">0</strong></div>
             <div class="recap-row"><span>Snake Length:</span><strong id="final-length">3</strong></div>
             <div class="recap-row"><span>All-Time Best:</span><strong id="final-best">0</strong></div>
           </div>
-          <button id="restart-btn" class="btn btn-primary">Reboot Snake</button>
+          <button id="restart-btn" class="btn btn-primary" aria-label="Reboot Snake game">Reboot Snake</button>
         </div>
       </div>
     </div>
@@ -82,11 +86,11 @@
     </div>
 
     <!-- Rules Modal for PA Review -->
-    <div id="rules-modal" class="modal">
+    <div id="rules-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="rules-title">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>How to Play (PA Review)</h3>
-          <button id="close-rules-btn" class="close-btn">&times;</button>
+          <h3 id="rules-title">How to Play</h3>
+          <button id="close-rules-btn" class="close-btn" aria-label="Close rules dialog">&times;</button>
         </div>
         <div class="modal-body">
           <ul class="rules-list">
@@ -94,8 +98,8 @@
             <li><strong>Controls:</strong> Use <kbd>W / A / S / D</kbd>, Arrow keys, or the on-screen touch D-Pad.</li>
             <li><strong>Power-Up Bits:</strong>
               <ul>
-                <li>💎 <strong>Cyan Energy Bit:</strong> +10 Pts, +1 length</li>
-                <li>⭐ <strong>Golden Quantum Bit:</strong> +50 Pts, temporary double points</li>
+                <li><span class="bit-indicator bit-cyan" aria-hidden="true"></span> <strong>Cyan Energy Bit:</strong> +10 Pts, +1 length</li>
+                <li><span class="bit-indicator bit-gold" aria-hidden="true"></span> <strong>Golden Quantum Bit:</strong> +50 Pts, temporary double points</li>
               </ul>
             </li>
             <li><strong>Screen Portals:</strong> Passing through canvas edges warps the snake smoothly to the opposite boundary!</li>

@@ -41,10 +41,22 @@
   let score = 0;
   let isPlaying = false;
   let gameLoopTimeout = null;
-  let tickSpeed = 120;
-  let bestScore = parseInt(localStorage.getItem("arcadeverse_cyber_snake_best") || "0", 10);
+  let bestScore = 0;
+  try {
+    bestScore = parseInt(localStorage.getItem("arcadeverse_cyber_snake_best") || "0", 10) || 0;
+  } catch (e) {}
 
   bestScoreEl.textContent = bestScore;
+
+  function updateBestScore() {
+    if (score > bestScore) {
+      bestScore = score;
+      bestScoreEl.textContent = bestScore;
+      try {
+        localStorage.setItem("arcadeverse_cyber_snake_best", bestScore);
+      } catch (e) {}
+    }
+  }
 
   function spawnFood() {
     let valid = false;
@@ -144,15 +156,12 @@
       speedDisplay.textContent = `${speedTier}x`;
 
       scoreDisplay.textContent = score;
-      if (score > bestScore) {
-        bestScore = score;
-        bestScoreEl.textContent = bestScore;
-        localStorage.setItem("arcadeverse_cyber_snake_best", bestScore);
-      }
+      updateBestScore();
     } else if (goldenFood && newX === goldenFood.x && newY === goldenFood.y) {
       score += 50;
       goldenFood = null;
       scoreDisplay.textContent = score;
+      updateBestScore();
     } else {
       snake.pop(); // normal movement
     }
@@ -277,11 +286,19 @@
   // Keyboard navigation
   window.addEventListener("keydown", (e) => {
     const key = e.key.toLowerCase();
-    if (key === "arrowup" || key === "w") setDirection(0, -1);
-    else if (key === "arrowdown" || key === "s") setDirection(0, 1);
-    else if (key === "arrowleft" || key === "a") setDirection(-1, 0);
-    else if (key === "arrowright" || key === "d") setDirection(1, 0);
-    else if (e.code === "Space" && !isPlaying) {
+    if (key === "arrowup" || key === "w") {
+      e.preventDefault();
+      setDirection(0, -1);
+    } else if (key === "arrowdown" || key === "s") {
+      e.preventDefault();
+      setDirection(0, 1);
+    } else if (key === "arrowleft" || key === "a") {
+      e.preventDefault();
+      setDirection(-1, 0);
+    } else if (key === "arrowright" || key === "d") {
+      e.preventDefault();
+      setDirection(1, 0);
+    } else if (e.code === "Space" && !isPlaying) {
       e.preventDefault();
       initGame();
     }

@@ -72,6 +72,14 @@
     }
   }
 
+  const SVG_FACE_SMILE = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>';
+  const SVG_FACE_WIN = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2"/><path d="M6 9h4"/><path d="M14 9h4"/></svg>';
+  const SVG_FACE_DEAD = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+  const SVG_FLAG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="#f43f5e" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>';
+  const SVG_MINE = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="6"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>';
+  const SVG_TROPHY = '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>';
+  const SVG_ALERT = '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+
   function initGame() {
     stopTimer();
     isGameOver = false;
@@ -79,7 +87,7 @@
     flagsLeft = totalMines;
     mineCountEl.textContent = flagsLeft;
     timerDisplayEl.textContent = "000";
-    faceBtn.textContent = "🙂";
+    faceBtn.innerHTML = SVG_FACE_SMILE;
     resultModal.classList.remove("active");
 
     grid = [];
@@ -110,6 +118,19 @@
           toggleFlag(r, c);
         });
 
+        cellEl.setAttribute("role", "gridcell");
+        cellEl.setAttribute("tabindex", "0");
+        cellEl.setAttribute("aria-label", `Cell at row ${r + 1}, column ${c + 1}`);
+
+        cellEl.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            handleCellClick(r, c);
+          } else if (e.key === " " || e.key === "f" || e.key === "F") {
+            e.preventDefault();
+            toggleFlag(r, c);
+          }
+        });
         minefieldEl.appendChild(cellEl);
         cell.element = cellEl;
         grid[r][c] = cell;
@@ -164,7 +185,7 @@
     } else if (flagsLeft > 0) {
       cell.isFlagged = true;
       cell.element.classList.add("flagged");
-      cell.element.textContent = "🚩";
+      cell.element.innerHTML = SVG_FLAG;
       flagsLeft--;
     }
 
@@ -229,7 +250,7 @@
         const cell = grid[r][c];
         if (cell.isMine) {
           cell.element.classList.add("mine");
-          cell.element.textContent = "💣";
+          cell.element.innerHTML = SVG_MINE;
         }
       }
     }
@@ -255,10 +276,10 @@
     isGameOver = true;
     stopTimer();
 
-    faceBtn.textContent = won ? "😎" : "😵";
+    faceBtn.innerHTML = won ? SVG_FACE_WIN : SVG_FACE_DEAD;
 
     resultTitle.textContent = won ? "Quantum Sector Secured!" : "Singularity Breach!";
-    resultIcon.textContent = won ? "🏆" : "💥";
+    resultIcon.innerHTML = won ? SVG_TROPHY : SVG_ALERT;
     resultMessage.textContent = won 
       ? `All ${totalMines} subatomic quantum hazards have been safely neutralized!`
       : "A quantum mine was triggered, destabilizing the local field.";

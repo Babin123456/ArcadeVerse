@@ -59,7 +59,12 @@
   let playerStep = 0;
   let isPlaying = false;
   let isDisplayingSequence = false;
-  let bestScore = parseInt(localStorage.getItem("arcadeverse_synth_simon_best") || "0", 10);
+  let bestScore = 0;
+  try {
+    bestScore = parseInt(localStorage.getItem("arcadeverse_synth_simon_best") || "0", 10) || 0;
+  } catch (e) {
+    bestScore = 0;
+  }
 
   bestScoreEl.textContent = bestScore;
 
@@ -90,7 +95,9 @@
     if (sequence.length - 1 > bestScore) {
       bestScore = sequence.length - 1;
       bestScoreEl.textContent = bestScore;
-      localStorage.setItem("arcadeverse_synth_simon_best", bestScore);
+      try {
+        localStorage.setItem("arcadeverse_synth_simon_best", bestScore);
+      } catch (e) {}
     }
 
     // Playback speed acceleration
@@ -122,7 +129,7 @@
     if (sequence[playerStep] === index) {
       playerStep++;
       if (playerStep === sequence.length) {
-        gameStatusEl.textContent = "CORRECT! ✨";
+        gameStatusEl.textContent = "PERFECT SEQUENCE!";
         gameStatusEl.style.color = "#10b981";
         setTimeout(startNextRound, 750);
       }
@@ -167,12 +174,16 @@
   window.addEventListener("keydown", (e) => {
     const key = e.key.toLowerCase();
     if (key === "q" || key === "1" || e.code === "ArrowUp") {
+      e.preventDefault();
       handlePadInput(0);
     } else if (key === "w" || key === "2" || e.code === "ArrowRight") {
+      e.preventDefault();
       handlePadInput(1);
     } else if (key === "a" || key === "3" || e.code === "ArrowLeft") {
+      e.preventDefault();
       handlePadInput(2);
     } else if (key === "s" || key === "4" || e.code === "ArrowDown") {
+      e.preventDefault();
       handlePadInput(3);
     } else if (e.code === "Space" && !isPlaying) {
       e.preventDefault();

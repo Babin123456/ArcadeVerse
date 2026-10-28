@@ -70,7 +70,10 @@
   let spawnTimer = 0;
   let songDuration = 1800; // ~40 seconds of gameplay
   let songProgress = 0;
-  let bestScore = parseInt(localStorage.getItem("arcadeverse_neon_runner_best") || "0", 10);
+  let bestScore = 0;
+  try {
+    bestScore = parseInt(localStorage.getItem("arcadeverse_neon_runner_best") || "0", 10) || 0;
+  } catch (e) {}
 
   bestScoreEl.textContent = bestScore;
 
@@ -139,7 +142,9 @@
       if (score > bestScore) {
         bestScore = score;
         bestScoreEl.textContent = bestScore;
-        localStorage.setItem("arcadeverse_neon_runner_best", bestScore);
+        try {
+          localStorage.setItem("arcadeverse_neon_runner_best", bestScore);
+        } catch (e) {}
       }
     }
   }

@@ -68,8 +68,17 @@
         cellEl.className = "radar-cell";
         cellEl.dataset.r = r;
         cellEl.dataset.c = c;
+        cellEl.setAttribute("role", "button");
+        cellEl.setAttribute("tabindex", "0");
+        cellEl.setAttribute("aria-label", `Sector row ${r + 1}, column ${c + 1}`);
 
         cellEl.addEventListener("click", () => handleCellClick(r, c));
+        cellEl.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleCellClick(r, c);
+          }
+        });
         radarGridEl.appendChild(cellEl);
 
         cell.element = cellEl;
@@ -154,19 +163,19 @@
       const ship = cell.hasShip;
       ship.hits++;
       cell.element.classList.add("hit");
-      cell.element.textContent = "🔥";
+      cell.element.innerHTML = '<svg class="cell-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="3" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="3" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="21" y2="12"/></svg>';
       logEntry(`Strike on sector (${r + 1},${c + 1}): DIRECT HIT!`, "hit");
 
       if (ship.hits === ship.size) {
         ship.isSunk = true;
-        logEntry(`Enemy ${ship.name} has been SUNK! 💥`, "hit");
+        logEntry(`Enemy ${ship.name} has been SUNK!`, "hit");
         statusIntelEl.textContent = `${ship.name} destroyed!`;
       } else {
         statusIntelEl.textContent = "Direct hit recorded!";
       }
     } else {
       cell.element.classList.add("miss");
-      cell.element.textContent = "🌊";
+      cell.element.innerHTML = '<svg class="cell-icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="5"/></svg>';
       logEntry(`Strike on sector (${r + 1},${c + 1}): Water splash.`, "miss");
       statusIntelEl.textContent = "Coordinates clear.";
     }
@@ -220,7 +229,9 @@
     isGameOver = true;
 
     resultTitle.textContent = won ? "Theater Secured!" : "Base Overwhelmed!";
-    resultIcon.textContent = won ? "🏆" : "💥";
+    resultIcon.innerHTML = won
+      ? `<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--color-radar)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>`
+      : `<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--color-hit)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
     resultMessage.textContent = won
       ? `All 4 enemy warships neutralized in ${turns} tactical turns!`
       : "Coastal defenses collapsed under relentless counter-bombardment.";

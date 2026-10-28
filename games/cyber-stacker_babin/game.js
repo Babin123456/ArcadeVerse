@@ -38,7 +38,10 @@
   let score = 0;
   let combo = 0;
   let maxCombo = 0;
-  let bestScore = parseInt(localStorage.getItem("arcadeverse_cyber_stacker_best") || "0", 10);
+  let bestScore = 0;
+  try {
+    bestScore = parseInt(localStorage.getItem("arcadeverse_cyber_stacker_best") || "0", 10) || 0;
+  } catch (e) {}
   let isPlaying = false;
   let animId = null;
 
@@ -159,7 +162,9 @@
     if (score > bestScore) {
       bestScore = score;
       bestScoreEl.textContent = bestScore;
-      localStorage.setItem("arcadeverse_cyber_stacker_best", bestScore);
+      try {
+        localStorage.setItem("arcadeverse_cyber_stacker_best", bestScore);
+      } catch (e) {}
     }
 
     direction = direction > 0 ? -1 : 1;

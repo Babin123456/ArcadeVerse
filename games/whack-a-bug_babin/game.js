@@ -24,10 +24,34 @@
   const rulesModal = document.getElementById("rules-modal");
 
   const BUG_TYPES = [
-    { type: "syntax", icon: "🐛", points: 10, cooling: 2, duration: 1100 },
-    { type: "nullpointer", icon: "👾", points: 25, cooling: 4, duration: 900 },
-    { type: "golden", icon: "⭐", points: 50, cooling: 10, duration: 750 },
-    { type: "firewall", icon: "🛡️", points: -20, cooling: -15, duration: 1200 }
+    {
+      type: "syntax",
+      iconSvg: '<svg class="bug-svg bug-syntax-svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/></svg>',
+      points: 10,
+      cooling: 2,
+      duration: 1100
+    },
+    {
+      type: "nullpointer",
+      iconSvg: '<svg class="bug-svg bug-null-svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg>',
+      points: 25,
+      cooling: 4,
+      duration: 900
+    },
+    {
+      type: "golden",
+      iconSvg: '<svg class="bug-svg bug-golden-svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+      points: 50,
+      cooling: 10,
+      duration: 750
+    },
+    {
+      type: "firewall",
+      iconSvg: '<svg class="bug-svg bug-firewall-svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+      points: -20,
+      cooling: -15,
+      duration: 1200
+    }
   ];
 
   let score = 0;
@@ -38,7 +62,12 @@
   let slots = [];
   let spawnInterval = null;
   let heatInterval = null;
-  let bestScore = parseInt(localStorage.getItem("arcadeverse_whack_bug_best") || "0", 10);
+  let bestScore = 0;
+  try {
+    bestScore = parseInt(localStorage.getItem("arcadeverse_whack_bug_best") || "0", 10) || 0;
+  } catch (e) {
+    bestScore = 0;
+  }
 
   bestScoreEl.textContent = bestScore;
 
@@ -50,8 +79,17 @@
       const slot = document.createElement("div");
       slot.className = "rack-slot";
       slot.dataset.index = i;
+      slot.setAttribute("role", "button");
+      slot.setAttribute("tabindex", "0");
+      slot.setAttribute("aria-label", `Server rack slot ${i + 1}`);
 
       slot.addEventListener("pointerdown", () => handleSlotClick(i));
+      slot.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleSlotClick(i);
+        }
+      });
       serverRack.appendChild(slot);
       slots.push({ element: slot, activeBug: null, timer: null });
     }
@@ -69,7 +107,9 @@
     if (score > bestScore) {
       bestScore = score;
       bestScoreEl.textContent = bestScore;
-      localStorage.setItem("arcadeverse_whack_bug_best", bestScore);
+      try {
+        localStorage.setItem("arcadeverse_whack_bug_best", bestScore);
+      } catch (e) {}
     }
   }
 
@@ -92,7 +132,7 @@
 
     const bugEl = document.createElement("div");
     bugEl.className = "bug-entity";
-    bugEl.textContent = bugType.icon;
+    bugEl.innerHTML = bugType.iconSvg;
 
     randomSlot.element.appendChild(bugEl);
     randomSlot.activeBug = bugType;

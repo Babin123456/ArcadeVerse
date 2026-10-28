@@ -37,40 +37,44 @@
     </div>
 
     <div class="canvas-wrapper">
-      <canvas id="game-canvas" width="400" height="560"></canvas>
+      <canvas id="game-canvas" width="400" height="560" role="img" aria-label="Cyber Tower Stacker game arena" tabindex="0"></canvas>
 
       <!-- Start Overlay -->
-      <div id="start-overlay" class="overlay active">
+      <div id="start-overlay" class="overlay active" role="dialog" aria-modal="true" aria-labelledby="start-title">
         <div class="overlay-card">
-          <div class="overlay-icon">🏢</div>
-          <h2>Cyber Tower Stacker</h2>
+          <div class="overlay-icon" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg>
+          </div>
+          <h2 id="start-title">Cyber Tower Stacker</h2>
           <p>Stack swinging neon slabs with millisecond precision. Any overhang is instantly sliced off!</p>
-          <button id="start-btn" class="btn btn-primary">Start Stacking</button>
+          <button id="start-btn" class="btn btn-primary" aria-label="Start Stacking">Start Stacking</button>
           <span class="hint-text">Press <strong>Spacebar</strong> or <strong>Tap Screen</strong> to drop</span>
         </div>
       </div>
 
       <!-- Game Over Overlay -->
-      <div id="gameover-overlay" class="overlay">
+      <div id="gameover-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="gameover-title">
         <div class="overlay-card">
-          <div class="overlay-icon">💥</div>
-          <h2>Tower Collapsed!</h2>
+          <div class="overlay-icon" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h2 id="gameover-title">Tower Collapsed!</h2>
           <div class="stats-recap">
             <div class="recap-row"><span>Final Height:</span><strong id="final-score">0</strong></div>
             <div class="recap-row"><span>Max Combo:</span><strong id="final-combo">0x</strong></div>
             <div class="recap-row"><span>All-Time Best:</span><strong id="final-best">0</strong></div>
           </div>
-          <button id="restart-btn" class="btn btn-primary">Try Again</button>
+          <button id="restart-btn" class="btn btn-primary" aria-label="Try stacking again">Try Again</button>
         </div>
       </div>
     </div>
 
     <!-- Controls & Rules Modal for PA Review -->
-    <div id="rules-modal" class="modal">
+    <div id="rules-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="rules-title">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>How to Play & Controls (PA Review)</h3>
-          <button id="close-rules-btn" class="close-btn">&times;</button>
+          <h3 id="rules-title">How to Play & Controls</h3>
+          <button id="close-rules-btn" class="close-btn" aria-label="Close rules dialog">&times;</button>
         </div>
         <div class="modal-body">
           <ul class="rules-list">

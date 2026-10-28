@@ -1399,7 +1399,7 @@
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 9px monospace';
         ctx.textAlign = 'center';
-        ctx.fillText('⚡ LASER GRID ⚡', 0, beamY - 14);
+        ctx.fillText('[!] LASER GRID [!]', 0, beamY - 14);
       }
       else if (obs.type === OBSTACLE_TYPES.BLOCKER) {
         // Tall Firewall Drone / Pylon (requires STEER to open lane)
