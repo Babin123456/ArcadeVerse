@@ -63,17 +63,17 @@ const KNOWN_PROFILES = {
     platformPRs: 0,
     qualityPRs: 0
   },
-  arcadeverse: {
-    name: "ArcadeVerse Contributor",
-    github: "arcadeverse",
+  arshibansal: {
+    name: "Arshi Bansal",
+    github: "ArshiBansal",
     role: "Puzzle Developer (NSOC '26)",
     mechanicsBonus: 0,
     platformPRs: 0,
     qualityPRs: 0
   },
-  abhishekcse2004: {
+  anshuu2004: {
     name: "Abhishek",
-    github: "abhishekcse2004",
+    github: "Anshuu2004",
     role: "Contributor (NSOC '26)",
     mechanicsBonus: 0,
     platformPRs: 0,
@@ -89,8 +89,8 @@ const EMAIL_MAP = {
   "mistu7debnath2021@gmail.com": "mistu7debnath",
   "harshjeswanitech95722@gmail.com": "hrshjswniii",
   "seethapragna2005@gmail.com": "pragna7",
-  "arshi900389@gmail.com": "arcadeverse",
-  "abhishekcse2004@gmail.com": "abhishekcse2004"
+  "arshi900389@gmail.com": "arshibansal",
+  "abhishekcse2004@gmail.com": "anshuu2004"
 };
 
 function getGitCommitCounts() {

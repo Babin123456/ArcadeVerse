@@ -47,8 +47,8 @@ const GAMES_REGISTRY = [
     "category": "Puzzle",
     "lucideIcon": "circuit-board",
     "description": "Rotate circuit tiles to connect the power source to the destination. Solve increasingly complex grids with logic and spatial reasoning!",
-    "author": "ArcadeVerse Contributor",
-    "github": "arcadeverse",
+    "author": "Arshi Bansal",
+    "github": "ArshiBansal",
     "role": "Puzzle Developer",
     "path": "games/circuit-connect_arshi/index.html",
     "tags": [
@@ -437,7 +437,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 149,
+    "commits": 151,
     "gamesCount": 2,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -453,7 +453,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 93,
+    "commits": 97,
     "gamesCount": 10,
     "mechanicsBonus": 2,
     "platformPRs": 29,
@@ -524,8 +524,8 @@ const CONTRIBUTORS_REGISTRY = [
     ]
   },
   {
-    "name": "ArcadeVerse Contributor",
-    "github": "arcadeverse",
+    "name": "Arshi Bansal",
+    "github": "ArshiBansal",
     "avatarInitial": "A",
     "role": "Puzzle Developer (NSOC '26)",
     "commits": 1,
@@ -555,7 +555,7 @@ const CONTRIBUTORS_REGISTRY = [
   },
   {
     "name": "Abhishek",
-    "github": "abhishekcse2004",
+    "github": "Anshuu2004",
     "avatarInitial": "A",
     "role": "Contributor (NSOC '26)",
     "commits": 1,

@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const CACHE_KEY = "arcadeverse_contributors_cache";
+  const CACHE_KEY = "arcadeverse_contributors_cache_v2";
   const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
   // Initial verified contributors from repository
@@ -346,6 +346,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return `Games: ${games} • Feat: ${feat} • Fix: ${fix}`;
   }
 
+  // Generate reliable inline SVG letter avatar (prevents 404 network errors & recursion)
+  function getFallbackAvatarSvg(name, login) {
+    const char = ((name || login || "?").trim().charAt(0) || "?").toUpperCase();
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%236366f1"/><stop offset="100%" stop-color="%2306b6d4"/></linearGradient></defs><rect width="64" height="64" rx="32" fill="url(%23g)"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" fill="%23ffffff" font-family="system-ui,-apple-system,sans-serif" font-size="26" font-weight="700">${char}</text></svg>`;
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+  }
+
   // Render Top Community Contributors Podium
   // Only displays real verified contributors who have contributed to the repository.
   // Never renders dummy "Claim Rank" cards.
@@ -393,6 +400,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const item = slot.user;
       const score = calculateScore(item);
       const badges = getContributorBadges(item);
+      const fallbackAvatar = getFallbackAvatarSvg(item.name, item.login);
 
       const card = document.createElement("div");
       card.className = `podium-card ${slot.cardClass}`;
@@ -401,7 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="podium-badge podium-badge-${slot.badgeType}">
           <i data-lucide="${slot.badgeIcon}"></i> ${slot.badgeLabel}
         </div>
-        <img src="${item.avatar_url}" alt="${item.name}" class="podium-avatar" onerror="this.src='https://github.com/identicons/${item.login}.png'">
+        <img src="${item.avatar_url || fallbackAvatar}" alt="${item.name}" class="podium-avatar" onerror="this.onerror=null; this.src='${fallbackAvatar}';">
         <h3 class="podium-name">${item.name}</h3>
         <a href="https://github.com/${item.login}" target="_blank" rel="noopener noreferrer" class="podium-handle">@${item.login}</a>
         
@@ -453,6 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const rank = index + 1;
       const score = calculateScore(item);
       const badges = getContributorBadges(item);
+      const fallbackAvatar = getFallbackAvatarSvg(item.name, item.login);
 
       let rankBadgeHtml = `<span class="rank-tag">#${rank}</span>`;
       if (rank === 1) {
@@ -468,7 +477,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${rankBadgeHtml}</td>
         <td>
           <div class="table-user-cell">
-            <img src="${item.avatar_url}" alt="${item.name}" class="table-user-avatar" onerror="this.src='https://github.com/identicons/${item.login}.png'">
+            <img src="${item.avatar_url || fallbackAvatar}" alt="${item.name}" class="table-user-avatar" onerror="this.onerror=null; this.src='${fallbackAvatar}';">
             <div>
               <strong class="user-display-name">${item.name}</strong>
               <span class="user-handle-sub">@${item.login}</span>
