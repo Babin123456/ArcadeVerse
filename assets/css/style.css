@@ -5965,19 +5965,8 @@ textarea:focus-visible,
   }
 }
 
-/* Game Ratings Star Badge & Controls */
-.game-card-rating-wrap {
+/* Global Audio Toggle Layout Integration */
+.nav-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 4px;
-}
-.rating-pill {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #fbbf24;
-  background: rgba(251, 191, 36, 0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
 }
