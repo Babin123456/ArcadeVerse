@@ -42,85 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const CACHE_KEY = "arcadeverse_contributors_cache";
+  const CACHE_KEY = "arcadeverse_contributors_cache_v2";
   const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
   // Initial verified contributors from repository
-  let contributorsData = [
-    {
-      login: "DebasmitaBose0",
-      name: "Debasmita Bose",
-      role: "Project Admin & Lead",
-      avatar_url: "https://avatars.githubusercontent.com/u/144198639?v=4",
-      commits: 37,
-      gamesCount: 2,
-      mechanicsBonus: 2,
-      platformPRs: 2,
-      qualityPRs: 0,
-      bonusPts: 0,
-      games: ["Quantum Memory Matrix", "Cyber Neon Pong"]
-    },
-    {
-      login: "Babin123456",
-      name: "Babin Bid",
-      role: "Arcade Developer",
-      avatar_url: "https://avatars.githubusercontent.com/u/265290994?v=4",
-      commits: 19,
-      gamesCount: 1,
-      mechanicsBonus: 1,
-      platformPRs: 2,
-      qualityPRs: 1,
-      bonusPts: 0,
-      games: ["Quantum 2048"]
-    },
-    {
-      login: "mistu7debnath",
-      name: "mistu7debnath",
-      role: "Contributor",
-      avatar_url: "https://avatars.githubusercontent.com/u/132514330?v=4",
-      commits: 2,
-      gamesCount: 1,
-      mechanicsBonus: 1,
-      platformPRs: 0,
-      qualityPRs: 0,
-      bonusPts: 0,
-      games: ["Flappy Cyber Jet"]
-    },
-    {
-      login: "hrshjswniii",
-      name: "Harsh Jaiswani",
-      role: "Active Contributor",
-      avatar_url: "https://avatars.githubusercontent.com/u/127110189?v=4",
-      commits: 2,
-      gamesCount: 0,
-      mechanicsBonus: 0,
-      platformPRs: 0,
-      qualityPRs: 1,
-      bonusPts: 0,
-      games: []
-    },
-    {
-      login: "joitapaul",
-      name: "Joita Paul",
-      role: "Active Contributor",
-      avatar_url: "https://avatars.githubusercontent.com/u/104523098?v=4",
-      commits: 1,
-      gamesCount: 0,
-      mechanicsBonus: 0,
-      platformPRs: 0,
-      qualityPRs: 1,
-      bonusPts: 0,
-      games: []
-    }
-  ];
+  let contributorsData = [];
 
   // Sync contributors data with local CONTRIBUTORS_REGISTRY and GAMES_REGISTRY
   function loadRegistryContributors() {
     if (typeof CONTRIBUTORS_REGISTRY === "undefined" || !Array.isArray(CONTRIBUTORS_REGISTRY)) return;
 
-    CONTRIBUTORS_REGISTRY.forEach(regUser => {
-      const existing = contributorsData.find(c => c.login && c.login.toLowerCase() === regUser.github.toLowerCase());
-      
+    contributorsData = CONTRIBUTORS_REGISTRY.map(regUser => {
       let userGames = [];
       if (typeof GAMES_REGISTRY !== "undefined" && Array.isArray(GAMES_REGISTRY)) {
         userGames = GAMES_REGISTRY.filter(g => g.github && g.github.toLowerCase() === regUser.github.toLowerCase());
@@ -128,29 +60,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const gamesCount = userGames.length > 0 ? userGames.length : (regUser.gamesCount || 0);
       const gamesList = userGames.length > 0 ? userGames.map(g => g.title) : (regUser.contributions || []);
 
-      if (existing) {
-        if (regUser.name) existing.name = regUser.name;
-        existing.gamesCount = Math.max(existing.gamesCount || 0, gamesCount);
-        existing.mechanicsBonus = regUser.mechanicsBonus || existing.mechanicsBonus || 0;
-        existing.platformPRs = regUser.platformPRs || existing.platformPRs || 0;
-        existing.qualityPRs = regUser.qualityPRs || existing.qualityPRs || 0;
-        existing.bonusPts = regUser.bonusPts || existing.bonusPts || 0;
-        if (gamesList.length > 0) existing.games = gamesList;
-      } else {
-        contributorsData.push({
-          login: regUser.github,
-          name: regUser.name,
-          role: regUser.role || "Community Contributor",
-          avatar_url: `https://github.com/${regUser.github}.png`,
-          commits: regUser.commits || 1,
-          gamesCount: gamesCount,
-          mechanicsBonus: regUser.mechanicsBonus || 0,
-          platformPRs: regUser.platformPRs || 0,
-          qualityPRs: regUser.qualityPRs || 0,
-          bonusPts: regUser.bonusPts || 0,
-          games: gamesList
-        });
-      }
+      return {
+        login: regUser.github,
+        name: regUser.name,
+        role: regUser.role || "Community Contributor",
+        avatar_url: `https://github.com/${regUser.github}.png`,
+        commits: regUser.commits || 1,
+        gamesCount: gamesCount,
+        mechanicsBonus: regUser.mechanicsBonus || 0,
+        platformPRs: regUser.platformPRs || 0,
+        qualityPRs: regUser.qualityPRs || 0,
+        bonusPts: regUser.bonusPts || 0,
+        games: gamesList
+      };
     });
   }
 
@@ -176,18 +98,31 @@ document.addEventListener("DOMContentLoaded", () => {
   // Evaluates and returns an array of badges strictly and deterministically based on:
   // 1. Leadership Category (Project Admin & Lead)
   // 2. Games Dedicated Category (Count of verified standalone games in 'games/'):
-  //    - Master Game Architect (15+ Verified Games)
-  //    - Hyper Game Developer (8–14 Verified Games)
-  //    - Arcade Developer (4–7 Verified Games)
-  //    - Arcade Explorer (1–3 Verified Games)
+  //    - Legendary Game Architect (50+ Verified Games)
+  //    - Mythic Game Creator (35–49 Verified Games)
+  //    - Grandmaster Game Designer (25–34 Verified Games)
+  //    - Master Game Architect (15–24 Verified Games)
+  //    - Veteran Game Developer (10–14 Verified Games)
+  //    - Hyper Game Developer (7–9 Verified Games)
+  //    - Senior Arcade Developer (5–6 Verified Games)
+  //    - Arcade Developer (3–4 Verified Games)
+  //    - Junior Game Crafter (2 Verified Games)
+  //    - Novice Game Creator (1 Verified Game)
   // 3. Platform & Universal Engineering Category (Strictly bound to in-app Arcade Score):
-  //    - Master Core Architect (750+ Arcade Points)
-  //    - Elite Contributor (250–749 Arcade Points)
-  //    - Platform Contributor (100–249 Arcade Points)
-  //    - Active Contributor (15–99 Arcade Points)
+  //    - Immortal Arcade Legend (5000+ Arcade Points)
+  //    - Grandmaster Core Architect (3000–4999 Arcade Points)
+  //    - Master Core Architect (2000–2999 Arcade Points)
+  //    - Senior Platform Engineer (1200–1999 Arcade Points)
+  //    - Elite Contributor (750–1199 Arcade Points)
+  //    - Distinguished Contributor (400–749 Arcade Points)
+  //    - Platform Contributor (200–399 Arcade Points)
+  //    - Rising Contributor (100–199 Arcade Points)
+  //    - Active Contributor (25–99 Arcade Points)
+  //    - Apprentice Contributor (1–24 Arcade Points)
   function getContributorBadges(user) {
     const badges = [];
-    const isAdmin = user.login && user.login.toLowerCase() === "debasmitabose0";
+    const userHandle = (user.login || user.github || "").toLowerCase();
+    const isAdmin = userHandle === "debasmitabose0";
 
     // 1. Leadership Badge (Only for Project Lead)
     if (isAdmin) {
@@ -202,15 +137,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 2. Dedicated Game Developer Tier (Based on Verified Games in 'games/' folder)
     const gamesCount = user.gamesCount || 0;
-    if (gamesCount >= 15) {
+    if (gamesCount >= 50) {
+      badges.push({
+        role: "Legendary Game Architect",
+        tagClass: "role-legendary-architect",
+        label: "Legendary Game Architect",
+        lucideIcon: "crown",
+        category: "Games Dedicated"
+      });
+    } else if (gamesCount >= 35) {
+      badges.push({
+        role: "Mythic Game Creator",
+        tagClass: "role-mythic-creator",
+        label: "Mythic Game Creator",
+        lucideIcon: "flame",
+        category: "Games Dedicated"
+      });
+    } else if (gamesCount >= 25) {
+      badges.push({
+        role: "Grandmaster Game Designer",
+        tagClass: "role-grandmaster-designer",
+        label: "Grandmaster Game Designer",
+        lucideIcon: "award",
+        category: "Games Dedicated"
+      });
+    } else if (gamesCount >= 15) {
       badges.push({
         role: "Master Game Architect",
         tagClass: "role-master-architect",
         label: "Master Game Architect",
-        lucideIcon: "crown",
+        lucideIcon: "shield-check",
         category: "Games Dedicated"
       });
-    } else if (gamesCount >= 8) {
+    } else if (gamesCount >= 10) {
+      badges.push({
+        role: "Veteran Game Developer",
+        tagClass: "role-veteran-dev",
+        label: "Veteran Game Developer",
+        lucideIcon: "rocket",
+        category: "Games Dedicated"
+      });
+    } else if (gamesCount >= 7) {
       badges.push({
         role: "Hyper Game Developer",
         tagClass: "role-hyper",
@@ -218,7 +185,15 @@ document.addEventListener("DOMContentLoaded", () => {
         lucideIcon: "zap",
         category: "Games Dedicated"
       });
-    } else if (gamesCount >= 4) {
+    } else if (gamesCount >= 5) {
+      badges.push({
+        role: "Senior Arcade Developer",
+        tagClass: "role-senior-arcade",
+        label: "Senior Arcade Developer",
+        lucideIcon: "cpu",
+        category: "Games Dedicated"
+      });
+    } else if (gamesCount >= 3) {
       badges.push({
         role: "Arcade Developer",
         tagClass: "role-arcade",
@@ -226,11 +201,19 @@ document.addEventListener("DOMContentLoaded", () => {
         lucideIcon: "gamepad-2",
         category: "Games Dedicated"
       });
+    } else if (gamesCount >= 2) {
+      badges.push({
+        role: "Junior Game Crafter",
+        tagClass: "role-junior-crafter",
+        label: "Junior Game Crafter",
+        lucideIcon: "hammer",
+        category: "Games Dedicated"
+      });
     } else if (gamesCount >= 1) {
       badges.push({
-        role: "Arcade Explorer",
-        tagClass: "role-explorer",
-        label: "Arcade Explorer",
+        role: "Novice Game Creator",
+        tagClass: "role-novice-creator",
+        label: "Novice Game Creator",
         lucideIcon: "compass",
         category: "Games Dedicated"
       });
@@ -239,7 +222,23 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. Platform & Universal Engineering Track (Directly bound to In-App Arcade Score)
     const score = calculateScore(user);
 
-    if (score >= 750) {
+    if (score >= 5000) {
+      badges.push({
+        role: "Immortal Arcade Legend",
+        tagClass: "role-immortal",
+        label: "Immortal Arcade Legend",
+        lucideIcon: "sparkles",
+        category: "Platform & Core"
+      });
+    } else if (score >= 3000) {
+      badges.push({
+        role: "Grandmaster Core Architect",
+        tagClass: "role-grandmaster-core",
+        label: "Grandmaster Core Architect",
+        lucideIcon: "gem",
+        category: "Platform & Core"
+      });
+    } else if (score >= 2000) {
       badges.push({
         role: "Master Core Architect",
         tagClass: "role-master",
@@ -247,7 +246,15 @@ document.addEventListener("DOMContentLoaded", () => {
         lucideIcon: "shield-check",
         category: "Platform & Core"
       });
-    } else if (score >= 250) {
+    } else if (score >= 1200) {
+      badges.push({
+        role: "Senior Platform Engineer",
+        tagClass: "role-senior-platform",
+        label: "Senior Platform Engineer",
+        lucideIcon: "terminal",
+        category: "Platform & Core"
+      });
+    } else if (score >= 750) {
       badges.push({
         role: "Elite Contributor",
         tagClass: "role-elite",
@@ -255,7 +262,15 @@ document.addEventListener("DOMContentLoaded", () => {
         lucideIcon: "gem",
         category: "Platform & Core"
       });
-    } else if (score >= 100) {
+    } else if (score >= 400) {
+      badges.push({
+        role: "Distinguished Contributor",
+        tagClass: "role-distinguished",
+        label: "Distinguished Contributor",
+        lucideIcon: "medal",
+        category: "Platform & Core"
+      });
+    } else if (score >= 200) {
       badges.push({
         role: "Platform Contributor",
         tagClass: "role-platform",
@@ -263,7 +278,15 @@ document.addEventListener("DOMContentLoaded", () => {
         lucideIcon: "code-2",
         category: "Platform & Core"
       });
-    } else if (score >= 15) {
+    } else if (score >= 100) {
+      badges.push({
+        role: "Rising Contributor",
+        tagClass: "role-rising",
+        label: "Rising Contributor",
+        lucideIcon: "trending-up",
+        category: "Getting Started"
+      });
+    } else if (score >= 25) {
       badges.push({
         role: "Active Contributor",
         tagClass: "role-active",
@@ -271,19 +294,40 @@ document.addEventListener("DOMContentLoaded", () => {
         lucideIcon: "sprout",
         category: "Getting Started"
       });
+    } else if (score >= 1) {
+      badges.push({
+        role: "Apprentice Contributor",
+        tagClass: "role-apprentice",
+        label: "Apprentice Contributor",
+        lucideIcon: "target",
+        category: "Getting Started"
+      });
     }
+
+    badges.forEach(b => {
+      if (!b.title) {
+        b.title = `${b.category}: ${b.label}`;
+      }
+    });
 
     return badges;
   }
 
-  // Get Community Contributors (Excludes Admin who has their separate dedicated rank)
+  // Helper to filter out automated bot accounts (e.g. github-actions[bot], dependabot[bot])
+  function isBotAccount(login) {
+    if (!login) return false;
+    const l = login.toLowerCase();
+    return l.endsWith("[bot]") || l.includes("bot") || l.includes("actions-user") || l === "github-actions";
+  }
+
+  // Get Community Contributors (Excludes Admin and Bots)
   // Ranked strictly by:
   // 1. Total Arcade Score (primary)
   // 2. Verified Games count (secondary)
   // 3. Merged Commits (tiebreaker)
   function getCommunityContributors() {
     return contributorsData
-      .filter(item => item.login && item.login.toLowerCase() !== "debasmitabose0")
+      .filter(item => item.login && item.login.toLowerCase() !== "debasmitabose0" && !isBotAccount(item.login))
       .sort((a, b) => {
         const scoreDiff = calculateScore(b) - calculateScore(a);
         if (scoreDiff !== 0) return scoreDiff;
@@ -300,6 +344,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const feat = item.platformPRs || 0;
     const fix = item.qualityPRs || 0;
     return `Games: ${games} • Feat: ${feat} • Fix: ${fix}`;
+  }
+
+  // Generate reliable inline SVG letter avatar (prevents 404 network errors & recursion)
+  function getFallbackAvatarSvg(name, login) {
+    const char = ((name || login || "?").trim().charAt(0) || "?").toUpperCase();
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%236366f1"/><stop offset="100%" stop-color="%2306b6d4"/></linearGradient></defs><rect width="64" height="64" rx="32" fill="url(%23g)"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" fill="%23ffffff" font-family="system-ui,-apple-system,sans-serif" font-size="26" font-weight="700">${char}</text></svg>`;
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
   }
 
   // Render Top Community Contributors Podium
@@ -349,6 +400,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const item = slot.user;
       const score = calculateScore(item);
       const badges = getContributorBadges(item);
+      const fallbackAvatar = getFallbackAvatarSvg(item.name, item.login);
 
       const card = document.createElement("div");
       card.className = `podium-card ${slot.cardClass}`;
@@ -357,12 +409,12 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="podium-badge podium-badge-${slot.badgeType}">
           <i data-lucide="${slot.badgeIcon}"></i> ${slot.badgeLabel}
         </div>
-        <img src="${item.avatar_url}" alt="${item.name}" class="podium-avatar" onerror="this.src='https://github.com/identicons/${item.login}.png'">
+        <img src="${item.avatar_url || fallbackAvatar}" alt="${item.name}" class="podium-avatar" onerror="this.onerror=null; this.src='${fallbackAvatar}';">
         <h3 class="podium-name">${item.name}</h3>
         <a href="https://github.com/${item.login}" target="_blank" rel="noopener noreferrer" class="podium-handle">@${item.login}</a>
         
         <div class="podium-badges-container">
-          ${badges.map(b => `<span class="role-pill-badge ${b.tagClass}"><i data-lucide="${b.lucideIcon}"></i> ${b.label}</span>`).join("")}
+          ${badges.map(b => `<span class="role-pill-badge ${b.tagClass}" title="${b.title || b.label}"><i data-lucide="${b.lucideIcon}"></i> ${b.label}</span>`).join("")}
         </div>
 
         <div class="podium-score-pill">
@@ -409,6 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const rank = index + 1;
       const score = calculateScore(item);
       const badges = getContributorBadges(item);
+      const fallbackAvatar = getFallbackAvatarSvg(item.name, item.login);
 
       let rankBadgeHtml = `<span class="rank-tag">#${rank}</span>`;
       if (rank === 1) {
@@ -424,7 +477,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${rankBadgeHtml}</td>
         <td>
           <div class="table-user-cell">
-            <img src="${item.avatar_url}" alt="${item.name}" class="table-user-avatar" onerror="this.src='https://github.com/identicons/${item.login}.png'">
+            <img src="${item.avatar_url || fallbackAvatar}" alt="${item.name}" class="table-user-avatar" onerror="this.onerror=null; this.src='${fallbackAvatar}';">
             <div>
               <strong class="user-display-name">${item.name}</strong>
               <span class="user-handle-sub">@${item.login}</span>
@@ -433,7 +486,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </td>
         <td>
           <div class="contributor-badges-wrap">
-            ${badges.map(b => `<span class="role-pill-badge ${b.tagClass}"><i data-lucide="${b.lucideIcon}"></i> ${b.label}</span>`).join("")}
+            ${badges.map(b => `<span class="role-pill-badge ${b.tagClass}" title="${b.title || b.label}"><i data-lucide="${b.lucideIcon}"></i> ${b.label}</span>`).join("")}
           </div>
         </td>
         <td>
@@ -480,7 +533,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (adminBadgesContainer) {
       const badges = getContributorBadges(adminUser);
       adminBadgesContainer.innerHTML = badges.map(b => `
-        <span class="role-pill-badge ${b.tagClass}" title="${b.title}"><i data-lucide="${b.lucideIcon}"></i> ${b.role}</span>
+        <span class="role-pill-badge ${b.tagClass}" title="${b.title || b.label}"><i data-lucide="${b.lucideIcon}"></i> ${b.label}</span>
       `).join("");
       if (window.lucide) {
         lucide.createIcons();
@@ -488,11 +541,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Live GitHub Contributions with LocalStorage TTL Cache
+  // Resolve display name synchronously without secondary API calls
+  function resolveDisplayName(login) {
+    if (!login) return "Contributor";
+    const lower = login.toLowerCase();
+
+    // Check CONTRIBUTORS_REGISTRY first
+    if (typeof CONTRIBUTORS_REGISTRY !== "undefined" && Array.isArray(CONTRIBUTORS_REGISTRY)) {
+      const match = CONTRIBUTORS_REGISTRY.find(c => c.github && c.github.toLowerCase() === lower);
+      if (match && match.name) return match.name;
+    }
+
+    // Check GAMES_REGISTRY
+    if (typeof GAMES_REGISTRY !== "undefined" && Array.isArray(GAMES_REGISTRY)) {
+      const match = GAMES_REGISTRY.find(g => g.github && g.github.toLowerCase() === lower);
+      if (match && match.author) return match.author;
+    }
+
+    return login;
+  }
+
+  // Live GitHub Contributions with LocalStorage TTL Cache & Zero Secondary Requests
   async function fetchLiveGitHubContributions(repo = "DebasmitaBose0/ArcadeVerse", forceRefresh = false) {
     if (!repo) return;
 
-    // Check LocalStorage Cache first
+    // Check LocalStorage Cache first (unless force-refreshed)
     if (!forceRefresh) {
       try {
         const cachedRaw = localStorage.getItem(`${CACHE_KEY}_${repo}`);
@@ -522,65 +595,72 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const response = await fetch(`https://api.github.com/repos/${repo}/contributors`);
+
+      if (response.status === 403) {
+        throw new Error("RATE_LIMIT");
+      }
+
       if (!response.ok) {
         throw new Error(`GitHub returned status: ${response.status}`);
       }
+
       const data = await response.json();
 
       if (Array.isArray(data) && data.length > 0) {
-        // Enrich profiles to resolve display names and cross-reference games/PRs
-        const enrichedContributors = await Promise.all(
-          data.map(async (user) => {
-            let displayName = user.login;
-            try {
-              const userRes = await fetch(`https://api.github.com/users/${user.login}`);
-              if (userRes.ok) {
-                const userData = await userRes.json();
-                if (userData.name) displayName = userData.name;
-              }
-            } catch (e) {
-              console.warn("Could not fetch user details for", user.login);
-            }
+        // Filter out automated bot accounts so only real human contributors are registered
+        const validUsers = data.filter(u => u.type !== "Bot" && !isBotAccount(u.login));
 
-            const isAdmin = user.login.toLowerCase() === "debasmitabose0";
-            
-            // Check if contributor exists in CONTRIBUTORS_REGISTRY or initial baseline data
-            let registryEntry = null;
-            if (typeof CONTRIBUTORS_REGISTRY !== "undefined" && Array.isArray(CONTRIBUTORS_REGISTRY)) {
-              registryEntry = CONTRIBUTORS_REGISTRY.find(c => c.github && c.github.toLowerCase() === user.login.toLowerCase());
-            }
-            const localEntry = contributorsData.find(c => c.login && c.login.toLowerCase() === user.login.toLowerCase());
+        // Map contributors in O(1) time per item - ZERO secondary network requests!
+        const enrichedContributors = validUsers.map((user) => {
+          const isAdmin = user.login.toLowerCase() === "debasmitabose0";
 
-            // Count registered games from GAMES_REGISTRY
-            let userGames = [];
-            if (typeof GAMES_REGISTRY !== "undefined" && Array.isArray(GAMES_REGISTRY)) {
-              userGames = GAMES_REGISTRY.filter(g => g.github && g.github.toLowerCase() === user.login.toLowerCase());
-            }
-            const gamesCount = userGames.length > 0 
-              ? userGames.length 
-              : (registryEntry ? (registryEntry.gamesCount || 0) : (localEntry ? (localEntry.gamesCount || 0) : (isAdmin ? 2 : 0)));
+          // Check if contributor exists in CONTRIBUTORS_REGISTRY or initial baseline data
+          let registryEntry = null;
+          if (typeof CONTRIBUTORS_REGISTRY !== "undefined" && Array.isArray(CONTRIBUTORS_REGISTRY)) {
+            registryEntry = CONTRIBUTORS_REGISTRY.find(c => c.github && c.github.toLowerCase() === user.login.toLowerCase());
+          }
+          const localEntry = contributorsData.find(c => c.login && c.login.toLowerCase() === user.login.toLowerCase());
 
-            const mechanicsBonus = registryEntry?.mechanicsBonus ?? localEntry?.mechanicsBonus ?? (isAdmin ? 2 : 0);
-            const platformPRs = registryEntry?.platformPRs ?? localEntry?.platformPRs ?? (isAdmin ? 2 : 0);
-            const qualityPRs = registryEntry?.qualityPRs ?? localEntry?.qualityPRs ?? (isAdmin ? 0 : 1);
-            const bonusPts = registryEntry?.bonusPts ?? localEntry?.bonusPts ?? 0;
+          const displayName = registryEntry ? registryEntry.name : (localEntry ? localEntry.name : resolveDisplayName(user.login));
 
-            return {
-              login: user.login,
-              name: registryEntry ? registryEntry.name : (localEntry ? localEntry.name : displayName),
-              avatar_url: user.avatar_url,
-              commits: user.contributions,
-              gamesCount: gamesCount,
-              mechanicsBonus: mechanicsBonus,
-              platformPRs: platformPRs,
-              qualityPRs: qualityPRs,
-              bonusPts: bonusPts,
-              games: userGames.length > 0 
-                ? userGames.map(g => g.title) 
-                : (localEntry?.games && localEntry.games.length > 0 ? localEntry.games : (isAdmin ? ["Quantum Memory Matrix", "Cyber Neon Pong"] : []))
-            };
-          })
-        );
+          // Count registered games from GAMES_REGISTRY
+          let userGames = [];
+          if (typeof GAMES_REGISTRY !== "undefined" && Array.isArray(GAMES_REGISTRY)) {
+            userGames = GAMES_REGISTRY.filter(g => g.github && g.github.toLowerCase() === user.login.toLowerCase());
+          }
+          const gamesCount = userGames.length > 0 
+            ? userGames.length 
+            : (registryEntry ? (registryEntry.gamesCount || 0) : (localEntry ? (localEntry.gamesCount || 0) : (isAdmin ? 2 : 0)));
+
+          const mechanicsBonus = registryEntry?.mechanicsBonus ?? localEntry?.mechanicsBonus ?? (isAdmin ? 2 : 0);
+          const platformPRs = registryEntry?.platformPRs ?? localEntry?.platformPRs ?? (isAdmin ? 2 : 0);
+          const qualityPRs = registryEntry?.qualityPRs ?? localEntry?.qualityPRs ?? (isAdmin ? 0 : 1);
+          const bonusPts = registryEntry?.bonusPts ?? localEntry?.bonusPts ?? 0;
+
+          const commits = Math.max(user.contributions || 0, registryEntry?.commits || 0, localEntry?.commits || 0);
+
+          return {
+            login: user.login,
+            name: displayName,
+            avatar_url: user.avatar_url,
+            commits: commits,
+            gamesCount: gamesCount,
+            mechanicsBonus: mechanicsBonus,
+            platformPRs: platformPRs,
+            qualityPRs: qualityPRs,
+            bonusPts: bonusPts,
+            games: userGames.length > 0 
+              ? userGames.map(g => g.title) 
+              : (localEntry?.games && localEntry.games.length > 0 ? localEntry.games : (isAdmin ? ["Quantum Memory Matrix", "Cyber Neon Pong"] : []))
+          };
+        });
+
+        // Ensure all verified contributors from local registry remain present
+        contributorsData.forEach(c => {
+          if (!enrichedContributors.some(ec => ec.login.toLowerCase() === c.login.toLowerCase())) {
+            enrichedContributors.push(c);
+          }
+        });
 
         contributorsData = enrichedContributors;
 
@@ -596,13 +676,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const adminUser = contributorsData.find(c => c.login.toLowerCase() === "debasmitabose0");
         if (adminUser) updateAdminSpotlight(adminUser);
 
-        const communityCount = contributorsData.filter(c => c.login.toLowerCase() !== "debasmitabose0").length;
+        const communityCount = contributorsData.filter(c => c.login.toLowerCase() !== "debasmitabose0" && !isBotAccount(c.login)).length;
         if (syncStatusText) syncStatusText.textContent = `GitHub Live Sync: 1 Admin Lead • ${communityCount} Community Contributor(s) active`;
       }
     } catch (err) {
       console.warn("GitHub API notice:", err.message);
       if (syncStatusText) {
-        syncStatusText.textContent = `Offline/Cached state: ${repo} (Rate limit safe)`;
+        syncStatusText.innerHTML = err.message === "RATE_LIMIT"
+          ? `<i data-lucide="alert-triangle" style="width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; color: #f59e0b;"></i> GitHub API rate limit reached (60/hr). Showing cached/local data.`
+          : `Offline/Cached state: ${repo} (Rate limit safe)`;
+        if (window.lucide) lucide.createIcons();
       }
     }
 
@@ -611,18 +694,44 @@ document.addEventListener("DOMContentLoaded", () => {
     renderTable();
   }
 
+  function detectRepo() {
+    if (repoInput && repoInput.value.trim() && repoInput.value.trim() !== "DebasmitaBose0/ArcadeVerse") {
+      return repoInput.value.trim();
+    }
+    if (typeof window !== "undefined" && window.location) {
+      if (window.location.hostname.endsWith(".github.io")) {
+        const owner = window.location.hostname.split(".")[0];
+        const pathSegments = window.location.pathname.split("/").filter(Boolean);
+        const repoName = pathSegments.length > 0 ? pathSegments[0] : "ArcadeVerse";
+        return `${owner}/${repoName}`;
+      }
+    }
+    return repoInput ? repoInput.value.trim() : "DebasmitaBose0/ArcadeVerse";
+  }
+
   if (fetchBtn) {
     fetchBtn.addEventListener("click", () => {
-      const repo = repoInput ? repoInput.value.trim() : "DebasmitaBose0/ArcadeVerse";
-      fetchLiveGitHubContributions(repo, true);
+      const repo = detectRepo();
+      fetchBtn.disabled = true;
+      fetchBtn.innerHTML = `<i data-lucide="loader-2" class="spin" style="width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px;"></i> Syncing...`;
+      if (window.lucide) lucide.createIcons();
+      fetchLiveGitHubContributions(repo, true).finally(() => {
+        setTimeout(() => {
+          fetchBtn.disabled = false;
+          fetchBtn.innerHTML = `<i data-lucide="refresh-cw" style="width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px;"></i> Refresh Stats`;
+          if (window.lucide) lucide.createIcons();
+        }, 1000);
+      });
     });
   }
 
   // Initial Run: Sync verified registry data first and render podium/table
   loadRegistryContributors();
+  const activeRepo = detectRepo();
+  if (repoInput) repoInput.value = activeRepo;
   const initialAdmin = contributorsData.find(c => c.login.toLowerCase() === "debasmitabose0");
   if (initialAdmin) updateAdminSpotlight(initialAdmin);
   renderPodium();
   renderTable();
-  fetchLiveGitHubContributions("DebasmitaBose0/ArcadeVerse", false);
+  fetchLiveGitHubContributions(activeRepo, false);
 });

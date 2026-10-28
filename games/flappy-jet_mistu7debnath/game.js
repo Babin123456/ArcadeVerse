@@ -34,8 +34,36 @@
     START: 'START',
     PLAYING: 'PLAYING',
     PAUSED: 'PAUSED',
-    GAMEOVER: 'GAMEOVER'
+    GAMEOVER: 'GAMEOVER',
+    LEVEL_SELECT: 'LEVEL_SELECT',
+    LEVEL_COMPLETE: 'LEVEL_COMPLETE',
+    VICTORY: 'VICTORY'
   };
+
+  // --- 20-Level Mission Manifest ---
+  const TOTAL_LEVELS = 20;
+  const LEVEL_CONFIGS = [
+    { level: 1,  name: "Neon Alley",        target: 5,  speed: 140, gap: 175, theme: 'cyan' },
+    { level: 2,  name: "Grid Entry",        target: 6,  speed: 143, gap: 173, theme: 'cyan' },
+    { level: 3,  name: "Data Stream",       target: 7,  speed: 146, gap: 171, theme: 'cyan' },
+    { level: 4,  name: "Circuit Break",     target: 8,  speed: 150, gap: 169, theme: 'cyan' },
+    { level: 5,  name: "Pulse Core",        target: 9,  speed: 153, gap: 167, theme: 'cyan' },
+    { level: 6,  name: "Sub-Net Void",      target: 10, speed: 157, gap: 165, theme: 'cyan' },
+    { level: 7,  name: "Cyber Pylon",       target: 11, speed: 160, gap: 163, theme: 'magenta' },
+    { level: 8,  name: "Laser Canyon",      target: 12, speed: 164, gap: 161, theme: 'magenta' },
+    { level: 9,  name: "Firewall Breach",   target: 13, speed: 167, gap: 159, theme: 'magenta' },
+    { level: 10, name: "Synth Overdrive",   target: 14, speed: 171, gap: 157, theme: 'magenta' },
+    { level: 11, name: "Vector Horizon",    target: 15, speed: 174, gap: 155, theme: 'magenta' },
+    { level: 12, name: "Quantum Surge",     target: 16, speed: 178, gap: 153, theme: 'magenta' },
+    { level: 13, name: "Plasma Gateway",    target: 17, speed: 181, gap: 151, theme: 'magenta' },
+    { level: 14, name: "Neon Eclipse",      target: 18, speed: 185, gap: 149, theme: 'amber' },
+    { level: 15, name: "Solar Storm",       target: 19, speed: 188, gap: 147, theme: 'amber' },
+    { level: 16, name: "Orbital Nexus",     target: 20, speed: 192, gap: 145, theme: 'amber' },
+    { level: 17, name: "Zero-Day Run",      target: 21, speed: 195, gap: 143, theme: 'amber' },
+    { level: 18, name: "Hyper Warp",        target: 22, speed: 199, gap: 141, theme: 'amber' },
+    { level: 19, name: "Singularity",       target: 23, speed: 202, gap: 139, theme: 'amber' },
+    { level: 20, name: "Cyber Flight Omega", target: 25, speed: 206, gap: 137, theme: 'amber' }
+  ];
 
   // --- Safe LocalStorage Manager ---
   const Storage = {
@@ -55,6 +83,190 @@
       }
     }
   };
+
+  // --- Central Progression & Persistence Model ---
+  class ProgressionManager {
+    constructor() {
+      this.storageKey = 'fcj_progression_v1';
+      this.inMemoryData = null;
+      this.data = this.load();
+    }
+
+    load() {
+      let raw = null;
+      try {
+        raw = localStorage.getItem(this.storageKey);
+      } catch (e) {
+        if (this.inMemoryData) return this.inMemoryData;
+      }
+
+      let parsed = null;
+      if (raw) {
+        try {
+          parsed = JSON.parse(raw);
+        } catch (e) {
+          parsed = null;
+        }
+      }
+
+      return this.validateAndRecover(parsed);
+    }
+
+    validateAndRecover(stored) {
+      const defaultData = {
+        version: 1,
+        unlockedLevels: [1],
+        completedLevels: [],
+        bestScores: {},
+        selectedLevel: 1
+      };
+
+      if (!stored || typeof stored !== 'object') {
+        return defaultData;
+      }
+
+      // 1. Sanitize unlockedLevels
+      let unlocked = Array.isArray(stored.unlockedLevels) ? stored.unlockedLevels : [1];
+      unlocked = unlocked
+        .map(n => parseInt(n, 10))
+        .filter(n => Number.isInteger(n) && n >= 1 && n <= TOTAL_LEVELS);
+
+      // Level 1 is ALWAYS unlocked
+      if (!unlocked.includes(1)) {
+        unlocked.push(1);
+      }
+
+      // 2. Sanitize completedLevels
+      let completed = Array.isArray(stored.completedLevels) ? stored.completedLevels : [];
+      completed = completed
+        .map(n => parseInt(n, 10))
+        .filter(n => Number.isInteger(n) && n >= 1 && n <= TOTAL_LEVELS);
+
+      // Monotonic Progression Recovery Rule:
+      // If Level K is unlocked, all preceding levels 1..(K-1) are guaranteed unlocked.
+      const maxUnlocked = Math.max(...unlocked, 1);
+      for (let i = 1; i <= maxUnlocked; i++) {
+        if (!unlocked.includes(i)) {
+          unlocked.push(i);
+        }
+      }
+
+      // Any level marked as completed must also be in unlocked
+      completed.forEach(lvl => {
+        if (!unlocked.includes(lvl)) {
+          unlocked.push(lvl);
+        }
+      });
+
+      // Deduplicate and sort
+      unlocked = Array.from(new Set(unlocked)).sort((a, b) => a - b);
+      completed = Array.from(new Set(completed)).sort((a, b) => a - b);
+
+      // 3. Sanitize bestScores
+      const bestScores = {};
+      if (stored.bestScores && typeof stored.bestScores === 'object') {
+        for (const [k, v] of Object.entries(stored.bestScores)) {
+          const lvl = parseInt(k, 10);
+          const score = parseInt(v, 10);
+          if (Number.isInteger(lvl) && lvl >= 1 && lvl <= TOTAL_LEVELS && Number.isInteger(score) && score >= 0) {
+            bestScores[lvl] = score;
+          }
+        }
+      }
+
+      // 4. Sanitize selectedLevel
+      let selected = parseInt(stored.selectedLevel, 10);
+      if (!Number.isInteger(selected) || !unlocked.includes(selected)) {
+        selected = unlocked[unlocked.length - 1] || 1;
+      }
+
+      const recovered = {
+        version: 1,
+        unlockedLevels: unlocked,
+        completedLevels: completed,
+        bestScores: bestScores,
+        selectedLevel: selected
+      };
+
+      this.inMemoryData = recovered;
+      return recovered;
+    }
+
+    save() {
+      this.inMemoryData = this.data;
+      try {
+        localStorage.setItem(this.storageKey, JSON.stringify(this.data));
+      } catch (e) {
+        // Fallback for private browsing or disabled storage
+      }
+    }
+
+    isUnlocked(level) {
+      return this.data.unlockedLevels.includes(level);
+    }
+
+    isCompleted(level) {
+      return this.data.completedLevels.includes(level);
+    }
+
+    getBestScore(level) {
+      return this.data.bestScores[level] || 0;
+    }
+
+    recordScore(level, score) {
+      const prev = this.getBestScore(level);
+      if (score > prev) {
+        this.data.bestScores[level] = score;
+        this.save();
+        return true;
+      }
+      return false;
+    }
+
+    getSelectedLevel() {
+      return this.data.selectedLevel;
+    }
+
+    setSelectedLevel(level) {
+      if (this.isUnlocked(level)) {
+        this.data.selectedLevel = level;
+        this.save();
+        return true;
+      }
+      return false;
+    }
+
+    completeLevel(level, score) {
+      this.recordScore(level, score);
+
+      if (!this.data.completedLevels.includes(level)) {
+        this.data.completedLevels.push(level);
+        this.data.completedLevels.sort((a, b) => a - b);
+      }
+
+      let newlyUnlocked = false;
+      if (level < TOTAL_LEVELS) {
+        const nextLevel = level + 1;
+        if (!this.data.unlockedLevels.includes(nextLevel)) {
+          this.data.unlockedLevels.push(nextLevel);
+          this.data.unlockedLevels.sort((a, b) => a - b);
+          newlyUnlocked = true;
+        }
+      }
+
+      this.save();
+      return { newlyUnlocked, completedCount: this.getCompletedCount() };
+    }
+
+    getCompletedCount() {
+      return this.data.completedLevels.length;
+    }
+
+    getOverallBest() {
+      const scores = Object.values(this.data.bestScores);
+      return scores.length > 0 ? Math.max(...scores) : 0;
+    }
+  }
 
   // --- Web Audio API Synthesizer (Zero External Dependencies) ---
   class SoundFX {
@@ -199,6 +411,54 @@
 
         osc.start(t);
         osc.stop(t + 0.04);
+      } catch (e) {}
+    }
+
+    playLevelComplete() {
+      if (this.isMuted || !this.ctx) return;
+      try {
+        const t = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const noteTime = t + i * 0.08;
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, noteTime);
+
+          gain.gain.setValueAtTime(0.24, noteTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.25);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(noteTime);
+          osc.stop(noteTime + 0.25);
+        });
+      } catch (e) {}
+    }
+
+    playVictory() {
+      if (this.isMuted || !this.ctx) return;
+      try {
+        const t = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.5, 1318.5, 1567.98].forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const noteTime = t + i * 0.11;
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, noteTime);
+
+          gain.gain.setValueAtTime(0.26, noteTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.4);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(noteTime);
+          osc.stop(noteTime + 0.4);
+        });
       } catch (e) {}
     }
   }
@@ -563,6 +823,35 @@
       });
     }
 
+    addVictorySparks(x, y) {
+      const colors = ['#fde047', '#00f0ff', '#10b981', '#ffffff', '#ec4899'];
+      for (let i = 0; i < 65; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 50 + Math.random() * 250;
+        this.particles.push({
+          type: 'spark',
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 60,
+          size: 2.5 + Math.random() * 4,
+          alpha: 1,
+          life: 0,
+          maxLife: 0.8 + Math.random() * 0.5,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+
+      this.rings.push({
+        x,
+        y,
+        radius: 10,
+        maxRadius: 100,
+        alpha: 1,
+        color: '#00f0ff'
+      });
+    }
+
     update(dt) {
       // Update particles
       for (let i = this.particles.length - 1; i >= 0; i--) {
@@ -807,40 +1096,82 @@
 
       // HUD & Overlays
       this.hudScore = document.getElementById('fcj-hud-score');
+      this.hudGoal = document.getElementById('fcj-hud-goal');
       this.hudBest = document.getElementById('fcj-hud-best');
+      this.hudLevel = document.getElementById('fcj-hud-level');
       this.btnSound = document.getElementById('fcj-btn-sound');
       this.btnPause = document.getElementById('fcj-btn-pause');
       this.soundIcon = document.getElementById('fcj-sound-icon');
       this.pauseIcon = document.getElementById('fcj-pause-icon');
 
+      // Screens & Cards
       this.startScreen = document.getElementById('fcj-start-screen');
       this.pauseScreen = document.getElementById('fcj-pause-screen');
       this.gameOverScreen = document.getElementById('fcj-gameover-screen');
+      this.levelScreen = document.getElementById('fcj-level-screen');
+      this.completeScreen = document.getElementById('fcj-complete-screen');
+      this.victoryScreen = document.getElementById('fcj-victory-screen');
 
+      // Screen Data Bindings
       this.startBestVal = document.getElementById('fcj-start-best');
-      this.pauseScoreVal = document.getElementById('fcj-pause-score');
-      this.pauseBestVal = document.getElementById('fcj-pause-best');
-      this.gameoverScoreVal = document.getElementById('fcj-gameover-score');
-      this.gameoverBestVal = document.getElementById('fcj-gameover-best');
-      this.newRecordBadge = document.getElementById('fcj-new-record-badge');
-      this.liveAnnouncer = document.getElementById('fcj-live-announcer');
+      this.startProgressVal = document.getElementById('fcj-start-progress-val');
+      this.btnStartText = document.getElementById('fcj-btn-start-text');
+      this.btnOpenLevels = document.getElementById('fcj-btn-open-levels');
 
-      // Buttons
-      this.btnStart = document.getElementById('fcj-btn-start');
+      // Level Selection Screen Elements
+      this.levelGrid = document.getElementById('fcj-level-grid');
+      this.levelProgressCount = document.getElementById('fcj-level-progress-count');
+      this.progressBarFill = document.getElementById('fcj-progress-bar-fill');
+      this.selectedName = document.getElementById('fcj-selected-name');
+      this.selectedMeta = document.getElementById('fcj-selected-meta');
+      this.btnLevelLaunch = document.getElementById('fcj-btn-level-launch');
+      this.btnLevelLaunchText = document.getElementById('fcj-level-launch-text');
+      this.btnLevelBack = document.getElementById('fcj-btn-level-back');
+
+      // Pause Screen Data Bindings
+      this.pauseScoreVal = document.getElementById('fcj-pause-score');
+      this.pauseGoalVal = document.getElementById('fcj-pause-goal');
       this.btnResume = document.getElementById('fcj-btn-resume');
       this.btnPauseRestart = document.getElementById('fcj-btn-pause-restart');
+      this.btnPauseLevels = document.getElementById('fcj-btn-pause-levels');
+
+      // Level Complete Screen Data Bindings
+      this.completeTitle = document.getElementById('fcj-complete-title');
+      this.completeTagline = document.getElementById('fcj-complete-tagline');
+      this.completeScoreVal = document.getElementById('fcj-complete-score');
+      this.completeBestVal = document.getElementById('fcj-complete-best');
+      this.btnCompleteNext = document.getElementById('fcj-btn-complete-next');
+      this.btnCompleteReplay = document.getElementById('fcj-btn-complete-replay');
+      this.btnCompleteLevels = document.getElementById('fcj-btn-complete-levels');
+
+      // Victory Screen Data Bindings
+      this.victoryScoreVal = document.getElementById('fcj-victory-score');
+      this.btnVictoryReplay = document.getElementById('fcj-btn-victory-replay');
+      this.btnVictoryLevels = document.getElementById('fcj-btn-victory-levels');
+      this.btnVictoryMenu = document.getElementById('fcj-btn-victory-menu');
+
+      // Game Over Screen Data Bindings
+      this.gameoverScoreVal = document.getElementById('fcj-gameover-score');
+      this.gameoverGoalVal = document.getElementById('fcj-gameover-goal');
+      this.newRecordBadge = document.getElementById('fcj-new-record-badge');
       this.btnRestart = document.getElementById('fcj-btn-restart');
+      this.btnGameoverLevels = document.getElementById('fcj-btn-gameover-levels');
       this.btnMenu = document.getElementById('fcj-btn-menu');
+      this.btnStart = document.getElementById('fcj-btn-start');
+      this.liveAnnouncer = document.getElementById('fcj-live-announcer');
 
       // Engine Subsystems
       this.sound = new SoundFX();
       this.jet = new CyberJet();
       this.particles = new ParticleEngine();
       this.env = new CyberEnvironment();
+      this.progression = new ProgressionManager();
 
       // State Management
       this.state = STATE.START;
       this.score = 0;
+      this.currentLevel = this.progression.getSelectedLevel() || 1;
+      this.levelCompletedInRound = false;
       this.bestScore = Storage.get('fcj_best_score', 0);
       this.isNewRecord = false;
 
@@ -863,6 +1194,7 @@
 
     init() {
       this.updateBestScoreDisplay();
+      this.updateProgressionUI();
       this.updateSoundButtonUI();
       this.handleResize();
 
@@ -871,11 +1203,16 @@
       this.bindInputs();
 
       // Announce initial screen
-      this.announce('Flappy Cyber Jet ready. Select Launch Jet to begin.');
+      this.announce('Flappy Cyber Jet ready. Select Launch Level to begin.');
 
       // Start the core render loop
       this.lastTime = performance.now();
       this.rafId = requestAnimationFrame((ts) => this.loop(ts));
+    }
+
+    getLevelConfig(level) {
+      const lvl = Math.max(1, Math.min(TOTAL_LEVELS, parseInt(level, 10) || 1));
+      return LEVEL_CONFIGS[lvl - 1];
     }
 
     // --- High-DPI Canvas Sizing ---
@@ -923,28 +1260,69 @@
           this.handleSoundToggle();
         } else if (e.code === 'Enter') {
           if (this.state === STATE.GAMEOVER) {
-            this.startRound();
+            this.startRound(this.currentLevel);
           } else if (this.state === STATE.START) {
-            this.startRound();
+            this.startRound(this.progression.getSelectedLevel());
+          } else if (this.state === STATE.LEVEL_SELECT) {
+            this.startRound(this.progression.getSelectedLevel());
+          } else if (this.state === STATE.LEVEL_COMPLETE) {
+            if (this.currentLevel < TOTAL_LEVELS) {
+              this.startRound(this.currentLevel + 1);
+            } else {
+              this.startRound(this.currentLevel);
+            }
+          } else if (this.state === STATE.VICTORY) {
+            this.showLevelSelection();
           }
         }
       });
 
-      // Canvas Pointer/Touch Input
+      // Canvas Pointer/Touch Input (only boosts during gameplay)
       this.canvas.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         this.sound.init();
-        this.handleActionTrigger();
+        if (this.state === STATE.PLAYING) {
+          this.handleActionTrigger();
+        }
       });
 
-      // UI Button Clicks
+      // --- Start Screen UI Buttons ---
       this.btnStart.addEventListener('click', (e) => {
         e.stopPropagation();
         this.sound.init();
         this.sound.playClick();
-        this.startRound();
+        this.startRound(this.progression.getSelectedLevel());
       });
 
+      if (this.btnOpenLevels) {
+        this.btnOpenLevels.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.init();
+          this.sound.playClick();
+          this.showLevelSelection();
+        });
+      }
+
+      // --- Level Selection Screen Buttons ---
+      if (this.btnLevelLaunch) {
+        this.btnLevelLaunch.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.init();
+          this.sound.playClick();
+          this.startRound(this.progression.getSelectedLevel());
+        });
+      }
+
+      if (this.btnLevelBack) {
+        this.btnLevelBack.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.init();
+          this.sound.playClick();
+          this.showStartScreen();
+        });
+      }
+
+      // --- Pause Screen Buttons ---
       this.btnResume.addEventListener('click', (e) => {
         e.stopPropagation();
         this.sound.playClick();
@@ -954,14 +1332,31 @@
       this.btnPauseRestart.addEventListener('click', (e) => {
         e.stopPropagation();
         this.sound.playClick();
-        this.startRound();
+        this.startRound(this.currentLevel);
       });
 
+      if (this.btnPauseLevels) {
+        this.btnPauseLevels.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.showLevelSelection();
+        });
+      }
+
+      // --- Game Over Screen Buttons ---
       this.btnRestart.addEventListener('click', (e) => {
         e.stopPropagation();
         this.sound.playClick();
-        this.startRound();
+        this.startRound(this.currentLevel);
       });
+
+      if (this.btnGameoverLevels) {
+        this.btnGameoverLevels.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.showLevelSelection();
+        });
+      }
 
       this.btnMenu.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -969,6 +1364,57 @@
         this.showStartScreen();
       });
 
+      // --- Level Complete Screen Buttons ---
+      if (this.btnCompleteNext) {
+        this.btnCompleteNext.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.startRound(this.currentLevel + 1);
+        });
+      }
+
+      if (this.btnCompleteReplay) {
+        this.btnCompleteReplay.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.startRound(this.currentLevel);
+        });
+      }
+
+      if (this.btnCompleteLevels) {
+        this.btnCompleteLevels.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.showLevelSelection();
+        });
+      }
+
+      // --- Victory Screen Buttons ---
+      if (this.btnVictoryReplay) {
+        this.btnVictoryReplay.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.startRound(TOTAL_LEVELS);
+        });
+      }
+
+      if (this.btnVictoryLevels) {
+        this.btnVictoryLevels.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.showLevelSelection();
+        });
+      }
+
+      if (this.btnVictoryMenu) {
+        this.btnVictoryMenu.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.playClick();
+          this.showStartScreen();
+        });
+      }
+
+      // --- HUD Top Buttons ---
       this.btnPause.addEventListener('click', (e) => {
         e.stopPropagation();
         this.sound.playClick();
@@ -986,9 +1432,9 @@
         this.jet.boost();
         this.sound.playThrust();
       } else if (this.state === STATE.START) {
-        this.startRound();
+        this.startRound(this.progression.getSelectedLevel());
       } else if (this.state === STATE.GAMEOVER) {
-        this.startRound();
+        this.startRound(this.currentLevel);
       }
     }
 
@@ -1021,8 +1467,10 @@
     }
 
     updateBestScoreDisplay() {
-      this.hudBest.textContent = this.bestScore;
-      this.startBestVal.textContent = this.bestScore;
+      const overall = Math.max(this.bestScore, this.progression.getOverallBest());
+      this.bestScore = overall;
+      this.hudBest.textContent = overall;
+      this.startBestVal.textContent = overall;
     }
 
     announce(text) {
@@ -1031,12 +1479,208 @@
       }
     }
 
+    // --- Progression UI & Level Grid Synchronization ---
+    updateProgressionUI() {
+      const completedCount = this.progression.getCompletedCount();
+      if (this.startProgressVal) {
+        this.startProgressVal.textContent = `${completedCount}/20`;
+      }
+
+      const selectedLvl = this.progression.getSelectedLevel();
+      const numStr = String(selectedLvl).padStart(2, '0');
+      if (this.btnStartText) {
+        this.btnStartText.textContent = `LAUNCH LEVEL ${numStr}`;
+      }
+
+      if (this.levelProgressCount) {
+        this.levelProgressCount.textContent = `${completedCount}/20 COMPLETED`;
+      }
+
+      if (this.progressBarFill) {
+        const pct = Math.min(100, Math.round((completedCount / TOTAL_LEVELS) * 100));
+        this.progressBarFill.style.width = `${pct}%`;
+        const pb = document.getElementById('fcj-progress-bar');
+        if (pb) pb.setAttribute('aria-valuenow', completedCount);
+      }
+
+      this.updateSelectedInfoBanner();
+    }
+
+    updateSelectedInfoBanner() {
+      const selected = this.progression.getSelectedLevel();
+      const cfg = this.getLevelConfig(selected);
+      const numStr = String(selected).padStart(2, '0');
+      const best = this.progression.getBestScore(selected);
+
+      if (this.selectedName) {
+        this.selectedName.textContent = `LEVEL ${numStr}: ${cfg.name.toUpperCase()}`;
+      }
+
+      if (this.selectedMeta) {
+        const statusText = this.progression.isCompleted(selected) ? 'COMPLETED' : 'INCOMPLETE';
+        this.selectedMeta.textContent = `TARGET: ${cfg.target} PYLONS • BEST: ${best} • ${statusText}`;
+      }
+
+      if (this.btnLevelLaunchText) {
+        this.btnLevelLaunchText.textContent = `START MISSION ${numStr}`;
+      }
+    }
+
+    renderLevelGrid() {
+      if (!this.levelGrid) return;
+      this.levelGrid.innerHTML = '';
+
+      const selectedLvl = this.progression.getSelectedLevel();
+
+      // Exactly 20 tiles rendered
+      for (let i = 1; i <= TOTAL_LEVELS; i++) {
+        const isUnlocked = this.progression.isUnlocked(i);
+        const isCompleted = this.progression.isCompleted(i);
+        const isSelected = (i === selectedLvl);
+        const cfg = this.getLevelConfig(i);
+
+        const tile = document.createElement('button');
+        tile.type = 'button';
+        tile.className = 'fcj-level-tile';
+        tile.dataset.level = String(i);
+
+        if (!isUnlocked) {
+          tile.classList.add('fcj-tile-locked');
+          tile.setAttribute('aria-disabled', 'true');
+          tile.tabIndex = -1;
+        } else if (isCompleted) {
+          tile.classList.add('fcj-tile-completed');
+          tile.setAttribute('aria-disabled', 'false');
+          tile.tabIndex = 0;
+        } else {
+          tile.classList.add('fcj-tile-unlocked');
+          tile.setAttribute('aria-disabled', 'false');
+          tile.tabIndex = 0;
+        }
+
+        if (isSelected) {
+          tile.classList.add('fcj-tile-selected');
+          tile.setAttribute('aria-current', 'true');
+        }
+
+        const numStr = String(i).padStart(2, '0');
+        let statusIcon = '';
+        let statusDesc = '';
+
+        if (!isUnlocked) {
+          statusIcon = '<i data-lucide="lock"></i>';
+          statusDesc = 'Locked';
+        } else if (isCompleted) {
+          statusIcon = '<i data-lucide="check"></i>';
+          statusDesc = `Completed, Best score ${this.progression.getBestScore(i)}`;
+        } else {
+          statusIcon = '<i data-lucide="play"></i>';
+          statusDesc = 'Unlocked';
+        }
+
+        tile.setAttribute('aria-label', `Level ${numStr}: ${cfg.name}, ${statusDesc}`);
+        tile.innerHTML = `
+          <span class="fcj-tile-num">${numStr}</span>
+          <span class="fcj-tile-status">${statusIcon}</span>
+        `;
+
+        tile.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.sound.init();
+          if (!isUnlocked) {
+            this.sound.playClick();
+            return;
+          }
+          this.sound.playClick();
+          this.selectLevel(i);
+        });
+
+        this.levelGrid.appendChild(tile);
+      }
+
+      this.updateProgressionUI();
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    selectLevel(level) {
+      if (!this.progression.isUnlocked(level)) return;
+      this.progression.setSelectedLevel(level);
+
+      // Update tile selection highlights
+      if (this.levelGrid) {
+        const tiles = this.levelGrid.querySelectorAll('.fcj-level-tile');
+        tiles.forEach(t => {
+          if (parseInt(t.dataset.level, 10) === level) {
+            t.classList.add('fcj-tile-selected');
+            t.setAttribute('aria-current', 'true');
+          } else {
+            t.classList.remove('fcj-tile-selected');
+            t.removeAttribute('aria-current');
+          }
+        });
+      }
+
+      this.updateProgressionUI();
+      const cfg = this.getLevelConfig(level);
+      this.announce(`Selected Level ${level}: ${cfg.name}`);
+    }
+
     // --- State Transitions ---
-    startRound() {
+    showLevelSelection() {
+      this.state = STATE.LEVEL_SELECT;
+      this.startScreen.classList.add('fcj-hidden');
+      this.pauseScreen.classList.add('fcj-hidden');
+      this.gameOverScreen.classList.add('fcj-hidden');
+      this.completeScreen.classList.add('fcj-hidden');
+      this.victoryScreen.classList.add('fcj-hidden');
+
+      this.renderLevelGrid();
+      this.levelScreen.classList.remove('fcj-hidden');
+      this.announce('Mission selection screen open. Select a mission.');
+    }
+
+    showStartScreen() {
+      this.state = STATE.START;
+      this.updateBestScoreDisplay();
+      this.updateProgressionUI();
+
+      this.startScreen.classList.remove('fcj-hidden');
+      this.pauseScreen.classList.add('fcj-hidden');
+      this.gameOverScreen.classList.add('fcj-hidden');
+      this.levelScreen.classList.add('fcj-hidden');
+      this.completeScreen.classList.add('fcj-hidden');
+      this.victoryScreen.classList.add('fcj-hidden');
+
+      this.jet.reset();
+      this.obstacles = [];
+      this.particles.reset();
+      this.announce('Returned to main menu.');
+    }
+
+    startRound(levelNum) {
+      // Resolve level to launch
+      const targetLevel = (typeof levelNum === 'number' && this.progression.isUnlocked(levelNum))
+        ? levelNum
+        : (this.progression.getSelectedLevel() || 1);
+
+      this.currentLevel = targetLevel;
+      this.progression.setSelectedLevel(this.currentLevel);
+
+      // Fresh round state initialization
       this.state = STATE.PLAYING;
       this.score = 0;
+      this.levelCompletedInRound = false;
       this.isNewRecord = false;
+
+      const config = this.getLevelConfig(this.currentLevel);
       this.hudScore.textContent = '0';
+      if (this.hudGoal) this.hudGoal.textContent = config.target;
+      if (this.hudLevel) this.hudLevel.textContent = String(this.currentLevel).padStart(2, '0');
+      this.hudBest.textContent = this.progression.getBestScore(this.currentLevel);
+
       this.obstacleTravelSinceLastSpawn = SPAWN_DISTANCE; // trigger immediate obstacle
       this.obstacles = [];
       this.particles.reset();
@@ -1047,9 +1691,12 @@
       this.startScreen.classList.add('fcj-hidden');
       this.pauseScreen.classList.add('fcj-hidden');
       this.gameOverScreen.classList.add('fcj-hidden');
+      this.levelScreen.classList.add('fcj-hidden');
+      this.completeScreen.classList.add('fcj-hidden');
+      this.victoryScreen.classList.add('fcj-hidden');
       this.newRecordBadge.classList.add('fcj-hidden');
 
-      this.announce('Mission launched! Flight controls engaged.');
+      this.announce(`Mission ${this.currentLevel}: ${config.name} launched! Clear ${config.target} obstacles.`);
       this.lastTime = performance.now();
     }
 
@@ -1058,7 +1705,9 @@
       this.state = STATE.PAUSED;
 
       this.pauseScoreVal.textContent = this.score;
-      this.pauseBestVal.textContent = this.bestScore;
+      if (this.pauseGoalVal) {
+        this.pauseGoalVal.textContent = this.getLevelConfig(this.currentLevel).target;
+      }
       this.pauseScreen.classList.remove('fcj-hidden');
       this.announce('Flight paused.');
     }
@@ -1071,16 +1720,62 @@
       this.announce('Flight resumed.');
     }
 
-    showStartScreen() {
-      this.state = STATE.START;
+    triggerLevelComplete() {
+      this.sound.playScore();
+
+      // Persist completion and unlock next level
+      this.progression.completeLevel(this.currentLevel, this.score);
       this.updateBestScoreDisplay();
-      this.startScreen.classList.remove('fcj-hidden');
-      this.pauseScreen.classList.add('fcj-hidden');
-      this.gameOverScreen.classList.add('fcj-hidden');
-      this.jet.reset();
-      this.obstacles = [];
-      this.particles.reset();
-      this.announce('Returned to main menu.');
+      this.updateProgressionUI();
+
+      if (this.currentLevel === TOTAL_LEVELS) {
+        // Level 20 Final Victory!
+        this.state = STATE.VICTORY;
+        this.sound.playVictory();
+        this.particles.addVictorySparks(this.jet.x, this.jet.y);
+
+        if (this.victoryScoreVal) {
+          this.victoryScoreVal.textContent = this.score;
+        }
+
+        setTimeout(() => {
+          if (this.state === STATE.VICTORY) {
+            this.victoryScreen.classList.remove('fcj-hidden');
+            this.announce('CYBER FLIGHT COMPLETE! All 20 missions conquered! You are the ultimate cyber pilot!');
+            if (window.lucide) lucide.createIcons();
+          }
+        }, 300);
+      } else {
+        // Level 1-19 Completion
+        this.state = STATE.LEVEL_COMPLETE;
+        this.sound.playLevelComplete();
+        this.particles.addVictorySparks(this.jet.x, this.jet.y);
+
+        const nextLvl = this.currentLevel + 1;
+        const nextCfg = this.getLevelConfig(nextLvl);
+        const curNumStr = String(this.currentLevel).padStart(2, '0');
+
+        if (this.completeTitle) {
+          this.completeTitle.textContent = `LEVEL ${curNumStr} COMPLETE`;
+        }
+        if (this.completeTagline) {
+          this.completeTagline.textContent = `Sector cleared! Level ${String(nextLvl).padStart(2, '0')}: ${nextCfg.name} unlocked!`;
+        }
+        if (this.completeScoreVal) {
+          this.completeScoreVal.textContent = this.score;
+        }
+        if (this.completeBestVal) {
+          this.completeBestVal.textContent = this.progression.getBestScore(this.currentLevel);
+        }
+
+        setTimeout(() => {
+          if (this.state === STATE.LEVEL_COMPLETE) {
+            this.completeScreen.classList.remove('fcj-hidden');
+            this.announce(`Level ${this.currentLevel} complete! Level ${nextLvl} unlocked.`);
+            if (window.lucide) lucide.createIcons();
+          }
+        }, 300);
+      }
     }
 
     triggerGameOver() {
@@ -1091,49 +1786,47 @@
       // Explosion sparks
       this.particles.addExplosion(this.jet.x, this.jet.y);
 
-      // Check high score
-      let recordBroken = false;
-      if (this.score > this.bestScore) {
-        this.bestScore = this.score;
-        this.isNewRecord = true;
-        recordBroken = true;
-        Storage.set('fcj_best_score', this.bestScore);
-        this.updateBestScoreDisplay();
+      // Check record for this level
+      const recordBroken = this.progression.recordScore(this.currentLevel, this.score);
+      this.updateBestScoreDisplay();
+      this.updateProgressionUI();
+
+      if (recordBroken) {
+        this.newRecordBadge.classList.remove('fcj-hidden');
         setTimeout(() => this.sound.playNewRecord(), 400);
+      } else {
+        this.newRecordBadge.classList.add('fcj-hidden');
       }
 
       // Populate game over modal
       this.gameoverScoreVal.textContent = this.score;
-      this.gameoverBestVal.textContent = this.bestScore;
-
-      if (recordBroken) {
-        this.newRecordBadge.classList.remove('fcj-hidden');
-      } else {
-        this.newRecordBadge.classList.add('fcj-hidden');
+      if (this.gameoverGoalVal) {
+        this.gameoverGoalVal.textContent = this.getLevelConfig(this.currentLevel).target;
       }
 
       // Reveal game over overlay after brief impact pause
       setTimeout(() => {
         if (this.state === STATE.GAMEOVER) {
           this.gameOverScreen.classList.remove('fcj-hidden');
-          this.announce(`Mission over. Final score: ${this.score}. High score: ${this.bestScore}.`);
+          this.announce(`Mission over. Final score: ${this.score}. Level target was: ${this.getLevelConfig(this.currentLevel).target}.`);
+          if (window.lucide) lucide.createIcons();
         }
       }, 350);
     }
 
-    // --- Difficulty Progression ---
+    // --- Dynamic Difficulty Progression per Level ---
     getCurrentSpeed() {
-      return Math.min(MAX_SPEED, INITIAL_SPEED + this.score * 1.8);
+      const cfg = this.getLevelConfig(this.currentLevel);
+      return Math.min(MAX_SPEED, cfg.speed + this.score * 1.5);
     }
 
     getCurrentGap() {
-      return Math.max(MIN_GAP, INITIAL_GAP - this.score * 1.1);
+      const cfg = this.getLevelConfig(this.currentLevel);
+      return Math.max(MIN_GAP, cfg.gap - this.score * 1.0);
     }
 
     getCurrentTheme() {
-      if (this.score >= 30) return 'amber';
-      if (this.score >= 15) return 'magenta';
-      return 'cyan';
+      return this.getLevelConfig(this.currentLevel).theme;
     }
 
     // --- Collision Detection ---
@@ -1223,6 +1916,14 @@
             const gapCenterY = obs.topHeight + obs.gap * 0.5;
             this.particles.addScoreRing(this.jet.x, gapCenterY);
 
+            // Level completion check
+            const targetScore = this.getLevelConfig(this.currentLevel).target;
+            if (!this.levelCompletedInRound && this.score >= targetScore) {
+              this.levelCompletedInRound = true;
+              this.triggerLevelComplete();
+              return;
+            }
+
             // Announce milestone every 10 points
             if (this.score % 10 === 0) {
               this.announce(`Score ${this.score}`);
@@ -1239,7 +1940,7 @@
         if (this.checkCollisions()) {
           this.triggerGameOver();
         }
-      } else if (this.state === STATE.START) {
+      } else if (this.state === STATE.START || this.state === STATE.LEVEL_SELECT) {
         // Idle environment animation
         this.env.update(dt, 50);
         // Idle hover animation for jet

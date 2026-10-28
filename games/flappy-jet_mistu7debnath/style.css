@@ -175,12 +175,41 @@ html, body {
   transform: translateY(1px);
 }
 
+.fcj-level-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(10, 15, 30, 0.85);
+  padding: 3px 8px;
+  border-radius: var(--fcj-radius-sm);
+  border: 1px solid var(--fcj-border-glow);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.fcj-level-badge-label {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--fcj-blue-glow);
+  line-height: 1;
+}
+
+.fcj-level-badge-val {
+  font-family: var(--fcj-font-mono);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--fcj-cyan);
+  line-height: 1.1;
+}
+
 .fcj-score-display {
   display: flex;
   flex-direction: column;
   align-items: center;
   background: rgba(10, 15, 30, 0.85);
-  padding: 4px 20px;
+  padding: 4px 18px;
   border-radius: var(--fcj-radius-full);
   border: 1px solid var(--fcj-border-glow);
   backdrop-filter: blur(10px);
@@ -189,20 +218,40 @@ html, body {
 }
 
 .fcj-score-label {
-  font-size: 0.65rem;
-  letter-spacing: 2px;
+  font-size: 0.6rem;
+  letter-spacing: 1.5px;
   color: var(--fcj-blue-glow);
   font-weight: 700;
   line-height: 1;
 }
 
+.fcj-score-val-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
 .fcj-score-val {
   font-family: var(--fcj-font-mono);
-  font-size: 1.7rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: #ffffff;
   text-shadow: 0 0 10px var(--fcj-cyan);
   line-height: 1.1;
+}
+
+.fcj-score-divider {
+  font-family: var(--fcj-font-mono);
+  font-size: 1rem;
+  color: var(--fcj-text-dim);
+  font-weight: 600;
+}
+
+.fcj-score-goal {
+  font-family: var(--fcj-font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--fcj-blue-glow);
 }
 
 .fcj-best-badge {
@@ -667,13 +716,332 @@ html, body {
 }
 
 /* ==========================================================================
+   Level Selection & Progression System Styling
+   ========================================================================== */
+
+/* Progression Chip on Start Screen */
+.fcj-progression-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  padding: 6px 16px;
+  border-radius: var(--fcj-radius-full);
+  margin-bottom: 12px;
+  font-size: 0.78rem;
+  color: var(--fcj-text-muted);
+}
+
+.fcj-prog-icon {
+  color: var(--fcj-cyan);
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.fcj-prog-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.fcj-prog-text strong {
+  color: #fff;
+  font-family: var(--fcj-font-mono);
+  letter-spacing: 0.5px;
+}
+
+/* Wide Modal Card for Level Grid */
+.fcj-modal-card-wide {
+  max-width: 440px;
+  max-height: 88vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 240, 255, 0.35) transparent;
+  padding: 20px 18px;
+}
+
+.fcj-modal-card-wide::-webkit-scrollbar {
+  width: 5px;
+}
+
+.fcj-modal-card-wide::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.35);
+  border-radius: 4px;
+}
+
+/* Level Selection Header & Progress Bar */
+.fcj-level-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fcj-title-level .fcj-title-main {
+  font-size: 1.55rem;
+}
+
+.fcj-progress-container {
+  width: 100%;
+  margin: 12px 0 10px 0;
+}
+
+.fcj-progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.fcj-progress-label {
+  letter-spacing: 1.5px;
+  color: var(--fcj-text-dim);
+}
+
+.fcj-progress-count {
+  font-family: var(--fcj-font-mono);
+  color: var(--fcj-cyan);
+  letter-spacing: 1px;
+}
+
+.fcj-progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: rgba(15, 23, 42, 0.85);
+  border-radius: var(--fcj-radius-full);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.fcj-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0284c7 0%, #00f0ff 65%, #10b981 100%);
+  border-radius: var(--fcj-radius-full);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 20-Level Mission Grid */
+.fcj-level-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  width: 100%;
+  margin: 8px 0 12px 0;
+}
+
+@media (max-width: 400px) {
+  .fcj-level-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+}
+
+/* Level Tile Base */
+.fcj-level-tile {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--fcj-radius-md);
+  padding: 6px 4px;
+  min-height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+  user-select: none;
+}
+
+.fcj-level-tile:focus-visible {
+  outline: 2px solid var(--fcj-cyan);
+  outline-offset: 2px;
+}
+
+.fcj-tile-num {
+  font-family: var(--fcj-font-mono);
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.fcj-tile-status {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+}
+
+.fcj-tile-status svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Tile State: Locked */
+.fcj-level-tile.fcj-tile-locked {
+  background: rgba(10, 15, 26, 0.45);
+  border-color: rgba(255, 255, 255, 0.05);
+  color: var(--fcj-text-dim);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.fcj-level-tile.fcj-tile-locked .fcj-tile-num {
+  color: #475569;
+}
+
+.fcj-level-tile.fcj-tile-locked:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Tile State: Unlocked (Playable, Incomplete) */
+.fcj-level-tile.fcj-tile-unlocked {
+  background: rgba(14, 30, 56, 0.75);
+  border-color: rgba(0, 240, 255, 0.4);
+  color: var(--fcj-text-main);
+}
+
+.fcj-level-tile.fcj-tile-unlocked .fcj-tile-num {
+  color: var(--fcj-cyan);
+}
+
+.fcj-level-tile.fcj-tile-unlocked .fcj-tile-status {
+  color: var(--fcj-blue-glow);
+}
+
+.fcj-level-tile.fcj-tile-unlocked:hover {
+  background: rgba(0, 240, 255, 0.18);
+  border-color: var(--fcj-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 240, 255, 0.35);
+}
+
+/* Tile State: Completed */
+.fcj-level-tile.fcj-tile-completed {
+  background: rgba(6, 78, 59, 0.35);
+  border-color: rgba(16, 185, 129, 0.55);
+  color: #ecfdf5;
+}
+
+.fcj-level-tile.fcj-tile-completed .fcj-tile-num {
+  color: #6ee7b7;
+}
+
+.fcj-level-tile.fcj-tile-completed .fcj-tile-status {
+  color: #10b981;
+}
+
+.fcj-level-tile.fcj-tile-completed:hover {
+  background: rgba(16, 185, 129, 0.22);
+  border-color: #10b981;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+}
+
+/* Tile State: Currently Selected (Highlight) */
+.fcj-level-tile.fcj-tile-selected {
+  outline: 2px solid var(--fcj-magenta) !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 16px rgba(236, 72, 153, 0.65) !important;
+  border-color: var(--fcj-magenta) !important;
+}
+
+/* Selected Mission Banner */
+.fcj-selected-info-banner {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--fcj-border-subtle);
+  border-radius: var(--fcj-radius-md);
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.fcj-selected-mission-name {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--fcj-cyan);
+  letter-spacing: 1px;
+}
+
+.fcj-selected-mission-meta {
+  font-size: 0.68rem;
+  color: var(--fcj-text-muted);
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* Button Group Row for Level Screen Actions */
+.fcj-btn-group-row {
+  flex-direction: row;
+  gap: 10px;
+}
+
+.fcj-btn-group-row .fcj-btn {
+  flex: 1;
+}
+
+/* Level Complete & Victory Overlays */
+.fcj-badge-cyan {
+  color: var(--fcj-cyan);
+  background: rgba(0, 240, 255, 0.12);
+  border-color: rgba(0, 240, 255, 0.35);
+}
+
+.fcj-title-complete {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #38bdf8;
+  text-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
+  margin-bottom: 6px;
+}
+
+.fcj-title-victory {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #fde047;
+  text-shadow: 0 0 20px rgba(253, 224, 71, 0.7);
+  margin-bottom: 6px;
+}
+
+.fcj-victory-trophy {
+  color: #facc15;
+  font-size: 2.8rem;
+  margin: 4px 0 12px 0;
+  filter: drop-shadow(0 0 16px rgba(250, 204, 21, 0.7));
+  animation: fcjTrophyFloat 2s ease-in-out infinite alternate;
+}
+
+.fcj-victory-trophy svg {
+  width: 44px;
+  height: 44px;
+}
+
+@keyframes fcjTrophyFloat {
+  from { transform: translateY(0) scale(1); }
+  to { transform: translateY(-5px) scale(1.05); }
+}
+
+/* ==========================================================================
    Reduced Motion Accessibility
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   .fcj-jet-preview,
   .fcj-svg-flame,
   .fcj-record-badge,
-  .fcj-modal-card {
+  .fcj-modal-card,
+  .fcj-victory-trophy,
+  .fcj-progress-bar-fill {
     animation: none !important;
     transition: none !important;
   }

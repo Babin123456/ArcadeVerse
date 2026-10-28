@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hall of Fame & Live Leaderboard | ArcadeVerse (NSOC '26)</title>
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/public/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/public/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/public/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -12,6 +18,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="cyber-grid"></div>
   <div class="glow-orb orb-1"></div>
   <div class="glow-orb orb-2"></div>
@@ -19,28 +26,60 @@
   <!-- Header -->
   <header class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="index.html" class="logo">
-        <span class="pixel-badge"><i data-lucide="bot"></i></span>
+      <a href="index.html" class="logo" aria-label="ArcadeVerse Home">
+        <img src="assets/public/brand-logo.webp" alt="ArcadeVerse Logo" class="brand-logo-img" width="34" height="34">
         <span class="logo-text">Arcade<span class="gradient-accent">Verse</span></span>
         <span class="nsoc-tag">NSOC '26</span>
       </a>
 
-      <nav class="nav-links">
+      <nav class="nav-links" aria-label="Main navigation">
         <a href="index.html" class="nav-item"><i data-lucide="gamepad-2"></i> Explore Games</a>
-        <a href="ideas.html" class="nav-item"><i data-lucide="lightbulb"></i> Ideas Vault</a>
         <a href="leaderboard.html" class="nav-item active"><i data-lucide="trophy"></i> Hall of Fame</a>
-        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" class="nav-item badge-link"><i data-lucide="book-open"></i> Contributor Guide</a>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" class="nav-item"><i data-lucide="book-open"></i> Contributor Guide</a>
       </nav>
 
       <div class="nav-actions">
-        <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" title="View repository on GitHub">
+        <button class="theme-toggle-btn" id="theme-toggle-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle dark/light theme">
+          <span class="theme-icon-wrap"><i data-lucide="sun"></i></span>
+        </button>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm nav-github-btn" title="View repository on GitHub">
           <span><i data-lucide="star"></i> GitHub</span>
         </a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
       </div>
+    </div>
+
+    <div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
+      <nav class="mobile-nav-content" aria-label="Mobile navigation">
+        <a href="index.html" class="mobile-nav-item">
+          <span class="mobile-nav-icon"><i data-lucide="gamepad-2"></i></span>
+          <span>Explore Games</span>
+        </a>
+        <a href="leaderboard.html" class="mobile-nav-item active" aria-current="page">
+          <span class="mobile-nav-icon"><i data-lucide="trophy"></i></span>
+          <span>Hall of Fame</span>
+        </a>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="mobile-nav-item mobile-badge-link">
+          <span class="mobile-nav-icon"><i data-lucide="book-open"></i></span>
+          <span>Contributor Guide</span>
+        </a>
+        <div class="mobile-nav-divider"></div>
+        <button class="mobile-nav-item theme-toggle-btn" style="width: 100%; border: none; background: transparent; cursor: pointer; text-align: left; padding: 0.75rem 1rem;">
+          <span class="mobile-nav-icon theme-icon-wrap"><i data-lucide="sun"></i></span>
+          <span>Toggle Dark / Light Theme</span>
+        </button>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="mobile-github-btn">
+          <span><i data-lucide="star"></i> Star on GitHub</span>
+        </a>
+      </nav>
     </div>
   </header>
 
-  <main class="page-container">
+  <main class="page-container" id="main-content" tabindex="-1">
     <div class="section-header center">
       <span class="section-tag">LIVE GITHUB RANKINGS</span>
       <h1 class="section-title">Hall of Fame & Leaderboard</h1>
@@ -66,7 +105,7 @@
         <span id="sync-status-text">GitHub Live Contributions Synced</span>
       </div>
       <div class="repo-meta-box">
-        <input type="text" id="repo-input" placeholder="owner/repo (e.g. DebasmitaBose0/ArcadeVerse)" value="DebasmitaBose0/ArcadeVerse">
+        <input type="text" id="repo-input" aria-label="GitHub repository to load leaderboard stats from" placeholder="owner/repo (e.g. DebasmitaBose0/ArcadeVerse)" value="DebasmitaBose0/ArcadeVerse">
         <button class="btn btn-secondary btn-sm" id="fetch-github-btn"><i data-lucide="refresh-cw"></i> Refresh Stats</button>
       </div>
     </div>
@@ -114,7 +153,7 @@
       <!-- Dedicated Admin & Project Architect Rank -->
       <div class="admin-spotlight-banner">
         <div class="admin-avatar-wrap">
-          <img src="https://avatars.githubusercontent.com/u/144198639?v=4" alt="Debasmita Bose" class="admin-avatar-img" onerror="this.src='https://github.com/DebasmitaBose0.png'">
+          <img src="https://avatars.githubusercontent.com/u/144198639?v=4" alt="Debasmita Bose" class="admin-avatar-img" onerror="this.onerror=null; this.src='https://github.com/DebasmitaBose0.png'">
           <span class="admin-crown-badge"><i data-lucide="crown"></i></span>
         </div>
         <div style="flex-grow: 1;">
@@ -123,14 +162,14 @@
           <p>Architect of ArcadeVerse core platform, Quantum Memory Matrix starter game, and NSOC '26 contributor framework. Oversees manual PR reviews and repository governance.</p>
           <div class="admin-badges-row" id="admin-badges-row" style="margin-top: 0.6rem; display: flex; gap: 0.4rem; flex-wrap: wrap;">
             <span class="role-pill-badge role-admin"><i data-lucide="crown"></i> Project Admin & Lead</span>
-            <span class="role-pill-badge role-arcade"><i data-lucide="gamepad-2"></i> Arcade Explorer</span>
-            <span class="role-pill-badge role-elite"><i data-lucide="gem"></i> Elite Contributor</span>
+            <span class="role-pill-badge role-junior-crafter"><i data-lucide="hammer"></i> Junior Game Crafter</span>
+            <span class="role-pill-badge role-senior-platform"><i data-lucide="terminal"></i> Senior Platform Engineer</span>
           </div>
         </div>
         <div class="admin-stats-badge">
           <span class="score-title">PERMANENT LEAD</span>
           <span class="score-num"><i data-lucide="crown"></i> ADMIN</span>
-          <span class="admin-sub-stat" id="admin-meta-info" style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">37 Commits • 2 Games • 535 pts</span>
+          <span class="admin-sub-stat" id="admin-meta-info" style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">147 Commits • 2 Games • 1,085 pts</span>
         </div>
       </div>
 
@@ -207,11 +246,11 @@
         <div class="tier-box-header">
           <h3><i data-lucide="award"></i> Official Contributor Rank Badges & Universal In-App Point System</h3>
           <p>ArcadeVerse features a transparent, automated scoring formula based on verified games, pull requests, and git commits. This in-app XP scoring is completely independent from official NSoC program evaluation labels:</p>
-          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 1rem 1.4rem; margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: space-around; font-size: 0.88rem;">
-            <div><strong>🎮 Verified Game:</strong> <span style="color: #38bdf8;">+100 pts</span> <span style="color: var(--text-muted);">(+25p mechanics)</span></div>
-            <div><strong>🚀 Feature PR:</strong> <span style="color: #818cf8;">+50 pts</span></div>
-            <div><strong>🛠️ Quality / Bug Fix PR:</strong> <span style="color: #34d399;">+25 pts</span></div>
-            <div><strong>📦 Merged Git Commit:</strong> <span style="color: #f59e0b;">+5 pts / commit</span></div>
+          <div class="tier-scoring-summary-banner">
+            <div><strong><i data-lucide="gamepad-2" style="width: 15px; height: 15px; vertical-align: -2px; margin-right: 4px; color: var(--accent-primary);"></i>Verified Game:</strong> <span class="rule-pts-accent">+100 pts</span> <span class="rule-pts-note">(+25p mechanics)</span></div>
+            <div><strong><i data-lucide="rocket" style="width: 15px; height: 15px; vertical-align: -2px; margin-right: 4px; color: #818cf8;"></i>Feature PR:</strong> <span class="rule-pts-accent">+50 pts</span></div>
+            <div><strong><i data-lucide="wrench" style="width: 15px; height: 15px; vertical-align: -2px; margin-right: 4px; color: var(--accent-emerald);"></i>Quality / Bug Fix PR:</strong> <span class="rule-pts-accent">+25 pts</span></div>
+            <div><strong><i data-lucide="git-commit" style="width: 15px; height: 15px; vertical-align: -2px; margin-right: 4px; color: var(--accent-warm);"></i>Merged Git Commit:</strong> <span class="rule-pts-accent">+5 pts / commit</span></div>
           </div>
         </div>
         <div class="table-responsive" style="margin-top: 1.5rem;">
@@ -227,78 +266,186 @@
             <tbody>
               <!-- Dedicated Game Creators Track -->
               <tr>
-                <td><span class="role-pill-badge role-master-architect"><i data-lucide="crown"></i> Master Game Architect</span></td>
+                <td><span class="role-pill-badge role-legendary-architect"><i data-lucide="crown"></i> Legendary Game Architect</span></td>
                 <td>
                   <span class="tier-cat-pill">Games Dedicated</span>
-                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in the 'games' folder)</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in 'games/' folder)</span>
                 </td>
-                <td><strong>15+ Verified Games</strong> • Master arcade creator with diverse, high-performance web arcade games</td>
+                <td><strong>50+ Verified Games</strong> • Master arcade pioneer with an expansive game universe</td>
+                <td>Legendary Hall of Fame Crown + Supreme Platform Honors</td>
+              </tr>
+              <tr>
+                <td><span class="role-pill-badge role-mythic-creator"><i data-lucide="flame"></i> Mythic Game Creator</span></td>
+                <td>
+                  <span class="tier-cat-pill">Games Dedicated</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in 'games/' folder)</span>
+                </td>
+                <td><strong>35–49 Verified Games</strong> • Prolific game developer across all arcade mechanics</td>
+                <td>Mythic Creator badge + Frontpage Permanent Showcase</td>
+              </tr>
+              <tr>
+                <td><span class="role-pill-badge role-grandmaster-designer"><i data-lucide="award"></i> Grandmaster Game Designer</span></td>
+                <td>
+                  <span class="tier-cat-pill">Games Dedicated</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in 'games/' folder)</span>
+                </td>
+                <td><strong>25–34 Verified Games</strong> • Elite developer with advanced mechanics and physics</td>
+                <td>Grandmaster Designer badge + Special Developer Spotlight</td>
+              </tr>
+              <tr>
+                <td><span class="role-pill-badge role-master-architect"><i data-lucide="shield-check"></i> Master Game Architect</span></td>
+                <td>
+                  <span class="tier-cat-pill">Games Dedicated</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in 'games/' folder)</span>
+                </td>
+                <td><strong>15–24 Verified Games</strong> • Master arcade creator with diverse, high-performance web arcade games</td>
                 <td>Ultimate Arcade Creator badge + Top Hall of Fame Spotlight</td>
+              </tr>
+              <tr>
+                <td><span class="role-pill-badge role-veteran-dev"><i data-lucide="rocket"></i> Veteran Game Developer</span></td>
+                <td>
+                  <span class="tier-cat-pill">Games Dedicated</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in 'games/' folder)</span>
+                </td>
+                <td><strong>10–14 Verified Games</strong> • Established arcade author with 10+ published games</td>
+                <td>Veteran Game Developer badge + Hall of Fame Feature</td>
               </tr>
               <tr>
                 <td><span class="role-pill-badge role-hyper"><i data-lucide="zap"></i> Hyper Game Developer</span></td>
                 <td>
                   <span class="tier-cat-pill">Games Dedicated</span>
-                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in the 'games' folder)</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in 'games/' folder)</span>
                 </td>
-                <td><strong>8–14 Verified Games</strong> • Experienced game developer across multiple arcade genres</td>
+                <td><strong>7–9 Verified Games</strong> • Experienced game developer across multiple arcade genres</td>
                 <td>Elite Game Developer badge + Hall of Fame Podium Spotlight</td>
+              </tr>
+              <tr>
+                <td><span class="role-pill-badge role-senior-arcade"><i data-lucide="cpu"></i> Senior Arcade Developer</span></td>
+                <td>
+                  <span class="tier-cat-pill">Games Dedicated</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in 'games/' folder)</span>
+                </td>
+                <td><strong>5–6 Verified Games</strong> • Senior game creator with consistent gameplay implementations</td>
+                <td>Senior Game Developer badge + Profile Highlight</td>
               </tr>
               <tr>
                 <td><span class="role-pill-badge role-arcade"><i data-lucide="gamepad-2"></i> Arcade Developer</span></td>
                 <td>
                   <span class="tier-cat-pill">Games Dedicated</span>
-                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in the 'games' folder)</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in 'games/' folder)</span>
                 </td>
-                <td><strong>4–7 Verified Games</strong> • Authored multiple polished games with physics or canvas mechanics</td>
+                <td><strong>3–4 Verified Games</strong> • Authored multiple polished games with physics or canvas mechanics</td>
                 <td>Verified Game Developer badge + Arcade Showcase</td>
               </tr>
               <tr>
-                <td><span class="role-pill-badge role-explorer"><i data-lucide="compass"></i> Arcade Explorer</span></td>
+                <td><span class="role-pill-badge role-junior-crafter"><i data-lucide="hammer"></i> Junior Game Crafter</span></td>
                 <td>
                   <span class="tier-cat-pill">Games Dedicated</span>
-                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in the 'games' folder)</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in 'games/' folder)</span>
                 </td>
-                <td><strong>1–3 Verified Games</strong> • Authored and integrated first playable game in <code>games/</code></td>
-                <td>Playable Game Badge + In-App Modal Player showcase</td>
+                <td><strong>2 Verified Games</strong> • Successfully integrated dual arcade titles into the catalog</td>
+                <td>Junior Crafter badge + Game Library Listing</td>
+              </tr>
+              <tr>
+                <td><span class="role-pill-badge role-novice-creator"><i data-lucide="compass"></i> Novice Game Creator</span></td>
+                <td>
+                  <span class="tier-cat-pill">Games Dedicated</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(in 'games/' folder)</span>
+                </td>
+                <td><strong>1 Verified Game</strong> • Authored and integrated first playable game in <code>games/</code> (Entry Title)</td>
+                <td>Novice Game Creator Badge + In-App Modal Player showcase</td>
               </tr>
 
               <!-- Platform & Core Engineering Track -->
               <tr>
+                <td><span class="role-pill-badge role-immortal"><i data-lucide="sparkles"></i> Immortal Arcade Legend</span></td>
+                <td>
+                  <span class="tier-cat-pill" style="color: #fbbf24; border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.1);">Platform & Core</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Universal Score Milestone)</span>
+                </td>
+                <td><code>5,000+ Arcade Points</code> (Pinnacle community achievement and sustained code excellence)</td>
+                <td>Immortal Legend badge + Hall of Fame Hall of Honor feature</td>
+              </tr>
+              <tr>
+                <td><span class="role-pill-badge role-grandmaster-core"><i data-lucide="gem"></i> Grandmaster Core Architect</span></td>
+                <td>
+                  <span class="tier-cat-pill" style="color: #f43f5e; border-color: rgba(244,63,94,0.3); background: rgba(244,63,94,0.1);">Platform & Core</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Universal Score Milestone)</span>
+                </td>
+                <td><code>3,000–4,999 Arcade Points</code> (Extraordinary sustained contributions across codebase)</td>
+                <td>Grandmaster Core badge + Podium Feature Priority</td>
+              </tr>
+              <tr>
                 <td><span class="role-pill-badge role-master"><i data-lucide="shield-check"></i> Master Core Architect</span></td>
                 <td>
                   <span class="tier-cat-pill" style="color: #fb7185; border-color: rgba(244,63,94,0.3); background: rgba(244,63,94,0.1);">Platform & Core</span>
-                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Codebase & Core Modifications)</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Universal Score Milestone)</span>
                 </td>
-                <td><code>750+ Arcade Points</code> (Top-tier architecture, engines, and 30+ PR equivalent)</td>
+                <td><code>2,000–2,999 Arcade Points</code> (Top-tier architecture, engines, and heavy PR contributions)</td>
                 <td>Master Core Architect badge + Permanent Hall of Fame Lead feature</td>
+              </tr>
+              <tr>
+                <td><span class="role-pill-badge role-senior-platform"><i data-lucide="terminal"></i> Senior Platform Engineer</span></td>
+                <td>
+                  <span class="tier-cat-pill" style="color: #a78bfa; border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.1);">Platform & Core</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Universal Score Milestone)</span>
+                </td>
+                <td><code>1,200–1,999 Arcade Points</code> (Significant platform features, optimizations, and commits)</td>
+                <td>Senior Platform Engineer badge + Contributor Spotlight</td>
               </tr>
               <tr>
                 <td><span class="role-pill-badge role-elite"><i data-lucide="gem"></i> Elite Contributor</span></td>
                 <td>
                   <span class="tier-cat-pill" style="color: #38bdf8; border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.1);">Platform & Core</span>
-                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Codebase & Core Modifications)</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Universal Score Milestone)</span>
                 </td>
-                <td><code>250–749 Arcade Points</code> (Cumulative games, features, and active commits)</td>
+                <td><code>750–1,199 Arcade Points</code> (Cumulative games, features, and active commits)</td>
                 <td>Elite Contributor badge + Permanent Hall of Fame feature</td>
+              </tr>
+              <tr>
+                <td><span class="role-pill-badge role-distinguished"><i data-lucide="medal"></i> Distinguished Contributor</span></td>
+                <td>
+                  <span class="tier-cat-pill" style="color: #f59e0b; border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.1);">Platform & Core</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Universal Score Milestone)</span>
+                </td>
+                <td><code>400–749 Arcade Points</code> (High-impact contributions with multiple games or PRs)</td>
+                <td>Distinguished Contributor badge + Top Standings Feature</td>
               </tr>
               <tr>
                 <td><span class="role-pill-badge role-platform"><i data-lucide="code-2"></i> Platform Contributor</span></td>
                 <td>
                   <span class="tier-cat-pill" style="color: #60a5fa; border-color: rgba(59,130,246,0.3); background: rgba(59,130,246,0.1);">Platform & Core</span>
-                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Codebase & Core Modifications)</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Universal Score Milestone)</span>
                 </td>
-                <td><code>100–249 Arcade Points</code> (UI components, game integration, search/filter tools)</td>
+                <td><code>200–399 Arcade Points</code> (UI components, game integration, search/filter tools)</td>
                 <td>Platform Contributor badge + Feature Author Spotlight</td>
+              </tr>
+              <tr>
+                <td><span class="role-pill-badge role-rising"><i data-lucide="trending-up"></i> Rising Contributor</span></td>
+                <td>
+                  <span class="tier-cat-pill" style="color: #34d399; border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.1);">Getting Started</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Universal Score Milestone)</span>
+                </td>
+                <td><code>100–199 Arcade Points</code> (First verified game integrated or multiple quality PRs)</td>
+                <td>Rising Contributor badge + Live Standings Listing</td>
               </tr>
               <tr>
                 <td><span class="role-pill-badge role-active"><i data-lucide="sprout"></i> Active Contributor</span></td>
                 <td>
-                  <span class="tier-cat-pill" style="color: #34d399; border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.1);">Getting Started</span>
-                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Codebase & Core Modifications)</span>
+                  <span class="tier-cat-pill" style="color: #38bdf8; border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.1);">Getting Started</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Universal Score Milestone)</span>
                 </td>
-                <td><code>15–99 Arcade Points</code> (First verified bug fix, touch control, or documentation PR)</td>
+                <td><code>25–99 Arcade Points</code> (First verified bug fix, responsive patch, or documentation PR)</td>
                 <td>Listed in verified NSOC '26 community contributors registry</td>
+              </tr>
+              <tr>
+                <td><span class="role-pill-badge role-apprentice"><i data-lucide="target"></i> Apprentice Contributor</span></td>
+                <td>
+                  <span class="tier-cat-pill" style="color: #94a3b8; border-color: rgba(148,163,184,0.3); background: rgba(148,163,184,0.1);">Getting Started</span>
+                  <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem;">(Universal Score Milestone)</span>
+                </td>
+                <td><code>1–24 Arcade Points</code> (First accepted commit or minor contribution)</td>
+                <td>Welcome Contributor badge + Registry Entry</td>
               </tr>
             </tbody>
           </table>
@@ -312,7 +459,7 @@
     <div class="footer-container">
       <div class="footer-col">
         <div class="logo">
-          <span class="pixel-badge"><i data-lucide="bot"></i></span>
+          <img src="assets/public/brand-logo.webp" alt="ArcadeVerse Logo" class="brand-logo-img" width="34" height="34">
           <span class="logo-text">Arcade<span class="gradient-accent">Verse</span></span>
         </div>
         <p class="footer-desc">An open-source flagship gaming initiative for NSOC Winter Edition 2026. Designed for seamless, conflict-free manual open source contributions.</p>
@@ -328,7 +475,6 @@
         <h4>Explore Platform</h4>
         <ul class="footer-list">
           <li><a href="index.html"><i data-lucide="gamepad-2"></i> Explore All Games</a></li>
-          <li><a href="ideas.html"><i data-lucide="lightbulb"></i> Ideas Vault</a></li>
           <li><a href="leaderboard.html"><i data-lucide="trophy"></i> Hall of Fame</a></li>
           <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer"><i data-lucide="book-open"></i> Contributor Guidelines</a></li>
           <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><i data-lucide="file-text"></i> MIT License</a></li>
@@ -364,11 +510,6 @@
   <script src="assets/js/games-registry.js"></script>
   <script src="assets/js/leaderboard.js"></script>
   <script>
-    const navbar = document.getElementById("navbar");
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 40) navbar.classList.add("scrolled");
-      else navbar.classList.remove("scrolled");
-    }, { passive: true });
     if (window.lucide) {
       lucide.createIcons();
     }

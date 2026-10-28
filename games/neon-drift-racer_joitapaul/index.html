@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b14">
+  <title>Neon Drift Racer | ArcadeVerse</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/public/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
+</head>
+<body>
+  <main class="game-shell">
+    <header class="game-header">
+      <div>
+        <p class="eyebrow">ARCADEVERSE · ARCADE</p>
+        <h1>Neon Drift Racer</h1>
+      </div>
+      <p class="creator">by <a href="https://github.com/joitapaul" target="_blank" rel="noopener noreferrer">@joitapaul</a></p>
+    </header>
+
+    <section class="scoreboard" aria-label="Game statistics">
+      <div class="score-item">
+        <span class="score-label">SCORE</span>
+        <strong id="score-value" aria-live="polite">0</strong>
+      </div>
+      <div class="score-item">
+        <span class="score-label">BEST</span>
+        <strong id="best-value">0</strong>
+      </div>
+      <div class="score-item">
+        <span class="score-label">ENERGY</span>
+        <strong id="energy-value">0</strong>
+      </div>
+    </section>
+
+    <div class="track-wrap">
+      <canvas id="race-track" width="480" height="600" role="img" aria-label="Neon racing game. Use the left and right arrow keys or A and D to steer.">
+        Your browser does not support canvas.
+      </canvas>
+      <div class="game-overlay" id="game-overlay">
+        <p class="overlay-kicker" id="overlay-kicker">READY TO RACE?</p>
+        <h2 id="overlay-title">Own the night.</h2>
+        <p id="overlay-message">Dodge traffic and grab energy orbs. The road gets faster the longer you survive.</p>
+        <button id="start-button" type="button">Start race</button>
+      </div>
+    </div>
+
+    <div class="controls" aria-label="Steering controls">
+      <button class="steer-button" id="left-button" type="button" aria-label="Steer left">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <p>Steer with <kbd>←</kbd> <kbd>→</kbd> or <kbd>A</kbd> <kbd>D</kbd></p>
+      <button class="steer-button" id="right-button" type="button" aria-label="Steer right">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+    <p class="hint">Avoid the red cars · Collect blue energy orbs for bonus points</p>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>

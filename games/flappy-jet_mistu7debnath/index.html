@@ -7,12 +7,16 @@
   <meta name="description" content="Pilot a futuristic cyber jet through neon obstacles, dodge collisions, and beat your high score in Flappy Cyber Jet.">
   <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/public/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
 </head>
 <body>
   <div class="fcj-app" id="fcj-app">
     <!-- Game Container / Arcade Display -->
     <div class="fcj-game-container" id="fcj-game-container">
-      
+
       <!-- Top In-Game HUD (Visible during gameplay) -->
       <header class="fcj-hud" id="fcj-hud" aria-label="Game heads up display">
         <div class="fcj-hud-left">
@@ -22,12 +26,20 @@
           <button id="fcj-btn-pause" class="fcj-icon-btn" type="button" aria-label="Pause game" title="Pause game (P / ESC)">
             <span class="fcj-pause-icon" id="fcj-pause-icon"><i data-lucide="pause"></i></span>
           </button>
+          <div class="fcj-level-badge" id="fcj-hud-level-badge" title="Current mission level">
+            <span class="fcj-level-badge-label">LVL</span>
+            <span class="fcj-level-badge-val" id="fcj-hud-level">01</span>
+          </div>
         </div>
 
         <div class="fcj-hud-center">
           <div class="fcj-score-display" aria-live="off">
-            <span class="fcj-score-label">SCORE</span>
-            <span class="fcj-score-val" id="fcj-hud-score">0</span>
+            <span class="fcj-score-label">SCORE / GOAL</span>
+            <div class="fcj-score-val-wrap">
+              <span class="fcj-score-val" id="fcj-hud-score">0</span>
+              <span class="fcj-score-divider">/</span>
+              <span class="fcj-score-goal" id="fcj-hud-goal">5</span>
+            </div>
           </div>
         </div>
 
@@ -49,7 +61,7 @@
       <div class="fcj-overlay fcj-start-screen" id="fcj-start-screen" role="dialog" aria-modal="true" aria-labelledby="fcj-start-title">
         <div class="fcj-modal-card">
           <div class="fcj-badge">NSOC '26 • ARCADEVERSE</div>
-          
+
           <h1 class="fcj-title" id="fcj-start-title">
             <span class="fcj-title-sub">FLAPPY</span>
             <span class="fcj-title-main">CYBER JET</span>
@@ -93,17 +105,29 @@
             </svg>
           </div>
 
+          <!-- Overall Progress Preview -->
+          <div class="fcj-progression-chip" id="fcj-start-progress-chip" title="Missions completed">
+            <span class="fcj-prog-icon"><i data-lucide="shield-check"></i></span>
+            <span class="fcj-prog-text">PROGRESS: <strong id="fcj-start-progress-val">0/20</strong> COMPLETED</span>
+          </div>
+
           <!-- Best Score Preview -->
           <div class="fcj-best-box" id="fcj-start-best-box">
             <span class="fcj-best-box-label">ALL-TIME BEST</span>
             <span class="fcj-best-box-val" id="fcj-start-best">0</span>
           </div>
 
-          <!-- Launch Button -->
-          <button id="fcj-btn-start" class="fcj-btn fcj-btn-primary" type="button">
-            <span class="fcj-btn-icon"><i data-lucide="rocket"></i></span>
-            <span class="fcj-btn-text">LAUNCH JET</span>
-          </button>
+          <!-- Action Buttons -->
+          <div class="fcj-btn-group">
+            <button id="fcj-btn-start" class="fcj-btn fcj-btn-primary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="rocket"></i></span>
+              <span class="fcj-btn-text" id="fcj-btn-start-text">LAUNCH LEVEL 01</span>
+            </button>
+            <button id="fcj-btn-open-levels" class="fcj-btn fcj-btn-secondary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="grid"></i></span>
+              <span class="fcj-btn-text">SELECT MISSION</span>
+            </button>
+          </div>
 
           <!-- Instructions Card -->
           <div class="fcj-controls-card">
@@ -130,6 +154,52 @@
         </div>
       </div>
 
+      <!-- Dedicated Level-Selection Screen Overlay -->
+      <div class="fcj-overlay fcj-level-screen fcj-hidden" id="fcj-level-screen" role="dialog" aria-modal="true" aria-labelledby="fcj-level-title">
+        <div class="fcj-modal-card fcj-modal-card-wide">
+          <div class="fcj-badge fcj-badge-cyan">MISSION SELECT</div>
+
+          <h2 class="fcj-title fcj-title-level" id="fcj-level-title">
+            <span class="fcj-title-sub">CYBER FLIGHT</span>
+            <span class="fcj-title-main">SELECT YOUR MISSION</span>
+          </h2>
+
+          <!-- Progress summary & neon meter -->
+          <div class="fcj-progress-container" aria-label="Level progression">
+            <div class="fcj-progress-info">
+              <span class="fcj-progress-label">MISSION STATUS</span>
+              <span class="fcj-progress-count" id="fcj-level-progress-count">0/20 COMPLETED</span>
+            </div>
+            <div class="fcj-progress-bar-bg" role="progressbar" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0" id="fcj-progress-bar">
+              <div class="fcj-progress-bar-fill" id="fcj-progress-bar-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Exactly 20 Level Tiles Grid -->
+          <div class="fcj-level-grid" id="fcj-level-grid" role="group" aria-label="Mission levels 1 through 20">
+            <!-- Dynamically populated with 20 tiles -->
+          </div>
+
+          <!-- Selected mission details banner -->
+          <div class="fcj-selected-info-banner" id="fcj-selected-info-banner">
+            <span class="fcj-selected-mission-name" id="fcj-selected-name">LEVEL 01: NEON ALLEY</span>
+            <span class="fcj-selected-mission-meta" id="fcj-selected-meta">TARGET: 5 PYLONS • BEST: 0</span>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="fcj-btn-group fcj-btn-group-row">
+            <button id="fcj-btn-level-launch" class="fcj-btn fcj-btn-primary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="play"></i></span>
+              <span class="fcj-btn-text" id="fcj-level-launch-text">START MISSION 01</span>
+            </button>
+            <button id="fcj-btn-level-back" class="fcj-btn fcj-btn-secondary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="arrow-left"></i></span>
+              <span class="fcj-btn-text">BACK</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Pause Screen Overlay -->
       <div class="fcj-overlay fcj-pause-screen fcj-hidden" id="fcj-pause-screen" role="dialog" aria-modal="true" aria-labelledby="fcj-pause-title">
         <div class="fcj-modal-card">
@@ -143,8 +213,8 @@
               <span class="fcj-stat-num" id="fcj-pause-score">0</span>
             </div>
             <div class="fcj-stat-chip">
-              <span class="fcj-stat-label">BEST</span>
-              <span class="fcj-stat-num" id="fcj-pause-best">0</span>
+              <span class="fcj-stat-label">MISSION GOAL</span>
+              <span class="fcj-stat-num" id="fcj-pause-goal">5</span>
             </div>
           </div>
 
@@ -155,7 +225,85 @@
             </button>
             <button id="fcj-btn-pause-restart" class="fcj-btn fcj-btn-secondary" type="button">
               <span class="fcj-btn-icon"><i data-lucide="rotate-ccw"></i></span>
-              <span class="fcj-btn-text">RESTART</span>
+              <span class="fcj-btn-text">RESTART MISSION</span>
+            </button>
+            <button id="fcj-btn-pause-levels" class="fcj-btn fcj-btn-secondary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="grid"></i></span>
+              <span class="fcj-btn-text">SELECT MISSION</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Level Complete Screen Overlay -->
+      <div class="fcj-overlay fcj-complete-screen fcj-hidden" id="fcj-complete-screen" role="dialog" aria-modal="true" aria-labelledby="fcj-complete-title">
+        <div class="fcj-modal-card">
+          <div class="fcj-badge fcj-badge-cyan">MISSION ACCOMPLISHED</div>
+          <h2 class="fcj-title fcj-title-complete" id="fcj-complete-title">LEVEL 01 COMPLETE</h2>
+          <p class="fcj-tagline" id="fcj-complete-tagline">Airspace cleared. Next waypoint unlocked.</p>
+
+          <div class="fcj-gameover-scores">
+            <div class="fcj-gameover-score-card">
+              <span class="fcj-score-card-label">SCORE EARNED</span>
+              <span class="fcj-score-card-val" id="fcj-complete-score">0</span>
+            </div>
+            <div class="fcj-gameover-score-card fcj-card-highlight">
+              <span class="fcj-score-card-label">LEVEL BEST</span>
+              <span class="fcj-score-card-val" id="fcj-complete-best">0</span>
+            </div>
+          </div>
+
+          <div class="fcj-btn-group">
+            <button id="fcj-btn-complete-next" class="fcj-btn fcj-btn-primary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="fast-forward"></i></span>
+              <span class="fcj-btn-text">NEXT LEVEL</span>
+            </button>
+            <button id="fcj-btn-complete-replay" class="fcj-btn fcj-btn-secondary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="rotate-ccw"></i></span>
+              <span class="fcj-btn-text">REPLAY LEVEL</span>
+            </button>
+            <button id="fcj-btn-complete-levels" class="fcj-btn fcj-btn-secondary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="grid"></i></span>
+              <span class="fcj-btn-text">LEVEL SELECTION</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Level 20 Final Victory Screen Overlay -->
+      <div class="fcj-overlay fcj-victory-screen fcj-hidden" id="fcj-victory-screen" role="dialog" aria-modal="true" aria-labelledby="fcj-victory-title">
+        <div class="fcj-modal-card">
+          <div class="fcj-badge fcj-badge-amber"><i data-lucide="award"></i> CYBER FLIGHT OMEGA</div>
+          <h2 class="fcj-title fcj-title-victory" id="fcj-victory-title">CYBER FLIGHT COMPLETE</h2>
+          <p class="fcj-tagline">All 20 sectors conquered. You are the Ultimate Cyber Pilot!</p>
+
+          <div class="fcj-victory-trophy" aria-hidden="true">
+            <i data-lucide="trophy"></i>
+          </div>
+
+          <div class="fcj-gameover-scores">
+            <div class="fcj-gameover-score-card fcj-card-highlight">
+              <span class="fcj-score-card-label">MISSIONS CLEARED</span>
+              <span class="fcj-score-card-val">20 / 20</span>
+            </div>
+            <div class="fcj-gameover-score-card">
+              <span class="fcj-score-card-label">FINAL SCORE</span>
+              <span class="fcj-score-card-val" id="fcj-victory-score">0</span>
+            </div>
+          </div>
+
+          <div class="fcj-btn-group">
+            <button id="fcj-btn-victory-replay" class="fcj-btn fcj-btn-primary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="rotate-ccw"></i></span>
+              <span class="fcj-btn-text">REPLAY LEVEL 20</span>
+            </button>
+            <button id="fcj-btn-victory-levels" class="fcj-btn fcj-btn-secondary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="grid"></i></span>
+              <span class="fcj-btn-text">MISSION SELECTION</span>
+            </button>
+            <button id="fcj-btn-victory-menu" class="fcj-btn fcj-btn-secondary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="home"></i></span>
+              <span class="fcj-btn-text">MAIN MENU</span>
             </button>
           </div>
         </div>
@@ -179,15 +327,19 @@
               <span class="fcj-score-card-val" id="fcj-gameover-score">0</span>
             </div>
             <div class="fcj-gameover-score-card fcj-card-highlight">
-              <span class="fcj-score-card-label">ALL-TIME BEST</span>
-              <span class="fcj-score-card-val" id="fcj-gameover-best">0</span>
+              <span class="fcj-score-card-label">MISSION GOAL</span>
+              <span class="fcj-score-card-val" id="fcj-gameover-goal">5</span>
             </div>
           </div>
 
           <div class="fcj-btn-group">
             <button id="fcj-btn-restart" class="fcj-btn fcj-btn-primary" type="button">
               <span class="fcj-btn-icon"><i data-lucide="rotate-ccw"></i></span>
-              <span class="fcj-btn-text">PLAY AGAIN</span>
+              <span class="fcj-btn-text">RETRY LEVEL</span>
+            </button>
+            <button id="fcj-btn-gameover-levels" class="fcj-btn fcj-btn-secondary" type="button">
+              <span class="fcj-btn-icon"><i data-lucide="grid"></i></span>
+              <span class="fcj-btn-text">SELECT MISSION</span>
             </button>
             <button id="fcj-btn-menu" class="fcj-btn fcj-btn-secondary" type="button">
               <span class="fcj-btn-icon"><i data-lucide="home"></i></span>

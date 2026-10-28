@@ -114,6 +114,22 @@ h1 {
   color: #ff648d;
   font-size: 0.95rem;
   letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.heart-icon {
+  display: inline-block;
+  vertical-align: middle;
+  color: #ff648d;
+  filter: drop-shadow(0 0 6px rgba(255, 100, 141, 0.6));
+}
+
+.heart-icon.empty {
+  opacity: 0.25;
+  color: #92a5c4;
+  filter: none;
 }
 
 .canvas-wrap {

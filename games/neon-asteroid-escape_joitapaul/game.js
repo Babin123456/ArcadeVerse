@@ -345,7 +345,7 @@ function drawPowerUp(powerUp) {
 
 function updateHud() {
   scoreElement.textContent = String(Math.floor(score));
-  livesElement.textContent = `${"♥ ".repeat(Math.max(0, lives)).trim()}${lives < 3 ? " ·".repeat(3 - lives) : ""}`;
+  livesElement.innerHTML = renderLives(Math.max(0, lives));
   livesElement.setAttribute("aria-label", `${lives} ${lives === 1 ? "life" : "lives"} remaining`);
   powerUpElement.textContent = activePowerUp
     ? `${activePowerUp === "shield" ? "Shield" : "Speed"} ${Math.ceil(powerUpTime)}s`

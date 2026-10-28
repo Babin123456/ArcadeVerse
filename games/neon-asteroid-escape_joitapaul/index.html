@@ -6,6 +6,10 @@
   <meta name="theme-color" content="#080d1c">
   <title>Neon Asteroid Escape | ArcadeVerse</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/public/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
 </head>
 <body>
   <main class="game-shell">
@@ -25,7 +29,11 @@
         </div>
         <div class="stat">
           <span class="stat-label">ENERGY</span>
-          <strong id="lives" aria-label="3 lives remaining">♥ ♥ ♥</strong>
+          <strong id="lives" aria-label="3 lives remaining">
+            <svg class="heart-icon active" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <svg class="heart-icon active" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <svg class="heart-icon active" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </strong>
         </div>
         <div class="stat">
           <span class="stat-label">BEST</span>
@@ -38,7 +46,7 @@
       </div>
 
       <div class="canvas-wrap">
-        <canvas id="game-canvas" width="800" height="500" aria-label="Game field. Use arrow keys or WASD to move the ship and avoid asteroids.">
+        <canvas id="game-canvas" width="800" height="500" role="img" aria-label="Game field. Use arrow keys or WASD to move the ship and avoid asteroids." tabindex="0">
           Your browser does not support the HTML canvas element.
         </canvas>
         <div class="game-overlay" id="game-overlay">
