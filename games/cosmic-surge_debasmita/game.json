@@ -1,19 +1,19 @@
 {
-  "title": "Cosmic Surge: Quantum Leap",
+  "title": "Cosmic Surge: Galaxy Defender",
   "category": "Arcade",
   "lucideIcon": "zap",
-  "description": "Navigate a pulsating energy core through rotating hazard rings, collect quantum flux orbs, and execute precision warp surges.",
+  "description": "Pilot a neon starfighter through cosmic asteroid belts, blast rogue drone fleets, collect quantum energy cores, and deploy EMP nova blasts.",
   "author": "Debasmita Bose",
   "github": "DebasmitaBose0",
   "role": "Project Admin & Lead (NSOC '26)",
   "tags": [
     "Arcade",
     "Action",
-    "Neon",
-    "Reflex",
+    "Space",
+    "Shooter",
     "NSOC26"
   ],
-  "stars": 38,
+  "stars": 45,
   "featured": true,
   "difficulty": "Intermediate",
   "releaseDate": "2026-10-28"

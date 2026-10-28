@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cosmic Surge: Quantum Leap | ArcadeVerse</title>
+  <title>Cosmic Surge: Galaxy Defender | ArcadeVerse</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Favicon and Brand Icons -->
@@ -12,99 +12,201 @@
   <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
 </head>
 <body>
-  <div class="game-container">
+  <div class="game-root">
+    <!-- Header -->
     <header class="game-header">
-      <div class="header-left">
+      <div class="title-wrap">
         <h1 class="game-title">
           <i data-lucide="zap"></i> Cosmic Surge
         </h1>
-        <span class="author-badge">Created by @DebasmitaBose0</span>
+        <span class="author-tag">Created by @DebasmitaBose0</span>
       </div>
-      <div class="header-actions">
-        <button id="btn-sound" class="btn-icon" aria-label="Toggle Sound" title="Toggle Sound">
+      <div class="header-btns">
+        <button id="btn-sound" class="icon-btn" aria-label="Toggle Sound" title="Toggle Sound">
           <i data-lucide="volume-2" id="sound-icon"></i>
         </button>
-        <button id="btn-help" class="btn-icon" aria-label="How to Play" title="How to Play">
+        <button id="btn-howtoplay" class="icon-btn" aria-label="How to Play" title="How to Play / Manual">
           <i data-lucide="help-circle"></i>
         </button>
       </div>
     </header>
 
-    <div class="hud-panel" role="region" aria-label="Game HUD">
-      <div class="hud-item">
-        <span class="hud-label">Score</span>
-        <span class="hud-value highlight" id="score-display">0</span>
+    <!-- In-Game HUD -->
+    <div class="hud-bar" role="region" aria-label="Flight Telemetry">
+      <div class="hud-group">
+        <span class="hud-caption">Score</span>
+        <span class="hud-val cyan" id="hud-score">0</span>
       </div>
-      <div class="hud-item">
-        <span class="hud-label">Multiplier</span>
-        <span class="hud-value" id="multiplier-display">1x</span>
+      <div class="hud-group">
+        <span class="hud-caption">Wave</span>
+        <span class="hud-val" id="hud-wave">1</span>
       </div>
-      <div class="hud-item">
-        <span class="hud-label">Best</span>
-        <span class="hud-value" id="best-display">0</span>
+      <div class="hud-group">
+        <span class="hud-caption">Shields</span>
+        <div class="shields-container" id="shields-wrap">
+          <i data-lucide="shield" class="shield-unit" id="shield-1"></i>
+          <i data-lucide="shield" class="shield-unit" id="shield-2"></i>
+          <i data-lucide="shield" class="shield-unit" id="shield-3"></i>
+        </div>
       </div>
-    </div>
-
-    <div class="canvas-wrapper">
-      <canvas id="gameCanvas" width="600" height="450" tabindex="0" role="img" aria-label="Cosmic Surge arcade arena"></canvas>
-
-      <!-- Start Screen Overlay -->
-      <div id="start-screen" class="overlay-screen">
-        <h2 class="overlay-title">COSMIC SURGE</h2>
-        <p class="overlay-subtitle">
-          Leap between orbital rings, collect quantum flux orbs, and avoid rotating plasma laser gates!
-        </p>
-        <button id="btn-start" class="btn-primary" type="button">
-          <i data-lucide="play"></i> Launch Mission
-        </button>
+      <div class="hud-group">
+        <span class="hud-caption">Nova EMP</span>
+        <div class="bomb-badge">
+          <i data-lucide="bomb" style="width:14px; height:14px;"></i>
+          <span id="hud-bombs">1</span>
+        </div>
       </div>
-
-      <!-- Game Over Overlay -->
-      <div id="gameover-screen" class="overlay-screen hidden">
-        <h2 class="overlay-title" style="color: #f43f5e;">CORE BREACH</h2>
-        <p class="overlay-subtitle">
-          Final Score: <strong id="final-score" style="color:#38bdf8;">0</strong><br>
-          Best Orbit Record: <strong id="final-best">0</strong>
-        </p>
-        <button id="btn-restart" class="btn-primary" type="button">
-          <i data-lucide="rotate-ccw"></i> Try Again
-        </button>
+      <div class="hud-group">
+        <span class="hud-caption">High Score</span>
+        <span class="hud-val amber" id="hud-best">0</span>
       </div>
     </div>
 
-    <p class="instructions-bar">
-      Press <strong>SPACEBAR</strong>, <strong>CLICK</strong>, or <strong>TOUCH</strong> to Surge Leap between rings.
-    </p>
+    <!-- Canvas Viewport -->
+    <div class="viewport">
+      <canvas id="gameCanvas" width="600" height="450" tabindex="0" role="img" aria-label="Cosmic Surge space battlefield"></canvas>
+
+      <!-- Mission Briefing (Start Overlay) -->
+      <div id="start-overlay" class="overlay">
+        <h2 class="overlay-heading">COSMIC SURGE</h2>
+        <p class="overlay-sub">
+          Deep Space Sector 7 is under siege! Pilot your neon starfighter, vaporize rogue asteroid swarms & enemy drones, and survive the cosmic storm.
+        </p>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-box-lbl">Primary Weapon</div>
+            <div class="stat-box-num">Twin Blasters</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-lbl">Superweapon</div>
+            <div class="stat-box-num">EMP Nova Bomb</div>
+          </div>
+        </div>
+        <button id="btn-start" class="btn-cta" type="button">
+          <i data-lucide="play"></i> ENGAGE THRUSTERS
+        </button>
+        <button id="btn-view-manual" class="btn-secondary" type="button">
+          <i data-lucide="book-open"></i> How to Play & Controls
+        </button>
+      </div>
+
+      <!-- Core Breach (Game Over Overlay) -->
+      <div id="gameover-overlay" class="overlay hidden">
+        <h2 class="overlay-heading danger">SHIP DESTROYED</h2>
+        <p class="overlay-sub">Your starfighter sustained critical hull breaches!</p>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-box-lbl">Final Score</div>
+            <div class="stat-box-num" id="over-score">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-lbl">Waves Cleared</div>
+            <div class="stat-box-num" id="over-wave">1</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-lbl">All-Time Best</div>
+            <div class="stat-box-num" id="over-best" style="color:#facc15;">0</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-lbl">Asteroids Smashed</div>
+            <div class="stat-box-num" id="over-kills">0</div>
+          </div>
+        </div>
+        <button id="btn-restart" class="btn-cta" type="button">
+          <i data-lucide="rotate-ccw"></i> DEPLOY REPLACEMENT SHIP
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Controls Reminder -->
+    <div class="quick-controls">
+      <span class="control-pill">
+        <span class="key-kbd">Mouse / Drag</span> or <span class="key-kbd">WASD / Arrows</span> Move
+      </span>
+      <span class="control-pill">
+        <span class="key-kbd">Space / Click</span> Fire
+      </span>
+      <span class="control-pill">
+        <span class="key-kbd">B</span> Nova EMP Bomb
+      </span>
+      <span class="control-pill">
+        <span class="key-kbd">P</span> Pause
+      </span>
+    </div>
   </div>
 
-  <!-- How to Play Modal -->
-  <div id="help-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 id="modal-title" class="modal-title">Flight Manual & Rules</h3>
-        <button id="btn-close-help" class="btn-icon" aria-label="Close modal">
+  <!-- Flight Academy / How to Play Modal Dialog -->
+  <div id="manual-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="manual-title">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="manual-title" class="modal-head-title">
+          <i data-lucide="crosshair"></i> Starfighter Flight Academy
+        </h3>
+        <button id="btn-close-manual" class="icon-btn" aria-label="Close Manual">
           <i data-lucide="x"></i>
         </button>
       </div>
-      <div class="modal-body">
-        <p>Master temporal momentum across pulsating quantum orbits:</p>
-        <ul>
-          <li>
-            <i data-lucide="circle-dot" style="width:16px; height:16px; color:#38bdf8;"></i>
-            <span><strong>Surge Leap:</strong> Press Spacebar, Click, or Tap to switch between Inner and Outer orbits.</span>
-          </li>
-          <li>
-            <i data-lucide="sparkles" style="width:16px; height:16px; color:#facc15;"></i>
-            <span><strong>Flux Orbs:</strong> Absorb glowing yellow orbs to gain +10 points and increase your combo multiplier.</span>
-          </li>
-          <li>
-            <i data-lucide="shield-alert" style="width:16px; height:16px; color:#f43f5e;"></i>
-            <span><strong>Hazard Gates:</strong> Avoid rotating red plasma gates. Timing your leaps is crucial for survival!</span>
-          </li>
-        </ul>
+
+      <div class="rules-list">
+        <div class="rule-item">
+          <div class="rule-icon cyan">
+            <i data-lucide="navigation"></i>
+          </div>
+          <div class="rule-text">
+            <strong>Starship Navigation</strong>
+            Move your mouse or drag your finger anywhere on screen to smoothly steer. You can also use <code>WASD</code> or <code>Arrow Keys</code>.
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-icon amber">
+            <i data-lucide="crosshair"></i>
+          </div>
+          <div class="rule-text">
+            <strong>Laser Cannons & Auto-Fire</strong>
+            Your blasters automatically target forward while moving. Hold <code>Spacebar</code> or click to unleash rapid-fire bursts!
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-icon purple">
+            <i data-lucide="bomb"></i>
+          </div>
+          <div class="rule-text">
+            <strong>Nova EMP Blast (Key B)</strong>
+            Press <code>B</code> (or double-tap screen) to detonate an emergency EMP shockwave that vaporizes all threats on screen.
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-icon rose">
+            <i data-lucide="shield-alert"></i>
+          </div>
+          <div class="rule-text">
+            <strong>Threats: Asteroids & Drone Fleets</strong>
+            Dodge or destroy tumbling asteroids and incoming drone raiders. Crashing into hazards consumes 1 shield charge.
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-icon cyan">
+            <i data-lucide="sparkles"></i>
+          </div>
+          <div class="rule-text">
+            <strong>Quantum Power-Up Drops</strong>
+            Destroyed targets occasionally drop:
+            • <strong>Triple Blaster (Green):</strong> 3-way laser spray<br>
+            • <strong>Shield Repair (Blue):</strong> Restores 1 lost shield<br>
+            • <strong>Nova Core (Purple):</strong> +1 EMP Bomb stock<br>
+            • <strong>Quantum Gem (Gold):</strong> +250 Bonus Points
+          </div>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button id="btn-got-it" class="btn-primary" type="button">Got it</button>
+
+      <div class="modal-foot">
+        <button id="btn-manual-ready" class="btn-cta" type="button">
+          READY FOR COMBAT
+        </button>
       </div>
     </div>
   </div>
