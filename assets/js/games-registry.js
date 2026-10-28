@@ -524,7 +524,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 172,
+    "commits": 173,
     "gamesCount": 2,
     "mechanicsBonus": 2,
     "platformPRs": 2,

@@ -28,8 +28,9 @@ jobs:
       - name: Compile Games Registry & Contributor Stats
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node scripts/validate-games.js
-        node scripts/build-registry.js
+        run: |
+          node scripts/validate-games.js
+          node scripts/build-registry.js
 
       - name: Commit & Push Updated Registry
         run: |
