@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cyber Brick Breaker | Neon Velocity</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="arcade-shell">
+    <!-- Top Navigation & Controls Header -->
+    <header class="game-header">
+      <div class="brand-group">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2"/>
+            <path d="M3 9h18"/>
+            <path d="M3 15h18"/>
+            <path d="M9 3v18"/>
+            <path d="M15 3v18"/>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <h1 class="title">CYBER <span class="highlight">BRICK BREAKER</span></h1>
+          <span class="version-tag">VELOCITY PROTOCOL // 60FPS</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Sound Toggle Button -->
+        <button id="sound-btn" class="icon-btn" title="Toggle Synthesizer Sound (M)" aria-label="Toggle Synthesizer Sound">
+          <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+          </svg>
+          <svg id="sound-icon-off" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <line x1="22" x2="16" y1="9" y2="15"/>
+            <line x1="16" x2="22" y1="9" y2="15"/>
+          </svg>
+        </button>
+
+        <!-- Pause Button -->
+        <button id="pause-btn" class="icon-btn" title="Pause System (P)" aria-label="Pause System">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="4" height="16" x="6" y="4"/>
+            <rect width="4" height="16" x="14" y="4"/>
+          </svg>
+        </button>
+
+        <!-- How to Play / Rules Button -->
+        <button id="rules-btn" class="btn btn-outline" title="View Game Rules & Controls" aria-label="View Game Rules">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" x2="12.01" y1="17" y2="17"/>
+          </svg>
+          <span>HOW TO PLAY</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Real-time HUD Dashboard -->
+    <section class="hud-dashboard" aria-label="Game HUD">
+      <div class="hud-pill">
+        <span class="hud-label">ENERGY MATRIX</span>
+        <span class="hud-value neon-cyan" id="score-display">00000</span>
+      </div>
+
+      <div class="hud-pill">
+        <span class="hud-label">COMBO MULTIPLIER</span>
+        <span class="hud-value neon-magenta" id="combo-display">x1.0</span>
+      </div>
+
+      <div class="hud-pill">
+        <span class="hud-label">SECTOR</span>
+        <span class="hud-value neon-gold" id="level-display">01</span>
+      </div>
+
+      <div class="hud-pill">
+        <span class="hud-label">ENERGY SHIELDS</span>
+        <div class="shield-container" id="shields-display">
+          <span class="shield-unit active">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </span>
+          <span class="shield-unit active">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </span>
+          <span class="shield-unit active">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="hud-pill hide-mobile">
+        <span class="hud-label">HIGH RECORD</span>
+        <span class="hud-value" id="high-score-display">00000</span>
+      </div>
+    </section>
+
+    <!-- Main Game Canvas Container -->
+    <main class="canvas-viewport">
+      <canvas id="game-canvas" width="800" height="540"></canvas>
+
+      <!-- Active Power-Up Notification Banner -->
+      <div id="powerup-badge-container" class="powerup-badge-container"></div>
+
+      <!-- Start Overlay -->
+      <div id="start-overlay" class="overlay active">
+        <div class="overlay-modal">
+          <div class="modal-icon-glow">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+          <h2 class="modal-title">CYBER BRICK BREAKER</h2>
+          <p class="modal-desc">
+            Deflect photon velocity balls through multi-angle paddle physics, shatter quantum armor matrices, and collect plasma blaster upgrades.
+          </p>
+          <div class="modal-actions">
+            <button id="start-btn" class="btn btn-primary pulse-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span>INITIALIZE MISSION</span>
+            </button>
+            <button id="start-rules-btn" class="btn btn-secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                <line x1="12" x2="12.01" y1="17" y2="17"/>
+              </svg>
+              <span>CONTROLS & RULES</span>
+            </button>
+          </div>
+          <div class="controls-hint">
+            <span>Mouse Move / Arrow Keys to steer • Spacebar to launch ball</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pause Overlay -->
+      <div id="pause-overlay" class="overlay">
+        <div class="overlay-modal">
+          <div class="modal-icon-glow pause-glow">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="4" height="16" x="6" y="4"/>
+              <rect width="4" height="16" x="14" y="4"/>
+            </svg>
+          </div>
+          <h2 class="modal-title">SYSTEM PAUSED</h2>
+          <p class="modal-desc">Mission suspended. Ready to resume cybernetic deflection loop.</p>
+          <div class="modal-actions">
+            <button id="resume-btn" class="btn btn-primary">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span>RESUME GAME</span>
+            </button>
+            <button id="restart-from-pause-btn" class="btn btn-secondary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+                <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                <path d="M16 21h5v-5"/>
+              </svg>
+              <span>RESTART SECTOR</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Over Overlay -->
+      <div id="gameover-overlay" class="overlay">
+        <div class="overlay-modal">
+          <div class="modal-icon-glow danger-glow">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+              <line x1="12" x2="12" y1="9" y2="13"/>
+              <line x1="12" x2="12.01" y1="17" y2="17"/>
+            </svg>
+          </div>
+          <h2 class="modal-title neon-crimson">MATRIX COLLAPSED</h2>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <span class="stat-label">FINAL SCORE</span>
+              <span class="stat-number neon-cyan" id="final-score">0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">MAX COMBO</span>
+              <span class="stat-number neon-magenta" id="final-combo">x1.0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">BRICKS CLEARED</span>
+              <span class="stat-number neon-gold" id="final-bricks">0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">SECTOR REACHED</span>
+              <span class="stat-number" id="final-sector">01</span>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button id="retry-btn" class="btn btn-primary pulse-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+                <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                <path d="M16 21h5v-5"/>
+              </svg>
+              <span>REBOOT MISSION</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Victory / Sector Clear Overlay -->
+      <div id="victory-overlay" class="overlay">
+        <div class="overlay-modal">
+          <div class="modal-icon-glow victory-glow">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/>
+              <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+            </svg>
+          </div>
+          <h2 class="modal-title neon-green">SECTOR SECURED!</h2>
+          <p class="modal-desc">All quantum barriers penetrated! Shield integrity bonus applied.</p>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <span class="stat-label">CURRENT SCORE</span>
+              <span class="stat-number neon-cyan" id="victory-score">0</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">SHIELD BONUS</span>
+              <span class="stat-number neon-green" id="victory-bonus">+1500</span>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button id="next-level-btn" class="btn btn-primary pulse-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              <span>ENGAGE NEXT SECTOR</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Mobile Touch Control Zone -->
+    <div class="touch-control-bar" id="touch-controls">
+      <button class="touch-btn" id="touch-left" aria-label="Steer Paddle Left">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+      </button>
+      <button class="touch-btn touch-action-btn" id="touch-launch" aria-label="Launch Ball or Fire Lasers">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 19 7-7 3 3-7 7-3-3z"/>
+          <path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
+          <path d="m2 2 7.586 7.586"/>
+          <circle cx="11" cy="11" r="2"/>
+        </svg>
+        <span>LAUNCH / FIRE</span>
+      </button>
+      <button class="touch-btn" id="touch-right" aria-label="Steer Paddle Right">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- MANDATORY IN-GAME RULES & GUIDELINES MODAL -->
+    <div id="rules-modal" class="modal-backdrop">
+      <div class="rules-modal-container">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+            <h2>HOW TO PLAY & MISSION GUIDELINES</h2>
+          </div>
+          <button id="close-rules-btn" class="close-btn" aria-label="Close Rules Modal">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="rules-modal-content">
+          <!-- Section 1: Objective -->
+          <div class="rules-section">
+            <h3 class="section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 14 14"/>
+              </svg>
+              Mission Objective
+            </h3>
+            <p>
+              Clear every quantum brick matrix before your Energy Shields are depleted. Keep photon balls alive and use dynamic paddle curvature angles to target high-value reinforced clusters.
+            </p>
+          </div>
+
+          <!-- Section 2: Controls -->
+          <div class="rules-section">
+            <h3 class="section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                <path d="M6 8h.01"/>
+                <path d="M10 8h.01"/>
+                <path d="M14 8h.01"/>
+                <path d="M18 8h.01"/>
+                <path d="M8 12h.01"/>
+                <path d="M12 12h.01"/>
+                <path d="M16 12h.01"/>
+                <path d="M7 16h10"/>
+              </svg>
+              Tactical Controls
+            </h3>
+            <div class="controls-grid">
+              <div class="control-card">
+                <div class="key-badge">MOUSE / TOUCH</div>
+                <div class="control-desc">Move cursor or drag on canvas for 1:1 paddle tracking</div>
+              </div>
+              <div class="control-card">
+                <div class="key-badge">ARROWS / A & D</div>
+                <div class="control-desc">Steer paddle left or right with precision velocity</div>
+              </div>
+              <div class="control-card">
+                <div class="key-badge">SPACEBAR</div>
+                <div class="control-desc">Launch photon ball or fire mounted plasma cannons</div>
+              </div>
+              <div class="control-card">
+                <div class="key-badge">P / ESC</div>
+                <div class="control-desc">Pause / Resume active game loop</div>
+              </div>
+              <div class="control-card">
+                <div class="key-badge">M</div>
+                <div class="control-desc">Mute / Unmute procedural Web Audio synthesizer</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Multi-Angle Physics -->
+          <div class="rules-section">
+            <h3 class="section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/>
+              </svg>
+              Multi-Angle Deflection Physics
+            </h3>
+            <p>
+              The ball's rebound trajectory depends strictly on where it strikes your energy paddle:
+            </p>
+            <ul class="physics-list">
+              <li><strong>Center Zone:</strong> Clean vertical bounce for steady control.</li>
+              <li><strong>Mid-Curvature:</strong> 45° angled deflection ideal for penetrating inner brick columns.</li>
+              <li><strong>Outer Edges:</strong> Steep 72° rapid angle with speed boost for blitzing top corners!</li>
+            </ul>
+          </div>
+
+          <!-- Section 4: Brick Matrix Hierarchy -->
+          <div class="rules-section">
+            <h3 class="section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="18" height="18" x="3" y="3" rx="2"/>
+                <path d="M3 9h18"/>
+                <path d="M3 15h18"/>
+              </svg>
+              Quantum Brick Types & Scores
+            </h3>
+            <div class="brick-types-grid">
+              <div class="brick-info-card">
+                <span class="brick-swatch cyan-swatch"></span>
+                <div class="brick-text">
+                  <strong>Standard Vector: 1 Hit</strong>
+                  <span>+100 base points • Smooth shatter</span>
+                </div>
+              </div>
+              <div class="brick-info-card">
+                <span class="brick-swatch magenta-swatch"></span>
+                <div class="brick-text">
+                  <strong>Armored Barrier: 2 Hits</strong>
+                  <span>+250 points • Shows visual impact fracture</span>
+                </div>
+              </div>
+              <div class="brick-info-card">
+                <span class="brick-swatch gold-swatch"></span>
+                <div class="brick-text">
+                  <strong>Reinforced Core: 3 Hits</strong>
+                  <span>+450 points • High resilience cyber titanium</span>
+                </div>
+              </div>
+              <div class="brick-info-card">
+                <span class="brick-swatch crimson-swatch"></span>
+                <div class="brick-text">
+                  <strong>EMP Detonator: 1 Hit</strong>
+                  <span>+500 points • Explodes all adjacent bricks!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 5: Power-Up Upgrades -->
+          <div class="rules-section">
+            <h3 class="section-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+              Tactical Power-Up Upgrades
+            </h3>
+            <div class="powerup-grid">
+              <div class="powerup-card">
+                <span class="powerup-badge laser-bg">LASER</span>
+                <div class="powerup-info">
+                  <strong>Twin Plasma Blasters</strong>
+                  <span>Mounts cannons to your paddle. Press Spacebar to blast bricks directly!</span>
+                </div>
+              </div>
+              <div class="powerup-card">
+                <span class="powerup-badge multi-bg">MULTI</span>
+                <div class="powerup-info">
+                  <strong>Quantum Tri-Ball</strong>
+                  <span>Splits active ball into 3 high-velocity energy spheres.</span>
+                </div>
+              </div>
+              <div class="powerup-card">
+                <span class="powerup-badge expand-bg">WIDE</span>
+                <div class="powerup-info">
+                  <strong>Wide Paddle Shield</strong>
+                  <span>Expands paddle width by 40% for maximum deflection area.</span>
+                </div>
+              </div>
+              <div class="powerup-card">
+                <span class="powerup-badge slow-bg">SLOW</span>
+                <div class="powerup-info">
+                  <strong>Temporal Overdrive</strong>
+                  <span>Slows down ball velocity for pinpoint trajectory control.</span>
+                </div>
+              </div>
+              <div class="powerup-card">
+                <span class="powerup-badge shield-bg">+LIFE</span>
+                <div class="powerup-info">
+                  <strong>Energy Shield Core</strong>
+                  <span>Restores +1 Energy Shield unit to your defense reserve.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="got-it-rules-btn" class="btn btn-primary">
+            <span>UNDERSTOOD // RETURN TO GAME</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
