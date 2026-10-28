@@ -103,8 +103,9 @@ Simply open your project folder in File Explorer and **double-click `index.html`
 3. 🤝 **Adhere to Code of Conduct:** Read our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Plagiarism, toxic comments, broken AI dumps, or rule violations will result in PR rejection and event disqualification.
 4. 🛡️ **Review Security Rules:** Review [SECURITY.md](SECURITY.md) for web security requirements (pure vanilla JS, no external tracker scripts, no dynamic `eval()` execution, and strict DOM safety).
 5. ⏱️ **Submission Timeline:** Submit PRs within **5 days** of issue assignment (issues with 7 days of inactivity will be auto-reassigned).
-6. 📝 **Automated Game Registration:** Include `game.json` metadata in your game folder (`games/<game-name_your-name>/`). Do NOT edit root files or `games-registry.js` — registration is handled automatically by GitHub Actions!
-7. 🎖️ **Earn Contributor Badges:** Unlock official titles on our live [Hall of Fame Leaderboard](leaderboard.html) across both **Games Dedicated** (`Master Game Architect`, `Hyper Game Developer`, `Arcade Developer`, `Arcade Explorer`) and **Platform & Core** (`Master Core Architect`, `Elite Contributor`, `Platform Contributor`, `Active Contributor`) tracks.
+6. 🧪 **Pre-Flight Game Validation:** Run `node scripts/validate-games.js` (or `npm run validate`) locally to verify that your `game.json` schema, required files, and asset references pass automated checks before opening a PR!
+7. 📝 **Automated Game Registration:** Include `game.json` metadata in your game folder (`games/<game-name_your-name>/`). Do NOT edit root files or `games-registry.js` — registration is handled automatically by GitHub Actions!
+8. 🎖️ **Earn Contributor Badges:** Unlock official titles on our live [Hall of Fame Leaderboard](leaderboard.html) across both **Games Dedicated** (`Master Game Architect`, `Hyper Game Developer`, `Arcade Developer`, `Arcade Explorer`) and **Platform & Core** (`Master Core Architect`, `Elite Contributor`, `Platform Contributor`, `Active Contributor`) tracks.
 
 ---
 
