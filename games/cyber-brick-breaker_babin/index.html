@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cyber Brick Breaker | ArcadeVerse</title>
+  <meta name="description" content="Shatter holographic neon brick barriers with precision multi-angle paddle physics, laser power-ups, and particle chain explosions!">
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/public/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="cbb-app">
+    <!-- Header / Brand -->
+    <header class="cbb-header">
+      <div class="cbb-title-group">
+        <a href="../../index.html" class="cbb-back-link" aria-label="Back to ArcadeVerse Catalog">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          ArcadeVerse
+        </a>
+        <h1 class="cbb-title">Cyber <span class="gradient-text">Brick Breaker</span></h1>
+      </div>
+
+      <div class="cbb-header-actions">
+        <button id="btn-sound" class="cbb-btn-icon" type="button" aria-label="Toggle Sound FX" title="Toggle Sound (M)">
+          <svg id="icon-sound-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+          <svg id="icon-sound-off" class="hidden" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="btn-help" class="cbb-btn-pill" type="button">How to Play</button>
+      </div>
+    </header>
+
+    <!-- Scoreboard HUD -->
+    <section class="cbb-hud" aria-label="Game HUD">
+      <div class="cbb-hud-card">
+        <span class="cbb-hud-label">SCORE</span>
+        <strong id="score-display" class="cbb-hud-val">0</strong>
+      </div>
+      <div class="cbb-hud-card">
+        <span class="cbb-hud-label">LIVES</span>
+        <div id="lives-display" class="cbb-lives-row" aria-label="3 lives remaining">
+          <svg class="heart-icon active" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <svg class="heart-icon active" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <svg class="heart-icon active" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+      </div>
+      <div class="cbb-hud-card">
+        <span class="cbb-hud-label">COMBO</span>
+        <strong id="combo-display" class="cbb-hud-val">1x</strong>
+      </div>
+      <div class="cbb-hud-card">
+        <span class="cbb-hud-label">HIGH SCORE</span>
+        <strong id="best-display" class="cbb-hud-val">0</strong>
+      </div>
+    </section>
+
+    <!-- Canvas Frame Container -->
+    <div class="cbb-canvas-container">
+      <canvas id="game-canvas" width="600" height="700" role="img" aria-label="Cyber Brick Breaker game arena. Move paddle with mouse, touch, or Left/Right arrow keys. Press Space to launch ball." tabindex="0"></canvas>
+
+      <!-- Start Overlay -->
+      <div id="start-overlay" class="cbb-overlay active">
+        <div class="cbb-overlay-card">
+          <div class="cbb-badge">NEON ARKANOID PROTOCOL</div>
+          <h2>Ready for Breach?</h2>
+          <p>Deflect the energy sphere to shatter cybernetic barriers. Catch falling power-up matrix capsules to gain multi-ball, laser blasters, and safety forcefields.</p>
+          <button id="btn-start" class="cbb-btn-primary" type="button">Launch Mission</button>
+        </div>
+      </div>
+
+      <!-- Game Over Overlay -->
+      <div id="game-over-overlay" class="cbb-overlay">
+        <div class="cbb-overlay-card danger">
+          <div class="cbb-badge danger">CORE BREACH DETECTED</div>
+          <h2>Game Over</h2>
+          <p>All defensive probes depleted. Final score: <strong id="final-score" class="highlight">0</strong></p>
+          <button id="btn-restart" class="cbb-btn-primary" type="button">Retry Run</button>
+        </div>
+      </div>
+
+      <!-- Victory Overlay -->
+      <div id="victory-overlay" class="cbb-overlay">
+        <div class="cbb-overlay-card victory">
+          <div class="cbb-badge success">SYSTEM RESTORED</div>
+          <h2>Grid Cleared!</h2>
+          <p>Outstanding reflex execution. Final score: <strong id="victory-score" class="highlight">0</strong></p>
+          <button id="btn-next-level" class="cbb-btn-primary" type="button">Play Again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls hint bar -->
+    <footer class="cbb-footer-hints">
+      <span>Controls: <kbd>←</kbd> <kbd>→</kbd> or <kbd>A</kbd> <kbd>D</kbd> or <strong>Mouse / Touch</strong> • <kbd>Space</kbd> Launch / Fire Laser</span>
+    </footer>
+
+    <!-- Instructions Modal Drawer -->
+    <div id="help-modal" class="cbb-modal">
+      <div class="cbb-modal-content">
+        <div class="cbb-modal-header">
+          <h3>How to Play: Cyber Brick Breaker</h3>
+          <button id="btn-close-help" class="cbb-btn-close" aria-label="Close Instructions">&times;</button>
+        </div>
+        <div class="cbb-modal-body">
+          <p><strong>Objective:</strong> Clear all colored brick barriers using your energy paddle to bounce the ball without letting it drop below the baseline.</p>
+          <ul>
+            <li><strong>Cyan Bricks (1 Hit):</strong> Standard data cells (10 pts).</li>
+            <li><strong>Magenta Bricks (2 Hits):</strong> Reinforced firewall nodes (25 pts).</li>
+            <li><strong>Gold Bricks (3 Hits):</strong> Armored quantum mainframe cores (50 pts).</li>
+            <li><strong>Explosive Red Bricks:</strong> Detonates all adjacent blocks in a chain explosion!</li>
+          </ul>
+          <h4>Power-Up Capsules:</h4>
+          <ul>
+            <li><strong>⚡ Multi-Ball:</strong> Spawns duplicate energy spheres.</li>
+            <li><strong>🔫 Laser Cannon:</strong> Equips paddle with blasters (Press Space).</li>
+            <li><strong>🛡️ Safety Forcefield:</strong> Deploys a bottom barrier preventing 1 ball loss.</li>
+            <li><strong>↔️ Extended Paddle:</strong> Expands deflection surface width.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
