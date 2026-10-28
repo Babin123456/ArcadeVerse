@@ -60,7 +60,12 @@
   let wave = 1;
   let lives = 3;
   let kills = 0;
-  let hiScore = parseInt(localStorage.getItem("arcadeverse_space_invaders_hi") || "0", 10);
+  let hiScore = 0;
+  try {
+    hiScore = parseInt(localStorage.getItem("arcadeverse_space_invaders_hi") || "0", 10) || 0;
+  } catch (e) {
+    hiScore = 0;
+  }
   let animId = null;
 
   hiScoreDisplay.textContent = String(hiScore).padStart(4, "0");
@@ -193,12 +198,15 @@
   function updateHUD() {
     scoreDisplay.textContent = String(score).padStart(4, "0");
     waveDisplay.textContent = wave;
-    livesDisplay.innerHTML = Array(lives).fill('<span class="life-icon">🚀</span>').join("");
+    const shipSvg = '<svg class="life-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 19 21 12 17 5 21 12 2"/></svg>';
+    livesDisplay.innerHTML = Array(lives).fill(shipSvg).join("");
 
     if (score > hiScore) {
       hiScore = score;
       hiScoreDisplay.textContent = String(hiScore).padStart(4, "0");
-      localStorage.setItem("arcadeverse_space_invaders_hi", hiScore);
+      try {
+        localStorage.setItem("arcadeverse_space_invaders_hi", hiScore);
+      } catch (e) {}
     }
   }
 
@@ -252,10 +260,10 @@
 
     if (won) {
       gameoverTitle.textContent = "Galaxy Liberated!";
-      gameoverIcon.textContent = "🏆";
+      gameoverIcon.innerHTML = `<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>`;
     } else {
       gameoverTitle.textContent = "Defense Pierced";
-      gameoverIcon.textContent = "💥";
+      gameoverIcon.innerHTML = `<svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--accent-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
     }
 
     setTimeout(() => {
@@ -535,8 +543,10 @@
   // Keyboard Event Handlers
   window.addEventListener("keydown", (e) => {
     if (e.code === "ArrowLeft" || e.code === "KeyA") {
+      e.preventDefault();
       player.isMovingLeft = true;
     } else if (e.code === "ArrowRight" || e.code === "KeyD") {
+      e.preventDefault();
       player.isMovingRight = true;
     } else if (e.code === "Space") {
       e.preventDefault();

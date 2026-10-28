@@ -8,6 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/public/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
 </head>
 <body>
   <div class="game-container">
@@ -38,33 +42,37 @@
 
     <!-- Rhythm Canvas Stage -->
     <div class="stage-wrapper">
-      <canvas id="rhythm-canvas" width="360" height="520"></canvas>
+      <canvas id="rhythm-canvas" width="360" height="520" role="img" aria-label="Neon Beat Runner rhythm track canvas" tabindex="0"></canvas>
 
       <!-- Hit Feedback Banner -->
-      <div class="feedback-banner" id="feedback-banner">READY</div>
+      <div class="feedback-banner" id="feedback-banner" role="status" aria-live="polite">READY</div>
 
       <!-- Start Overlay -->
-      <div id="start-overlay" class="overlay active">
+      <div id="start-overlay" class="overlay active" role="dialog" aria-modal="true" aria-labelledby="start-title">
         <div class="overlay-card">
-          <div class="overlay-icon">🎵</div>
-          <h2>Neon Beat Runner</h2>
+          <div class="overlay-icon" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <h2 id="start-title">Neon Beat Runner</h2>
           <p>Sync your keypresses to descending neon pulses with millisecond precision to build combo streaks!</p>
-          <button id="start-btn" class="btn btn-primary">Start Track</button>
+          <button id="start-btn" class="btn btn-primary" aria-label="Start Track">Start Track</button>
           <span class="hint-text">Keys: <strong>D • F • J • K</strong></span>
         </div>
       </div>
 
       <!-- Game Over Overlay -->
-      <div id="gameover-overlay" class="overlay">
+      <div id="gameover-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="gameover-title">
         <div class="overlay-card">
-          <div class="overlay-icon">🎧</div>
-          <h2>Track Completed!</h2>
+          <div class="overlay-icon" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+          </div>
+          <h2 id="gameover-title">Track Completed!</h2>
           <div class="stats-recap">
             <div class="recap-row"><span>Final Score:</span><strong id="final-score">0</strong></div>
             <div class="recap-row"><span>Max Combo:</span><strong id="final-combo">0x</strong></div>
             <div class="recap-row"><span>Perfect Hits:</span><strong id="final-perfects">0</strong></div>
           </div>
-          <button id="restart-btn" class="btn btn-primary">Replay Track</button>
+          <button id="restart-btn" class="btn btn-primary" aria-label="Replay Track">Replay Track</button>
         </div>
       </div>
     </div>
@@ -78,11 +86,11 @@
     </div>
 
     <!-- Rules Modal for PA Review -->
-    <div id="rules-modal" class="modal">
+    <div id="rules-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="rules-title">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>How to Play (PA Review)</h3>
-          <button id="close-rules-btn" class="close-btn">&times;</button>
+          <h3 id="rules-title">How to Play</h3>
+          <button id="close-rules-btn" class="close-btn" aria-label="Close rules dialog">&times;</button>
         </div>
         <div class="modal-body">
           <ul class="rules-list">
@@ -97,9 +105,9 @@
             </li>
             <li><strong>Hit Ratings:</strong>
               <ul>
-                <li>✨ <strong>PERFECT:</strong> Exact line alignment (+100 pts, builds multiplier)</li>
-                <li>👍 <strong>GOOD:</strong> Close proximity (+50 pts)</li>
-                <li>❌ <strong>MISS:</strong> Pulse passes the target line (combo reset)</li>
+                <li><span class="hit-indicator hit-perfect" aria-hidden="true">PERFECT</span> Exact line alignment (+100 pts, builds multiplier)</li>
+                <li><span class="hit-indicator hit-good" aria-hidden="true">GOOD</span> Close proximity (+50 pts)</li>
+                <li><span class="hit-indicator hit-miss" aria-hidden="true">MISS</span> Pulse passes the target line (combo reset)</li>
               </ul>
             </li>
             <li><strong>Audio Engine:</strong> Native Web Audio synthesizer generates percussion beats and chime feedback.</li>

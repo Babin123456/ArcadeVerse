@@ -51,14 +51,23 @@
       border: 2px solid #38bdf8;
       border-radius: 12px;
       box-shadow: 0 0 24px rgba(56, 189, 248, 0.2);
+      max-width: 100%;
+      height: auto;
+      touch-action: none;
     }
     .instructions {
       margin-top: 12px;
       font-size: 0.85rem;
-      color: #64748b;
+      color: #94a3b8;
+      text-align: center;
+      padding: 0 1rem;
     }
   </style>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/public/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
 </head>
 <body>
   <div class="game-header">
@@ -68,14 +77,14 @@
     <div class="author-badge">Created by @DebasmitaBose0</div>
   </div>
 
-  <div class="score-board">
+  <div class="score-board" role="status" aria-live="polite">
     <span>Player: <strong id="player-score" style="color:#38bdf8;">0</strong></span>
     <span>AI: <strong id="ai-score" style="color:#f43f5e;">0</strong></span>
   </div>
 
-  <canvas id="pongCanvas" width="600" height="380"></canvas>
+  <canvas id="pongCanvas" width="600" height="380" role="img" aria-label="Cyber Neon Pong interactive court" tabindex="0"></canvas>
 
-  <p class="instructions">Control your paddle using your <strong>Mouse</strong> (move up & down)</p>
+  <p class="instructions">Control paddle using <strong>Mouse / Touch</strong> or <strong>Arrow Keys / W & S</strong></p>
 
   <script src="game.js"></script>
   <script>

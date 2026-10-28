@@ -11,7 +11,7 @@ const winOverlay = document.getElementById("win-overlay");
 const winSummary = document.getElementById("win-summary");
 const playAgainBtn = document.getElementById("play-again-btn");
 
-const glyphIcons = ["⚡", "💎", "🛸", "👾", "🔮", "🧬", "🔥", "🪐"];
+const glyphIcons = ["zap", "gem", "rocket", "bot", "sparkles", "dna", "flame", "globe"];
 let cardsArray = [];
 let flippedCards = [];
 let matchedPairs = 0;
@@ -55,13 +55,23 @@ function renderBoard() {
     card.classList.add("card");
     card.dataset.glyph = glyph;
     card.dataset.index = index;
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-label", `Memory Card ${index + 1}`);
 
     card.innerHTML = `
       <div class="card-face card-front"><i data-lucide="atom"></i></div>
-      <div class="card-face card-back">${glyph}</div>
+      <div class="card-face card-back"><i data-lucide="${glyph}"></i></div>
     `;
 
     card.addEventListener("click", () => handleCardClick(card));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleCardClick(card);
+      }
+    });
+
     matrixGrid.appendChild(card);
   });
   if (window.lucide) {

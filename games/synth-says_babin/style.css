@@ -131,6 +131,19 @@ body {
   transform: scale(0.97);
 }
 
+.pad:focus-visible {
+  outline: 3px solid var(--accent-cyan);
+  outline-offset: -3px;
+  z-index: 5;
+}
+
+button:focus-visible,
+.btn:focus-visible,
+.hub-btn:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
 .key-hint {
   position: absolute;
   font-size: 0.7rem;

@@ -6,6 +6,10 @@
   <meta name="theme-color" content="#080b14">
   <title>Quantum Pinball: Reactor Run | ArcadeVerse</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/public/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
 </head>
 <body>
   <main class="game-shell">
@@ -45,9 +49,13 @@
       </div>
 
       <div class="control-row">
-        <button class="flipper-button" id="left-flipper" type="button" aria-label="Hold left flipper">◀ Left</button>
+        <button class="flipper-button" id="left-flipper" type="button" aria-label="Hold left flipper">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align: middle; margin-right: 4px;"><polyline points="15 18 9 12 15 6"></polyline></svg> Left Flipper
+        </button>
         <p class="keyboard-hint"><kbd>←</kbd> / <kbd>A</kbd> left <span>·</span> <kbd>D</kbd> / <kbd>→</kbd> right</p>
-        <button class="flipper-button" id="right-flipper" type="button" aria-label="Hold right flipper">Right ▶</button>
+        <button class="flipper-button" id="right-flipper" type="button" aria-label="Hold right flipper">
+          Right Flipper <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align: middle; margin-left: 4px;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
       </div>
       <div class="launch-row">
         <span class="hint">Press Space or tap to launch</span>

@@ -179,6 +179,33 @@ body {
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
 }
 
+.radar-cell:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 1px;
+  z-index: 2;
+}
+
+.sonar-btn:focus-visible,
+button:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+.cell-icon-svg {
+  display: block;
+}
+
+.radar-cell.hit .cell-icon-svg {
+  color: var(--color-hit);
+  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.8));
+}
+
+.radar-cell.miss .cell-icon-svg {
+  color: var(--color-miss);
+  opacity: 0.85;
+}
+
 .battle-log {
   height: 65px;
   background: rgba(0, 0, 0, 0.4);

@@ -288,3 +288,20 @@ kbd {
   border-radius: 4px;
   font-family: monospace;
 }
+
+.bit-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+.bit-cyan {
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan);
+}
+.bit-gold {
+  background: #facc15;
+  box-shadow: 0 0 8px #facc15;
+}

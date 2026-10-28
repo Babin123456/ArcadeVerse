@@ -18,12 +18,37 @@ let ballRadius = 8;
 let ballSpeedX = 4;
 let ballSpeedY = 3;
 
-canvas.addEventListener("mousemove", (e) => {
-  const rect = canvas.getBoundingClientRect();
-  const mouseY = e.clientY - rect.top;
-  playerY = mouseY - paddleHeight / 2;
+function setPlayerY(targetY) {
+  playerY = targetY;
   if (playerY < 0) playerY = 0;
   if (playerY > canvas.height - paddleHeight) playerY = canvas.height - paddleHeight;
+}
+
+canvas.addEventListener("mousemove", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const scaleY = canvas.height / (rect.height || canvas.height);
+  const mouseY = (e.clientY - rect.top) * scaleY;
+  setPlayerY(mouseY - paddleHeight / 2);
+});
+
+canvas.addEventListener("touchmove", (e) => {
+  if (e.touches && e.touches[0]) {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const scaleY = canvas.height / (rect.height || canvas.height);
+    const touchY = (e.touches[0].clientY - rect.top) * scaleY;
+    setPlayerY(touchY - paddleHeight / 2);
+  }
+}, { passive: false });
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") {
+    e.preventDefault();
+    setPlayerY(playerY - 24);
+  } else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") {
+    e.preventDefault();
+    setPlayerY(playerY + 24);
+  }
 });
 
 function resetBall() {
