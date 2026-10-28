@@ -257,31 +257,42 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleFavorite(game.id);
       });
 
-      const cardTrophyBtn = card.querySelector(".btn-card-trophy");
-      if (cardTrophyBtn) {
-        cardTrophyBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-        });
-      }
-
       const playBtn = card.querySelector(".btn-play-trigger");
       playBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         openGameModal(game, playBtn);
       });
 
-      // Prevent game launch modal when clicking rating stars or interactive controls
+      // Direct star rating click binding - 100% reliable, never triggers game modal
+      const starBtns = card.querySelectorAll(".rate-star-btn");
+      starBtns.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const gameId = btn.dataset.game;
+          const score = parseInt(btn.dataset.star, 10);
+          if (window.GameRatings && gameId && score) {
+            window.GameRatings.setGameRating(gameId, score);
+            window.GameRatings.updateStarUI(gameId, score);
+          }
+        });
+      });
+
+      // Clicking any empty area of the rating row also stops modal launch
+      const ratingRow = card.querySelector(".game-card-rating-row");
+      if (ratingRow) {
+        ratingRow.addEventListener("click", (e) => {
+          e.stopPropagation();
+        });
+      }
+
+      // Card click opens game modal EXCEPT when clicking favorite or rating elements
       card.addEventListener("click", (e) => {
-        if (e.target.closest(".rate-star-btn, .game-rating-stars, .btn-card-favorite")) {
+        if (e.target.closest(".rate-star-btn, .game-rating-stars, .game-card-rating-row, .btn-card-favorite")) {
           return;
         }
         openGameModal(game, card);
       });
-
-      const ratingWidget = card.querySelector(".game-rating-stars");
-      if (ratingWidget) {
-        ratingWidget.addEventListener("click", (e) => e.stopPropagation());
-      }
       gamesGrid.appendChild(card);
     });
 

@@ -263,28 +263,18 @@ textarea:focus-visible,
   position: sticky;
   top: 0;
   z-index: 1000;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  background: var(--bg-surface);
-  border-bottom: 1px solid var(--border-subtle);
-  transition: all 0.3s var(--ease-smooth);
-}
-
-/* Squeeze effect on scroll */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
+  background: rgba(6, 11, 25, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(0, 245, 255, 0.12);
   transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, backdrop-filter 0.25s ease;
 }
 
 .navbar.scrolled {
-  background: rgba(6, 11, 25, 0.75) !important;
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border-bottom: 1px solid rgba(0, 245, 255, 0.18);
+  background: rgba(6, 11, 25, 0.65) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(0, 245, 255, 0.22);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
 
@@ -4723,17 +4713,21 @@ textarea:focus-visible,
   color: #000000 !important;
 }
 
-/* Header & Brand */
+/* Header & Brand - Real Glassy Transparency in Light Mode */
 [data-theme="light"] .navbar {
-  background: rgba(252, 249, 242, 0.92);
-  border-bottom: 1px solid var(--border-medium);
-  box-shadow: 0 4px 20px rgba(70, 50, 25, 0.05);
+  background: rgba(252, 249, 242, 0.72) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(70, 50, 25, 0.04) !important;
 }
 
 [data-theme="light"] .navbar.scrolled {
-  background: rgba(252, 249, 242, 0.98);
-  border-bottom-color: var(--border-medium);
-  box-shadow: 0 10px 30px rgba(70, 50, 25, 0.08);
+  background: rgba(252, 249, 242, 0.68) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 10px 30px rgba(70, 50, 25, 0.08) !important;
 }
 
 [data-theme="light"] .logo,
@@ -6221,9 +6215,22 @@ html {
   color: #0284c7 !important;
 }
 
-[data-theme="light"] .engine-step-card .step-icon svg {
+/* Step 01: Octocat is filled */
+.engine-step-card .step-icon svg:not(.lucide) {
+  fill: #38bdf8;
+}
+[data-theme="light"] .engine-step-card .step-icon svg:not(.lucide) {
   fill: #0284c7 !important;
+}
+
+/* Steps 02, 03, 04: Lucide icons are stroke-based outlines - NEVER fill them solid */
+.engine-step-card .step-icon .lucide,
+.engine-step-card .step-icon svg.lucide,
+[data-theme="light"] .engine-step-card .step-icon .lucide,
+[data-theme="light"] .engine-step-card .step-icon svg.lucide {
+  fill: none !important;
   stroke: #0284c7 !important;
+  stroke-width: 2 !important;
 }
 
 /* Games Section Header & Controls in Light Mode */
@@ -6288,4 +6295,53 @@ html {
   background: #0284c7 !important;
   color: #ffffff !important;
   border-color: #0284c7 !important;
+}
+
+/* =========================================================================
+   LIGHT MODE: GAME LAUNCHER MODAL & TOPBAR HEADER CONTRAST
+   ========================================================================= */
+[data-theme="light"] .modal-window {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="light"] .modal-topbar {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .modal-game-info h3,
+[data-theme="light"] #modal-game-title {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .modal-game-info .author-tag {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="light"] .modal-game-info .badge {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
+}
+
+[data-theme="light"] .modal-controls .btn-icon,
+[data-theme="light"] .modal-controls .btn-close {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .modal-controls .btn-icon:hover,
+[data-theme="light"] .modal-controls .btn-close:hover {
+  background: #e2e8f0 !important;
+  color: #000000 !important;
+}
+
+[data-theme="light"] .modal-controls .btn-icon svg,
+[data-theme="light"] .modal-controls .btn-close svg {
+  stroke: #0f172a !important;
 }
