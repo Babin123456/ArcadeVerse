@@ -1,0 +1,19 @@
+{
+  "title": "Cyber Brick Breaker",
+  "category": "Arcade",
+  "lucideIcon": "grid",
+  "description": "High-velocity cyberpunk breakout with multi-angle canvas deflection, armored quantum bricks, plasma laser cannons, and procedural Web Audio chiptune synthesis.",
+  "author": "Harsh Jaiswani",
+  "github": "hrshjswniii",
+  "role": "Arcade Developer",
+  "tags": [
+    "Arcade",
+    "Retro",
+    "Breakout",
+    "Physics",
+    "WebAudio",
+    "NSOC26"
+  ],
+  "stars": 42,
+  "featured": true
+}
