@@ -1,0 +1,17 @@
+{
+  "title": "Cosmic Orbit Slingshot",
+  "category": "Physics",
+  "lucideIcon": "orbit",
+  "description": "Calculate orbital trajectories and use celestial gravity assists to sling deep space probes into target nexus stations.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Physics",
+    "Gravity",
+    "Space",
+    "Puzzle"
+  ],
+  "stars": 47,
+  "featured": true
+}
