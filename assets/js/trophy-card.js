@@ -52,10 +52,31 @@
       // Reset
       ctx.clearRect(0, 0, W, H);
 
+      // Resolve Direct CORS-Enabled Avatar URL
+      let resolvedAvatar = avatarUrl;
+      const cleanHandle = userHandle.replace('@', '').trim();
+
+      // Specifically resolve DebasmitaBose0 (Project Admin) to direct GitHub CDN avatar with CORS
+      if (!resolvedAvatar || resolvedAvatar.includes('github.com/')) {
+        if (cleanHandle.toLowerCase() === 'debasmitabose0' || (playerName && playerName.toLowerCase().includes('debasmita'))) {
+          resolvedAvatar = 'https://avatars.githubusercontent.com/u/144198639?v=4';
+        } else {
+          // Check if an avatar img for this user already exists in the DOM
+          const domAvatar = document.querySelector(`img[src*="${cleanHandle}"], a[href*="${cleanHandle}"] img, .podium-card img[alt*="${playerName}"], .admin-avatar-img`);
+          if (domAvatar && domAvatar.src && domAvatar.src.includes('avatars.githubusercontent.com')) {
+            resolvedAvatar = domAvatar.src;
+          }
+        }
+      }
+
+      if (!resolvedAvatar && cleanHandle.toLowerCase() === 'debasmitabose0') {
+        resolvedAvatar = 'https://avatars.githubusercontent.com/u/144198639?v=4';
+      }
+
       // Preload Brand Logo and User Profile Avatar
       const [brandLogoImg, userAvatarImg] = await Promise.all([
         loadImage('assets/public/brand-logo.webp').then(res => res || loadImage('assets/public/brand-logo.png')),
-        avatarUrl ? loadImage(avatarUrl) : loadImage(`https://github.com/${userHandle.replace('@', '')}.png`)
+        resolvedAvatar ? loadImage(resolvedAvatar) : (cleanHandle.toLowerCase() === 'debasmitabose0' ? loadImage('https://avatars.githubusercontent.com/u/144198639?v=4') : null)
       ]);
 
       // 1. Deep Cyber Luxury Background
@@ -195,12 +216,21 @@
         ctx.shadowBlur = 14;
         ctx.stroke();
       } else {
-        // Fallback Initial Avatar
+        // Fallback Initial Avatar (Valid CanvasGradient)
         const initial = (playerName || 'U').trim().charAt(0).toUpperCase();
         ctx.beginPath();
         ctx.arc(W / 2, avatarY, avatarR, 0, Math.PI * 2);
-        ctx.fillStyle = 'linear-gradient(135deg, #00f5ff, #3b82f6)';
+        const avatarGrad = ctx.createLinearGradient((W / 2) - avatarR, avatarY - avatarR, (W / 2) + avatarR, avatarY + avatarR);
+        avatarGrad.addColorStop(0, '#00f5ff');
+        avatarGrad.addColorStop(1, '#3b82f6');
+        ctx.fillStyle = avatarGrad;
         ctx.fill();
+        ctx.strokeStyle = outerGrad;
+        ctx.lineWidth = 3.5;
+        ctx.shadowColor = 'rgba(0, 245, 255, 0.4)';
+        ctx.shadowBlur = 12;
+        ctx.stroke();
+
         ctx.fillStyle = '#040b17';
         ctx.font = 'bold 44px "Space Grotesk", sans-serif';
         ctx.textAlign = 'center';

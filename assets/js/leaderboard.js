@@ -541,6 +541,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const score = calculateScore(adminUser);
     adminMetaInfo.textContent = `${adminUser.commits} Commits • ${adminUser.gamesCount} Games • ${score} pts`;
 
+    // Ensure Admin Trophy Certificate button has direct CORS-enabled avatar URL
+    const adminTrophyBtn = document.querySelector('.admin-stats-badge [data-action="open-trophy-card"]');
+    if (adminTrophyBtn) {
+      adminTrophyBtn.dataset.avatar = adminUser.avatar_url || "https://avatars.githubusercontent.com/u/144198639?v=4";
+      adminTrophyBtn.dataset.handle = adminUser.login || "DebasmitaBose0";
+      adminTrophyBtn.dataset.player = adminUser.name || "Debasmita Bose";
+      adminTrophyBtn.dataset.score = `${score} PTS`;
+      adminTrophyBtn.dataset.rank = "Project Lead & Core Architect";
+      adminTrophyBtn.dataset.game = "Core Platform & Quantum Matrix";
+    }
+
     const adminBadgesContainer = document.getElementById("admin-badges-row");
     if (adminBadgesContainer) {
       const badges = getContributorBadges(adminUser);
