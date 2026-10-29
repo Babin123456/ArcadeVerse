@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Lunar Lander | ArcadeVerse</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <div class="header-left">
+        <a href="../../index.html" class="back-link" aria-label="Return to ArcadeVerse Hub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Arcade Hub</span>
+        </a>
+        <h1 class="game-title">Neon Lunar <span class="accent">Lander</span></h1>
+      </div>
+      <div class="header-controls">
+        <button id="sound-btn" class="icon-btn" type="button" aria-label="Toggle Sound Effects" title="Toggle Sound">
+          <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <svg id="sound-icon-off" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="help-btn" class="icon-btn" type="button" aria-label="Game Instructions" title="Instructions">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="scoreboard-bar">
+      <div class="score-card">
+        <span class="label">ALTITUDE</span>
+        <span class="value" id="alt-display">400m</span>
+      </div>
+      <div class="score-card">
+        <span class="label">V-SPEED</span>
+        <span class="value speed-safe" id="vspeed-display">0.0</span>
+      </div>
+      <div class="score-card">
+        <span class="label">FUEL</span>
+        <span class="value" id="fuel-display">100%</span>
+      </div>
+      <div class="score-card highlight">
+        <span class="label">SCORE</span>
+        <span class="value" id="score-display">0</span>
+      </div>
+    </div>
+
+    <main class="canvas-wrapper" role="region" aria-label="Lunar Flight Canvas">
+      <canvas id="game-canvas" width="560" height="420"></canvas>
+
+      <!-- Overlay Menus -->
+      <div id="start-overlay" class="overlay">
+        <div class="overlay-card">
+          <h2 class="overlay-title">Neon Lunar Lander</h2>
+          <p class="overlay-desc">Control thruster burn and attitude rotation to guide your craft down safely onto a glowing landing pad.</p>
+          <div class="controls-guide">
+            <span class="guide-item"><kbd>&uarr;</kbd> or <kbd>W</kbd> : Main Thruster</span>
+            <span class="guide-item"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>A</kbd> <kbd>D</kbd> : Attitude Rotation</span>
+            <span class="guide-item">Touchdown Speed must be under 1.5 m/s</span>
+          </div>
+          <button id="start-btn" class="btn btn-primary" type="button">Commence Descent</button>
+        </div>
+      </div>
+
+      <div id="gameover-overlay" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title gameover-text">Lander Destroyed</h2>
+          <p class="overlay-desc" id="gameover-reason">Impact velocity exceeded structural tolerance!</p>
+          <div class="results-stats">
+            <div class="stat-row"><span>Final Score:</span><strong id="final-score">0</strong></div>
+            <div class="stat-row"><span>Successful Landings:</span><strong id="final-landings">0</strong></div>
+          </div>
+          <button id="restart-btn" class="btn btn-primary" type="button">Deploy New Probe</button>
+        </div>
+      </div>
+
+      <div id="landing-clear-overlay" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title win-text">Touchdown Confirmed!</h2>
+          <p class="overlay-desc">Smooth landing within safety envelope.</p>
+          <div class="results-stats">
+            <div class="stat-row"><span>Landing Pad Multiplier:</span><strong id="pad-multiplier">1x</strong></div>
+            <div class="stat-row"><span>Fuel Bonus:</span><strong id="fuel-bonus">+0</strong></div>
+            <div class="stat-row"><span>Touchdown Score:</span><strong id="landing-score">+0</strong></div>
+          </div>
+          <button id="next-landing-btn" class="btn btn-primary" type="button">Next Landing Site</button>
+        </div>
+      </div>
+
+      <div id="instructions-modal" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title">Flight Parameters</h2>
+          <ul class="rules-list">
+            <li><strong>Landing Pads:</strong> Touch down only on flat highlighted colored platforms (1x, 2x, 3x).</li>
+            <li><strong>Safety Velocity:</strong> Vertical speed must be below 1.5 m/s and horizontal speed below 1.0 m/s.</li>
+            <li><strong>Safe Angle:</strong> Craft must be nearly upright (within +/- 12 degrees).</li>
+            <li><strong>Fuel:</strong> Conserving fuel yields huge score bonuses!</li>
+          </ul>
+          <button id="close-help-btn" class="btn btn-secondary" type="button">Dismiss</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Mobile Touch Flight Controls -->
+    <div class="flight-controls-bar">
+      <button id="thrust-left-btn" class="flight-btn" type="button" aria-label="Rotate Left">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <button id="main-thrust-btn" class="flight-btn main-thrust" type="button" aria-label="Main Thruster">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 19 21 12 17 5 21 12 2"></polygon></svg>
+        <span>THRUST</span>
+      </button>
+      <button id="thrust-right-btn" class="flight-btn" type="button" aria-label="Rotate Right">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
