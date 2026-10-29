@@ -13,20 +13,65 @@
 </head>
 <body>
   <div class="game-header">
-    <div class="game-title" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+    <div class="game-title">
       <i data-lucide="gamepad-2"></i> Cyber Neon Pong
     </div>
-    <div class="author-badge">Created by @DebasmitaBose0</div>
+    <div class="author-badge">Created by @DebasmitaBose0 • Match Rules Edition</div>
+  </div>
+
+  <!-- Settings & Difficulty Toolbar -->
+  <div class="pong-toolbar">
+    <div class="difficulty-group" role="group" aria-label="AI Difficulty Level">
+      <button type="button" class="diff-btn active" data-difficulty="easy">Easy</button>
+      <button type="button" class="diff-btn" data-difficulty="pro">Pro</button>
+      <button type="button" class="diff-btn" data-difficulty="cyber">Cyber</button>
+    </div>
+
+    <div class="toolbar-actions">
+      <button type="button" class="icon-btn" id="pause-btn" title="Pause Game (P or Space)" aria-label="Pause Game">
+        <i data-lucide="pause" id="pause-icon"></i>
+      </button>
+      <button type="button" class="icon-btn" id="sound-btn" title="Toggle Sound" aria-label="Toggle Sound">
+        <i data-lucide="volume-2" id="sound-icon"></i>
+      </button>
+      <button type="button" class="icon-btn" id="restart-btn" title="Reset Match" aria-label="Reset Match">
+        <i data-lucide="rotate-ccw"></i>
+      </button>
+    </div>
   </div>
 
   <div class="score-board" role="status" aria-live="polite">
-    <span>Player: <strong id="player-score" style="color:#38bdf8;">0</strong></span>
-    <span>AI: <strong id="ai-score" style="color:#f43f5e;">0</strong></span>
+    <span class="score-player">Player: <strong id="player-score">0</strong></span>
+    <span class="match-target-tag">First to 7</span>
+    <span class="score-ai">AI: <strong id="ai-score">0</strong></span>
   </div>
 
-  <canvas id="pongCanvas" width="600" height="380" role="img" aria-label="Cyber Neon Pong interactive court" tabindex="0"></canvas>
+  <div class="canvas-wrapper">
+    <canvas id="pongCanvas" width="600" height="380" role="img" aria-label="Cyber Neon Pong interactive court" tabindex="0"></canvas>
+    
+    <!-- Pause Overlay -->
+    <div class="pong-overlay hidden" id="pause-overlay">
+      <div class="overlay-card">
+        <h2>Match Paused</h2>
+        <p>Press <strong>P</strong>, <strong>Space</strong>, or click Resume to continue</p>
+        <button type="button" class="btn-primary" id="resume-btn">Resume Match</button>
+      </div>
+    </div>
 
-  <p class="instructions">Control paddle using <strong>Mouse / Touch</strong> or <strong>Arrow Keys / W & S</strong></p>
+    <!-- Match Over Overlay -->
+    <div class="pong-overlay hidden" id="gameover-overlay">
+      <div class="overlay-card">
+        <h2 id="winner-title">Victory!</h2>
+        <p id="winner-desc">You dominated the neon court!</p>
+        <div class="final-score-row" id="final-score-display">7 - 3</div>
+        <button type="button" class="btn-primary" id="play-again-btn">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="instructions">
+    Control paddle: <strong>Mouse / Touch</strong> or <strong>Arrow Keys / W & S</strong> • <strong>P</strong> to Pause
+  </p>
 
   <script src="game.js"></script>
   <script>
