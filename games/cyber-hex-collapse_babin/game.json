@@ -1,0 +1,17 @@
+{
+  "title": "Cyber Hex Collapse",
+  "category": "Puzzle",
+  "lucideIcon": "hexagon",
+  "description": "Rotate a central hexagonal prism to catch incoming colored perimeter bars and trigger match-3 cascades.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Puzzle",
+    "Hexagon",
+    "Match-3",
+    "Reflex"
+  ],
+  "stars": 49,
+  "featured": true
+}
