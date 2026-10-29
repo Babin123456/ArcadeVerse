@@ -1,0 +1,123 @@
+/**
+ * ArcadeVerse — Network Connectivity Telemetry & Offline Toast
+ * Real-time network status indicator for offline gaming sessions
+ */
+
+.arcade-network-toast-wrapper {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  max-width: 380px;
+  width: calc(100% - 48px);
+}
+
+.network-toast {
+  pointer-events: auto;
+  background: rgba(19, 23, 34, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-md, 12px);
+  padding: 0.85rem 1.1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.network-toast.toast-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.network-toast.toast-offline {
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);
+}
+
+.network-toast.toast-online {
+  border-color: rgba(16, 185, 129, 0.45);
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
+}
+
+.network-toast-body {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.network-toast-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.toast-offline .network-toast-icon {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+}
+
+.toast-online .network-toast-icon {
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+}
+
+.network-toast-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.network-toast-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+  margin: 0;
+}
+
+.network-toast-desc {
+  font-size: 0.76rem;
+  color: var(--text-secondary, #94a3b8);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.btn-toast-dismiss {
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #64748b);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-toast-dismiss:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary, #f8fafc);
+}
+
+@media (max-width: 600px) {
+  .arcade-network-toast-wrapper {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+  }
+}
