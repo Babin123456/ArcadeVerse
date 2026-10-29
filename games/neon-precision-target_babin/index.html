@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Precision Target | ArcadeVerse</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <div class="header-left">
+        <a href="../../index.html" class="back-link" aria-label="Return to ArcadeVerse Hub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Arcade Hub</span>
+        </a>
+        <h1 class="game-title">Neon Precision <span class="accent">Target</span></h1>
+      </div>
+      <div class="header-controls">
+        <button id="sound-btn" class="icon-btn" type="button" aria-label="Toggle Sound Effects" title="Toggle Sound">
+          <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <svg id="sound-icon-off" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="help-btn" class="icon-btn" type="button" aria-label="Game Instructions" title="Instructions">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="scoreboard-bar">
+      <div class="score-card">
+        <span class="label">STAGE</span>
+        <span class="value" id="stage-display">1 / 5</span>
+      </div>
+      <div class="score-card highlight">
+        <span class="label">SCORE</span>
+        <span class="value" id="score-display">0</span>
+      </div>
+      <div class="score-card">
+        <span class="label">ARROWS</span>
+        <span class="value" id="arrows-display">10</span>
+      </div>
+      <div class="score-card">
+        <span class="label">COMBO</span>
+        <span class="value" id="combo-display">0x</span>
+      </div>
+    </div>
+
+    <main class="canvas-wrapper" role="region" aria-label="Precision Archery Range Canvas">
+      <canvas id="game-canvas" width="480" height="480"></canvas>
+
+      <!-- Overlay Menus -->
+      <div id="start-overlay" class="overlay">
+        <div class="overlay-card">
+          <h2 class="overlay-title">Neon Precision Target</h2>
+          <p class="overlay-desc">Time your cyber arrows to strike moving concentric targets. Hit dead-center for 100 points and chain consecutive bullseye combos.</p>
+          <div class="controls-guide">
+            <span class="guide-item"><kbd>Space</kbd> or Click Canvas : Release Arrow</span>
+            <span class="guide-item">Dodge revolving red barrier shields</span>
+            <span class="guide-item">Bullseye gives consecutive streak multipliers</span>
+          </div>
+          <button id="start-btn" class="btn btn-primary" type="button">Start Archery Range</button>
+        </div>
+      </div>
+
+      <div id="gameover-overlay" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title gameover-text">Quiver Depleted</h2>
+          <p class="overlay-desc">Range challenge concluded.</p>
+          <div class="results-stats">
+            <div class="stat-row"><span>Final Score:</span><strong id="final-score">0</strong></div>
+            <div class="stat-row"><span>Bullseyes Landed:</span><strong id="final-bullseyes">0</strong></div>
+            <div class="stat-row"><span>Max Streak:</span><strong id="final-streak">0x</strong></div>
+          </div>
+          <button id="restart-btn" class="btn btn-primary" type="button">New Challenge</button>
+        </div>
+      </div>
+
+      <div id="stage-clear-overlay" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title win-text">Stage Cleared!</h2>
+          <p class="overlay-desc">Target objective reached.</p>
+          <button id="next-stage-btn" class="btn btn-primary" type="button">Next Stage</button>
+        </div>
+      </div>
+
+      <div id="instructions-modal" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title">Target Scoring</h2>
+          <ul class="rules-list">
+            <li><strong>Outer Blue Ring:</strong> 15 Points</li>
+            <li><strong>Middle Yellow Ring:</strong> 40 Points</li>
+            <li><strong>Inner Magenta Ring:</strong> 75 Points</li>
+            <li><strong>White Bullseye:</strong> 150 Points + Streak Multiplier!</li>
+            <li><strong>Barriers:</strong> Arrows hitting rotating red shields deflect harmlessly.</li>
+          </ul>
+          <button id="close-help-btn" class="btn btn-secondary" type="button">Dismiss</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Mobile Release Arrow Button -->
+    <div class="mobile-action-bar">
+      <button id="shoot-arrow-btn" class="shoot-btn" type="button" aria-label="Release Arrow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 8 16 12 12 16"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        <span>RELEASE ARROW (SPACE)</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

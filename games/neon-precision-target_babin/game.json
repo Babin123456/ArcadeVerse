@@ -1,0 +1,17 @@
+{
+  "title": "Neon Precision Target",
+  "category": "Arcade",
+  "lucideIcon": "target",
+  "description": "Time precision arrow releases to strike moving neon concentric bullseyes while factoring wind drift and revolving barrier shields.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Arcade",
+    "Precision",
+    "Reflex",
+    "Timing"
+  ],
+  "stars": 47,
+  "featured": true
+}
