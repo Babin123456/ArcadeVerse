@@ -18,6 +18,118 @@ if (!canvas || !context || !scoreValue || !bestValue || !ballsValue ||
   throw new Error("Quantum Pinball could not find all required game elements.");
 }
 
+const soundToggleBtn = document.getElementById("sound-toggle-btn");
+const soundIconOn = document.getElementById("sound-icon-on");
+const soundIconOff = document.getElementById("sound-icon-off");
+
+let soundEnabled = true;
+let audioCtx = null;
+
+try {
+  const saved = localStorage.getItem("quantum-pinball-sound-enabled");
+  if (saved !== null) soundEnabled = saved === "true";
+} catch (_) {}
+
+function updateSoundUI() {
+  if (!soundIconOn || !soundIconOff) return;
+  soundIconOn.classList.toggle("hidden", !soundEnabled);
+  soundIconOff.classList.toggle("hidden", soundEnabled);
+  if (soundToggleBtn) {
+    soundToggleBtn.title = soundEnabled ? "Mute Sound" : "Enable Sound";
+  }
+}
+updateSoundUI();
+
+function initAudio() {
+  if (!audioCtx) {
+    const AudioClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioClass) audioCtx = new AudioClass();
+  }
+  if (audioCtx && audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+}
+
+function playTone(freq, type = "sine", duration = 0.08, gainVal = 0.14) {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  try {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  } catch (_) {}
+}
+
+function playFlipperSound() {
+  playTone(850, "triangle", 0.04, 0.15);
+}
+
+function playBumperSound(points) {
+  const freq = points >= 250 ? 920 : (points >= 150 ? 740 : 580);
+  playTone(freq, "sine", 0.12, 0.2);
+}
+
+function playTargetSound() {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  [659, 1046].forEach((f, i) => {
+    setTimeout(() => playTone(f, "triangle", 0.1, 0.16), i * 50);
+  });
+}
+
+function playLaunchSound() {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(260, now);
+    osc.frequency.exponentialRampToValueAtTime(840, now + 0.18);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  } catch (_) {}
+}
+
+function playDrainSound() {
+  playTone(180, "sawtooth", 0.25, 0.2);
+}
+
+function playGameOverSound() {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  [440, 392, 349, 293, 220].forEach((f, i) => {
+    setTimeout(() => playTone(f, "sawtooth", 0.2, 0.18), i * 90);
+  });
+}
+
+if (soundToggleBtn) {
+  soundToggleBtn.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    try {
+      localStorage.setItem("quantum-pinball-sound-enabled", String(soundEnabled));
+    } catch (_) {}
+    updateSoundUI();
+    if (soundEnabled) playFlipperSound();
+  });
+}
+
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
 const BALL_RADIUS = 9;
@@ -101,6 +213,7 @@ function launchBall() {
   ball.launched = true;
   ball.vx = -65;
   ball.vy = -640;
+  playLaunchSound();
   launchButton.textContent = "Ball launched";
 }
 
@@ -110,6 +223,7 @@ function loseBall() {
 
   if (remainingBalls <= 0) {
     gameState = "over";
+    playGameOverSound();
     if (score > bestScore) {
       bestScore = score;
       bestValue.textContent = bestScore;
@@ -123,6 +237,7 @@ function loseBall() {
     return;
   }
 
+  playDrainSound();
   placeBallInShooterLane();
   launchButton.textContent = "Launch ball";
 }
@@ -157,8 +272,10 @@ function collideWithCircle(circle, isTarget) {
   if (isTarget) {
     circle.active = false;
     updateScore(circle.points);
+    playTargetSound();
   } else {
     updateScore(circle.points);
+    playBumperSound(circle.points);
   }
 }
 
@@ -410,6 +527,9 @@ function frame(timestamp) {
 
 function setFlipperPressed(side, isPressed) {
   const flipper = side === "left" ? flippers.left : flippers.right;
+  if (!flipper.pressed && isPressed) {
+    playFlipperSound();
+  }
   flipper.pressed = isPressed;
   const button = side === "left" ? leftButton : rightButton;
   button.classList.toggle("is-pressed", isPressed);
