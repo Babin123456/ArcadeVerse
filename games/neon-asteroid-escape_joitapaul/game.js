@@ -10,6 +10,132 @@ const overlayTitle = document.getElementById("overlay-title");
 const overlayMessage = document.getElementById("overlay-message");
 const startButton = document.getElementById("start-button");
 const resetBestButton = document.getElementById("reset-best");
+const soundToggleBtn = document.getElementById("sound-toggle-btn");
+const soundIconOn = document.getElementById("sound-icon-on");
+const soundIconOff = document.getElementById("sound-icon-off");
+
+let soundEnabled = true;
+let audioCtx = null;
+
+try {
+  const savedSound = localStorage.getItem("neon-asteroid-sound-enabled");
+  if (savedSound !== null) soundEnabled = savedSound === "true";
+} catch (_) {}
+
+function updateSoundUI() {
+  if (!soundIconOn || !soundIconOff) return;
+  soundIconOn.classList.toggle("hidden", !soundEnabled);
+  soundIconOff.classList.toggle("hidden", soundEnabled);
+  if (soundToggleBtn) {
+    soundToggleBtn.title = soundEnabled ? "Mute Sound" : "Enable Sound";
+  }
+}
+updateSoundUI();
+
+function initAudio() {
+  if (!audioCtx) {
+    const AudioClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioClass) audioCtx = new AudioClass();
+  }
+  if (audioCtx && audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+}
+
+function playTone(freq, type = "sine", duration = 0.08, gainVal = 0.14) {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  try {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  } catch (_) {}
+}
+
+function playOrbSound() {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(880, now);
+    osc.frequency.exponentialRampToValueAtTime(1320, now + 0.1);
+    gain.gain.setValueAtTime(0.18, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.12);
+  } catch (_) {}
+}
+
+function playPowerUpSound() {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  [587, 740, 880, 1174].forEach((f, i) => {
+    setTimeout(() => playTone(f, "triangle", 0.12, 0.16), i * 50);
+  });
+}
+
+function playDamageSound() {
+  playTone(160, "sawtooth", 0.18, 0.22);
+}
+
+function playShieldBreakSound() {
+  playTone(320, "square", 0.14, 0.18);
+}
+
+function playStartSound() {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(220, now);
+    osc.frequency.exponentialRampToValueAtTime(660, now + 0.25);
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.28);
+  } catch (_) {}
+}
+
+function playGameOverSound() {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  [440, 370, 311, 220, 146].forEach((f, i) => {
+    setTimeout(() => playTone(f, "sawtooth", 0.22, 0.2), i * 110);
+  });
+}
+
+if (soundToggleBtn) {
+  soundToggleBtn.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    try {
+      localStorage.setItem("neon-asteroid-sound-enabled", String(soundEnabled));
+    } catch (_) {}
+    updateSoundUI();
+    if (soundEnabled) playOrbSound();
+  });
+}
 
 const width = canvas.width;
 const height = canvas.height;
@@ -87,6 +213,7 @@ function startGame() {
   gameState = "running";
   updateHud();
   overlay.hidden = true;
+  playStartSound();
   lastFrame = performance.now();
   animationFrame = requestAnimationFrame(gameLoop);
 }
@@ -150,9 +277,11 @@ function updateGame(delta) {
         activePowerUp = null;
         powerUpTime = 0;
         invulnerableTime = 0.65;
+        playShieldBreakSound();
       } else {
         lives -= 1;
         invulnerableTime = 1.25;
+        playDamageSound();
       }
     }
   });
@@ -163,6 +292,7 @@ function updateGame(delta) {
     if (distance(player, orb) < player.radius + orb.radius) {
       orb.collected = true;
       score += 50;
+      playOrbSound();
     }
   });
 
@@ -173,6 +303,7 @@ function updateGame(delta) {
       powerUp.collected = true;
       activePowerUp = powerUp.type;
       powerUpTime = powerUp.duration;
+      playPowerUpSound();
     }
   });
 
@@ -360,6 +491,7 @@ function updateHud() {
 function endGame() {
   gameState = "over";
   cancelAnimationFrame(animationFrame);
+  playGameOverSound();
   overlayKicker.textContent = "FLIGHT COMPLETE";
   overlayTitle.textContent = "The asteroid field caught up";
   overlayMessage.textContent = `You scored ${Math.floor(score)} points. Ready to take another run?`;
