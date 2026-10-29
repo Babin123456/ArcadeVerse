@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Gravity Rush | ArcadeVerse</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/public/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../assets/public/apple-touch-icon.png">
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <div class="header-left">
+        <h1 class="game-title">Neon <span class="accent">Gravity</span> Rush</h1>
+        <span class="game-subtitle">Sub-Orbital Vector Protocol</span>
+      </div>
+      <div class="header-right">
+        <button id="sound-btn" class="icon-btn" aria-label="Toggle Sound FX">
+          <svg id="sound-on-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <svg id="sound-off-icon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="rules-btn" class="btn btn-secondary">How to Play</button>
+      </div>
+    </header>
+
+    <!-- Scoreboard HUD -->
+    <section class="ngr-hud" aria-label="Game HUD">
+      <div class="ngr-hud-card">
+        <span class="ngr-hud-label">SECTOR</span>
+        <strong id="sector-display" class="ngr-hud-val">1</strong>
+      </div>
+      <div class="ngr-hud-card">
+        <span class="ngr-hud-label">SCORE</span>
+        <strong id="score-display" class="ngr-hud-val">0</strong>
+      </div>
+      <div class="ngr-hud-card">
+        <span class="ngr-hud-label">DISTANCE</span>
+        <strong id="distance-display" class="ngr-hud-val">0m</strong>
+      </div>
+      <div class="ngr-hud-card">
+        <span class="ngr-hud-label">MULTIPLIER</span>
+        <strong id="multiplier-display" class="ngr-hud-val">1.0x</strong>
+      </div>
+      <div class="ngr-hud-card">
+        <span class="ngr-hud-label">BEST</span>
+        <strong id="best-display" class="ngr-hud-val">0</strong>
+      </div>
+    </section>
+
+    <!-- Canvas Wrapper with Overlays -->
+    <div class="canvas-wrapper">
+      <canvas id="game-canvas" width="720" height="400" role="img" aria-label="Neon Gravity Rush gameplay arena" tabindex="0"></canvas>
+
+      <!-- Sector Warp Banner -->
+      <div id="warp-banner" class="warp-banner">WARPING TO SECTOR 2</div>
+
+      <!-- Start Overlay -->
+      <div id="start-overlay" class="overlay active" role="dialog" aria-modal="true" aria-labelledby="start-title">
+        <div class="overlay-card">
+          <div class="overlay-icon" aria-hidden="true">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h2 id="start-title">Neon Gravity Rush</h2>
+          <p>Invert gravitational vectors between floor and ceiling rails. Evade laser barriers and plasma spikes while collecting quantum energy cores!</p>
+          <button id="start-btn" class="btn btn-primary">Initialize Warp Engine</button>
+          <span class="hint-text">Press <strong>SPACE</strong>, <strong>W</strong>, or <strong>UP ARROW</strong> to Flip Gravity</span>
+        </div>
+      </div>
+
+      <!-- Game Over Overlay -->
+      <div id="gameover-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="gameover-title">
+        <div class="overlay-card">
+          <div class="overlay-icon danger-icon" aria-hidden="true">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <h2 id="gameover-title">Vessel Desynchronized!</h2>
+          <div class="stats-recap">
+            <div class="recap-row"><span>Final Score:</span><strong id="final-score">0</strong></div>
+            <div class="recap-row"><span>Sector Reached:</span><strong id="final-sector">1</strong></div>
+            <div class="recap-row"><span>Distance Traversed:</span><strong id="final-distance">0m</strong></div>
+            <div class="recap-row"><span>Energy Cores:</span><strong id="final-cores">0</strong></div>
+            <div class="recap-row"><span>All-Time Best:</span><strong id="final-best">0</strong></div>
+          </div>
+          <button id="restart-btn" class="btn btn-primary">Re-engage Engine</button>
+          <span class="hint-text">Press <strong>ENTER</strong> or <strong>SPACE</strong> to Reboot</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Touch Invert Action Button -->
+    <div class="touch-controls">
+      <button id="touch-flip-btn" class="btn-touch-action">FLIP GRAVITY</button>
+    </div>
+
+    <!-- Rules Modal -->
+    <div id="rules-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="rules-title">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="rules-title">Flight Protocol & Rules</h3>
+          <button id="close-rules-btn" class="close-btn" aria-label="Close rules dialog">&times;</button>
+        </div>
+        <div class="modal-body">
+          <ul class="rules-list">
+            <li><strong>Gravity Inversion:</strong> Tap <code>SPACE</code>, <code>W</code>, <code>UP ARROW</code>, or click to flip between floor and ceiling rails.</li>
+            <li><strong>Laser Spikes:</strong> Red plasma barriers mounted on ceiling and floor destroy your craft on contact.</li>
+            <li><strong>Quantum Cores:</strong> Golden energy nodes grant +50 bonus points and elevate your multiplier.</li>
+            <li><strong>Sector Progression:</strong> Every 300 meters traversed triggers a warp into a higher Sector with increased corridor velocity and higher multiplier!</li>
+            <li><strong>Audio Toggle:</strong> Press <code>M</code> or click the speaker icon to toggle Web Audio chiptune sound synthesis.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
+

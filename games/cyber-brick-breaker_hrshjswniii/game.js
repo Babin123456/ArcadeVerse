@@ -382,9 +382,17 @@
           this.keys.left = true;
         } else if (e.code === "ArrowRight" || e.code === "KeyD") {
           this.keys.right = true;
-        } else if (e.code === "Space") {
+        } else if (e.code === "Space" || e.code === "Enter") {
           e.preventDefault();
-          this.handleActionTrigger();
+          if (this.state === "START") {
+            this.startGame();
+          } else if (this.state === "VICTORY") {
+            this.advanceLevel();
+          } else if (this.state === "GAMEOVER") {
+            this.restartGame();
+          } else if (this.state === "PLAYING") {
+            this.handleActionTrigger();
+          }
         } else if (e.code === "KeyP" || e.code === "Escape") {
           this.togglePause();
         } else if (e.code === "KeyM") {

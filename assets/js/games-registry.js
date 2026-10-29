@@ -342,6 +342,26 @@ const GAMES_REGISTRY = [
     "difficulty": "Intermediate"
   },
   {
+    "id": "neon-gravity-rush_babin",
+    "title": "Neon Gravity Rush",
+    "category": "Action",
+    "lucideIcon": "gamepad-2",
+    "description": "High-octane gravity-inversion corridor runner. Invert gravitational vectors between floor and ceiling to dodge laser barriers, plasma spikes, and quantum anomalies at 60 FPS.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/neon-gravity-rush_babin/index.html",
+    "tags": [
+      "Action",
+      "Physics",
+      "Rhythm",
+      "Canvas",
+      "Audio"
+    ],
+    "stars": 25,
+    "featured": false
+  },
+  {
     "id": "neon-grid-defense_mistu7debnath",
     "title": "Neon Grid Defense: Core Protocol",
     "category": "Strategy",
@@ -605,8 +625,8 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 115,
-    "gamesCount": 14,
+    "commits": 119,
+    "gamesCount": 15,
     "mechanicsBonus": 2,
     "platformPRs": 29,
     "qualityPRs": 1,
@@ -619,6 +639,7 @@ const CONTRIBUTORS_REGISTRY = [
       "Cyber Snake Matrix",
       "Cyber Tower Stacker",
       "Neon Beat Runner",
+      "Neon Gravity Rush",
       "Neon Rhythm Blaster",
       "Quantum 2048",
       "Quantum Minesweeper",

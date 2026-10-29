@@ -288,13 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
 
-      // Card click opens game modal EXCEPT when clicking favorite or rating elements
-      card.addEventListener("click", (e) => {
-        if (e.target.closest(".rate-star-btn, .game-rating-stars, .game-card-rating-row, .btn-card-favorite")) {
-          return;
-        }
-        openGameModal(game, card);
-      });
+      // Only clicking the dedicated Play Now button launches the game modal
       gamesGrid.appendChild(card);
     });
 

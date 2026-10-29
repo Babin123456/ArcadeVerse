@@ -444,14 +444,48 @@
 
   // Keyboard navigation
   window.addEventListener('keydown', (e) => {
-    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyA', 'KeyS', 'KeyD', 'Space'].includes(e.code)) {
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyA', 'KeyS', 'KeyD', 'Space', 'Enter'].includes(e.code)) {
       e.preventDefault();
+    }
+    if (e.code === 'Enter') {
+      if (startOverlay && startOverlay.classList.contains('active')) {
+        startInfiltration();
+        return;
+      }
+      if (gameoverOverlay && gameoverOverlay.classList.contains('active')) {
+        startInfiltration();
+        return;
+      }
+      if (descentOverlay && descentOverlay.classList.contains('active')) {
+        nextFloor();
+        return;
+      }
+    }
+    if (e.code === 'Space') {
+      if (startOverlay && startOverlay.classList.contains('active')) {
+        startInfiltration();
+        return;
+      }
+      if (gameoverOverlay && gameoverOverlay.classList.contains('active')) {
+        startInfiltration();
+        return;
+      }
+      if (descentOverlay && descentOverlay.classList.contains('active')) {
+        nextFloor();
+        return;
+      }
+      turnResolution();
+      return;
     }
     if (e.code === 'ArrowUp' || e.code === 'KeyW') movePlayer(0, -1);
     if (e.code === 'ArrowDown' || e.code === 'KeyS') movePlayer(0, 1);
     if (e.code === 'ArrowLeft' || e.code === 'KeyA') movePlayer(-1, 0);
     if (e.code === 'ArrowRight' || e.code === 'KeyD') movePlayer(1, 0);
-    if (e.code === 'Space') turnResolution();
+    if (e.code === 'Escape') {
+      if (helpModal && helpModal.classList.contains('active')) {
+        helpModal.classList.remove('active');
+      }
+    }
   });
 
   // D-Pad buttons

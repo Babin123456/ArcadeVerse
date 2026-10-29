@@ -62,12 +62,10 @@
 
   let pulses = [];
   let score = 0;
-    level = 1;
-    totalHits = 0;
-    if (levelDisplay) levelDisplay.textContent = level;
   let level = 1;
   let totalHits = 0;
   const levelDisplay = document.getElementById('level-display');
+  if (levelDisplay) levelDisplay.textContent = level;
   let combo = 0;
   let maxCombo = 0;
   let perfects = 0;
@@ -127,6 +125,14 @@
       p.hit = true;
       playHitSound(LANE_FREQUENCIES[lane]);
 
+      totalHits++;
+      level = Math.floor(totalHits / 15) + 1;
+      if (levelDisplay) levelDisplay.textContent = level;
+
+      totalHits++;
+      level = Math.floor(totalHits / 15) + 1;
+      if (levelDisplay) levelDisplay.textContent = level;
+
       if (minDistance <= 22) {
         // PERFECT!
         combo++;
@@ -291,9 +297,13 @@
     else if (key === "f" || key === "2") handleHit(1);
     else if (key === "j" || key === "3") handleHit(2);
     else if (key === "k" || key === "4") handleHit(3);
-    else if (e.code === "Space" && !isPlaying) {
+    else if ((e.code === "Space" || e.code === "Enter") && !isPlaying) {
       e.preventDefault();
       initGame();
+    } else if (e.code === "Escape") {
+      if (rulesModal && rulesModal.classList.contains("active")) {
+        rulesModal.classList.remove("active");
+      }
     }
   });
 

@@ -262,6 +262,31 @@
     updateHUD();
   }
 
+  // Global Keyboard Controls
+  window.addEventListener("keydown", (e) => {
+    if ((e.code === "Space" || e.code === "Enter") && isGameOver) {
+      e.preventDefault();
+      initGame();
+      return;
+    }
+    if (e.code === "Escape") {
+      if (rulesModal && rulesModal.classList.contains("active")) {
+        rulesModal.classList.remove("active");
+      }
+      if (resultModal && resultModal.classList.contains("active")) {
+        resultModal.classList.remove("active");
+      }
+      return;
+    }
+    if ((e.code === "KeyS" || e.code === "Digit1") && !isGameOver) {
+      if (sonarCharges > 0) {
+        isSonarActive = !isSonarActive;
+        sonarScanBtn.classList.toggle("active", isSonarActive);
+        statusIntelEl.textContent = isSonarActive ? "Click 2x2 sector to scan" : "Awaiting coordinates...";
+      }
+    }
+  });
+
   sonarScanBtn.addEventListener("click", () => {
     if (sonarCharges > 0 && !isGameOver) {
       isSonarActive = !isSonarActive;

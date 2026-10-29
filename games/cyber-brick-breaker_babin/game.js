@@ -373,16 +373,25 @@
   const keys = { left: false, right: false };
 
   window.addEventListener('keydown', (e) => {
-    if (['ArrowLeft', 'ArrowRight', 'KeyA', 'KeyD', 'Space'].includes(e.code)) {
+    if (['ArrowLeft', 'ArrowRight', 'KeyA', 'KeyD', 'Space', 'Enter'].includes(e.code)) {
       e.preventDefault();
     }
     if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true;
     if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true;
-    if (e.code === 'Space') {
-      if (gameState === 'playing' && paddle.laserEquipped) {
+    if (e.code === 'Space' || e.code === 'Enter') {
+      if (gameState === 'start' || gameState === 'gameover') {
+        startNewGame();
+      } else if (gameState === 'victory') {
+        advanceNextLevel();
+      } else if (gameState === 'playing' && paddle.laserEquipped) {
         lasers.push({ x: paddle.x + 8, y: paddle.y - 8, vy: -580 });
         lasers.push({ x: paddle.x + paddle.width - 8, y: paddle.y - 8, vy: -580 });
         playTone(660, 'sawtooth', 0.05, 0.15);
+      }
+    }
+    if (e.code === 'Escape') {
+      if (helpModal && helpModal.classList.contains('active')) {
+        helpModal.classList.remove('active');
       }
     }
   });
@@ -412,7 +421,30 @@
 
   function resetBallAndPaddle() {
     paddle.x = WIDTH / 2 - paddle.width / 2;
-    balls = [new Ball(WIDTH / 2, HEIGHT - 55, 180, -380)];
+    const baseSpeed = Math.min(620, 380 + (level - 1) * 35);
+    const angle = (Math.PI / 4) + (Math.random() * (Math.PI / 2));
+    const dx = baseSpeed * Math.cos(angle) * (Math.random() > 0.5 ? 1 : -1);
+    const dy = -baseSpeed * Math.sin(angle);
+    const newBall = new Ball(WIDTH / 2, HEIGHT - 55, dx, dy);
+    newBall.speed = baseSpeed;
+    balls = [newBall];
+  }
+
+  function advanceNextLevel() {
+    level++;
+    victoryOverlay.classList.remove('active');
+    gameOverOverlay.classList.remove('active');
+    startOverlay.classList.remove('active');
+    particles = [];
+    powerUps = [];
+    lasers = [];
+    paddle.width = paddle.baseWidth;
+    paddle.laserEquipped = false;
+    paddle.safetyNet = false;
+    initBricks();
+    resetBallAndPaddle();
+    gameState = 'playing';
+    updateHUD();
   }
 
   function startNewGame() {
@@ -636,10 +668,10 @@
 
     // Check Victory
     const aliveCount = bricks.filter(b => b.alive).length;
-    if (aliveCount === 0) {
+    if (aliveCount === 0 && bricks.length > 0 && gameState === 'playing') {
       gameState = 'victory';
       victoryScoreEl.textContent = score;
-    btnNextLevel.textContent = `Advance to Level ${level + 1} →`;
+      btnNextLevel.textContent = `Advance to Level ${level + 1} →`;
       victoryOverlay.classList.add('active');
     }
   }
@@ -747,18 +779,7 @@
   // Button Listeners
   btnStart.addEventListener('click', startNewGame);
   btnRestart.addEventListener('click', startNewGame);
-  btnNextLevel.addEventListener('click', () => {
-    level++;
-    victoryOverlay.classList.remove('active');
-    // Speed increases progressively each level
-    ball.baseSpeed = Math.min(10, 5.5 + (level - 1) * 0.4);
-    ball.speed = ball.baseSpeed;
-    resetBallAndPaddle();
-    initBricks();
-    gameState = 'playing';
-    requestAnimationFrame(gameLoop);
-    updateHUD();
-  });
+  btnNextLevel.addEventListener('click', advanceNextLevel);
 
   btnSound.addEventListener('click', () => {
     soundEnabled = !soundEnabled;

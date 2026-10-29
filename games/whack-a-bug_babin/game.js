@@ -240,6 +240,36 @@
     }, 1000);
   }
 
+  // Global Keyboard Controls (1-9 or QWE/ASD/ZXC, Space/Enter to Start/Restart)
+  window.addEventListener("keydown", (e) => {
+    if ((e.code === "Space" || e.code === "Enter") && !isPlaying) {
+      e.preventDefault();
+      initGame();
+      return;
+    }
+    if (e.code === "Escape") {
+      if (rulesModal && rulesModal.classList.contains("active")) {
+        rulesModal.classList.remove("active");
+      }
+      return;
+    }
+    if (!isPlaying) return;
+
+    // Number keys 1-9
+    const num = parseInt(e.key, 10);
+    let slotIdx = -1;
+    if (num >= 1 && num <= 9) {
+      slotIdx = num - 1;
+    } else {
+      const keyMap = { KeyQ: 0, KeyW: 1, KeyE: 2, KeyA: 3, KeyS: 4, KeyD: 5, KeyZ: 6, KeyX: 7, KeyC: 8 };
+      if (keyMap[e.code] !== undefined) slotIdx = keyMap[e.code];
+    }
+    if (slotIdx >= 0 && slotIdx < slots.length) {
+      e.preventDefault();
+      whack(slots[slotIdx]);
+    }
+  });
+
   startBtn.addEventListener("click", initGame);
   restartBtn.addEventListener("click", initGame);
 
