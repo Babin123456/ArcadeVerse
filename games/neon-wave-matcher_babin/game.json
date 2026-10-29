@@ -1,0 +1,17 @@
+{
+  "title": "Neon Wave Matcher",
+  "category": "Puzzle",
+  "lucideIcon": "activity",
+  "description": "Tune frequency, amplitude, and phase on a cyber oscilloscope to decrypt intercepted audio signals before time runs out.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Puzzle",
+    "Audio",
+    "Synth",
+    "Waveform"
+  ],
+  "stars": 48,
+  "featured": true
+}
