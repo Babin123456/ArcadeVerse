@@ -1,0 +1,18 @@
+{
+  "title": "Cyber Swarm Assault",
+  "category": "Action",
+  "lucideIcon": "crosshair",
+  "description": "Engage dive-bombing cybernetic drone swarms in high-intensity vertical shoot-em-up aerial combat.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Action",
+    "Shooter",
+    "Shmup",
+    "Retro",
+    "Space"
+  ],
+  "stars": 50,
+  "featured": true
+}
