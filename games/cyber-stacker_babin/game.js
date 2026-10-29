@@ -30,6 +30,8 @@
   const INITIAL_WIDTH = 220;
 
   let stack = [];
+  let level = 1;
+  const levelDisplay = document.getElementById('level-display');
   let debris = [];
   let particles = [];
   let currentBlock = null;

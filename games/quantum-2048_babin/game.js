@@ -407,3 +407,14 @@ class Quantum2048 {
 document.addEventListener("DOMContentLoaded", () => {
   new Quantum2048();
 });
+
+  // Guide Modal Listeners
+  const rulesBtn = document.getElementById('rules-btn');
+  const rulesModal = document.getElementById('rules-modal');
+  const closeRulesBtn = document.getElementById('close-rules-btn');
+  if (rulesBtn && rulesModal) {
+    rulesBtn.addEventListener('click', () => { rulesModal.style.display = 'flex'; });
+  }
+  if (closeRulesBtn && rulesModal) {
+    closeRulesBtn.addEventListener('click', () => { rulesModal.style.display = 'none'; });
+  }

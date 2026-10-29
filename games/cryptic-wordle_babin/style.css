@@ -325,3 +325,68 @@ body {
 .demo-tile.green { background: var(--color-green); color: #fff; }
 .demo-tile.amber { background: var(--color-amber); color: #fff; }
 .demo-tile.dark { background: var(--color-dark); color: #94a3b8; }
+
+
+/* Compact & Level HUD */
+.hud-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 9999px;
+  padding: 3px 9px;
+  font-size: 0.72rem;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #00f0ff;
+}
+
+.hud-pill-lbl {
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 0.65rem;
+}
+
+.hud-pill-val {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+/* Ensure compact full viewport fit without vertical scrolling */
+body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  padding: 0.5rem;
+}
+
+.game-container {
+  max-height: 98vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+
+.grid-container {
+  gap: 5px;
+  margin: 0.4rem 0;
+}
+
+.tile {
+  width: 48px;
+  height: 48px;
+  font-size: 1.25rem;
+}
+
+@media (max-height: 680px) {
+  .tile {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  .key {
+    height: 38px;
+    font-size: 0.8rem;
+  }
+}

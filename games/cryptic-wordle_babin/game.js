@@ -31,6 +31,10 @@
   const statMaxStreakEl = document.getElementById("stat-maxstreak");
 
   let secretWord = "";
+  let currentLevel = 1;
+  let currentScore = 0;
+  const currentLevelEl = document.getElementById("current-level");
+  const currentScoreEl = document.getElementById("current-score");
   let currentRow = 0;
   let currentTile = 0;
   let isGameOver = false;

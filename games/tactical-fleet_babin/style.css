@@ -320,3 +320,32 @@ button:focus-visible,
 
 .rules-list li { margin-bottom: 0.5rem; }
 .rules-list ul { margin-top: 0.25rem; margin-left: 0.5rem; }
+
+
+/* Responsive Compact Layout */
+body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  padding: 0.5rem;
+}
+
+.game-container {
+  max-height: 98vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.radar-board-wrapper {
+  max-height: calc(100vh - 250px);
+  max-width: calc(100vh - 250px);
+  margin: 0 auto;
+}
+
+@media (max-height: 680px) {
+  .radar-board-wrapper {
+    max-height: calc(100vh - 190px);
+    max-width: calc(100vh - 190px);
+  }
+}

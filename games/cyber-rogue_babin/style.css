@@ -471,3 +471,36 @@ kbd {
   font-family: var(--font-mono);
   font-size: 0.72rem;
 }
+
+
+/* Responsive Compact Layout */
+body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  padding: 0.5rem;
+}
+
+.crp-app {
+  max-height: 98vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.crp-arena-wrapper {
+  max-height: calc(100vh - 220px);
+  max-width: calc(100vh - 220px);
+  margin: 0 auto;
+}
+
+@media (max-height: 720px) {
+  .crp-arena-wrapper {
+    max-height: calc(100vh - 180px);
+    max-width: calc(100vh - 180px);
+  }
+  .dpad-btn {
+    width: 36px;
+    height: 36px;
+  }
+}

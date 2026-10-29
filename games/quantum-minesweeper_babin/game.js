@@ -36,6 +36,8 @@
   let totalMines = 10;
   let grid = [];
   let isGameOver = false;
+  let currentSector = 1;
+  const levelDisplay = document.getElementById('level-display');
   let isGameStarted = false;
   let flagsLeft = 10;
   let flagMode = false;

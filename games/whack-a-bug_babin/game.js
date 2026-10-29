@@ -55,6 +55,8 @@
   ];
 
   let score = 0;
+  let incidentLevel = 1;
+  const levelDisplay = document.getElementById('level-display');
   let combo = 0;
   let maxCombo = 0;
   let cpuTemp = 45;

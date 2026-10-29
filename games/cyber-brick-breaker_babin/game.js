@@ -614,6 +614,7 @@
     if (aliveCount === 0) {
       gameState = 'victory';
       victoryScoreEl.textContent = score;
+    btnNextLevel.textContent = `Advance to Level ${level + 1} →`;
       victoryOverlay.classList.add('active');
     }
   }
@@ -721,7 +722,18 @@
   // Button Listeners
   btnStart.addEventListener('click', startNewGame);
   btnRestart.addEventListener('click', startNewGame);
-  btnNextLevel.addEventListener('click', startNewGame);
+  btnNextLevel.addEventListener('click', () => {
+    level++;
+    victoryOverlay.classList.remove('active');
+    // Speed increases progressively each level
+    ball.baseSpeed = Math.min(10, 5.5 + (level - 1) * 0.4);
+    ball.speed = ball.baseSpeed;
+    resetBallAndPaddle();
+    initBricks();
+    gameState = 'playing';
+    requestAnimationFrame(gameLoop);
+    updateHUD();
+  });
 
   btnSound.addEventListener('click', () => {
     soundEnabled = !soundEnabled;

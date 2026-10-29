@@ -475,3 +475,28 @@ body {
     display: flex;
   }
 }
+
+
+/* Compact Viewport Scaling */
+.matrix-arcade-wrapper {
+  max-height: 98vh;
+  overflow: hidden;
+}
+
+#matrix-canvas {
+  max-height: calc(100vh - 180px);
+  width: auto;
+  aspect-ratio: 1 / 2;
+}
+
+@media (max-height: 680px) {
+  .matrix-arcade-wrapper {
+    padding: 0.35rem 0.5rem;
+  }
+  .matrix-header {
+    margin-bottom: 0.25rem;
+  }
+  #matrix-canvas {
+    max-height: calc(100vh - 130px);
+  }
+}
