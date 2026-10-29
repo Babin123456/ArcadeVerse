@@ -130,8 +130,8 @@ body {
 /* Scoreboard HUD */
 .cbb-hud {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.4rem;
 }
 
 .cbb-hud-card {
@@ -410,7 +410,8 @@ kbd {
 body {
   height: 100vh;
   max-height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 0.5rem;
 }
 
@@ -429,8 +430,10 @@ body {
 
 @media (max-height: 700px) {
   .cbb-hud {
-    padding: 0.25rem;
-  }
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.4rem;
+}
   .cbb-hud-val {
     font-size: 0.95rem;
   }

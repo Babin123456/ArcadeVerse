@@ -191,12 +191,14 @@ body {
 .crp-grid-container {
   position: relative;
   width: 100%;
+  max-width: 480px;
   aspect-ratio: 1 / 1;
   background: #040711;
   border: 1.5px solid var(--border-glow);
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 0 32px rgba(0, 245, 255, 0.15);
+  margin: 0 auto;
 }
 
 canvas {
@@ -477,7 +479,8 @@ kbd {
 body {
   height: 100vh;
   max-height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 0.5rem;
 }
 

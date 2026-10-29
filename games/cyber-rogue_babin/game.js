@@ -356,6 +356,7 @@
 
   function draw() {
     ctx.clearRect(0, 0, 500, 500);
+    if (!map || !map.length || !explored || !explored.length) return;
 
     // Draw Map Tiles
     for (let y = 0; y < GRID_SIZE; y++) {
@@ -478,5 +479,7 @@
     if (e.target === helpModal) helpModal.classList.remove('active');
   });
 
+  generateMap();
+  updateHUD();
   requestAnimationFrame(draw);
 })();
