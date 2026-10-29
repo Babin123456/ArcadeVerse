@@ -1,0 +1,17 @@
+{
+  "title": "Cyber Helix Fall",
+  "category": "Arcade",
+  "lucideIcon": "disc",
+  "description": "Rotate the neon helix tower to navigate a bouncing cyber sphere through gap sectors while avoiding glitch traps.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Arcade",
+    "Physics",
+    "Reflex",
+    "3D-Perspective"
+  ],
+  "stars": 45,
+  "featured": true
+}
