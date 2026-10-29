@@ -75,9 +75,29 @@ h1 {
 
 .scoreboard {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0.65rem;
   margin-bottom: 0.7rem;
+}
+
+.racer-sound-btn {
+  background: transparent;
+  border: none;
+  color: #60c9ff;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.racer-sound-btn:hover {
+  transform: scale(1.15);
+}
+
+.racer-sound-btn .hidden {
+  display: none;
 }
 
 .score-item {
