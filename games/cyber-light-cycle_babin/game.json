@@ -1,0 +1,17 @@
+{
+  "title": "Cyber Light Cycle",
+  "category": "Retro",
+  "lucideIcon": "zap",
+  "description": "Duel an AI opponent across a neon arena leaving solid light trails in a high-speed survival grid.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Retro",
+    "Tron",
+    "Arena",
+    "AI-Duel"
+  ],
+  "stars": 49,
+  "featured": true
+}

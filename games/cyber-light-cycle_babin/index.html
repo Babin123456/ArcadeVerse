@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Light Cycle | ArcadeVerse</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <div class="header-left">
+        <a href="../../index.html" class="back-link" aria-label="Return to ArcadeVerse Hub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Arcade Hub</span>
+        </a>
+        <h1 class="game-title">Cyber Light <span class="accent">Cycle</span></h1>
+      </div>
+      <div class="header-controls">
+        <select id="difficulty-select" class="diff-dropdown" aria-label="AI Duel Difficulty">
+          <option value="easy">Novice</option>
+          <option value="normal" selected>Veteran</option>
+          <option value="hard">Master</option>
+        </select>
+        <button id="sound-btn" class="icon-btn" type="button" aria-label="Toggle Sound Effects" title="Toggle Sound">
+          <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <svg id="sound-icon-off" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="help-btn" class="icon-btn" type="button" aria-label="Game Instructions" title="Instructions">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="scoreboard-bar">
+      <div class="score-card player-card">
+        <span class="label">PLAYER</span>
+        <span class="value" id="player-score-display">0</span>
+      </div>
+      <div class="score-card round-card">
+        <span class="label">ROUND</span>
+        <span class="value" id="round-display">1 / 5</span>
+      </div>
+      <div class="score-card enemy-card">
+        <span class="label">AI CYBER</span>
+        <span class="value" id="ai-score-display">0</span>
+      </div>
+    </div>
+
+    <main class="canvas-wrapper" role="region" aria-label="Light Cycle Grid Arena">
+      <canvas id="game-canvas" width="480" height="480"></canvas>
+
+      <!-- Overlay Menus -->
+      <div id="start-overlay" class="overlay">
+        <div class="overlay-card">
+          <h2 class="overlay-title">Cyber Light Cycle</h2>
+          <p class="overlay-desc">Enter the gladiatorial grid. Steer your cyan cycle to trap the autonomous magenta drone without colliding with light ribbons or arena perimeters.</p>
+          <div class="controls-guide">
+            <span class="guide-item"><kbd>&uarr;</kbd> <kbd>&darr;</kbd> <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> : Steer Cycle</span>
+            <span class="guide-item">Swipe on Canvas or Use Touch D-Pad</span>
+            <span class="guide-item">First to 3 Points Wins Match</span>
+          </div>
+          <button id="start-btn" class="btn btn-primary" type="button">Enter The Grid</button>
+        </div>
+      </div>
+
+      <div id="round-result-overlay" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title" id="round-result-title">Round Concluded</h2>
+          <p class="overlay-desc" id="round-result-desc">AI cycle impacted a light trail!</p>
+          <div class="results-stats">
+            <div class="stat-row"><span>Match Score:</span><strong id="match-standings">Player 1 - 0 AI</strong></div>
+          </div>
+          <button id="next-round-btn" class="btn btn-primary" type="button">Next Round</button>
+        </div>
+      </div>
+
+      <div id="match-gameover-overlay" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title" id="match-gameover-title">Match Finished</h2>
+          <p class="overlay-desc" id="match-gameover-desc">You conquered the Master AI grid!</p>
+          <div class="results-stats">
+            <div class="stat-row"><span>Final Match Result:</span><strong id="final-match-score">3 - 1</strong></div>
+          </div>
+          <button id="rematch-btn" class="btn btn-primary" type="button">New Match</button>
+        </div>
+      </div>
+
+      <div id="instructions-modal" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title">Grid Rules</h2>
+          <ul class="rules-list">
+            <li><strong>Solid Trails:</strong> Light cycles leave continuous walls behind them.</li>
+            <li><strong>Crashes:</strong> Crashing into the outer wall, your trail, or enemy trail results in instant elimination.</li>
+            <li><strong>No Reverse:</strong> You cannot reverse directly backwards into your own cycle trail.</li>
+            <li><strong>Match Play:</strong> Win 3 rounds to claim grid championship victory.</li>
+          </ul>
+          <button id="close-help-btn" class="btn btn-secondary" type="button">Dismiss</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Mobile Touch D-Pad -->
+    <div class="dpad-container" aria-label="Directional cycle controls">
+      <div class="dpad-row">
+        <button id="dpad-up" class="dpad-btn" type="button" aria-label="Steer Up">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
+        </button>
+      </div>
+      <div class="dpad-row middle">
+        <button id="dpad-left" class="dpad-btn" type="button" aria-label="Steer Left">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="dpad-center"></div>
+        <button id="dpad-right" class="dpad-btn" type="button" aria-label="Steer Right">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+      <div class="dpad-row">
+        <button id="dpad-down" class="dpad-btn" type="button" aria-label="Steer Down">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
