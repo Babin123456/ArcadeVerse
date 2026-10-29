@@ -1,0 +1,17 @@
+{
+  "title": "Neon Missile Command",
+  "category": "Action",
+  "lucideIcon": "shield-alert",
+  "description": "Defend neon city power grids from descending orbital warheads using precision flak detonations.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Action",
+    "Defense",
+    "Retro",
+    "Tactical"
+  ],
+  "stars": 48,
+  "featured": true
+}

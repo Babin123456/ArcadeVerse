@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Missile Command | ArcadeVerse</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <div class="header-left">
+        <a href="../../index.html" class="back-link" aria-label="Return to ArcadeVerse Hub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Arcade Hub</span>
+        </a>
+        <h1 class="game-title">Neon Missile <span class="accent">Command</span></h1>
+      </div>
+      <div class="header-controls">
+        <button id="sound-btn" class="icon-btn" type="button" aria-label="Toggle Sound Effects" title="Toggle Sound">
+          <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <svg id="sound-icon-off" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="help-btn" class="icon-btn" type="button" aria-label="Game Instructions" title="Instructions">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="scoreboard-bar">
+      <div class="score-card">
+        <span class="label">WAVE</span>
+        <span class="value" id="wave-display">1</span>
+      </div>
+      <div class="score-card highlight">
+        <span class="label">SCORE</span>
+        <span class="value" id="score-display">0</span>
+      </div>
+      <div class="score-card">
+        <span class="label">BEST</span>
+        <span class="value" id="best-display">0</span>
+      </div>
+      <div class="score-card">
+        <span class="label">AMMO</span>
+        <span class="value" id="ammo-display">30</span>
+      </div>
+    </div>
+
+    <main class="canvas-wrapper" role="region" aria-label="Missile Defense Canvas">
+      <canvas id="game-canvas" width="560" height="420"></canvas>
+
+      <!-- Overlay Menus -->
+      <div id="start-overlay" class="overlay">
+        <div class="overlay-card">
+          <h2 class="overlay-title">Neon Missile Command</h2>
+          <p class="overlay-desc">Incoming hypersonic orbital warheads detected! Tap or click anywhere to launch interceptor flak detonations. Defend all 4 power grids.</p>
+          <div class="controls-guide">
+            <span class="guide-item">Click or Tap Sky : Fire Flak Interceptor</span>
+            <span class="guide-item">Chain reactions destroy multiple warheads</span>
+          </div>
+          <button id="start-btn" class="btn btn-primary" type="button">Deploy Defense Grid</button>
+        </div>
+      </div>
+
+      <div id="gameover-overlay" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title gameover-text">Grid Obliterated</h2>
+          <p class="overlay-desc">All city power stations have suffered catastrophic orbital impacts.</p>
+          <div class="results-stats">
+            <div class="stat-row"><span>Final Score:</span><strong id="final-score">0</strong></div>
+            <div class="stat-row"><span>Waves Survived:</span><strong id="final-wave">0</strong></div>
+            <div class="stat-row"><span>Warheads Intercepted:</span><strong id="final-intercepts">0</strong></div>
+          </div>
+          <button id="restart-btn" class="btn btn-primary" type="button">Rebuild Grid</button>
+        </div>
+      </div>
+
+      <div id="wave-clear-overlay" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title wave-clear-text">Wave Secured</h2>
+          <p class="overlay-desc">Orbital assault repelled! Calculating defense bonus:</p>
+          <div class="results-stats">
+            <div class="stat-row"><span>Surviving Cities:</span><strong id="bonus-cities">0</strong></div>
+            <div class="stat-row"><span>Unspent Ammo:</span><strong id="bonus-ammo">0</strong></div>
+            <div class="stat-row"><span>Bonus Points:</span><strong id="bonus-points">+0</strong></div>
+          </div>
+          <button id="next-wave-btn" class="btn btn-primary" type="button">Next Wave</button>
+        </div>
+      </div>
+
+      <div id="instructions-modal" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title">Tactical Briefing</h2>
+          <ul class="rules-list">
+            <li><strong>Interceptors:</strong> Click or tap anywhere in the airspace to launch flak missiles.</li>
+            <li><strong>Flak Explosions:</strong> Missiles explode into expanding neon blast zones that vaporize any warheads inside.</li>
+            <li><strong>Chain Explosions:</strong> Exploding enemy missiles trigger secondary blasts!</li>
+            <li><strong>Ammo Conservation:</strong> You have 30 interceptors per wave. Remaining missiles award bonus score.</li>
+          </ul>
+          <button id="close-help-btn" class="btn btn-secondary" type="button">Dismiss</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
