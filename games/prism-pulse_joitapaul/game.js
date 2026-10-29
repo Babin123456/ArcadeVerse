@@ -54,8 +54,150 @@ const LEVELS = [
       { row: 3, col: 0, solved: "\\" }
     ],
     blockers: [{ row: 2, col: 2 }, { row: 2, col: 4 }, { row: 0, col: 3 }]
+  },
+  {
+    name: "Prism Matrix",
+    emitter: { row: 0, col: 0, direction: 1 },
+    receiver: { row: 5, col: 5 },
+    mirrors: [
+      { row: 0, col: 4, solved: "\\" },
+      { row: 2, col: 4, solved: "/" },
+      { row: 2, col: 2, solved: "/" },
+      { row: 5, col: 2, solved: "\\" }
+    ],
+    blockers: [{ row: 1, col: 2 }, { row: 3, col: 4 }, { row: 4, col: 1 }]
+  },
+  {
+    name: "Quantum Zigzag",
+    emitter: { row: 1, col: 0, direction: 1 },
+    receiver: { row: 4, col: 5 },
+    mirrors: [
+      { row: 1, col: 3, solved: "\\" },
+      { row: 3, col: 3, solved: "/" },
+      { row: 3, col: 1, solved: "/" },
+      { row: 5, col: 1, solved: "\\" },
+      { row: 5, col: 4, solved: "/" },
+      { row: 4, col: 4, solved: "/" }
+    ],
+    blockers: [{ row: 0, col: 3 }, { row: 2, col: 2 }, { row: 4, col: 2 }]
+  },
+  {
+    name: "Photon Cascade",
+    emitter: { row: 5, col: 0, direction: 0 },
+    receiver: { row: 0, col: 5 },
+    mirrors: [
+      { row: 2, col: 0, solved: "/" },
+      { row: 2, col: 2, solved: "\\" },
+      { row: 4, col: 2, solved: "\\" },
+      { row: 4, col: 4, solved: "/" },
+      { row: 1, col: 4, solved: "\\" },
+      { row: 1, col: 1, solved: "/" },
+      { row: 3, col: 1, solved: "\\" },
+      { row: 3, col: 5, solved: "/" }
+    ],
+    blockers: [{ row: 0, col: 2 }, { row: 2, col: 3 }, { row: 5, col: 3 }, { row: 5, col: 5 }]
   }
 ];
+
+// Sound Synthesizer via Web Audio API
+let audioCtx = null;
+let soundEnabled = localStorage.getItem("prism-pulse-sound-enabled") !== "false";
+
+function getAudioContext() {
+  if (!audioCtx) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioContextClass) {
+      audioCtx = new AudioContextClass();
+    }
+  }
+  if (audioCtx && audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+function updateSoundUI() {
+  const iconOn = document.getElementById("sound-icon-on");
+  const iconOff = document.getElementById("sound-icon-off");
+  const soundBtn = document.getElementById("sound-toggle-btn");
+  if (iconOn && iconOff && soundBtn) {
+    if (soundEnabled) {
+      iconOn.classList.remove("hidden");
+      iconOff.classList.add("hidden");
+      soundBtn.setAttribute("aria-label", "Mute sound");
+      soundBtn.setAttribute("title", "Mute sound");
+    } else {
+      iconOn.classList.add("hidden");
+      iconOff.classList.remove("hidden");
+      soundBtn.setAttribute("aria-label", "Unmute sound");
+      soundBtn.setAttribute("title", "Unmute sound");
+    }
+  }
+}
+
+function playRotateSound() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    const now = ctx.currentTime;
+    osc.frequency.setValueAtTime(540, now);
+    osc.frequency.exponentialRampToValueAtTime(420, now + 0.08);
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.08);
+  } catch (_) {}
+}
+
+function playLitSound() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    [659.25, 880].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, now + i * 0.04);
+      gain.gain.setValueAtTime(0.15, now + i * 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + i * 0.04);
+      osc.stop(now + 0.35);
+    });
+  } catch (_) {}
+}
+
+function playWinSound() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "triangle";
+      const start = now + idx * 0.09;
+      osc.frequency.setValueAtTime(freq, start);
+      gain.gain.setValueAtTime(0.2, start);
+      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.3);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + 0.3);
+    });
+  } catch (_) {}
+}
 
 let levelIndex = 0;
 let moves = 0;
@@ -134,6 +276,7 @@ function traceBeam() {
 function rotateMirror(index) {
   if (levelComplete) return;
 
+  playRotateSound();
   mirrors[index].orientation = mirrors[index].orientation === "/" ? "\\" : "/";
   moves++;
   movesLabel.textContent = moves;
@@ -142,6 +285,8 @@ function rotateMirror(index) {
 
   if (receiverLit) {
     levelComplete = true;
+    playLitSound();
+    playWinSound();
     statusElement.textContent = levelIndex === LEVELS.length - 1
       ? `Labyrinth solved in ${moves} rotations. The prism is stable!`
       : `${getLevel().name} complete in ${moves} rotations.`;
@@ -226,5 +371,16 @@ nextButton.addEventListener("click", () => {
   levelIndex++;
   resetLevel();
 });
+
+const soundToggleBtn = document.getElementById("sound-toggle-btn");
+if (soundToggleBtn) {
+  soundToggleBtn.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem("prism-pulse-sound-enabled", soundEnabled);
+    updateSoundUI();
+    if (soundEnabled) playRotateSound();
+  });
+}
+updateSoundUI();
 
 resetLevel();

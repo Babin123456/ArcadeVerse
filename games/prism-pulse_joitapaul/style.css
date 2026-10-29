@@ -116,6 +116,18 @@ h1 {
   font-weight: 700;
   cursor: pointer;
   touch-action: manipulation;
+  transition: transform 0.12s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.sound-btn {
+  padding: 0 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sound-btn .hidden {
+  display: none;
 }
 
 .secondary-button {
