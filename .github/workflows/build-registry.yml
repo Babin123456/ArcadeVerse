@@ -5,7 +5,12 @@ on:
     branches: [ main ]
     paths:
       - 'games/**'
-      - 'scripts/build-registry.js'
+      - 'scripts/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'games/**'
+      - 'scripts/**'
   workflow_dispatch:
 
 permissions:
@@ -25,14 +30,17 @@ jobs:
         with:
           node-version: 20
 
+      - name: Validate Community Games Pre-Flight
+        run: node scripts/validate-games.js
+
       - name: Compile Games Registry & Contributor Stats
+        if: github.event_name != 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          node scripts/validate-games.js
-          node scripts/build-registry.js
+        run: node scripts/build-registry.js
 
       - name: Commit & Push Updated Registry
+        if: github.event_name != 'pull_request'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -41,5 +49,6 @@ jobs:
             echo "No registry changes detected."
           else
             git commit -m "chore(registry): auto-compile games-registry.js [skip ci]"
-            git push origin main
+            git pull --rebase origin main || true
+            git push origin HEAD:main
           fi

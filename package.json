@@ -1,10 +1,12 @@
 {
   "name": "arcadeverse",
   "version": "1.2.0",
-  "description": "The Open-Source Community Arcade Station for Nexus Spring Of Code – Winter Edition 2026",
+  "description": "The Open-Source Community Arcade Station for Nexus Spring of Code – Winter Edition 2026",
   "main": "assets/js/app.js",
   "scripts": {
+    "test": "node scripts/validate-games.js",
     "validate": "node scripts/validate-games.js",
+    "build": "node scripts/build-registry.js",
     "build:registry": "node scripts/build-registry.js"
   },
   "keywords": [
