@@ -185,9 +185,16 @@
     } else if (key === "s" || key === "4" || e.code === "ArrowDown") {
       e.preventDefault();
       handlePadInput(3);
-    } else if (e.code === "Space" && !isPlaying) {
+    } else if ((e.code === "Space" || e.code === "Enter") && !isPlaying) {
       e.preventDefault();
       initGame();
+    } else if (e.code === "Escape") {
+      if (rulesModal && rulesModal.classList.contains("active")) {
+        rulesModal.classList.remove("active");
+      }
+      if (gameoverModal && gameoverModal.classList.contains("active")) {
+        gameoverModal.classList.remove("active");
+      }
     }
   });
 

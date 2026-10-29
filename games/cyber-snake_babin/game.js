@@ -8,7 +8,7 @@
   const ctx = canvas.getContext("2d");
 
   const scoreDisplay = document.getElementById("score-display");
-  const speedDisplay = document.getElementById("speed-display");
+  const levelDisplay = document.getElementById("level-display");
   const bestScoreEl = document.getElementById("best-score");
 
   const startOverlay = document.getElementById("start-overlay");
@@ -40,7 +40,7 @@
   let goldenTimer = 0;
   let score = 0;
   let level = 1;
-  const levelDisplay = document.getElementById('level-display');
+  let tickSpeed = 120;
   let isPlaying = false;
   let gameLoopTimeout = null;
   let bestScore = 0;
@@ -111,7 +111,8 @@
     isPlaying = true;
 
     scoreDisplay.textContent = "0";
-    speedDisplay.textContent = "1.0x";
+    level = 1;
+    if (levelDisplay) levelDisplay.textContent = "1";
 
     startOverlay.classList.remove("active");
     gameoverOverlay.classList.remove("active");
@@ -149,13 +150,13 @@
     // Check eating normal food
     if (food && newX === food.x && newY === food.y) {
       score += 10;
+      level = Math.floor(score / 30) + 1;
       spawnFood();
       spawnGoldenFood();
 
       // Progressive speedup
       tickSpeed = Math.max(65, 120 - Math.floor(score / 30) * 8);
-      const speedTier = (120 / tickSpeed).toFixed(1);
-      speedDisplay.textContent = `${speedTier}x`;
+      if (levelDisplay) levelDisplay.textContent = level;
 
       scoreDisplay.textContent = score;
       updateBestScore();
@@ -300,9 +301,13 @@
     } else if (key === "arrowright" || key === "d") {
       e.preventDefault();
       setDirection(1, 0);
-    } else if (e.code === "Space" && !isPlaying) {
+    } else if ((e.code === "Space" || e.code === "Enter") && !isPlaying) {
       e.preventDefault();
       initGame();
+    } else if (e.code === "Escape") {
+      if (rulesModal && rulesModal.classList.contains("active")) {
+        rulesModal.classList.remove("active");
+      }
     }
   });
 
