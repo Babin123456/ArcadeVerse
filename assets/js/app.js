@@ -212,6 +212,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const favorited = favs.has(game.id);
       const actionText = 'Play Now <i data-lucide="play" style="width: 13px; height: 13px; vertical-align: middle; margin-left: 2px;"></i>';
 
+      const userRating = (window.GameRatings && window.GameRatings.ratings[game.id]) || null;
+      const displayScore = userRating ? Number(userRating).toFixed(1) : (game.stars ? (game.stars / 10).toFixed(1) : "5.0");
+      const currentStar = userRating || Math.min(5, Math.max(1, Math.round((game.stars || 25) / 10)));
+
       card.innerHTML = `
         <div class="game-card-preview">
           <span class="game-category-tag">${game.category}</span>
@@ -225,6 +229,16 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="game-card-body">
           <h3 class="game-card-title">${game.title}</h3>
           <p class="game-card-desc">${game.description}</p>
+          <div class="game-card-rating-row">
+            <div class="game-rating-stars" data-game-id="${game.id}" aria-label="Rating for ${game.title}">
+              ${[1, 2, 3, 4, 5].map(starNum => `
+                <button type="button" class="rate-star-btn ${currentStar >= starNum ? 'voted' : ''}" data-game="${game.id}" data-star="${starNum}" title="Rate ${starNum} star${starNum > 1 ? 's' : ''}" aria-label="Rate ${starNum} stars">
+                  <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </button>
+              `).join('')}
+              <span class="rating-badge">${displayScore}</span>
+            </div>
+          </div>
           <div class="game-card-footer">
             <div class="contributor-meta">
               <div class="contributor-avatar">${game.author.charAt(0).toUpperCase()}</div>
@@ -249,7 +263,36 @@ document.addEventListener("DOMContentLoaded", () => {
         openGameModal(game, playBtn);
       });
 
-      card.addEventListener("click", () => openGameModal(game, card));
+      // Direct star rating click binding - 100% reliable, never triggers game modal
+      const starBtns = card.querySelectorAll(".rate-star-btn");
+      starBtns.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const gameId = btn.dataset.game;
+          const score = parseInt(btn.dataset.star, 10);
+          if (window.GameRatings && gameId && score) {
+            window.GameRatings.setGameRating(gameId, score);
+            window.GameRatings.updateStarUI(gameId, score);
+          }
+        });
+      });
+
+      // Clicking any empty area of the rating row also stops modal launch
+      const ratingRow = card.querySelector(".game-card-rating-row");
+      if (ratingRow) {
+        ratingRow.addEventListener("click", (e) => {
+          e.stopPropagation();
+        });
+      }
+
+      // Card click opens game modal EXCEPT when clicking favorite or rating elements
+      card.addEventListener("click", (e) => {
+        if (e.target.closest(".rate-star-btn, .game-rating-stars, .game-card-rating-row, .btn-card-favorite")) {
+          return;
+        }
+        openGameModal(game, card);
+      });
       gamesGrid.appendChild(card);
     });
 
@@ -269,6 +312,8 @@ document.addEventListener("DOMContentLoaded", () => {
     newTabBtn.href = game.path;
 
     updateModalFavoriteButton(isFavorite(game.id));
+
+
 
     // Record game play in Recently Played drawer
     if (window.ArcadeRecent && typeof window.ArcadeRecent.recordPlayed === "function") {
@@ -361,6 +406,13 @@ document.addEventListener("DOMContentLoaded", () => {
       currentCategory = pill.getAttribute("data-category");
       renderGames();
     });
+  });
+
+  // Re-sort when a game rating is updated
+  window.addEventListener("rating-updated", () => {
+    if (currentSort === "rating") {
+      renderGames();
+    }
   });
 
   // Initial render

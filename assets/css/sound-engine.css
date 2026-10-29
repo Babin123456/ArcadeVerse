@@ -78,3 +78,58 @@
     padding: 6px 10px;
   }
 }
+
+/* Light Mode & Accessibility Enhancements for Sound Engine */
+html.light-mode .sound-toggle-btn {
+  background: #ffffff;
+  border-color: rgba(2, 132, 199, 0.3);
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+html.light-mode .sound-toggle-btn:hover {
+  border-color: #0284c7;
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.25);
+}
+
+html.light-mode .sound-toggle-btn.sound-muted {
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #94a3b8;
+  background: #f1f5f9;
+}
+
+html.light-mode .eq-bar {
+  background: #0284c7;
+}
+
+.sound-toggle-btn:focus-visible {
+  outline: 2px solid #00f5ff;
+  outline-offset: 2px;
+}
+
+/* Explicit Light Mode Contrast Enhancements for Sound Toggle Button */
+[data-theme="light"] .sound-toggle-btn {
+  background: #ffffff !important;
+  border: 1.5px solid #0284c7 !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .sound-toggle-btn .sound-label {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .sound-toggle-btn .eq-bar {
+  background: #0284c7 !important;
+}
+
+[data-theme="light"] .sound-toggle-btn.sound-muted {
+  border-color: #cbd5e1 !important;
+  color: #64748b !important;
+  background: #f8fafc !important;
+}
+
+[data-theme="light"] .sound-toggle-btn.sound-muted .sound-label {
+  color: #64748b !important;
+}

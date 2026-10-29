@@ -1,6 +1,7 @@
 /**
  * ArcadeVerse Global Web Audio Sound Engine
- * Zero-asset synthesized UI interaction audio using native Web Audio API
+ * Procedural tactile acoustic audio synthesis using native Web Audio API
+ * Realistic mechanical switch clicks and throttled responsive hover cues
  * Author: Babin Bid (@Babin123456)
  * Open Source for ArcadeVerse - NSOC Winter Edition 2026
  */
@@ -13,7 +14,7 @@
   const SoundEngine = {
     ctx: null,
     enabled: true,
-    volume: 0.25,
+    volume: 0.28,
 
     init() {
       this.loadSettings();
@@ -37,7 +38,7 @@
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
         if (saved && typeof saved.enabled === 'boolean') {
           this.enabled = saved.enabled;
-          this.volume = saved.volume || 0.25;
+          this.volume = saved.volume || 0.28;
         }
       } catch (_) {}
     },
@@ -51,51 +52,106 @@
       } catch (_) {}
     },
 
-    playTone(freq, type = 'sine', duration = 0.08, gainRatio = 1) {
+    // Realistic Physical Mechanical Switch Click
+    playClick() {
       if (!this.enabled) return;
       const ctx = this.getAudioContext();
       if (!ctx) return;
 
       try {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        const now = ctx.currentTime;
 
-        const currentGain = this.volume * gainRatio;
-        gain.gain.setValueAtTime(currentGain, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+        // 1. Sharp high-frequency mechanical switch pop (transient snap)
+        const oscClick = ctx.createOscillator();
+        const gainClick = ctx.createGain();
 
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + duration);
+        oscClick.type = 'triangle';
+        oscClick.frequency.setValueAtTime(1750, now);
+        oscClick.frequency.exponentialRampToValueAtTime(75, now + 0.012);
+
+        gainClick.gain.setValueAtTime(this.volume * 0.95, now);
+        gainClick.gain.exponentialRampToValueAtTime(0.0001, now + 0.014);
+
+        oscClick.connect(gainClick);
+        gainClick.connect(ctx.destination);
+
+        oscClick.start(now);
+        oscClick.stop(now + 0.015);
+
+        // 2. Subtle low acoustic bottom-out thump (physical keycap reverberation)
+        const oscBody = ctx.createOscillator();
+        const gainBody = ctx.createGain();
+
+        oscBody.type = 'sine';
+        oscBody.frequency.setValueAtTime(160, now + 0.003);
+        oscBody.frequency.exponentialRampToValueAtTime(40, now + 0.024);
+
+        gainBody.gain.setValueAtTime(this.volume * 0.45, now + 0.003);
+        gainBody.gain.exponentialRampToValueAtTime(0.0001, now + 0.026);
+
+        oscBody.connect(gainBody);
+        gainBody.connect(ctx.destination);
+
+        oscBody.start(now + 0.003);
+        oscBody.stop(now + 0.028);
       } catch (_) {}
     },
 
-    // Standardized UI Sound Effects
+    // Subtle tactile hover tick
     playHover() {
-      this.playTone(520, 'sine', 0.04, 0.4);
-    },
+      if (!this.enabled) return;
+      const ctx = this.getAudioContext();
+      if (!ctx) return;
 
-    playClick() {
-      this.playTone(840, 'triangle', 0.06, 0.7);
+      try {
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(720, now);
+        osc.frequency.exponentialRampToValueAtTime(320, now + 0.02);
+
+        gain.gain.setValueAtTime(this.volume * 0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.022);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.025);
+      } catch (_) {}
     },
 
     playFilterSelect() {
-      this.playTone(420, 'sine', 0.05, 0.6);
-      setTimeout(() => this.playTone(630, 'sine', 0.07, 0.8), 45);
+      this.playClick();
+      setTimeout(() => {
+        if (!this.enabled) return;
+        const ctx = this.getAudioContext();
+        if (!ctx) return;
+        try {
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(640, now);
+          osc.frequency.exponentialRampToValueAtTime(960, now + 0.04);
+          gain.gain.setValueAtTime(this.volume * 0.4, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } catch (_) {}
+      }, 35);
     },
 
     playModalOpen() {
-      this.playTone(330, 'sine', 0.08, 0.7);
-      setTimeout(() => this.playTone(495, 'triangle', 0.1, 0.9), 60);
-      setTimeout(() => this.playTone(660, 'sine', 0.14, 1.0), 120);
+      this.playClick();
     },
 
     playModalClose() {
-      this.playTone(600, 'triangle', 0.06, 0.6);
-      setTimeout(() => this.playTone(380, 'sine', 0.08, 0.5), 50);
+      this.playClick();
     },
 
     renderControls() {
@@ -130,21 +186,31 @@
     },
 
     bindDOMSounds() {
+      let lastHoverTarget = null;
+      let lastHoverTime = 0;
+
+      // Throttled and deduplicated mouseover: NEVER plays repeatedly when moving within the same card/button
       document.addEventListener('mouseover', (e) => {
-        if (e.target.closest('.game-card, .category-pill, .btn, .nav-links a')) {
-          this.playHover();
+        const target = e.target.closest('.game-card, .pill, .btn, .nav-item, .podium-card, .table-trophy-btn, .theme-toggle-btn');
+        if (!target) {
+          lastHoverTarget = null;
+          return;
         }
+        if (target === lastHoverTarget) return;
+
+        const now = Date.now();
+        if (now - lastHoverTime < 130) return;
+
+        lastHoverTarget = target;
+        lastHoverTime = now;
+        this.playHover();
       });
 
       document.addEventListener('click', (e) => {
-        if (e.target.closest('.category-pill')) {
+        if (e.target.closest('.pill, .category-pill')) {
           this.playFilterSelect();
-        } else if (e.target.closest('.btn, .nav-links a')) {
+        } else if (e.target.closest('.btn, .nav-item, .rate-star-btn, .podium-trophy-btn, .table-trophy-btn, .theme-toggle-btn, .btn-play-trigger')) {
           this.playClick();
-        } else if (e.target.closest('[data-action="open-game-modal"]')) {
-          this.playModalOpen();
-        } else if (e.target.closest('#modal-close-btn, #modal-overlay')) {
-          this.playModalClose();
         }
       });
     }

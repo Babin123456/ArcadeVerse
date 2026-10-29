@@ -263,40 +263,42 @@ textarea:focus-visible,
   position: sticky;
   top: 0;
   z-index: 1000;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  background: var(--bg-surface);
-  border-bottom: 1px solid var(--border-subtle);
-  transition: all 0.3s var(--ease-smooth);
+  background: rgba(6, 11, 25, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(0, 245, 255, 0.12);
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, backdrop-filter 0.25s ease;
 }
 
-/* Squeeze effect on scroll */
 .navbar.scrolled {
-  background: rgba(10, 12, 18, 0.95);
-  border-bottom-color: var(--border-medium);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  background: rgba(6, 11, 25, 0.65) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(0, 245, 255, 0.22);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
 
+/* Stable navbar without fluctuation or layout shifts */
 .navbar.scrolled .nav-container {
-  padding: 0.5rem 2rem;
+  padding: 0.85rem 2rem;
 }
 
 .navbar.scrolled .logo {
-  font-size: 1.25rem;
+  font-size: 1.45rem;
 }
 
 .navbar.scrolled .nav-links {
-  padding: 0.2rem 0.4rem;
+  padding: 0.25rem 0.5rem;
 }
 
 .navbar.scrolled .nav-item {
-  font-size: 0.82rem;
-  padding: 0.35rem 0.8rem;
+  font-size: 0.9rem;
+  padding: 0.45rem 1rem;
 }
 
 .navbar.scrolled .btn-sm {
-  padding: 0.4rem 0.9rem;
-  font-size: 0.82rem;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.88rem;
 }
 
 .nav-container {
@@ -4711,17 +4713,21 @@ textarea:focus-visible,
   color: #000000 !important;
 }
 
-/* Header & Brand */
+/* Header & Brand - Real Glassy Transparency in Light Mode */
 [data-theme="light"] .navbar {
-  background: rgba(252, 249, 242, 0.92);
-  border-bottom: 1px solid var(--border-medium);
-  box-shadow: 0 4px 20px rgba(70, 50, 25, 0.05);
+  background: rgba(252, 249, 242, 0.72) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(70, 50, 25, 0.04) !important;
 }
 
 [data-theme="light"] .navbar.scrolled {
-  background: rgba(252, 249, 242, 0.98);
-  border-bottom-color: var(--border-medium);
-  box-shadow: 0 10px 30px rgba(70, 50, 25, 0.08);
+  background: rgba(252, 249, 242, 0.68) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 10px 30px rgba(70, 50, 25, 0.08) !important;
 }
 
 [data-theme="light"] .logo,
@@ -6084,4 +6090,267 @@ textarea:focus-visible,
   border: 1px solid rgba(37, 99, 235, 0.25);
   color: #1d4ed8 !important;
   font-weight: 700;
+}
+
+/* =========================================================================
+   IN-APP CIRCULAR PAGE TRANSITION LOADER & SMOOTH ANIMATIONS
+   ========================================================================= */
+html {
+  scroll-behavior: smooth;
+}
+
+.page-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(4, 7, 18, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-loader-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.loader-spinner-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.loader-spinner-circle {
+  width: 48px;
+  height: 48px;
+  border: 3.5px solid rgba(0, 245, 255, 0.15);
+  border-top-color: #00f5ff;
+  border-right-color: #38bdf8;
+  border-radius: 50%;
+  animation: pageSpin 0.7s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.35);
+}
+
+@keyframes pageSpin {
+  to { transform: rotate(360deg); }
+}
+
+.loader-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+[data-theme="light"] .page-loader-overlay {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+[data-theme="light"] .loader-spinner-circle {
+  border-color: rgba(2, 132, 199, 0.2);
+  border-top-color: #0284c7;
+  border-right-color: #0284c7;
+  box-shadow: 0 0 16px rgba(2, 132, 199, 0.3);
+}
+
+[data-theme="light"] .loader-text {
+  color: #0284c7;
+}
+
+/* =========================================================================
+   LIGHT MODE: HIGH CONTRAST ARCHITECTURE EXPLAINER & GAMES HEADER CONTROLS
+   ========================================================================= */
+[data-theme="light"] .engine-explainer-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .engine-step-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-theme="light"] .engine-step-card:hover {
+  background: #ffffff !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.15) !important;
+}
+
+[data-theme="light"] .engine-step-card h4 {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .engine-step-card p {
+  color: #334155 !important;
+  font-size: 0.88rem !important;
+  line-height: 1.55 !important;
+}
+
+[data-theme="light"] .engine-step-card code {
+  background: #f1f5f9 !important;
+  color: #0284c7 !important;
+  border: 1px solid rgba(2, 132, 199, 0.25) !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="light"] .engine-step-card .step-num {
+  color: rgba(15, 23, 42, 0.16) !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .engine-step-card .step-icon {
+  background: rgba(2, 132, 199, 0.1) !important;
+  border: 1px solid rgba(2, 132, 199, 0.3) !important;
+  color: #0284c7 !important;
+}
+
+/* Step 01: Octocat is filled */
+.engine-step-card .step-icon svg:not(.lucide) {
+  fill: #38bdf8;
+}
+[data-theme="light"] .engine-step-card .step-icon svg:not(.lucide) {
+  fill: #0284c7 !important;
+}
+
+/* Steps 02, 03, 04: Lucide icons are stroke-based outlines - NEVER fill them solid */
+.engine-step-card .step-icon .lucide,
+.engine-step-card .step-icon svg.lucide,
+[data-theme="light"] .engine-step-card .step-icon .lucide,
+[data-theme="light"] .engine-step-card .step-icon svg.lucide {
+  fill: none !important;
+  stroke: #0284c7 !important;
+  stroke-width: 2 !important;
+}
+
+/* Games Section Header & Controls in Light Mode */
+[data-theme="light"] .search-box {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+[data-theme="light"] .search-box input {
+  color: #0f172a !important;
+  background: transparent !important;
+}
+
+[data-theme="light"] .search-box input::placeholder {
+  color: #64748b !important;
+}
+
+[data-theme="light"] .search-box svg {
+  stroke: #0f172a !important;
+}
+
+[data-theme="light"] .sort-box {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+[data-theme="light"] .sort-label {
+  color: #334155 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .sort-select,
+[data-theme="light"] #catalog-sort-select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+[data-theme="light"] .sort-select option,
+[data-theme="light"] #catalog-sort-select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  padding: 8px 12px;
+}
+
+[data-theme="light"] .category-pills .pill {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="light"] .category-pills .pill:hover {
+  background: #f0f9ff !important;
+  color: #0284c7 !important;
+  border-color: #0284c7 !important;
+}
+
+[data-theme="light"] .category-pills .pill.active {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border-color: #0284c7 !important;
+}
+
+/* =========================================================================
+   LIGHT MODE: GAME LAUNCHER MODAL & TOPBAR HEADER CONTRAST
+   ========================================================================= */
+[data-theme="light"] .modal-window {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="light"] .modal-topbar {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] .modal-game-info h3,
+[data-theme="light"] #modal-game-title {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .modal-game-info .author-tag {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="light"] .modal-game-info .badge {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border: 1px solid #bfdbfe !important;
+}
+
+[data-theme="light"] .modal-controls .btn-icon,
+[data-theme="light"] .modal-controls .btn-close {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .modal-controls .btn-icon:hover,
+[data-theme="light"] .modal-controls .btn-close:hover {
+  background: #e2e8f0 !important;
+  color: #000000 !important;
+}
+
+[data-theme="light"] .modal-controls .btn-icon svg,
+[data-theme="light"] .modal-controls .btn-close svg {
+  stroke: #0f172a !important;
+}
+
+/* Explicit Light Mode Override for Certificate Modal Title */
+[data-theme="light"] .trophy-modal-header h3,
+[data-theme="light"] .trophy-modal-title,
+html.light-mode .trophy-modal-header h3,
+html.light-mode .trophy-modal-title {
+  color: #0f172a !important;
+  font-weight: 800 !important;
 }

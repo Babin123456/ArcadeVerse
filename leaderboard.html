@@ -15,6 +15,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cambria+Math&family=Permanent+Marker&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/a11y-engine.css">
+  <link rel="stylesheet" href="assets/css/trophy-card.css">
+  <link rel="stylesheet" href="assets/css/sound-engine.css">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -164,7 +166,7 @@
       <!-- Dedicated Admin & Project Architect Rank -->
       <div class="admin-spotlight-banner">
         <div class="admin-avatar-wrap">
-          <img src="https://avatars.githubusercontent.com/u/144198639?v=4" alt="Debasmita Bose" class="admin-avatar-img" onerror="this.onerror=null; this.src='https://github.com/DebasmitaBose0.png'">
+          <img src="https://avatars.githubusercontent.com/u/144198639?v=4" alt="Debasmita Bose" class="admin-avatar-img" crossorigin="anonymous" onerror="this.onerror=null; this.src='https://github.com/DebasmitaBose0.png'">
           <span class="admin-crown-badge"><i data-lucide="crown"></i></span>
         </div>
         <div style="flex-grow: 1;">
@@ -180,6 +182,10 @@
         <div class="admin-stats-badge">
           <span class="score-title">PERMANENT LEAD</span>
           <span class="score-num"><i data-lucide="crown"></i> ADMIN</span>
+          <button type="button" class="btn btn-sm btn-secondary" data-action="open-trophy-card" data-player="Debasmita Bose" data-handle="DebasmitaBose0" data-avatar="https://avatars.githubusercontent.com/u/144198639?v=4" data-score="1,820 PTS" data-game="Core Platform & Quantum Matrix" data-rank="Project Lead & Core Architect" style="margin-top: 0.5rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.35rem 0.6rem; font-size: 0.78rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            Trophy Card
+          </button>
           <span class="admin-sub-stat" id="admin-meta-info" style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">174 Commits • 3 Games • 1,820 pts</span>
         </div>
       </div>
@@ -524,12 +530,21 @@
   <script src="assets/js/navbar.js"></script>
   <script src="assets/js/games-registry.js"></script>
   <script src="assets/js/a11y-engine.js"></script>
+  <script src="assets/js/trophy-card.js"></script>
+  <script src="assets/js/sound-engine.js"></script>
   <script src="assets/js/leaderboard.js"></script>
   <script>
     if (window.lucide) {
       lucide.createIcons();
     }
   </script>
+    <!-- Page Transition Circular Loader -->
+  <div id="page-transition-loader" class="page-loader-overlay" aria-hidden="true">
+    <div class="loader-spinner-wrap">
+      <div class="loader-spinner-circle"></div>
+      <span class="loader-text">Loading...</span>
+    </div>
+  </div>
   <!-- Back to Top Floating Button -->
   <button class="back-to-top-btn" id="back-to-top-btn" type="button" aria-label="Back to top" title="Back to top">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

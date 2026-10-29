@@ -17,6 +17,9 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/daily-challenge.css">
   <link rel="stylesheet" href="assets/css/a11y-engine.css">
+  <link rel="stylesheet" href="assets/css/trophy-card.css">
+  <link rel="stylesheet" href="assets/css/sound-engine.css">
+  <link rel="stylesheet" href="assets/css/game-ratings.css">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -356,11 +359,21 @@
   <script src="assets/js/app.js"></script>
   <script src="assets/js/daily-challenge.js"></script>
   <script src="assets/js/a11y-engine.js"></script>
+  <script src="assets/js/trophy-card.js"></script>
+  <script src="assets/js/sound-engine.js"></script>
+  <script src="assets/js/game-ratings.js"></script>
   <script>
     if (window.lucide) {
       lucide.createIcons();
     }
   </script>
+    <!-- Page Transition Circular Loader -->
+  <div id="page-transition-loader" class="page-loader-overlay" aria-hidden="true">
+    <div class="loader-spinner-wrap">
+      <div class="loader-spinner-circle"></div>
+      <span class="loader-text">Loading...</span>
+    </div>
+  </div>
   <!-- Back to Top Floating Button -->
   <button class="back-to-top-btn" id="back-to-top-btn" type="button" aria-label="Back to top" title="Back to top">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

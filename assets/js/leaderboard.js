@@ -425,9 +425,11 @@ document.addEventListener("DOMContentLoaded", () => {
           <span><i data-lucide="git-commit" style="width: 0.8rem; height: 0.8rem;"></i> ${item.commits} Commit${item.commits === 1 ? '' : 's'}</span>
         </div>
 
-        <a href="https://github.com/${item.login}" target="_blank" rel="noopener noreferrer" class="podium-gh-btn" title="View GitHub profile">
-          <i data-lucide="external-link"></i> View Profile
-        </a>
+        <div class="podium-actions-row">
+          <button type="button" class="podium-trophy-btn" data-action="open-trophy-card" data-player="${item.name || item.login}" data-handle="${item.login}" data-avatar="${item.avatar_url || ''}" data-score="${score} PTS" data-game="NSOC 2026 Hall of Fame" data-rank="${slot.badgeLabel}" data-badge="NSOC 2026" title="Generate Verified Achievement Certificate">
+            <i data-lucide="award"></i> Trophy Certificate
+          </button>
+        </div>
       `;
 
       podiumContainer.appendChild(card);
@@ -509,6 +511,9 @@ document.addEventListener("DOMContentLoaded", () => {
             <a href="https://github.com/DebasmitaBose0/ArcadeVerse/pulls?q=author%3A${item.login}" target="_blank" rel="noopener noreferrer" class="activity-link-btn" title="View Pull Requests by @${item.login}">
               <i data-lucide="git-pull-request"></i> PRs
             </a>
+            <button type="button" class="activity-link-btn table-trophy-btn" data-action="open-trophy-card" data-player="${item.name || item.login}" data-handle="${item.login}" data-avatar="${item.avatar_url || ''}" data-score="${score} PTS" data-game="Contributor Milestone" data-rank="#${rank} Contributor" data-badge="NSOC 2026" title="Generate Verified Achievement Certificate">
+              <i data-lucide="award"></i> Certificate
+            </button>
           </div>
         </td>
         <td style="text-align: right;">
@@ -535,6 +540,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const score = calculateScore(adminUser);
     adminMetaInfo.textContent = `${adminUser.commits} Commits • ${adminUser.gamesCount} Games • ${score} pts`;
+
+    // Ensure Admin Trophy Certificate button has direct CORS-enabled avatar URL
+    const adminTrophyBtn = document.querySelector('.admin-stats-badge [data-action="open-trophy-card"]');
+    if (adminTrophyBtn) {
+      adminTrophyBtn.dataset.avatar = adminUser.avatar_url || "https://avatars.githubusercontent.com/u/144198639?v=4";
+      adminTrophyBtn.dataset.handle = adminUser.login || "DebasmitaBose0";
+      adminTrophyBtn.dataset.player = adminUser.name || "Debasmita Bose";
+      adminTrophyBtn.dataset.score = `${score} PTS`;
+      adminTrophyBtn.dataset.rank = "Project Lead & Core Architect";
+      adminTrophyBtn.dataset.game = "Core Platform & Quantum Matrix";
+    }
 
     const adminBadgesContainer = document.getElementById("admin-badges-row");
     if (adminBadgesContainer) {
