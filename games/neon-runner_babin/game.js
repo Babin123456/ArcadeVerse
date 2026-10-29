@@ -62,6 +62,12 @@
 
   let pulses = [];
   let score = 0;
+    level = 1;
+    totalHits = 0;
+    if (levelDisplay) levelDisplay.textContent = level;
+  let level = 1;
+  let totalHits = 0;
+  const levelDisplay = document.getElementById('level-display');
   let combo = 0;
   let maxCombo = 0;
   let perfects = 0;
@@ -256,6 +262,9 @@
   function initGame() {
     pulses = [];
     score = 0;
+    level = 1;
+    totalHits = 0;
+    if (levelDisplay) levelDisplay.textContent = level;
     combo = 0;
     maxCombo = 0;
     perfects = 0;

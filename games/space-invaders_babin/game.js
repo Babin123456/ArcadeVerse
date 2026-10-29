@@ -362,10 +362,14 @@
       return;
     }
 
-    // Check wave cleared
+    // Check wave cleared (Infinite Level Scaling)
     if (aliens.length === 0) {
       wave++;
-      score += 500;
+      score += 500 * wave;
+      // Bunker durability recovery
+      for (const b of bunkers) {
+        if (b.health < 4) b.health++;
+      }
       updateHUD();
       playTone(660, "triangle", 0.3);
       spawnAliens();

@@ -175,23 +175,33 @@
     const loader = document.getElementById('page-transition-loader');
     if (!loader) return;
 
-    // Smoothly hide on page load
-    loader.classList.remove('active');
+    // Smoothly hide on page load & back-forward navigation cache restore
+    const hideLoader = () => loader.classList.remove('active');
+    hideLoader();
+    window.addEventListener('pageshow', hideLoader);
 
-    // Intercept clicks on links moving between index and leaderboard
+    // Intercept clicks on links specifically moving between root index and leaderboard
     document.querySelectorAll('a[href]').forEach((link) => {
       const href = link.getAttribute('href');
       if (!href) return;
-      if (
-        (href.includes('leaderboard.html') || href.includes('index.html')) &&
-        !href.startsWith('http') &&
-        !href.startsWith('#')
-      ) {
+      if (link.target === '_blank') return;
+
+      // Only match direct top-level navigation between index.html and leaderboard.html
+      const isInternalNav = (
+        href === 'leaderboard.html' ||
+        href === './leaderboard.html' ||
+        href === 'index.html' ||
+        href === './index.html' ||
+        href === '/'
+      );
+
+      if (isInternalNav) {
         link.addEventListener('click', (e) => {
-          // If middle click or holding ctrl/cmd, allow default new tab
           if (e.metaKey || e.ctrlKey || e.button !== 0) return;
           e.preventDefault();
           loader.classList.add('active');
+          // Safety timeout to prevent sticking if user cancels navigation
+          setTimeout(hideLoader, 2500);
           setTimeout(() => {
             window.location.href = href;
           }, 140);

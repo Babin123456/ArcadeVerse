@@ -132,17 +132,19 @@ document.addEventListener("DOMContentLoaded", () => {
     filtered.sort((a, b) => {
       if (currentSort === "az") {
         return a.title.localeCompare(b.title);
-      } else if (currentSort === "stars") {
-        return (b.stars || 0) - (a.stars || 0);
       } else if (currentSort === "rating") {
-        const rA = (window.GameRatings && window.GameRatings.ratings[a.id]) || (a.stars || 0) * 0.1;
-        const rB = (window.GameRatings && window.GameRatings.ratings[b.id]) || (b.stars || 0) * 0.1;
-        return rB - rA;
+        const rA = (window.GameRatings && window.GameRatings.ratings[a.id]) || (a.stars ? (a.stars / 10) : 5.0);
+        const rB = (window.GameRatings && window.GameRatings.ratings[b.id]) || (b.stars ? (b.stars / 10) : 5.0);
+        if (rB !== rA) return rB - rA;
+        return a.title.localeCompare(b.title);
       } else {
-        // "featured": featured items first, then by stars
+        // "featured": featured items first, then by rating / title
         if (a.featured && !b.featured) return -1;
         if (!a.featured && b.featured) return 1;
-        return (b.stars || 0) - (a.stars || 0);
+        const rA = (window.GameRatings && window.GameRatings.ratings[a.id]) || (a.stars ? (a.stars / 10) : 5.0);
+        const rB = (window.GameRatings && window.GameRatings.ratings[b.id]) || (b.stars ? (b.stars / 10) : 5.0);
+        if (rB !== rA) return rB - rA;
+        return a.title.localeCompare(b.title);
       }
     });
 
@@ -408,10 +410,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Re-sort when a game rating is updated
+  // Re-sort when a game rating is updated (debounced to preserve click interaction)
+  let ratingSortTimer = null;
   window.addEventListener("rating-updated", () => {
     if (currentSort === "rating") {
-      renderGames();
+      clearTimeout(ratingSortTimer);
+      ratingSortTimer = setTimeout(() => {
+        renderGames();
+      }, 700);
     }
   });
 

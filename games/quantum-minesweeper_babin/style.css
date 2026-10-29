@@ -313,3 +313,30 @@ body {
 }
 
 .rules-list li { margin-bottom: 0.5rem; }
+
+
+/* Responsive Compact Layout */
+body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  padding: 0.5rem;
+}
+
+.game-container {
+  max-height: 98vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.board-wrapper {
+  max-height: calc(100vh - 210px);
+  overflow: auto;
+}
+
+@media (max-height: 680px) {
+  .board-wrapper {
+    max-height: calc(100vh - 160px);
+  }
+}

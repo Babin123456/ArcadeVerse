@@ -103,6 +103,10 @@
   // Game State
   let gameState = 'start';
   let score = 0;
+  let level = 1;
+  let totalHits = 0;
+  const levelDisplay = document.getElementById('level-display');
+  if (levelDisplay) levelDisplay.textContent = level;
   let combo = 0;
   let maxCombo = 0;
   let totalNotesSpawned = 0;
@@ -126,7 +130,7 @@
     }
 
     update(dt) {
-      this.y += NOTE_SPEED * dt;
+      this.y += (NOTE_SPEED + (level - 1) * 35) * dt;
     }
 
     draw() {
@@ -223,6 +227,8 @@
     if (closestNote && closestDist < 85) {
       closestNote.hit = true;
       totalNotesHit++;
+      totalHits++;
+      if (totalHits % 15 === 0) level++;
       playNoteTone(lane);
 
       const x = lane * LANE_WIDTH + LANE_WIDTH / 2;
@@ -259,6 +265,7 @@
 
   function updateHUD() {
     scoreDisplay.textContent = score;
+    if (levelDisplay) levelDisplay.textContent = level;
     comboDisplay.textContent = combo > 0 ? `${combo}x` : '0';
 
     const acc = totalNotesSpawned > 0 ? Math.round((totalNotesHit / totalNotesSpawned) * 100) : 100;
@@ -301,6 +308,9 @@
     initAudio();
     gameState = 'playing';
     score = 0;
+    level = 1;
+    totalHits = 0;
+    if (levelDisplay) levelDisplay.textContent = level;
     combo = 0;
     maxCombo = 0;
     totalNotesSpawned = 0;

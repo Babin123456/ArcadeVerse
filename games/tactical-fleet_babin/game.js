@@ -41,6 +41,8 @@
   let sonarCharges = 1;
   let isSonarActive = false;
   let isGameOver = false;
+  let sectorLevel = 1;
+  const levelDisplay = document.getElementById('level-display');
 
   function logEntry(text, type = "system") {
     const entry = document.createElement("div");

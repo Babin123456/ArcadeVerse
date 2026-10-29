@@ -14,6 +14,8 @@
   const livesDisplay = document.getElementById('lives-display');
   const comboDisplay = document.getElementById('combo-display');
   const bestDisplay = document.getElementById('best-display');
+  const levelDisplay = document.getElementById('level-display');
+  let level = 1;
 
   const startOverlay = document.getElementById('start-overlay');
   const gameOverOverlay = document.getElementById('game-over-overlay');
@@ -250,33 +252,54 @@
   const BRICK_OFFSET_X = (WIDTH - (BRICK_COLS * BRICK_WIDTH + (BRICK_COLS - 1) * BRICK_GAP)) / 2;
   const BRICK_OFFSET_Y = 60;
 
-  function initBricks() {
+    function initBricks() {
     bricks = [];
+    const lvlMod = ((level - 1) % 5) + 1; // 1 to 5 level themes
+
     for (let r = 0; r < BRICK_ROWS; r++) {
       for (let c = 0; c < BRICK_COLS; c++) {
+        let shouldSpawn = true;
         let type = 'cyan';
         let hits = 1;
         let color = '#00f5ff';
         let points = 10;
 
-        if (r === 0 || r === 1) {
+        // Custom Layout Patterns per Level
+        if (lvlMod === 2) {
+          // Diamond / Fortress layout
+          const distFromCenter = Math.abs(c - (BRICK_COLS - 1) / 2) + Math.abs(r - (BRICK_ROWS - 1) / 2);
+          if (distFromCenter > 4) shouldSpawn = false;
+        } else if (lvlMod === 3) {
+          // Dual Column Towers
+          if (c === 3 || c === 4) shouldSpawn = false;
+        } else if (lvlMod === 4) {
+          // Checkerboard Invader
+          if ((r + c) % 2 === 1 && r > 0 && r < 5) shouldSpawn = false;
+        }
+
+        if (!shouldSpawn) continue;
+
+        // Brick toughness scaling by row & level
+        if (r === 0 || (r === 1 && lvlMod >= 2)) {
           type = 'gold';
-          hits = 3;
+          hits = Math.min(5, 3 + Math.floor(level / 3));
           color = '#fbbf24';
-          points = 50;
+          points = 50 * level;
         } else if (r === 2 || r === 3) {
           type = 'magenta';
           hits = 2;
           color = '#ec4899';
-          points = 25;
+          points = 25 * level;
+        } else {
+          points = 10 * level;
         }
 
-        // 10% chance of explosive brick
-        if (Math.random() < 0.08) {
+        // Explosive chance increases on higher levels
+        if (Math.random() < 0.08 + Math.min(0.08, level * 0.015)) {
           type = 'explosive';
           hits = 1;
           color = '#ef4444';
-          points = 30;
+          points = 30 * level;
         }
 
         bricks.push({
@@ -395,6 +418,7 @@
   function startNewGame() {
     initAudio();
     score = 0;
+    level = 1;
     lives = 3;
     combo = 1;
     comboTimer = 0;
@@ -416,6 +440,7 @@
 
   function updateHUD() {
     scoreDisplay.textContent = score;
+    if (levelDisplay) levelDisplay.textContent = level;
     comboDisplay.textContent = combo > 1 ? `${combo}x` : '1x';
 
     // Lives
@@ -614,6 +639,7 @@
     if (aliveCount === 0) {
       gameState = 'victory';
       victoryScoreEl.textContent = score;
+    btnNextLevel.textContent = `Advance to Level ${level + 1} →`;
       victoryOverlay.classList.add('active');
     }
   }
@@ -721,7 +747,18 @@
   // Button Listeners
   btnStart.addEventListener('click', startNewGame);
   btnRestart.addEventListener('click', startNewGame);
-  btnNextLevel.addEventListener('click', startNewGame);
+  btnNextLevel.addEventListener('click', () => {
+    level++;
+    victoryOverlay.classList.remove('active');
+    // Speed increases progressively each level
+    ball.baseSpeed = Math.min(10, 5.5 + (level - 1) * 0.4);
+    ball.speed = ball.baseSpeed;
+    resetBallAndPaddle();
+    initBricks();
+    gameState = 'playing';
+    requestAnimationFrame(gameLoop);
+    updateHUD();
+  });
 
   btnSound.addEventListener('click', () => {
     soundEnabled = !soundEnabled;

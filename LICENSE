@@ -1,8 +1,7 @@
 # MIT License
 
-Copyright (c) 2026 Debasmita Bose (Project Admin & Lead)
-Nexus Spring Of Code – Winter Edition 2026
-ArcadeVerse Community Developers
+Copyright (c) 2026 Debasmita Bose and ArcadeVerse Contributors
+Nexus Spring Of Code - Winter Edition 2026
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,23 +23,23 @@ SOFTWARE.
 
 ---
 
-## 📜 Open Source Community Contribution Terms & Intellectual Integrity Policy
+## Open Source Community Contribution Terms and Intellectual Integrity Policy
 
 1. GRANT OF CONTRIBUTION LICENSE:
    By submitting a Pull Request, code, assets, or documentation to ArcadeVerse
-   (Nexus Spring Of Code – Winter Edition 2026), the contributor certifies that:
+   (Nexus Spring Of Code - Winter Edition 2026), the contributor certifies that:
    (a) The submission is their original creative work or is licensed under a compatible
        permissive open-source license.
    (b) The contributor grants the ArcadeVerse project, its maintainers, and downstream
        users a perpetual, worldwide, non-exclusive, royalty-free license to use, reproduce,
        distribute, and modify the contribution under the terms of the MIT License.
 
-2. ARCHITECTURAL & DIRECTORY INTEGRITY:
+2. ARCHITECTURAL AND DIRECTORY INTEGRITY:
    All community mini-games must reside strictly inside isolated folders using the
-   prescribed notation `games/game-name_contributor-name/` to protect project structure
+   prescribed notation `games/<game-name_contributor-name>/` to protect project structure
    and prevent merge collisions.
 
-3. ETHICAL CONDUCT & CODE OF MERIT:
+3. ETHICAL CONDUCT AND CODE OF MERIT:
    Contributors agree not to submit malicious scripts, obfuscated payloads, proprietary
    copyrighted third-party assets, or spam commits. Any breach empowers project admins
    to immediately close, revert, and reject offending contributions.

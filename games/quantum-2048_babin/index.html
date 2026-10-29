@@ -27,6 +27,10 @@
 
       <div class="scores-container">
         <div class="score-card">
+          <span class="score-label">TIER</span>
+          <span class="score-val" id="level-display">1</span>
+        </div>
+        <div class="score-card">
           <span class="score-label">SCORE</span>
           <span class="score-val" id="current-score">0</span>
         </div>
@@ -40,6 +44,9 @@
     <!-- Toolbar Controls -->
     <div class="toolbar">
       <div class="toolbar-actions">
+        <button id="rules-btn" class="tool-btn" title="How to Play Guide">
+          <span style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="help-circle"></i> Guide</span>
+        </button>
         <button id="undo-btn" class="tool-btn" title="Undo last move" disabled>
           <span style="display: inline-flex; align-items: center; gap: 4px;"><i data-lucide="undo-2"></i> Undo</span>
         </button>
@@ -113,5 +120,20 @@
       lucide.createIcons();
     }
   </script>
+
+  <!-- How to Play Modal -->
+  <div id="rules-modal" class="modal" role="dialog" aria-modal="true" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; justify-content: center; align-items: center;">
+    <div style="background: #0f172a; border: 1px solid rgba(0,245,255,0.3); border-radius: 14px; max-width: 420px; width: 90%; padding: 1.5rem; color: #f8fafc; font-family: 'Space Grotesk', sans-serif;">
+      <h3 style="color: #00f5ff; margin-bottom: 0.75rem; font-size: 1.25rem;">How to Play: Quantum 2048</h3>
+      <p style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5; margin-bottom: 1rem;">
+        • Swipe or use <strong>Arrow Keys / WASD</strong> to shift quantum isotope tiles across the grid.<br>
+        • When two identical atoms touch, they fuse into a higher-tier energy state (2 → 4 → 8 → 16 → 2048)!<br>
+        • Advance through progressive Quantum Tiers with higher score multipliers.<br>
+        • Reaction continues indefinitely to unlock infinite atomic singularities!
+      </p>
+      <button id="close-rules-btn" style="width: 100%; padding: 0.6rem; background: #00f5ff; color: #04091a; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Got It, Let's Play!</button>
+    </div>
+  </div>
+
 </body>
 </html>

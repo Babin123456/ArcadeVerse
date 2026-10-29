@@ -39,6 +39,8 @@
   let goldenFood = null;
   let goldenTimer = 0;
   let score = 0;
+  let level = 1;
+  const levelDisplay = document.getElementById('level-display');
   let isPlaying = false;
   let gameLoopTimeout = null;
   let bestScore = 0;

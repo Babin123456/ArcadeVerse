@@ -315,3 +315,32 @@ body {
     --board-size: 320px;
   }
 }
+
+
+/* Responsive Compact Layout */
+body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  padding: 0.5rem;
+}
+
+.game-wrapper {
+  max-height: 98vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.board-container {
+  max-height: calc(100vh - 210px);
+  max-width: calc(100vh - 210px);
+  margin: 0 auto;
+}
+
+@media (max-height: 680px) {
+  .board-container {
+    max-height: calc(100vh - 160px);
+    max-width: calc(100vh - 160px);
+  }
+}

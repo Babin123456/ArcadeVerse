@@ -130,8 +130,8 @@ body {
 /* Scoreboard HUD */
 .cbb-hud {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.4rem;
 }
 
 .cbb-hud-card {
@@ -403,4 +403,42 @@ kbd {
 
 .hidden {
   display: none !important;
+}
+
+
+/* Responsive Compact Layout */
+body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem;
+}
+
+.cbb-app {
+  max-height: 98vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cbb-canvas-container {
+  max-height: calc(100vh - 180px);
+  max-width: calc((100vh - 180px) * (600 / 700));
+  margin: 0 auto;
+}
+
+@media (max-height: 700px) {
+  .cbb-hud {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.4rem;
+}
+  .cbb-hud-val {
+    font-size: 0.95rem;
+  }
+  .cbb-canvas-container {
+    max-height: calc(100vh - 140px);
+    max-width: calc((100vh - 140px) * (600 / 700));
+  }
 }

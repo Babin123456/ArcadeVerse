@@ -191,12 +191,14 @@ body {
 .crp-grid-container {
   position: relative;
   width: 100%;
+  max-width: 480px;
   aspect-ratio: 1 / 1;
   background: #040711;
   border: 1.5px solid var(--border-glow);
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 0 32px rgba(0, 245, 255, 0.15);
+  margin: 0 auto;
 }
 
 canvas {
@@ -470,4 +472,38 @@ kbd {
   color: var(--text-primary);
   font-family: var(--font-mono);
   font-size: 0.72rem;
+}
+
+
+/* Responsive Compact Layout */
+body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem;
+}
+
+.crp-app {
+  max-height: 98vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.crp-arena-wrapper {
+  max-height: calc(100vh - 220px);
+  max-width: calc(100vh - 220px);
+  margin: 0 auto;
+}
+
+@media (max-height: 720px) {
+  .crp-arena-wrapper {
+    max-height: calc(100vh - 180px);
+    max-width: calc(100vh - 180px);
+  }
+  .dpad-btn {
+    width: 36px;
+    height: 36px;
+  }
 }

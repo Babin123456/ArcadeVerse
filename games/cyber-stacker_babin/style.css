@@ -262,3 +262,44 @@ kbd {
   border-radius: 4px;
   font-family: monospace;
 }
+
+
+/* Responsive Compact Layout */
+body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  padding: 0.5rem;
+}
+
+.game-container {
+  max-height: 98vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.canvas-wrapper {
+  max-height: calc(100vh - 190px);
+  max-width: calc((100vh - 190px) * (400 / 560));
+  margin: 0 auto;
+}
+
+#game-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@media (max-height: 680px) {
+  .scoreboard-bar {
+    margin-bottom: 0.25rem;
+  }
+  .score-card {
+    padding: 0.25rem 0.5rem;
+  }
+  .canvas-wrapper {
+    max-height: calc(100vh - 150px);
+    max-width: calc((100vh - 150px) * (400 / 560));
+  }
+}

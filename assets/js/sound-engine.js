@@ -189,9 +189,9 @@
       let lastHoverTarget = null;
       let lastHoverTime = 0;
 
-      // Throttled and deduplicated mouseover: NEVER plays repeatedly when moving within the same card/button
+      // Only deliberate buttons trigger subtle hover, NEVER game-cards or large containers
       document.addEventListener('mouseover', (e) => {
-        const target = e.target.closest('.game-card, .pill, .btn, .nav-item, .podium-card, .table-trophy-btn, .theme-toggle-btn');
+        const target = e.target.closest('.pill, .nav-item, .sound-toggle-btn, .theme-toggle-btn');
         if (!target) {
           lastHoverTarget = null;
           return;
@@ -199,7 +199,7 @@
         if (target === lastHoverTarget) return;
 
         const now = Date.now();
-        if (now - lastHoverTime < 130) return;
+        if (now - lastHoverTime < 240) return;
 
         lastHoverTarget = target;
         lastHoverTime = now;
@@ -207,9 +207,13 @@
       });
 
       document.addEventListener('click', (e) => {
+        // Unlock AudioContext on first user interaction
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
         if (e.target.closest('.pill, .category-pill')) {
           this.playFilterSelect();
-        } else if (e.target.closest('.btn, .nav-item, .rate-star-btn, .podium-trophy-btn, .table-trophy-btn, .theme-toggle-btn, .btn-play-trigger')) {
+        } else if (e.target.closest('.btn, .nav-item, .rate-star-btn, .podium-trophy-btn, .table-trophy-btn, .theme-toggle-btn, .btn-play-trigger, .tool-portal-card, .game-card')) {
           this.playClick();
         }
       });

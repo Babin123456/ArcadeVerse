@@ -57,6 +57,33 @@
     },
 
     bindEvents() {
+      // Hover preview over stars
+      document.addEventListener('mouseover', (e) => {
+        const starBtn = e.target.closest('.rate-star-btn');
+        if (!starBtn) return;
+        const container = starBtn.closest('.game-rating-stars');
+        if (!container) return;
+        const starVal = parseInt(starBtn.dataset.star, 10);
+        const allStars = container.querySelectorAll('.rate-star-btn');
+        allStars.forEach((btn, idx) => {
+          if (idx < starVal) {
+            btn.classList.add('hover-active');
+          } else {
+            btn.classList.remove('hover-active');
+          }
+        });
+      });
+
+      document.addEventListener('mouseout', (e) => {
+        const starBtn = e.target.closest('.rate-star-btn');
+        if (!starBtn) return;
+        const container = starBtn.closest('.game-rating-stars');
+        if (!container) return;
+        if (e.relatedTarget && container.contains(e.relatedTarget)) return;
+        const allStars = container.querySelectorAll('.rate-star-btn');
+        allStars.forEach((btn) => btn.classList.remove('hover-active'));
+      });
+
       // Listen for click on rating trigger button
       document.addEventListener('click', (e) => {
         const starBtn = e.target.closest('.rate-star-btn');
@@ -80,6 +107,7 @@
         if (starContainer) {
           const stars = starContainer.querySelectorAll('.rate-star-btn');
           stars.forEach((s, idx) => {
+            s.classList.remove('hover-active');
             if (idx < score) s.classList.add('voted');
             else s.classList.remove('voted');
           });
@@ -87,6 +115,9 @@
         const badge = card.querySelector('.rating-badge');
         if (badge) {
           badge.textContent = Number(score).toFixed(1);
+          badge.classList.remove('rating-pop');
+          void badge.offsetWidth;
+          badge.classList.add('rating-pop');
         }
         if (window.SoundEngine && typeof window.SoundEngine.playClick === 'function') {
           window.SoundEngine.playClick();

@@ -63,8 +63,8 @@ body {
 
 .scoreboard-bar {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
   margin-bottom: 0.75rem;
 }
 
@@ -112,11 +112,14 @@ body {
 
 .server-rack-wrapper {
   position: relative;
+  width: 100%;
+  max-width: 400px;
   background: #030712;
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px;
   overflow: hidden;
+  margin: 0.5rem auto;
 }
 
 .server-rack {
@@ -126,7 +129,10 @@ body {
 }
 
 .rack-slot {
-  height: 95px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 80px;
+  max-height: 110px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
@@ -331,3 +337,46 @@ button:focus-visible,
 
 .rules-list li { margin-bottom: 0.5rem; }
 .rules-list ul { margin-top: 0.25rem; margin-left: 0.5rem; }
+
+
+/* Responsive Compact Layout */
+body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem;
+}
+
+.game-container {
+  max-height: 98vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.server-rack-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  background: #030712;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  overflow: hidden;
+  margin: 0.5rem auto;
+}
+
+@media (max-height: 680px) {
+  .server-rack-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  background: #030712;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  overflow: hidden;
+  margin: 0.5rem auto;
+}
+}
