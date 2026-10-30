@@ -306,7 +306,7 @@
           if (pills && pills[index]) {
             pills[index].click();
           }
-        }}
+        }
       });
     }
   };
