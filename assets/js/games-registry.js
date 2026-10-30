@@ -62,6 +62,25 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "cosmic-orbit-slingshot_babin",
+    "title": "Cosmic Orbit Slingshot",
+    "category": "Physics",
+    "lucideIcon": "orbit",
+    "description": "Calculate orbital trajectories and use celestial gravity assists to sling deep space probes into target nexus stations.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/cosmic-orbit-slingshot_babin/index.html",
+    "tags": [
+      "Physics",
+      "Gravity",
+      "Space",
+      "Puzzle"
+    ],
+    "stars": 47,
+    "featured": true
+  },
+  {
     "id": "cosmic-surge_debasmita",
     "title": "Cosmic Surge: Galaxy Defender",
     "category": "Arcade",
@@ -703,7 +722,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 201,
+    "commits": 202,
     "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -720,13 +739,14 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 134,
-    "gamesCount": 20,
+    "commits": 135,
+    "gamesCount": 21,
     "mechanicsBonus": 2,
     "platformPRs": 29,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
+      "Cosmic Orbit Slingshot",
       "Cryptic Wordle Hack",
       "Cyber Block Matrix",
       "Cyber Brick Breaker",
