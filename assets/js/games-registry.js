@@ -342,6 +342,26 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "cyber-swarm-assault_babin",
+    "title": "Cyber Swarm Assault",
+    "category": "Action",
+    "lucideIcon": "crosshair",
+    "description": "Engage dive-bombing cybernetic drone swarms in high-intensity vertical shoot-em-up aerial combat.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/cyber-swarm-assault_babin/index.html",
+    "tags": [
+      "Action",
+      "Shooter",
+      "Shmup",
+      "Retro",
+      "Space"
+    ],
+    "stars": 50,
+    "featured": true
+  },
+  {
     "id": "flappy-jet_mistu7debnath",
     "title": "Flappy Cyber Jet",
     "category": "Arcade",
@@ -493,6 +513,25 @@ const GAMES_REGISTRY = [
       "Tactical"
     ],
     "stars": 48,
+    "featured": true
+  },
+  {
+    "id": "neon-precision-target_babin",
+    "title": "Neon Precision Target",
+    "category": "Arcade",
+    "lucideIcon": "target",
+    "description": "Time precision arrow releases to strike moving neon concentric bullseyes while factoring wind drift and revolving barrier shields.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/neon-precision-target_babin/index.html",
+    "tags": [
+      "Arcade",
+      "Precision",
+      "Reflex",
+      "Timing"
+    ],
+    "stars": 47,
     "featured": true
   },
   {
@@ -760,7 +799,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 204,
+    "commits": 206,
     "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -777,8 +816,8 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 137,
-    "gamesCount": 23,
+    "commits": 139,
+    "gamesCount": 25,
     "mechanicsBonus": 2,
     "platformPRs": 29,
     "qualityPRs": 1,
@@ -793,11 +832,13 @@ const CONTRIBUTORS_REGISTRY = [
       "Cyber Light Cycle",
       "Cyber Rogue Protocol",
       "Cyber Snake Matrix",
+      "Cyber Swarm Assault",
       "Cyber Tower Stacker",
       "Neon Beat Runner",
       "Neon Gravity Rush",
       "Neon Lunar Lander",
       "Neon Missile Command",
+      "Neon Precision Target",
       "Neon Rhythm Blaster",
       "Neon Wave Matcher",
       "Quantum 2048",
