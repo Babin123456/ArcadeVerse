@@ -539,6 +539,25 @@ const GAMES_REGISTRY = [
     "difficulty": "Intermediate"
   },
   {
+    "id": "quantum-sokoban_babin",
+    "title": "Quantum Sokoban",
+    "category": "Puzzle",
+    "lucideIcon": "box",
+    "description": "Navigate a cybernetic drone through quantum mainframe chambers to push power cores onto containment pads.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/quantum-sokoban_babin/index.html",
+    "tags": [
+      "Puzzle",
+      "Logic",
+      "Retro",
+      "Strategy"
+    ],
+    "stars": 46,
+    "featured": true
+  },
+  {
     "id": "space-invaders_babin",
     "title": "Space Invaders 2026",
     "category": "Action",
@@ -646,7 +665,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 198,
+    "commits": 199,
     "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -663,8 +682,8 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 131,
-    "gamesCount": 17,
+    "commits": 132,
+    "gamesCount": 18,
     "mechanicsBonus": 2,
     "platformPRs": 29,
     "qualityPRs": 1,
@@ -683,6 +702,7 @@ const CONTRIBUTORS_REGISTRY = [
       "Neon Rhythm Blaster",
       "Quantum 2048",
       "Quantum Minesweeper",
+      "Quantum Sokoban",
       "Space Invaders 2026",
       "Synth-Wave Simon Says",
       "Tactical Fleet Commander",
