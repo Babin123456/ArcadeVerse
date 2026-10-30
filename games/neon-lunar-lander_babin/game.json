@@ -1,0 +1,17 @@
+{
+  "title": "Neon Lunar Lander",
+  "category": "Physics",
+  "lucideIcon": "navigation",
+  "description": "Pilot a lunar survey probe with realistic thruster momentum to touch down softly on designated planetary landing pads.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Physics",
+    "Space",
+    "Simulation",
+    "Retro"
+  ],
+  "stars": 44,
+  "featured": true
+}
