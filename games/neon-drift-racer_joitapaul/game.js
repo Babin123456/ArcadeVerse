@@ -14,6 +14,133 @@ if (!canvas || !context || !scoreValue || !bestValue || !energyValue ||
   throw new Error("Neon Drift Racer could not find all required game elements.");
 }
 
+const soundToggleBtn = document.getElementById("sound-toggle-btn");
+const soundIconOn = document.getElementById("sound-icon-on");
+const soundIconOff = document.getElementById("sound-icon-off");
+
+let soundEnabled = true;
+let audioCtx = null;
+
+try {
+  const saved = localStorage.getItem("neon-drift-racer-sound-enabled");
+  if (saved !== null) soundEnabled = saved === "true";
+} catch (_) {}
+
+function updateSoundUI() {
+  if (!soundIconOn || !soundIconOff) return;
+  soundIconOn.classList.toggle("hidden", !soundEnabled);
+  soundIconOff.classList.toggle("hidden", soundEnabled);
+  if (soundToggleBtn) {
+    soundToggleBtn.title = soundEnabled ? "Mute Sound" : "Enable Sound";
+  }
+}
+updateSoundUI();
+
+function initAudio() {
+  if (!audioCtx) {
+    const AudioClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioClass) audioCtx = new AudioClass();
+  }
+  if (audioCtx && audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+}
+
+function playTone(freq, type = "sine", duration = 0.08, gainVal = 0.14) {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  try {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  } catch (_) {}
+}
+
+function playSteerSound(dir) {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    const startF = dir > 0 ? 320 : 480;
+    const endF = dir > 0 ? 540 : 260;
+    osc.frequency.setValueAtTime(startF, now);
+    osc.frequency.exponentialRampToValueAtTime(endF, now + 0.07);
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.08);
+  } catch (_) {}
+}
+
+function playEnergySound() {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  [659, 987, 1318].forEach((f, i) => {
+    setTimeout(() => playTone(f, "sine", 0.09, 0.16), i * 45);
+  });
+}
+
+function playCrashSound() {
+  playTone(130, "sawtooth", 0.25, 0.24);
+}
+
+function playStartSound() {
+  if (!soundEnabled) return;
+  initAudio();
+  if (!audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(140, now);
+    osc.frequency.exponentialRampToValueAtTime(420, now + 0.22);
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now + 0.25);
+  } catch (_) {}
+}
+
+if (soundToggleBtn) {
+  soundToggleBtn.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    try {
+      localStorage.setItem("neon-drift-racer-sound-enabled", String(soundEnabled));
+    } catch (_) {}
+    updateSoundUI();
+    if (soundEnabled) playEnergySound();
+  });
+}
+
+canvas.addEventListener("pointerdown", (e) => {
+  if (gameState !== "running") return;
+  const rect = canvas.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  if (clickX < rect.width / 2) {
+    steer(-1);
+  } else {
+    steer(1);
+  }
+});
+
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
 const ROAD_LEFT = 48;
@@ -65,10 +192,12 @@ function startGame() {
   scoreValue.textContent = "0";
   energyValue.textContent = "0";
   overlay.classList.add("is-hidden");
+  playStartSound();
 }
 
 function finishGame() {
   gameState = "over";
+  playCrashSound();
   if (score > bestScore) {
     bestScore = score;
     bestValue.textContent = bestScore;
@@ -83,7 +212,11 @@ function finishGame() {
 
 function steer(direction) {
   if (gameState === "running") {
-    playerLane = Math.max(0, Math.min(LANES.length - 1, playerLane + direction));
+    const nextLane = Math.max(0, Math.min(LANES.length - 1, playerLane + direction));
+    if (nextLane !== playerLane) {
+      playerLane = nextLane;
+      playSteerSound(direction);
+    }
   }
 }
 
@@ -126,6 +259,7 @@ function update(delta) {
       score += 25;
       scoreValue.textContent = score;
       energyValue.textContent = energy;
+      playEnergySound();
       continue;
     }
 
