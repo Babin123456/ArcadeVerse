@@ -205,6 +205,25 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "cyber-hex-collapse_babin",
+    "title": "Cyber Hex Collapse",
+    "category": "Puzzle",
+    "lucideIcon": "hexagon",
+    "description": "Rotate a central hexagonal prism to catch incoming colored perimeter bars and trigger match-3 cascades.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/cyber-hex-collapse_babin/index.html",
+    "tags": [
+      "Puzzle",
+      "Hexagon",
+      "Match-3",
+      "Reflex"
+    ],
+    "stars": 49,
+    "featured": true
+  },
+  {
     "id": "cyber-light-cycle_babin",
     "title": "Cyber Light Cycle",
     "category": "Retro",
@@ -722,7 +741,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 202,
+    "commits": 203,
     "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -739,8 +758,8 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 135,
-    "gamesCount": 21,
+    "commits": 136,
+    "gamesCount": 22,
     "mechanicsBonus": 2,
     "platformPRs": 29,
     "qualityPRs": 1,
@@ -751,6 +770,7 @@ const CONTRIBUTORS_REGISTRY = [
       "Cyber Block Matrix",
       "Cyber Brick Breaker",
       "Cyber Helix Fall",
+      "Cyber Hex Collapse",
       "Cyber Light Cycle",
       "Cyber Rogue Protocol",
       "Cyber Snake Matrix",
