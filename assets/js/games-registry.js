@@ -401,6 +401,25 @@ const GAMES_REGISTRY = [
     "featured": false
   },
   {
+    "id": "neon-missile-command_babin",
+    "title": "Neon Missile Command",
+    "category": "Action",
+    "lucideIcon": "shield-alert",
+    "description": "Defend neon city power grids from descending orbital warheads using precision flak detonations.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/neon-missile-command_babin/index.html",
+    "tags": [
+      "Action",
+      "Defense",
+      "Retro",
+      "Tactical"
+    ],
+    "stars": 48,
+    "featured": true
+  },
+  {
     "id": "neon-rhythm-blaster_babin",
     "title": "Neon Rhythm Blaster",
     "category": "Arcade",
@@ -627,7 +646,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 197,
+    "commits": 198,
     "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -644,8 +663,8 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 130,
-    "gamesCount": 16,
+    "commits": 131,
+    "gamesCount": 17,
     "mechanicsBonus": 2,
     "platformPRs": 29,
     "qualityPRs": 1,
@@ -660,6 +679,7 @@ const CONTRIBUTORS_REGISTRY = [
       "Cyber Tower Stacker",
       "Neon Beat Runner",
       "Neon Gravity Rush",
+      "Neon Missile Command",
       "Neon Rhythm Blaster",
       "Quantum 2048",
       "Quantum Minesweeper",
