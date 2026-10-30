@@ -90,9 +90,29 @@ h1 {
 
 .scoreboard {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0.55rem;
   margin-bottom: 0.65rem;
+}
+
+.pinball-sound-btn {
+  background: transparent;
+  border: none;
+  color: #65d7ff;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.pinball-sound-btn:hover {
+  transform: scale(1.15);
+}
+
+.pinball-sound-btn .hidden {
+  display: none;
 }
 
 .stat {
