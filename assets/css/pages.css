@@ -625,12 +625,65 @@
 }
 
 .file-tree-box .file {
-  color: #e2e8f0;
+  color: #f1f5f9;
 }
 
 .file-tree-box .comment {
   color: var(--text-muted);
   font-style: italic;
+}
+
+/* Light Theme overrides for File Tree and Code Blocks */
+[data-theme="light"] .file-tree-box {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+[data-theme="light"] .file-tree-box .folder {
+  color: #0284c7;
+  font-weight: 700;
+}
+
+[data-theme="light"] .file-tree-box .file {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+[data-theme="light"] .file-tree-box .comment {
+  color: #64748b;
+}
+
+[data-theme="light"] .code-block-wrapper {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .code-block-header {
+  background: #f1f5f9;
+  border-bottom-color: #cbd5e1;
+}
+
+[data-theme="light"] .code-block-lang {
+  color: #475569;
+  font-weight: 600;
+}
+
+[data-theme="light"] .code-pre,
+[data-theme="light"] .code-pre code {
+  color: #0f172a;
+}
+
+[data-theme="light"] .btn-copy-code {
+  color: #334155;
+  border-color: #cbd5e1;
+  background: #ffffff;
+}
+
+[data-theme="light"] .btn-copy-code:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+  border-color: #94a3b8;
 }
 
 /* Architecture Flowchart Cards */

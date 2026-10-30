@@ -123,10 +123,20 @@
     },
 
     injectNavbarTrigger() {
-      const actions = document.querySelector('.nav-actions');
-      if (!actions || document.getElementById('shortcuts-trigger-btn')) return;
+      let btn = document.getElementById('shortcuts-trigger-btn');
+      if (btn) {
+        // If already statically present in markup, bind toggle handler once
+        if (!btn.dataset.bound) {
+          btn.addEventListener('click', () => this.toggle());
+          btn.dataset.bound = 'true';
+        }
+        return;
+      }
 
-      const btn = document.createElement('button');
+      const actions = document.querySelector('.nav-actions');
+      if (!actions) return;
+
+      btn = document.createElement('button');
       btn.id = 'shortcuts-trigger-btn';
       btn.className = 'keyboard-shortcuts-btn';
       btn.type = 'button';
@@ -140,7 +150,13 @@
       `;
 
       btn.addEventListener('click', () => this.toggle());
-      actions.prepend(btn);
+      btn.dataset.bound = 'true';
+      const a11y = actions.querySelector('#a11y-trigger-btn');
+      if (a11y) {
+        actions.insertBefore(btn, a11y);
+      } else {
+        actions.prepend(btn);
+      }
     },
 
     open() {
@@ -296,5 +312,9 @@
   };
 
   window.ArcadeShortcuts = ShortcutsEngine;
-  document.addEventListener('DOMContentLoaded', () => ShortcutsEngine.init());
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => ShortcutsEngine.init());
+  } else {
+    ShortcutsEngine.init();
+  }
 })();

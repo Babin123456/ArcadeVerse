@@ -153,6 +153,51 @@ kbd {
   border-color: rgba(59, 130, 246, 0.4);
 }
 
+/* Light Mode Contrast Rules */
+[data-theme="light"] .keyboard-shortcuts-btn {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: #1e293b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .keyboard-shortcuts-btn:hover {
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+  border-color: #2563eb;
+}
+
+[data-theme="light"] .shortcuts-modal-card {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .shortcuts-title {
+  color: #0f172a;
+}
+
+[data-theme="light"] .shortcuts-group-title {
+  color: #2563eb;
+}
+
+[data-theme="light"] .shortcut-row {
+  color: #334155;
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="light"] kbd {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .shortcuts-tip {
+  color: #64748b;
+  border-top-color: #e2e8f0;
+}
+
 @media (max-width: 600px) {
   .shortcuts-groups-grid {
     grid-template-columns: 1fr;
