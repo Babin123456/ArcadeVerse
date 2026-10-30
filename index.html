@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArcadeVerse | Open Source Gaming Platform (NSOC '26)</title>
-  <meta name="description" content="ArcadeVerse is an open-source community arcade built with pure HTML, CSS, and JS for NSOC Winter Edition 2026.">
+  <meta name="description"
+    content="ArcadeVerse is an open-source community arcade built with pure HTML, CSS, and JS for NSOC Winter Edition 2026.">
   <!-- Favicon and Brand Icons -->
   <link rel="icon" type="image/x-icon" href="assets/public/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/public/favicon-32x32.png">
@@ -13,17 +15,18 @@
   <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cambria+Math&family=Permanent+Marker&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cambria+Math&family=Permanent+Marker&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/daily-challenge.css">
   <link rel="stylesheet" href="assets/css/a11y-engine.css">
   <link rel="stylesheet" href="assets/css/trophy-card.css">
   <link rel="stylesheet" href="assets/css/sound-engine.css">
   <link rel="stylesheet" href="assets/css/game-ratings.css">
-  <link rel="stylesheet" href="assets/css/network-detector.css">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
   <!-- Ambient background lighting -->
@@ -41,14 +44,18 @@
       </a>
 
       <nav class="nav-links" aria-label="Main navigation">
-        <a href="index.html" class="nav-item active" aria-current="page"><i data-lucide="gamepad-2"></i> Explore Games</a>
+        <a href="index.html" class="nav-item active" aria-current="page"><i data-lucide="gamepad-2"></i> Explore
+          Games</a>
         <a href="leaderboard.html" class="nav-item"><i data-lucide="trophy"></i> Hall of Fame</a>
-        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" class="nav-item"><i data-lucide="book-open"></i> Contributor Guide</a>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank"
+          class="nav-item"><i data-lucide="book-open"></i> Contributor Guide</a>
       </nav>
 
       <div class="nav-actions">
-                <button class="a11y-btn-trigger" id="a11y-trigger-btn" type="button" aria-label="Open Accessibility Hub" title="Accessibility Hub">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <button class="a11y-btn-trigger" id="a11y-trigger-btn" type="button" aria-label="Open Accessibility Hub"
+          title="Accessibility Hub">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10"></circle>
             <path d="m4.93 4.93 4.24 4.24"></path>
             <path d="m14.83 9.17 4.24-4.24"></path>
@@ -57,13 +64,16 @@
             <circle cx="12" cy="12" r="4"></circle>
           </svg>
         </button>
-        <button class="theme-toggle-btn" id="theme-toggle-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle dark/light theme">
+        <button class="theme-toggle-btn" id="theme-toggle-btn" type="button" aria-label="Toggle dark/light theme"
+          title="Toggle dark/light theme">
           <span class="theme-icon-wrap"><i data-lucide="sun"></i></span>
         </button>
-        <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" title="View repository on GitHub">
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer"
+          class="btn btn-secondary btn-sm" title="View repository on GitHub">
           <span><i data-lucide="star"></i> GitHub</span>
         </a>
-        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false"
+          aria-controls="mobile-nav-drawer">
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
           <span class="hamburger-line"></span>
@@ -82,16 +92,19 @@
           <span class="mobile-nav-icon"><i data-lucide="trophy"></i></span>
           <span>Hall of Fame</span>
         </a>
-        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="mobile-nav-item">
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank"
+          rel="noopener noreferrer" class="mobile-nav-item">
           <span class="mobile-nav-icon"><i data-lucide="book-open"></i></span>
           <span>Contributor Guide</span>
         </a>
         <div class="mobile-nav-divider"></div>
-        <button class="mobile-nav-item theme-toggle-btn" style="width: 100%; border: none; background: transparent; cursor: pointer; text-align: left; padding: 0.75rem 1rem;">
+        <button class="mobile-nav-item theme-toggle-btn"
+          style="width: 100%; border: none; background: transparent; cursor: pointer; text-align: left; padding: 0.75rem 1rem;">
           <span class="mobile-nav-icon theme-icon-wrap"><i data-lucide="sun"></i></span>
           <span>Toggle Dark / Light Theme</span>
         </button>
-        <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="mobile-github-btn">
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer"
+          class="mobile-github-btn">
           <span><i data-lucide="star"></i> Star on GitHub</span>
         </a>
       </div>
@@ -110,15 +123,16 @@
           <span class="gradient-text">Community Arcade Station</span>
         </h1>
         <p class="hero-subtitle">
-          Built with pure <strong>HTML5, CSS3, & Vanilla JavaScript</strong>. Zero bundlers, zero framework fatigue. 
+          Built with pure <strong>HTML5, CSS3, & Vanilla JavaScript</strong>. Zero bundlers, zero framework fatigue.
           Read our contributing guide, build your game in an isolated directory, and submit conflict-free pull requests!
         </p>
-        
+
         <div class="hero-cta-group">
           <a href="#games" class="btn btn-primary">
             <span><i data-lucide="play"></i> Play Live Games</span>
           </a>
-          <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" class="btn btn-secondary">
+          <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank"
+            class="btn btn-secondary">
             <span><i data-lucide="book-open"></i> Contributor Guide</span>
           </a>
           <a href="leaderboard.html" class="btn btn-glass">
@@ -148,8 +162,9 @@
           <a href="#games" class="scroll-down-arrow" aria-label="Scroll down to games catalog">
             <span class="scroll-arrow-text">Explore Arcade</span>
             <span class="scroll-arrow-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
               </svg>
             </span>
           </a>
@@ -159,7 +174,6 @@
 
     <!-- Daily Mystery Mission Quest Mount -->
     <div id="daily-challenge-mount" class="daily-challenge-section"></div>
-    <div id="recently-played-mount" class="recently-played-section-wrapper"></div>
 
     <!-- Games Showcase Section -->
     <section class="games-section" id="games">
@@ -177,7 +191,8 @@
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <input type="text" id="game-search-input" placeholder="Search game or contributor..." aria-label="Search games or contributors">
+            <input type="text" id="game-search-input" placeholder="Search game or contributor..."
+              aria-label="Search games or contributors">
           </div>
 
           <div class="sort-box">
@@ -196,7 +211,8 @@
         <div class="category-pills" id="category-pills" role="tablist" aria-label="Filter games by category">
           <button class="pill active" data-category="all">All</button>
           <button class="pill pill-favorites" data-category="favorites">
-            <span class="pill-fav-icon"><i data-lucide="heart"></i></span> Favorites <span class="favorites-count-badge" id="favorites-count-badge">0</span>
+            <span class="pill-fav-icon"><i data-lucide="heart"></i></span> Favorites <span class="favorites-count-badge"
+              id="favorites-count-badge">0</span>
           </button>
           <button class="pill" data-category="Puzzle">Puzzle</button>
           <button class="pill" data-category="Arcade">Arcade</button>
@@ -218,32 +234,37 @@
       <div class="section-header center">
         <span class="section-tag">CONTRIBUTOR ARCHITECTURE</span>
         <h2 class="section-title">Everything Built For Contributors</h2>
-        <p class="section-subtitle">Official resources, automated tooling, and architectural standards for NSOC Winter Edition 2026.</p>
+        <p class="section-subtitle">Official resources, automated tooling, and architectural standards for NSOC Winter
+          Edition 2026.</p>
       </div>
 
       <div class="tools-grid">
         <a href="leaderboard.html" class="tool-portal-card">
           <div class="tool-icon"><i data-lucide="trophy"></i></div>
           <h3>Hall of Fame Leaderboard</h3>
-          <p>Live rankings, verified commit points, tier multipliers, and official holographic achievement certificates.</p>
+          <p>Live rankings, verified commit points, tier multipliers, and official holographic achievement certificates.
+          </p>
           <span class="tool-link-text">View Leaderboard &rarr;</span>
         </a>
 
-        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="tool-portal-card">
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank"
+          rel="noopener noreferrer" class="tool-portal-card">
           <div class="tool-icon"><i data-lucide="book-open"></i></div>
           <h3>Contribution Guidelines</h3>
           <p>Step-by-step git PR workflow, isolated directory standards, and zero-conflict repository governance.</p>
           <span class="tool-link-text">Read Guidelines &rarr;</span>
         </a>
 
-        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/ARCHITECTURE.md" target="_blank" rel="noopener noreferrer" class="tool-portal-card">
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/ARCHITECTURE.md" target="_blank"
+          rel="noopener noreferrer" class="tool-portal-card">
           <div class="tool-icon"><i data-lucide="layers"></i></div>
           <h3>Platform Architecture</h3>
           <p>Specifications for the isolated 4-file game structure: index.html, style.css, game.js, and game.json.</p>
           <span class="tool-link-text">View Architecture &rarr;</span>
         </a>
 
-        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/issues" target="_blank" rel="noopener noreferrer" class="tool-portal-card">
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/issues" target="_blank" rel="noopener noreferrer"
+          class="tool-portal-card">
           <div class="tool-icon"><i data-lucide="git-pull-request"></i></div>
           <h3>Issues & PR Tracker</h3>
           <p>Submit new mini-game proposals, claim feature tracks, and collaborate with maintainers on GitHub.</p>
@@ -265,19 +286,22 @@
         </div>
         <div class="modal-controls">
           <button class="btn btn-sm btn-icon" id="modal-fav-btn" title="Save to Favorites" aria-label="Toggle favorite">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="modal-fav-icon">
-              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              class="modal-fav-icon">
+              <path
+                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
             </svg>
           </button>
           <button class="btn btn-sm btn-icon" id="reload-btn" title="Restart Game">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M23 4v6h-6M1 20v-6h6"/>
-              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              <path d="M23 4v6h-6M1 20v-6h6" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
           </button>
           <button class="btn btn-sm btn-icon" id="fullscreen-btn" title="Toggle Fullscreen">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
+              </path>
             </svg>
           </button>
           <a href="#" target="_blank" class="btn btn-sm btn-icon" id="new-tab-btn" title="Open in New Tab">
@@ -288,7 +312,8 @@
             </svg>
           </a>
           <button class="btn btn-sm btn-close" id="close-modal-btn" title="Close Game (Esc)" aria-label="Close Game">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
@@ -309,9 +334,11 @@
           <img src="assets/public/brand-logo.webp" alt="ArcadeVerse Logo" class="brand-logo-img" width="34" height="34">
           <span class="logo-text">Arcade<span class="gradient-accent">Verse</span></span>
         </div>
-        <p class="footer-desc">An open-source flagship gaming initiative for NSOC Winter Edition 2026. Designed for seamless, conflict-free manual open source contributions.</p>
+        <p class="footer-desc">An open-source flagship gaming initiative for NSOC Winter Edition 2026. Designed for
+          seamless, conflict-free manual open source contributions.</p>
         <div class="footer-cta-wrapper" style="margin-top: 1.4rem;">
-          <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="btn btn-github-highlight" title="Star and view ArcadeVerse on GitHub">
+          <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer"
+            class="btn btn-github-highlight" title="Star and view ArcadeVerse on GitHub">
             <span class="github-star-icon"><i data-lucide="star"></i></span>
             <span class="github-btn-text">GitHub</span>
           </a>
@@ -323,8 +350,10 @@
         <ul class="footer-list">
           <li><a href="index.html"><i data-lucide="gamepad-2"></i> Explore All Games</a></li>
           <li><a href="leaderboard.html"><i data-lucide="trophy"></i> Hall of Fame</a></li>
-          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer"><i data-lucide="book-open"></i> Contributor Guidelines</a></li>
-          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><i data-lucide="file-text"></i> MIT License</a></li>
+          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank"
+              rel="noopener noreferrer"><i data-lucide="book-open"></i> Contributor Guidelines</a></li>
+          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/LICENSE" target="_blank"
+              rel="noopener noreferrer"><i data-lucide="file-text"></i> MIT License</a></li>
         </ul>
       </div>
 
@@ -343,11 +372,14 @@
       <div class="footer-bottom-content">
         <p>© 2026 ArcadeVerse • Open Source under MIT License • NSOC Winter Edition 2026</p>
         <div class="footer-bottom-links">
-          <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+          <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer">GitHub
+            Repository</a>
           <span>•</span>
-          <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contribution Guide</a>
+          <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank"
+            rel="noopener noreferrer">Contribution Guide</a>
           <span>•</span>
-          <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">License</a>
+          <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/LICENSE" target="_blank"
+            rel="noopener noreferrer">License</a>
         </div>
       </div>
     </div>
@@ -362,13 +394,12 @@
   <script src="assets/js/trophy-card.js"></script>
   <script src="assets/js/sound-engine.js"></script>
   <script src="assets/js/game-ratings.js"></script>
-  <script src="assets/js/network-detector.js"></script>
   <script>
     if (window.lucide) {
       lucide.createIcons();
     }
   </script>
-    <!-- Page Transition Circular Loader -->
+  <!-- Page Transition Circular Loader -->
   <div id="page-transition-loader" class="page-loader-overlay" aria-hidden="true">
     <div class="loader-spinner-wrap">
       <div class="loader-spinner-circle"></div>
@@ -377,10 +408,12 @@
   </div>
   <!-- Back to Top Floating Button -->
   <button class="back-to-top-btn" id="back-to-top-btn" type="button" aria-label="Back to top" title="Back to top">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="m18 15-6-6-6 6"/>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m18 15-6-6-6 6" />
     </svg>
   </button>
 
 </body>
+
 </html>
