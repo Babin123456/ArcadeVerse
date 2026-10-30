@@ -17,6 +17,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const fetchBtn = document.getElementById("fetch-github-btn");
   const syncStatusText = document.getElementById("sync-status-text");
   const adminMetaInfo = document.getElementById("admin-meta-info");
+  const searchInput = document.getElementById("leaderboard-search-input");
+  const exportCsvBtn = document.getElementById("export-csv-btn");
+  let tableSearchQuery = "";
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      tableSearchQuery = e.target.value.toLowerCase().trim();
+      renderTable();
+    });
+  }
+
+  if (exportCsvBtn) {
+    exportCsvBtn.addEventListener("click", () => {
+      exportStandingsCsv();
+    });
+  }
 
   // Leaderboard Switcher (Community Contributors vs Admin View)
   const switchContribBtn = document.getElementById("switch-contributors-btn");
@@ -444,11 +460,43 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderTable() {
     if (!tableBody) return;
     tableBody.innerHTML = "";
-
-    const communityContributors = getCommunityContributors();
+    const allCommunityContributors = getCommunityContributors();
+    const communityContributors = allCommunityContributors.filter(item => {
+      if (!tableSearchQuery) return true;
+      const q = tableSearchQuery;
+      const nameMatch = (item.name || "").toLowerCase().includes(q);
+      const loginMatch = (item.login || "").toLowerCase().includes(q);
+      const roleMatch = (item.role || "").toLowerCase().includes(q);
+      const badges = getContributorBadges(item);
+      const badgeMatch = badges.some(b => (b.label || "").toLowerCase().includes(q));
+      return nameMatch || loginMatch || roleMatch || badgeMatch;
+    });
 
     if (communityContributors.length === 0) {
       const emptyTr = document.createElement("tr");
+      if (tableSearchQuery && allCommunityContributors.length > 0) {
+        emptyTr.innerHTML = `
+          <td colspan="9" style="text-align: center; padding: 2.2rem; color: var(--text-muted);">
+            <div style="font-size: 1.05rem; margin-bottom: 0.5rem; color: var(--text-secondary);">
+              No contributors found matching "<strong>${tableSearchQuery}</strong>"
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" id="reset-table-search-btn">
+              <span><i data-lucide="rotate-ccw"></i> Clear Filter</span>
+            </button>
+          </td>
+        `;
+        tableBody.appendChild(emptyTr);
+        const resetBtn = emptyTr.querySelector("#reset-table-search-btn");
+        if (resetBtn) {
+          resetBtn.addEventListener("click", () => {
+            tableSearchQuery = "";
+            if (searchInput) searchInput.value = "";
+            renderTable();
+          });
+        }
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
       emptyTr.innerHTML = `
         <td colspan="9" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
           <i data-lucide="sparkles" style="margin-right: 0.4rem;"></i> Awaiting first community PR merges! Be the first contributor to claim Rank #1.
@@ -739,6 +787,33 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     return repoInput ? repoInput.value.trim() : "DebasmitaBose0/ArcadeVerse";
+  }
+
+  function exportStandingsCsv() {
+    const list = getCommunityContributors();
+    if (!list || list.length === 0) return;
+
+    const headers = ["Rank", "Contributor", "GitHub Handle", "Verified Games", "Commits", "Arcade Score"];
+    const rows = list.map((item, idx) => {
+      const rank = idx + 1;
+      const name = '"' + (item.name || "").replace(/"/g, '""') + '"';
+      const login = item.login || "";
+      const games = item.gamesCount || 0;
+      const commits = item.commits || 0;
+      const score = calculateScore(item);
+      return [rank, name, login, games, commits, score].join(",");
+    });
+
+    const csvContent = [headers.join(","), ...rows].join("\r\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "ArcadeVerse_Leaderboard_NSOC2026.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   }
 
   if (fetchBtn) {
