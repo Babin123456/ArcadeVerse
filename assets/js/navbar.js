@@ -215,30 +215,27 @@
     hideLoader();
     window.addEventListener('pageshow', hideLoader);
 
-    // Intercept clicks on links specifically moving between root index and leaderboard
+    // Intercept clicks on links specifically moving from ONE PAGE TO ANOTHER
     document.querySelectorAll('a[href]').forEach((link) => {
       const href = link.getAttribute('href');
       if (!href) return;
       if (link.target === '_blank') return;
 
-      // Match direct top-level internal navigation across all platform pages
-      const baseHref = href.split('#')[0];
-      const internalPages = [
-        'index.html', './index.html', '/', '',
-        'leaderboard.html', './leaderboard.html',
-        'docs.html', './docs.html',
-        'faqs.html', './faqs.html',
-        'terms.html', './terms.html',
-        'privacy.html', './privacy.html'
-      ];
-      const isInternalNav = internalPages.includes(baseHref);
+      // Never show loader for in-page anchors / subsections
+      if (href.startsWith('#')) return;
 
-      if (isInternalNav) {
+      const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+      const targetBase = href.split('#')[0].replace(/^\.\//, '');
+      const targetFile = targetBase === '' ? 'index.html' : targetBase;
+
+      const platformPages = ['index.html', 'leaderboard.html', 'docs.html', 'faqs.html', 'terms.html', 'privacy.html'];
+
+      // Only trigger loader when genuinely navigating to a DIFFERENT platform page
+      if (platformPages.includes(targetFile) && targetFile !== currentFile) {
         link.addEventListener('click', (e) => {
           if (e.metaKey || e.ctrlKey || e.button !== 0) return;
           e.preventDefault();
           loader.classList.add('active');
-          // Safety timeout to prevent sticking if user cancels navigation
           setTimeout(hideLoader, 2500);
           setTimeout(() => {
             window.location.href = href;

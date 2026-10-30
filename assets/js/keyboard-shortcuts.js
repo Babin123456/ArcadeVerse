@@ -257,6 +257,32 @@
           return;
         }
 
+        // F: Toggle Game Fullscreen (when modal is open)
+        if (e.key === 'f' || e.key === 'F') {
+          const gameModal = document.getElementById('game-modal');
+          if (gameModal && gameModal.classList.contains('active')) {
+            const fsBtn = document.getElementById('fullscreen-btn');
+            if (fsBtn) {
+              fsBtn.click();
+              e.preventDefault();
+            }
+          }
+          return;
+        }
+
+        // R: Reload / Restart Game (when modal is open)
+        if (e.key === 'r' || e.key === 'R') {
+          const gameModal = document.getElementById('game-modal');
+          if (gameModal && gameModal.classList.contains('active')) {
+            const reloadBtn = document.getElementById('reload-btn');
+            if (reloadBtn) {
+              reloadBtn.click();
+              e.preventDefault();
+            }
+          }
+          return;
+        }
+
         // 1 to 8: Category pills
         if (e.key >= '1' && e.key <= '8') {
           const pills = document.querySelectorAll('.category-pills .pill');
@@ -264,7 +290,7 @@
           if (pills && pills[index]) {
             pills[index].click();
           }
-        }
+        }}
       });
     }
   };

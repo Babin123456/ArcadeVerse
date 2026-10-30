@@ -835,16 +835,7 @@
               window.SoundEngine.playClick();
             }
 
-            // Smooth redirect to top of the clicked question with navbar clearance
-            setTimeout(() => {
-              const navEl = document.getElementById('navbar');
-              const navHeight = navEl ? navEl.offsetHeight : 70;
-              const itemTop = item.getBoundingClientRect().top + window.pageYOffset - navHeight - 16;
-              window.scrollTo({
-                top: Math.max(0, itemTop),
-                behavior: 'smooth'
-              });
-            }, 60);
+            // Item toggled in place naturally without unwanted screen jumping
           }
         });
       });
