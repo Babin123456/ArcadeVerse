@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmic Orbit Slingshot | ArcadeVerse</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <div class="header-left">
+        <a href="../../index.html" class="back-link" aria-label="Return to ArcadeVerse Hub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Arcade Hub</span>
+        </a>
+        <h1 class="game-title">Cosmic Orbit <span class="accent">Slingshot</span></h1>
+      </div>
+      <div class="header-controls">
+        <button id="reset-level-btn" class="icon-btn" type="button" aria-label="Restart System" title="Restart System (R)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+        </button>
+        <button id="sound-btn" class="icon-btn" type="button" aria-label="Toggle Sound Effects" title="Toggle Sound">
+          <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <svg id="sound-icon-off" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="help-btn" class="icon-btn" type="button" aria-label="Game Instructions" title="Instructions">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="scoreboard-bar">
+      <div class="score-card">
+        <span class="label">SECTOR</span>
+        <span class="value" id="sector-display">1 / 5</span>
+      </div>
+      <div class="score-card">
+        <span class="label">ATTEMPTS</span>
+        <span class="value" id="attempts-display">0</span>
+      </div>
+      <div class="score-card">
+        <span class="label">STARDUST</span>
+        <span class="value" id="stardust-display">0 / 0</span>
+      </div>
+      <div class="score-card highlight">
+        <span class="label">SCORE</span>
+        <span class="value" id="score-display">0</span>
+      </div>
+    </div>
+
+    <main class="canvas-wrapper" role="region" aria-label="Orbital Slingshot Simulation Canvas">
+      <canvas id="game-canvas" width="540" height="420"></canvas>
+
+      <!-- Overlay Menus -->
+      <div id="start-overlay" class="overlay">
+        <div class="overlay-card">
+          <h2 class="overlay-title">Cosmic Orbit Slingshot</h2>
+          <p class="overlay-desc">Use planetary gravitational wells to sling your probe into the orbital receiving nexus. Collect stardust along your trajectory.</p>
+          <div class="controls-guide">
+            <span class="guide-item">Drag Back from Probe to Aim & Power</span>
+            <span class="guide-item">Release to Launch Probe</span>
+            <span class="guide-item">Gravity curves your path in real time</span>
+          </div>
+          <button id="start-btn" class="btn btn-primary" type="button">Commence Navigation</button>
+        </div>
+      </div>
+
+      <div id="sector-clear-overlay" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title win-text">Nexus Docked!</h2>
+          <p class="overlay-desc">Orbital trajectory calculated with pinpoint precision.</p>
+          <div class="results-stats">
+            <div class="stat-row"><span>Stardust Harvested:</span><strong id="final-stardust">0</strong></div>
+            <div class="stat-row"><span>Attempts Used:</span><strong id="final-attempts">1</strong></div>
+            <div class="stat-row"><span>Sector Score:</span><strong id="sector-score">+500</strong></div>
+          </div>
+          <button id="next-sector-btn" class="btn btn-primary" type="button">Next Sector</button>
+        </div>
+      </div>
+
+      <div id="instructions-modal" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title">Navigation Protocols</h2>
+          <ul class="rules-list">
+            <li><strong>Aim & Launch:</strong> Click or touch the yellow probe station, drag backwards to set velocity angle and power, then release!</li>
+            <li><strong>Gravity Assist:</strong> Massive celestial bodies warp space-time and slingshot your probe around their orbits.</li>
+            <li><strong>Hazards:</strong> Avoid crashing directly into planetary surfaces or black holes.</li>
+            <li><strong>Objective:</strong> Reach the pulsing green Nexus Station to clear the sector.</li>
+          </ul>
+          <button id="close-help-btn" class="btn btn-secondary" type="button">Dismiss</button>
+        </div>
+      </div>
+    </main>
+
+    <div class="bottom-slingshot-hint">
+      <span>Drag probe backward and release to launch | Press <kbd>R</kbd> to reset trajectory</span>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
