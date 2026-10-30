@@ -1,0 +1,17 @@
+{
+  "title": "Quantum Sokoban",
+  "category": "Puzzle",
+  "lucideIcon": "box",
+  "description": "Navigate a cybernetic drone through quantum mainframe chambers to push power cores onto containment pads.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Puzzle",
+    "Logic",
+    "Retro",
+    "Strategy"
+  ],
+  "stars": 46,
+  "featured": true
+}

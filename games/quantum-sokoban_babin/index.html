@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Sokoban | ArcadeVerse</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="../../assets/public/favicon.ico">
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <div class="header-left">
+        <a href="../../index.html" class="back-link" aria-label="Return to ArcadeVerse Hub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Arcade Hub</span>
+        </a>
+        <h1 class="game-title">Quantum <span class="accent">Sokoban</span></h1>
+      </div>
+      <div class="header-controls">
+        <button id="undo-btn" class="icon-btn" type="button" aria-label="Undo Move" title="Undo (Z)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+        </button>
+        <button id="reset-btn" class="icon-btn" type="button" aria-label="Reset Level" title="Restart Level (R)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+        </button>
+        <button id="sound-btn" class="icon-btn" type="button" aria-label="Toggle Sound Effects" title="Toggle Sound">
+          <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+          <svg id="sound-icon-off" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+        <button id="help-btn" class="icon-btn" type="button" aria-label="Game Instructions" title="Instructions">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="scoreboard-bar">
+      <div class="score-card">
+        <span class="label">LEVEL</span>
+        <span class="value" id="level-display">1 / 5</span>
+      </div>
+      <div class="score-card highlight">
+        <span class="label">MOVES</span>
+        <span class="value" id="moves-display">0</span>
+      </div>
+      <div class="score-card">
+        <span class="label">PUSHES</span>
+        <span class="value" id="pushes-display">0</span>
+      </div>
+      <div class="score-card">
+        <span class="label">CORES</span>
+        <span class="value" id="cores-display">0 / 0</span>
+      </div>
+    </div>
+
+    <main class="canvas-wrapper" role="region" aria-label="Sokoban Puzzle Canvas">
+      <canvas id="game-canvas" width="440" height="440"></canvas>
+
+      <!-- Overlay Menus -->
+      <div id="level-clear-overlay" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title win-text">Chamber Stabilized!</h2>
+          <p class="overlay-desc">All quantum cores secured in containment pads.</p>
+          <div class="results-stats">
+            <div class="stat-row"><span>Total Steps:</span><strong id="final-moves">0</strong></div>
+            <div class="stat-row"><span>Cores Pushed:</span><strong id="final-pushes">0</strong></div>
+          </div>
+          <div class="modal-buttons">
+            <button id="replay-level-btn" class="btn btn-secondary" type="button">Replay</button>
+            <button id="next-level-btn" class="btn btn-primary" type="button">Next Chamber</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="instructions-modal" class="overlay hidden">
+        <div class="overlay-card">
+          <h2 class="overlay-title">Mainframe Protocol</h2>
+          <ul class="rules-list">
+            <li><strong>Objective:</strong> Push every glowing quantum core onto an energy containment target pad.</li>
+            <li><strong>Movement:</strong> Use Arrow keys or WASD to navigate the drone.</li>
+            <li><strong>Push Rules:</strong> You can only push one core at a time. Cores cannot be pulled or pushed through walls.</li>
+            <li><strong>Undo:</strong> Made a wrong move? Press <kbd>Z</kbd> or the Undo icon to revert step-by-step.</li>
+          </ul>
+          <button id="close-help-btn" class="btn btn-secondary" type="button">Close</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Mobile Touch D-Pad -->
+    <div class="dpad-container" aria-label="On-screen directional controls">
+      <div class="dpad-row">
+        <button id="dpad-up" class="dpad-btn" type="button" aria-label="Move Up">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
+        </button>
+      </div>
+      <div class="dpad-row middle">
+        <button id="dpad-left" class="dpad-btn" type="button" aria-label="Move Left">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="dpad-center"></div>
+        <button id="dpad-right" class="dpad-btn" type="button" aria-label="Move Right">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+      <div class="dpad-row">
+        <button id="dpad-down" class="dpad-btn" type="button" aria-label="Move Down">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
