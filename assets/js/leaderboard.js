@@ -654,6 +654,27 @@ document.addEventListener("DOMContentLoaded", () => {
               }
               return user;
             });
+            // Merge any missing registry contributors into cached list
+            if (typeof CONTRIBUTORS_REGISTRY !== "undefined" && Array.isArray(CONTRIBUTORS_REGISTRY)) {
+              CONTRIBUTORS_REGISTRY.forEach(reg => {
+                if (!contributorsData.some(c => c.login && c.login.toLowerCase() === reg.github.toLowerCase())) {
+                  contributorsData.push({
+                    login: reg.github,
+                    name: reg.name,
+                    role: reg.role || "Community Contributor",
+                    avatar_url: `https://github.com/${reg.github}.png`,
+                    commits: reg.commits || 1,
+                    gamesCount: reg.gamesCount || 0,
+                    mechanicsBonus: reg.mechanicsBonus || 0,
+                    platformPRs: reg.platformPRs || 0,
+                    qualityPRs: reg.qualityPRs || 0,
+                    bonusPts: reg.bonusPts || 0,
+                    games: reg.contributions || []
+                  });
+                }
+              });
+            }
+
             const adminItem = contributorsData.find(c => c.login && c.login.toLowerCase() === "debasmitabose0");
             if (adminItem) updateAdminSpotlight(adminItem);
 
@@ -710,7 +731,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           const gamesCount = userGames.length > 0 
             ? userGames.length 
-            : (registryEntry ? (registryEntry.gamesCount || 0) : (localEntry ? (localEntry.gamesCount || 0) : (isAdmin ? 2 : 0)));
+            : (registryEntry ? (registryEntry.gamesCount || 0) : (localEntry ? (localEntry.gamesCount || 0) : (isAdmin ? 3 : 0)));
 
           const mechanicsBonus = registryEntry?.mechanicsBonus ?? localEntry?.mechanicsBonus ?? (isAdmin ? 2 : 0);
           const platformPRs = registryEntry?.platformPRs ?? localEntry?.platformPRs ?? (isAdmin ? 2 : 0);
@@ -731,7 +752,7 @@ document.addEventListener("DOMContentLoaded", () => {
             bonusPts: bonusPts,
             games: userGames.length > 0 
               ? userGames.map(g => g.title) 
-              : (localEntry?.games && localEntry.games.length > 0 ? localEntry.games : (isAdmin ? ["Quantum Memory Matrix", "Cyber Neon Pong"] : []))
+              : (localEntry?.games && localEntry.games.length > 0 ? localEntry.games : (isAdmin ? ["Cosmic Surge: Galaxy Defender", "Cyber Neon Pong", "Quantum Memory Matrix"] : []))
           };
         });
 

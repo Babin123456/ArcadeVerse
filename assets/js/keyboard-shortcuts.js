@@ -69,6 +69,14 @@
                   <div class="shortcut-keys"><kbd>L</kbd></div>
                 </div>
                 <div class="shortcut-row">
+                  <span>Documentation</span>
+                  <div class="shortcut-keys"><kbd>D</kbd></div>
+                </div>
+                <div class="shortcut-row">
+                  <span>FAQs & Help</span>
+                  <div class="shortcut-keys"><kbd>Q</kbd></div>
+                </div>
+                <div class="shortcut-row">
                   <span>Category Filter Pills</span>
                   <div class="shortcut-keys"><kbd>1</kbd> ... <kbd>8</kbd></div>
                 </div>
@@ -229,6 +237,22 @@
         if (e.key === 'l' || e.key === 'L') {
           if (!window.location.pathname.endsWith('leaderboard.html')) {
             window.location.href = 'leaderboard.html';
+          }
+          return;
+        }
+
+        // D: Go to Documentation
+        if (e.key === 'd' || e.key === 'D') {
+          if (!window.location.pathname.endsWith('docs.html')) {
+            window.location.href = 'docs.html';
+          }
+          return;
+        }
+
+        // Q: Go to FAQs
+        if (e.key === 'q' || e.key === 'Q') {
+          if (!window.location.pathname.endsWith('faqs.html')) {
+            window.location.href = 'faqs.html';
           }
           return;
         }

@@ -49,7 +49,8 @@
 
     // Deterministic pseudo-random seed from date string
     generateTodayChallenge() {
-      if (!window.GAMES_REGISTRY || window.GAMES_REGISTRY.length === 0) return;
+      const games = (typeof window !== 'undefined' && window.GAMES_REGISTRY) || (typeof GAMES_REGISTRY !== 'undefined' ? GAMES_REGISTRY : []);
+      if (!games || games.length === 0) return;
 
       let hash = 0;
       for (let i = 0; i < this.todayKey.length; i++) {
@@ -58,8 +59,8 @@
       }
       const positiveHash = Math.abs(hash);
 
-      const gameIndex = positiveHash % window.GAMES_REGISTRY.length;
-      const game = window.GAMES_REGISTRY[gameIndex];
+      const gameIndex = positiveHash % games.length;
+      const game = games[gameIndex];
 
       const targets = [250, 500, 750, 1000, 1500];
       const targetScore = targets[positiveHash % targets.length];
@@ -140,7 +141,8 @@
         const launchBtn = e.target.closest('#btn-launch-daily');
         if (launchBtn && this.challenge) {
           const gameId = launchBtn.dataset.gameId;
-          const game = window.GAMES_REGISTRY.find(g => g.id === gameId);
+          const games = (typeof window !== 'undefined' && window.GAMES_REGISTRY) || (typeof GAMES_REGISTRY !== 'undefined' ? GAMES_REGISTRY : []);
+          const game = games.find(g => g.id === gameId);
           if (game && typeof window.openGameModal === 'function') {
             window.openGameModal(game);
           }

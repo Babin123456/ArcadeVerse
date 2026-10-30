@@ -113,7 +113,7 @@
 
       // Close if window is resized beyond mobile breakpoint
       window.addEventListener("resize", () => {
-        if (window.innerWidth > 1100 && mobileDrawer.classList.contains("open")) {
+        if (window.innerWidth > 1280 && mobileDrawer.classList.contains("open")) {
           closeMobileMenu();
         }
       }, { passive: true });
@@ -151,22 +151,57 @@
 
     // Ensure active navbar pill matches the current active page
     const currentPath = (window.location.pathname || "").toLowerCase();
-    const isLeaderboard = currentPath.includes("leaderboard.html");
+    const pageName = currentPath.split("/").pop() || "index.html";
 
     document.querySelectorAll(".nav-item, .mobile-nav-item").forEach((link) => {
       const href = (link.getAttribute("href") || "").toLowerCase();
-      if (!href || href.startsWith("http")) return;
+      if (!href || href.startsWith("http") || href.startsWith("#")) return;
+      const targetPage = href.split("#")[0].split("/").pop() || "index.html";
 
-      if (isLeaderboard && href.includes("leaderboard.html")) {
-        link.classList.add("active");
-        link.setAttribute("aria-current", "page");
-      } else if (!isLeaderboard && href.includes("index.html")) {
+      let isActive = false;
+      if (pageName === "leaderboard.html" && targetPage === "leaderboard.html") {
+        isActive = true;
+      } else if (pageName === "docs.html" && targetPage === "docs.html") {
+        isActive = true;
+      } else if (pageName === "faqs.html" && targetPage === "faqs.html") {
+        isActive = true;
+      } else if (pageName === "terms.html" && targetPage === "terms.html") {
+        isActive = true;
+      } else if (pageName === "privacy.html" && targetPage === "privacy.html") {
+        isActive = true;
+      } else if ((pageName === "index.html" || pageName === "" || pageName === "/") && (targetPage === "index.html" || targetPage === "")) {
+        isActive = true;
+      }
+
+      if (isActive) {
         link.classList.add("active");
         link.setAttribute("aria-current", "page");
       } else {
         link.classList.remove("active");
         link.removeAttribute("aria-current");
       }
+    });
+
+    // Smooth In-Page Anchor Scrolling with Fixed Navbar Offset (Redirect to Top of Section)
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', (e) => {
+        const hash = anchor.getAttribute('href');
+        if (!hash || hash === '#' || hash === '#!') return;
+        const targetEl = document.querySelector(hash);
+        if (targetEl) {
+          e.preventDefault();
+          const navEl = document.getElementById('navbar');
+          const navH = navEl ? navEl.offsetHeight : 70;
+          const pos = targetEl.getBoundingClientRect().top + window.pageYOffset - navH - 18;
+          window.scrollTo({
+            top: Math.max(0, pos),
+            behavior: 'smooth'
+          });
+          if (history.pushState) {
+            history.pushState(null, null, hash);
+          }
+        }
+      });
     });
   });
 
@@ -186,14 +221,17 @@
       if (!href) return;
       if (link.target === '_blank') return;
 
-      // Only match direct top-level navigation between index.html and leaderboard.html
-      const isInternalNav = (
-        href === 'leaderboard.html' ||
-        href === './leaderboard.html' ||
-        href === 'index.html' ||
-        href === './index.html' ||
-        href === '/'
-      );
+      // Match direct top-level internal navigation across all platform pages
+      const baseHref = href.split('#')[0];
+      const internalPages = [
+        'index.html', './index.html', '/', '',
+        'leaderboard.html', './leaderboard.html',
+        'docs.html', './docs.html',
+        'faqs.html', './faqs.html',
+        'terms.html', './terms.html',
+        'privacy.html', './privacy.html'
+      ];
+      const isInternalNav = internalPages.includes(baseHref);
 
       if (isInternalNav) {
         link.addEventListener('click', (e) => {
