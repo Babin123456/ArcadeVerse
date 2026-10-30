@@ -3097,6 +3097,57 @@ textarea:focus-visible,
   color: var(--text-muted);
 }
 
+.table-header-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.leaderboard-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.leaderboard-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  width: 15px;
+  height: 15px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+#leaderboard-search-input {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  padding: 0.45rem 0.8rem 0.45rem 2.2rem;
+  min-width: 240px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+#leaderboard-search-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.btn-export-csv {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
 .table-responsive {
   width: 100%;
   overflow-x: auto;

@@ -1,0 +1,161 @@
+/**
+ * ArcadeVerse — Global Keyboard Shortcuts Cheatsheet Modal
+ * Accessible shortcuts helper with retro <kbd> keycaps
+ */
+
+.shortcuts-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 10, 16, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  padding: 1rem;
+}
+
+.shortcuts-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.shortcuts-modal-card {
+  background: var(--bg-surface-elevated, #161b28);
+  border: 1px solid var(--border-medium, rgba(255, 255, 255, 0.15));
+  border-radius: var(--radius-lg, 16px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  max-width: 640px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.6rem 2rem;
+  transform: scale(0.96);
+  transition: transform 0.2s ease;
+}
+
+.shortcuts-modal-overlay.active .shortcuts-modal-card {
+  transform: scale(1);
+}
+
+.shortcuts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.4rem;
+  border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  padding-bottom: 0.9rem;
+}
+
+.shortcuts-title {
+  font-family: var(--font-heading, sans-serif);
+  font-size: 1.25rem;
+  color: var(--text-primary, #f8fafc);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.shortcuts-title svg {
+  color: var(--accent-primary, #3b82f6);
+}
+
+.shortcuts-close-btn {
+  background: transparent;
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.1));
+  color: var(--text-muted, #94a3b8);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.shortcuts-close-btn:hover {
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+.shortcuts-groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.shortcut-group h3 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-primary, #3b82f6);
+  margin-bottom: 0.8rem;
+}
+
+.shortcut-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.shortcut-keys {
+  display: inline-flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+kbd {
+  font-family: var(--font-code, monospace);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom-width: 2px;
+  color: var(--text-primary, #f8fafc);
+  padding: 0.15rem 0.45rem;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.keyboard-shortcuts-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.12));
+  color: var(--text-secondary, #94a3b8);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.keyboard-shortcuts-btn:hover {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent-primary, #3b82f6);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+@media (max-width: 600px) {
+  .shortcuts-groups-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+}

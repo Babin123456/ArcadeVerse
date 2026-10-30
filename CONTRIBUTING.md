@@ -400,6 +400,10 @@ As your Project Admin, here is what I expect from every contributor:
 > - ❌ **Malicious code** — cryptominers, tracking scripts, harmful iframes, or unescaped XSS injections.
 > - ❌ **Tiny changes presented as bigger work** — a 10–20 line edit will not be accepted as Level 2/3.
 > - ❌ **Multiple PRs from one shared branch** for the same issue.
+>
+> ---
+>
+> ⭐ **NOTE:** If very important, main files may be modified (with clear changes and prior approval).
 
 ---
 

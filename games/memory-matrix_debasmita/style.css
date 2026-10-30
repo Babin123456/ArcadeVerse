@@ -21,22 +21,81 @@ body {
   box-shadow: 0 0 35px rgba(0, 230, 118, 0.15);
   border-radius: 16px;
   padding: 1.5rem;
-  max-width: 460px;
+  max-width: 520px;
   width: 100%;
   position: relative;
 }
 
 .header {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.1rem;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
 }
 
 .title {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   color: #00e676;
   text-shadow: 0 0 10px #00e676;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-toggle-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  color: #00e676;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-toggle-btn:hover {
+  background: rgba(0, 230, 118, 0.2);
+  transform: scale(1.05);
+}
+
+.difficulty-bar {
+  display: flex;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   margin-bottom: 0.8rem;
+}
+
+.diff-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.diff-btn:hover {
+  color: #f8fafc;
+}
+
+.diff-btn.active {
+  background: #00e676;
+  color: #080912;
 }
 
 .meta {
@@ -46,6 +105,7 @@ body {
   padding: 0.6rem 0.9rem;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 0.6rem;
 }
 
 .meta-item {
@@ -57,16 +117,40 @@ body {
   color: #00f2fe;
 }
 
+.best-record-bar {
+  text-align: center;
+  font-size: 0.74rem;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.best-record-bar strong {
+  color: #fbbf24;
+}
+
+/* Dynamic Grids */
 .matrix-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 8px;
   perspective: 1000px;
   margin-bottom: 1.2rem;
 }
 
+.matrix-grid.grid-3x4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.matrix-grid.grid-4x4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.matrix-grid.grid-4x5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
 .card {
-  height: 80px;
+  height: 76px;
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -96,7 +180,7 @@ body {
 .card-front {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: #8a4bff;
 }
 
@@ -108,15 +192,15 @@ body {
 .card-back {
   background: linear-gradient(135deg, #1b2838, #16182c);
   border: 2px solid #00e676;
-  font-size: 2.2rem;
+  font-size: 2rem;
   transform: rotateY(180deg);
   box-shadow: 0 0 15px rgba(0, 230, 118, 0.4);
 }
 
 .card-back i,
 .card-back svg {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   stroke: #00e676;
 }
 
@@ -152,7 +236,7 @@ body {
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(4, 6, 15, 0.92);
+  background: rgba(4, 6, 15, 0.94);
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -173,13 +257,31 @@ body {
 
 .overlay-card h2 {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: #00e676;
   margin-bottom: 0.8rem;
+  line-height: 1.4;
 }
 
 .overlay-card p {
   color: #9aa1bc;
   font-size: 0.85rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.new-record-notice {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  color: #fbbf24;
+  margin-bottom: 1.2rem;
+  animation: pulse 1s infinite alternate;
+}
+
+.new-record-notice.hidden {
+  display: none;
+}
+
+@keyframes pulse {
+  from { opacity: 0.6; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1.04); }
 }
