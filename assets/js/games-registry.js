@@ -537,6 +537,25 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "neon-wave-matcher_babin",
+    "title": "Neon Wave Matcher",
+    "category": "Puzzle",
+    "lucideIcon": "activity",
+    "description": "Tune frequency, amplitude, and phase on a cyber oscilloscope to decrypt intercepted audio signals before time runs out.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/neon-wave-matcher_babin/index.html",
+    "tags": [
+      "Puzzle",
+      "Audio",
+      "Synth",
+      "Waveform"
+    ],
+    "stars": 48,
+    "featured": true
+  },
+  {
     "id": "prism-pulse_joitapaul",
     "title": "Prism Pulse: Laser Labyrinth",
     "category": "Puzzle",
@@ -741,7 +760,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 203,
+    "commits": 204,
     "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -758,8 +777,8 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 136,
-    "gamesCount": 22,
+    "commits": 137,
+    "gamesCount": 23,
     "mechanicsBonus": 2,
     "platformPRs": 29,
     "qualityPRs": 1,
@@ -780,6 +799,7 @@ const CONTRIBUTORS_REGISTRY = [
       "Neon Lunar Lander",
       "Neon Missile Command",
       "Neon Rhythm Blaster",
+      "Neon Wave Matcher",
       "Quantum 2048",
       "Quantum Minesweeper",
       "Quantum Sokoban",
