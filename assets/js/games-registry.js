@@ -186,6 +186,25 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "cyber-light-cycle_babin",
+    "title": "Cyber Light Cycle",
+    "category": "Retro",
+    "lucideIcon": "zap",
+    "description": "Duel an AI opponent across a neon arena leaving solid light trails in a high-speed survival grid.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/cyber-light-cycle_babin/index.html",
+    "tags": [
+      "Retro",
+      "Tron",
+      "Arena",
+      "AI-Duel"
+    ],
+    "stars": 49,
+    "featured": true
+  },
+  {
     "id": "cyber-neon-pong_debasmita",
     "title": "Cyber Neon Pong",
     "category": "Arcade",
@@ -399,6 +418,25 @@ const GAMES_REGISTRY = [
     ],
     "stars": 25,
     "featured": false
+  },
+  {
+    "id": "neon-lunar-lander_babin",
+    "title": "Neon Lunar Lander",
+    "category": "Physics",
+    "lucideIcon": "navigation",
+    "description": "Pilot a lunar survey probe with realistic thruster momentum to touch down softly on designated planetary landing pads.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/neon-lunar-lander_babin/index.html",
+    "tags": [
+      "Physics",
+      "Space",
+      "Simulation",
+      "Retro"
+    ],
+    "stars": 44,
+    "featured": true
   },
   {
     "id": "neon-missile-command_babin",
@@ -665,7 +703,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 199,
+    "commits": 201,
     "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -682,8 +720,8 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 132,
-    "gamesCount": 18,
+    "commits": 134,
+    "gamesCount": 20,
     "mechanicsBonus": 2,
     "platformPRs": 29,
     "qualityPRs": 1,
@@ -693,11 +731,13 @@ const CONTRIBUTORS_REGISTRY = [
       "Cyber Block Matrix",
       "Cyber Brick Breaker",
       "Cyber Helix Fall",
+      "Cyber Light Cycle",
       "Cyber Rogue Protocol",
       "Cyber Snake Matrix",
       "Cyber Tower Stacker",
       "Neon Beat Runner",
       "Neon Gravity Rush",
+      "Neon Lunar Lander",
       "Neon Missile Command",
       "Neon Rhythm Blaster",
       "Quantum 2048",
