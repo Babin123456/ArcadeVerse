@@ -138,6 +138,15 @@
             <h3><i data-lucide="medal"></i> Verified Community Contributors Standing</h3>
             <span class="ranking-metric-hint">Ranked by Verified Game(s) & Merged GitHub Contributions in NSOC '26</span>
           </div>
+          <div class="table-header-tools">
+            <div class="leaderboard-search-wrap">
+              <i data-lucide="search" class="leaderboard-search-icon"></i>
+              <input type="text" id="leaderboard-search-input" placeholder="Search contributor or badge..." aria-label="Search contributor table">
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm btn-export-csv" id="export-csv-btn" title="Export leaderboard standings as CSV file">
+              <i data-lucide="download"></i> <span>Export CSV</span>
+            </button>
+          </div>
         </div>
         <div class="table-responsive">
           <table class="leaderboard-table">

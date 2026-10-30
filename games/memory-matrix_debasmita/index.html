@@ -15,18 +15,35 @@
 <body>
   <div class="game-container">
     <div class="header">
-      <div class="title" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-        <i data-lucide="puzzle"></i> QUANTUM MEMORY
+      <div class="title-row">
+        <div class="title">
+          <i data-lucide="puzzle"></i> QUANTUM MEMORY
+        </div>
+        <button type="button" class="icon-toggle-btn" id="sound-toggle-btn" title="Toggle Sound" aria-label="Toggle Sound">
+          <i data-lucide="volume-2" id="sound-icon"></i>
+        </button>
       </div>
+
+      <!-- Difficulty Level Selector -->
+      <div class="difficulty-bar" role="group" aria-label="Select Grid Difficulty">
+        <button type="button" class="diff-btn" data-diff="cadet">Cadet (3x4)</button>
+        <button type="button" class="diff-btn active" data-diff="agent">Agent (4x4)</button>
+        <button type="button" class="diff-btn" data-diff="architect">Architect (4x5)</button>
+      </div>
+
       <div class="meta">
         <div class="meta-item">MOVES: <span id="moves-count">0</span></div>
-        <div class="meta-item">PAIRS: <span id="pairs-count">0</span>/8</div>
+        <div class="meta-item">PAIRS: <span id="pairs-count">0</span>/<span id="total-pairs-count">8</span></div>
         <div class="meta-item time">TIME: <span id="timer-val">00:00</span></div>
+      </div>
+
+      <div class="best-record-bar">
+        <span>BEST: <strong id="best-record-text">--</strong></span>
       </div>
     </div>
 
-    <div class="matrix-grid" id="matrix-grid">
-      <!-- 16 memory cards injected by JS -->
+    <div class="matrix-grid grid-4x4" id="matrix-grid">
+      <!-- Memory cards injected by JS -->
     </div>
 
     <div class="controls">
@@ -38,6 +55,7 @@
       <div class="overlay-card">
         <h2>DECRYPTION COMPLETE!</h2>
         <p id="win-summary">You solved the matrix in 14 moves and 32 seconds.</p>
+        <div class="new-record-notice hidden" id="new-record-badge">NEW RECORD!</div>
         <button id="play-again-btn" class="glow-button">NEW ENCRYPTION</button>
       </div>
     </div>

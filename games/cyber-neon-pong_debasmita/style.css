@@ -14,38 +14,139 @@ body {
   justify-content: center;
   min-height: 100vh;
   overflow: hidden;
+  padding: 1rem;
 }
 
 .game-header {
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .game-title {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: #38bdf8;
   letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .author-badge {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* Pong Toolbar */
+.pong-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.difficulty-group {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.diff-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.diff-btn:hover {
+  color: #f8fafc;
+}
+
+.diff-btn.active {
+  background: #38bdf8;
+  color: #090d16;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.4);
 }
 
 .score-board {
   display: flex;
-  gap: 32px;
-  font-size: 1.2rem;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 600px;
+  font-size: 1.15rem;
   font-weight: 700;
-  margin-bottom: 12px;
-  padding: 6px 18px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 10px;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.score-player {
+  color: #38bdf8;
+}
+
+.score-ai {
+  color: #f43f5e;
+}
+
+.match-target-tag {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+
+/* Canvas Wrapper & Overlays */
+.canvas-wrapper {
+  position: relative;
+  max-width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 canvas {
+  display: block;
   background: #0d1322;
   border: 2px solid #38bdf8;
   border-radius: 12px;
@@ -55,9 +156,75 @@ canvas {
   touch-action: none;
 }
 
+.pong-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 13, 22, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: opacity 0.25s ease;
+}
+
+.pong-overlay.hidden {
+  display: none;
+}
+
+.overlay-card {
+  background: rgba(22, 27, 40, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+  border-radius: 14px;
+  padding: 1.8rem 2.2rem;
+  text-align: center;
+  max-width: 320px;
+}
+
+.overlay-card h2 {
+  font-size: 1.6rem;
+  color: #38bdf8;
+  margin-bottom: 0.5rem;
+}
+
+.overlay-card p {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  margin-bottom: 1.2rem;
+  line-height: 1.4;
+}
+
+.final-score-row {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.btn-primary {
+  background: #38bdf8;
+  color: #090d16;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #0284c7;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
 .instructions {
-  margin-top: 12px;
-  font-size: 0.85rem;
+  margin-top: 10px;
+  font-size: 0.82rem;
   color: #94a3b8;
   text-align: center;
   padding: 0 1rem;
