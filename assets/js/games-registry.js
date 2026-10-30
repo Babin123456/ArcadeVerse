@@ -167,6 +167,25 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "cyber-helix-fall_babin",
+    "title": "Cyber Helix Fall",
+    "category": "Arcade",
+    "lucideIcon": "disc",
+    "description": "Rotate the neon helix tower to navigate a bouncing cyber sphere through gap sectors while avoiding glitch traps.",
+    "author": "Babin Bid",
+    "github": "Babin123456",
+    "role": "Arcade Developer",
+    "path": "games/cyber-helix-fall_babin/index.html",
+    "tags": [
+      "Arcade",
+      "Physics",
+      "Reflex",
+      "3D-Perspective"
+    ],
+    "stars": 45,
+    "featured": true
+  },
+  {
     "id": "cyber-neon-pong_debasmita",
     "title": "Cyber Neon Pong",
     "category": "Arcade",
@@ -608,7 +627,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 196,
+    "commits": 197,
     "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -625,8 +644,8 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 129,
-    "gamesCount": 15,
+    "commits": 130,
+    "gamesCount": 16,
     "mechanicsBonus": 2,
     "platformPRs": 29,
     "qualityPRs": 1,
@@ -635,6 +654,7 @@ const CONTRIBUTORS_REGISTRY = [
       "Cryptic Wordle Hack",
       "Cyber Block Matrix",
       "Cyber Brick Breaker",
+      "Cyber Helix Fall",
       "Cyber Rogue Protocol",
       "Cyber Snake Matrix",
       "Cyber Tower Stacker",
