@@ -3,3 +3,4 @@
   "buildCommand": "node scripts/build-registry.js",
   "outputDirectory": "."
 }
+

@@ -880,6 +880,41 @@
     padding: 2.5rem 1rem 1.5rem;
   }
 
+  .file-tree-box {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
+
+  .faq-filter-pills {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.6rem;
+    margin-bottom: 1.5rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .faq-filter-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .faq-pill {
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-size: 0.82rem;
+    padding: 0.45rem 0.9rem;
+  }
+
+  .faq-search-input {
+    font-size: 16px;
+    padding: 0.85rem 1rem 0.85rem 2.8rem;
+  }
+
   .faq-accordion-trigger {
     padding: 1.1rem 1.25rem;
     font-size: 0.98rem;
