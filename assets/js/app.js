@@ -333,6 +333,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return true;
       }
       return false;
+    },
+    launchRandom: () => {
+      launchRandomGame();
     }
   };
 
@@ -414,6 +417,82 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 700);
     }
   });
+
+
+  // Web Audio Chiptune SFX for Hero Roulette Launcher
+  function playRouletteSfx() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      if (ctx.state === "suspended") {
+        ctx.resume();
+      }
+
+      const notes = [330, 440, 554.37, 659.25, 880];
+      const now = ctx.currentTime;
+
+      notes.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, now + idx * 0.05);
+
+        gain.gain.setValueAtTime(0.08, now + idx * 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.08);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + idx * 0.05);
+        osc.stop(now + idx * 0.05 + 0.09);
+      });
+    } catch (e) {
+      // Audio autoplay policy or browser unavailable - fail silently
+    }
+  }
+
+  // Hero Section "Surprise Me / Random Game Roulette" Launcher
+  const randomGameBtn = document.getElementById("hero-random-game-btn");
+  let isRollingRandom = false;
+
+  function launchRandomGame() {
+    if (isRollingRandom) return;
+    if (typeof GAMES_REGISTRY === "undefined" || !Array.isArray(GAMES_REGISTRY) || GAMES_REGISTRY.length === 0) {
+      console.warn("GAMES_REGISTRY is not available or empty.");
+      return;
+    }
+
+    isRollingRandom = true;
+    if (randomGameBtn) {
+      randomGameBtn.classList.add("is-rolling");
+      randomGameBtn.setAttribute("aria-busy", "true");
+    }
+
+    playRouletteSfx();
+
+    // 400ms micro-animation for tactile roulette feel
+    setTimeout(() => {
+      const candidates = GAMES_REGISTRY.filter((g) => g && g.path);
+      const pool = candidates.length > 0 ? candidates : GAMES_REGISTRY;
+      const picked = pool[Math.floor(Math.random() * pool.length)];
+
+      if (randomGameBtn) {
+        randomGameBtn.classList.remove("is-rolling");
+        randomGameBtn.setAttribute("aria-busy", "false");
+      }
+      isRollingRandom = false;
+
+      if (picked) {
+        openGameModal(picked, randomGameBtn);
+      }
+    }, 400);
+  }
+
+  if (randomGameBtn) {
+    randomGameBtn.addEventListener("click", launchRandomGame);
+  }
 
   // Initial render
   renderGames();
