@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haunted House: Phantom Manor - ArcadeVerse</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="hh-container">
+    <div class="hh-ambient-fog" aria-hidden="true"></div>
+
+    <!-- Arcade HUD -->
+    <header class="hh-hud">
+      <div class="hh-brand-group">
+        <svg class="hh-pumpkin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2v3m-3-1 2 2m4-2-2 2"></path>
+          <path d="M12 21a9 9 0 0 0 9-8c0-4.5-3.5-7-9-7s-9 2.5-9 7a9 9 0 0 0 9 8z"></path>
+          <path d="M9 13v.01M15 13v.01M9 17c1 1 2 1.5 3 1.5s2-.5 3-1.5"></path>
+        </svg>
+        <div class="hh-title-wrap">
+          <h1>Phantom Manor</h1>
+        </div>
+        <span class="hh-tag">Halloween '26</span>
+      </div>
+
+      <div class="hh-stats-row">
+        <!-- Sanity Meter -->
+        <div class="hh-stat-item" title="Sanity Level - decreases when ghosts are near!">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+          </svg>
+          <div class="hh-sanity-bar-wrap">
+            <div id="hh-sanity-fill" class="hh-sanity-fill"></div>
+          </div>
+        </div>
+
+        <!-- Relic Keys Collected -->
+        <div class="hh-stat-item" title="Cursed Relic Keys Collected">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="7.5" cy="15.5" r="5.5"></circle>
+            <path d="m21 2-9.6 9.6m5.6-3.6 2 2m-4 0 2 2"></path>
+          </svg>
+          <div class="hh-keys-pill">
+            <span id="hh-keys-count">0</span> / 3
+          </div>
+        </div>
+
+        <!-- Spirits Banished Score -->
+        <div class="hh-stat-item" title="Ghosts Banished">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18h6m-3-4v8m-5-8a7 7 0 1 1 10 0v2H7v-2Z"></path>
+          </svg>
+          <span id="hh-score">0</span> PTS
+        </div>
+      </div>
+
+      <div class="hh-hud-actions">
+        <button id="hh-btn-sound" class="hh-btn-icon" type="button" aria-label="Toggle Sound" title="Sound: ON">
+          <svg id="hh-sound-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07m3.54-10.61a10 10 0 0 1 0 14.14"></path>
+          </svg>
+        </button>
+        <button id="hh-btn-help" class="hh-btn-icon" type="button" aria-label="How to Play" title="How to Play">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3m.08 4h.01"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Canvas Simulation Area -->
+    <main class="hh-canvas-wrapper">
+      <canvas id="hh-canvas"></canvas>
+
+      <!-- Mobile Touch Controls Overlay -->
+      <div class="hh-mobile-controls" id="hh-mobile-controls">
+        <div class="hh-dpad">
+          <button class="hh-dpad-btn up" id="hh-touch-up" type="button" aria-label="Move Up">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>
+          </button>
+          <button class="hh-dpad-btn left" id="hh-touch-left" type="button" aria-label="Move Left">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button class="hh-dpad-btn down" id="hh-touch-down" type="button" aria-label="Move Down">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <button class="hh-dpad-btn right" id="hh-touch-right" type="button" aria-label="Move Right">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+
+        <div class="hh-action-buttons">
+          <button class="hh-touch-btn" id="hh-touch-burst" type="button">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/></svg>
+            <span>UV BURST</span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Start / How to Play Modal Screen -->
+    <div class="hh-overlay" id="hh-modal-instructions">
+      <div class="hh-modal-card">
+        <span class="hh-modal-badge">Halloween 2026 Special</span>
+        <h2>HAUNTED HOUSE: PHANTOM MANOR</h2>
+        <p class="hh-modal-sub">Trapped inside a haunted Victorian manor on Halloween night. Vengeful phantoms lurk in the dark corridors. Find the 3 relic keys and escape before your sanity breaks!</p>
+
+        <div class="hh-instructions-grid">
+          <div class="hh-inst-card">
+            <h4>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              Flashlight & UV Beam
+            </h4>
+            <p>Your flashlight automatically points where you move. Aim your light cone directly at ghosts to vaporize them!</p>
+          </div>
+
+          <div class="hh-inst-card">
+            <h4>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="m21 2-9.6 9.6m5.6-3.6 2 2m-4 0 2 2"></path></svg>
+              3 Cursed Keys
+            </h4>
+            <p>Explore the manor rooms to uncover 3 glowing Relic Keys. Once collected, rush to the golden Exit Gate!</p>
+          </div>
+
+          <div class="hh-inst-card">
+            <h4>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+              Sanity & Candlesticks
+            </h4>
+            <p>Being near ghosts drains your sanity. Touch glowing salt candlesticks and Jack-o'-Lanterns to restore sanity!</p>
+          </div>
+
+          <div class="hh-inst-card">
+            <h4>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+              Controls
+            </h4>
+            <p><strong>Move:</strong> WASD or Arrow Keys / Touch D-Pad.<br><strong>Burst:</strong> Spacebar or UV Burst Button.</p>
+          </div>
+        </div>
+
+        <button id="hh-btn-start" class="hh-btn-primary" type="button">
+          <span>ENTER THE MANOR</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Game Over / Victory Modal -->
+    <div class="hh-overlay hidden" id="hh-modal-gameover">
+      <div class="hh-modal-card">
+        <span class="hh-modal-badge" id="hh-go-badge">Expedition Complete</span>
+        <h2 id="hh-go-title">MANOR ESCAPED!</h2>
+        <p class="hh-modal-sub" id="hh-go-desc">You banished the dark spirits, unlocked the gates, and survived the night.</p>
+        <div style="margin-bottom: 1.5rem; font-size: 1.8rem; font-weight: 800; color: var(--hh-orange);">
+          Score: <span id="hh-final-score">0</span> PTS
+        </div>
+        <button id="hh-btn-restart" class="hh-btn-primary" type="button">
+          <span>PLAY AGAIN</span>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

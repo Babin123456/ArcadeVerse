@@ -362,6 +362,28 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "escape-room_debasmita",
+    "title": "Halloween Escape: Witch's Crypt",
+    "category": "Puzzle / Mystery",
+    "lucideIcon": "key",
+    "description": "Trapped inside a forgotten witch's crypt on All Hallows' Eve! Decipher runic pedestals, brew alchemical potions in the bubbling cauldron, solve arcane bookshelf codes, and unlock the cursed iron gate before midnight.",
+    "author": "Debasmita Bose",
+    "github": "DebasmitaBose0",
+    "role": "Project Admin & Lead",
+    "path": "games/escape-room_debasmita/index.html",
+    "tags": [
+      "Halloween",
+      "Escape Room",
+      "Puzzle",
+      "Point & Click",
+      "NSOC26"
+    ],
+    "stars": 30,
+    "featured": true,
+    "difficulty": "Medium",
+    "releaseDate": "2026-10-31"
+  },
+  {
     "id": "fishing-frenzy_mistu7debnath",
     "title": "Fishing Frenzy",
     "category": "Arcade",
@@ -399,6 +421,50 @@ const GAMES_REGISTRY = [
     ],
     "stars": 18,
     "featured": true
+  },
+  {
+    "id": "haunted-house_debasmita",
+    "title": "Haunted House: Phantom Manor",
+    "category": "Adventure / Horror",
+    "lucideIcon": "ghost",
+    "description": "Explore the shadowy corridors of Phantom Manor on Halloween night. Use your dynamic flashlight beam to banish vengeful spirits, collect cursed relic keys, and escape before your sanity fades.",
+    "author": "Debasmita Bose",
+    "github": "DebasmitaBose0",
+    "role": "Project Admin & Lead",
+    "path": "games/haunted-house_debasmita/index.html",
+    "tags": [
+      "Halloween",
+      "Horror",
+      "Action",
+      "Survival",
+      "NSOC26"
+    ],
+    "stars": 30,
+    "featured": true,
+    "difficulty": "Medium",
+    "releaseDate": "2026-10-31"
+  },
+  {
+    "id": "island-survival_debasmita",
+    "title": "Cursed Island: Halloween Survival",
+    "category": "Survival / Action",
+    "lucideIcon": "flame",
+    "description": "Stranded on a cursed island under the Blood Moon on Halloween night! Gather cursed driftwood and soul embers, defend the sacred Hallowed Pumpkin Bonfire against waves of zombie scarecrows and phantom bats, and survive the nightmare.",
+    "author": "Debasmita Bose",
+    "github": "DebasmitaBose0",
+    "role": "Project Admin & Lead",
+    "path": "games/island-survival_debasmita/index.html",
+    "tags": [
+      "Halloween",
+      "Survival",
+      "Action",
+      "Top-Down",
+      "NSOC26"
+    ],
+    "stars": 30,
+    "featured": true,
+    "difficulty": "Hard",
+    "releaseDate": "2026-10-31"
   },
   {
     "id": "memory-matrix_debasmita",
@@ -821,15 +887,18 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 210,
-    "gamesCount": 3,
+    "commits": 214,
+    "gamesCount": 6,
     "mechanicsBonus": 2,
     "platformPRs": 2,
     "qualityPRs": 0,
     "bonusPts": 0,
     "contributions": [
       "Cosmic Surge: Galaxy Defender",
+      "Cursed Island: Halloween Survival",
       "Cyber Neon Pong",
+      "Halloween Escape: Witch's Crypt",
+      "Haunted House: Phantom Manor",
       "Quantum Memory Matrix"
     ]
   },
@@ -838,7 +907,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 145,
+    "commits": 149,
     "gamesCount": 25,
     "mechanicsBonus": 2,
     "platformPRs": 29,

@@ -1,0 +1,20 @@
+{
+  "title": "Cursed Island: Halloween Survival",
+  "category": "Survival / Action",
+  "lucideIcon": "flame",
+  "description": "Stranded on a cursed island under the Blood Moon on Halloween night! Gather cursed driftwood and soul embers, defend the sacred Hallowed Pumpkin Bonfire against waves of zombie scarecrows and phantom bats, and survive the nightmare.",
+  "author": "Debasmita Bose",
+  "github": "DebasmitaBose0",
+  "role": "Project Admin & Lead",
+  "tags": [
+    "Halloween",
+    "Survival",
+    "Action",
+    "Top-Down",
+    "NSOC26"
+  ],
+  "stars": 30,
+  "featured": true,
+  "difficulty": "Hard",
+  "releaseDate": "2026-10-31"
+}

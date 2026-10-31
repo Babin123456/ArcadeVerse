@@ -1,0 +1,20 @@
+{
+  "title": "Haunted House: Phantom Manor",
+  "category": "Adventure / Horror",
+  "lucideIcon": "ghost",
+  "description": "Explore the shadowy corridors of Phantom Manor on Halloween night. Use your dynamic flashlight beam to banish vengeful spirits, collect cursed relic keys, and escape before your sanity fades.",
+  "author": "Debasmita Bose",
+  "github": "DebasmitaBose0",
+  "role": "Project Admin & Lead",
+  "tags": [
+    "Halloween",
+    "Horror",
+    "Action",
+    "Survival",
+    "NSOC26"
+  ],
+  "stars": 30,
+  "featured": true,
+  "difficulty": "Medium",
+  "releaseDate": "2026-10-31"
+}
