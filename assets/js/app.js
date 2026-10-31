@@ -352,8 +352,19 @@ document.addEventListener("DOMContentLoaded", () => {
     activeGame = null;
     gameModal.classList.remove("active");
     gameModal.setAttribute("aria-hidden", "true");
-    gameIframe.src = "";
-    document.body.style.overflow = "auto";
+    
+    // Safely blank out iframe to prevent audio pops and host page reloading
+    try {
+      if (gameIframe && gameIframe.contentWindow) {
+        gameIframe.contentWindow.location.replace("about:blank");
+      } else if (gameIframe) {
+        gameIframe.src = "about:blank";
+      }
+    } catch (e) {
+      if (gameIframe) gameIframe.src = "about:blank";
+    }
+
+    document.body.style.overflow = "";
     modalWindow.classList.remove("fullscreen");
     if (gameModal) gameModal.classList.remove("fullscreen-mode");
     if (document.fullscreenElement || document.webkitFullscreenElement) {

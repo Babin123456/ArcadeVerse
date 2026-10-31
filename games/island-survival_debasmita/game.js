@@ -1,6 +1,6 @@
 /**
  * Island Survival: Lost Beyond the Shore
- * Comprehensive 2D Top-Down Sandbox Survival Adventure
+ * High-Fidelity Fullscreen 2D Sandbox Survival Adventure
  * Author: Debasmita Bose (DebasmitaBose0)
  */
 
@@ -156,33 +156,36 @@
 
   const sound = new SoundEngine();
 
-  // --- Canvas & DOM Setup ---
+  // --- Canvas Setup & Fullscreen Resizing ---
   const canvas = document.getElementById('islandCanvas');
   const ctx = canvas.getContext('2d');
 
-  // Vitals Bars
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  // DOM Elements
   const healthBar = document.getElementById('healthBar');
   const hungerBar = document.getElementById('hungerBar');
   const thirstBar = document.getElementById('thirstBar');
   const energyBar = document.getElementById('energyBar');
 
-  // World Info
   const dayText = document.getElementById('dayText');
   const timeText = document.getElementById('timeText');
   const weatherText = document.getElementById('weatherText');
-  const weatherBadge = document.getElementById('weatherBadge');
   const weatherFx = document.getElementById('weatherFx');
   const lightningFx = document.getElementById('lightningFx');
   const eventToast = document.getElementById('eventToast');
 
-  // Quickbar resources
   const resWood = document.getElementById('resWood');
   const resStone = document.getElementById('resStone');
   const resVines = document.getElementById('resVines');
   const resLeaves = document.getElementById('resLeaves');
   const resFood = document.getElementById('resFood');
   const equippedTool = document.getElementById('equippedTool');
-  const dockHint = document.getElementById('dockHint');
 
   // Modals
   const modalCrafting = document.getElementById('modalCrafting');
@@ -196,37 +199,41 @@
   const statScore = document.getElementById('statScore');
 
   // --- World Constants ---
-  const WORLD_W = 960;
-  const WORLD_H = 540;
-  const ISLAND_CX = 480;
-  const ISLAND_CY = 270;
-  const ISLAND_RX = 410;
-  const ISLAND_RY = 230;
+  const WORLD_W = 1600;
+  const WORLD_H = 1100;
+  const ISLAND_CX = WORLD_W / 2;
+  const ISLAND_CY = WORLD_H / 2;
+  const ISLAND_RX = 680;
+  const ISLAND_RY = 440;
 
   // --- Game State ---
   const state = {
     running: true,
     day: 1,
-    timeOfDay: 0.35, // 0.0 to 1.0 (0=dawn, 0.25=noon, 0.75=dusk, 0.85-1=night)
-    timeSpeed: 0.016, // full day every 60s
-    weather: 'clear', // 'clear', 'rain', 'storm'
+    timeOfDay: 0.35, // 0=dawn, 0.25=noon, 0.75=dusk, 0.85-1=night
+    timeSpeed: 0.015,
+    weather: 'clear',
     weatherTimer: 0,
     statsCrafted: 0,
     statsScore: 0,
 
+    camera: { x: 0, y: 0 },
+
     player: {
-      x: 320,
-      y: 380, // starts near crash on southern beach
+      x: ISLAND_CX - 150,
+      y: ISLAND_CY + 280,
       vx: 0,
       vy: 0,
       angle: 0,
-      speed: 3.2,
-      radius: 14,
+      speed: 3.5,
+      radius: 16,
+      walkStep: 0,
+      swinging: 0,
       health: 100,
       hunger: 85,
       thirst: 75,
       energy: 90,
-      equippedTool: 'Bare Hands', // 'Bare Hands', 'Stone Axe', 'Wooden Spear', 'Fishing Rod'
+      equippedTool: 'Bare Hands',
       hasPlaneBattery: false
     },
 
@@ -243,38 +250,33 @@
       waterBottles: 0
     },
 
-    // Interactive World Objects
-    trees: [],       // { x, y, hp, type: 'palm'|'vine' }
-    rocks: [],       // { x, y, hp }
-    bushes: [],      // { x, y, berriesAvailable }
-    spring: { x: 500, y: 220, radius: 24 }, // Freshwater spring
-    planeWreck: { x: 260, y: 400, searched: false }, // Crashed fuselage
-    radioCliff: { x: 740, y: 150 }, // High plateau for SOS Beacon
+    trees: [],
+    rocks: [],
+    bushes: [],
+    spring: { x: ISLAND_CX + 20, y: ISLAND_CY - 60, radius: 36 },
+    planeWreck: { x: ISLAND_CX - 280, y: ISLAND_CY + 320, searched: false },
+    radioCliff: { x: ISLAND_CX + 440, y: ISLAND_CY - 220 },
 
-    // Placed structures
     structures: {
-      campfires: [], // { x, y, fuel: 100 }
-      shelters: [],  // { x, y }
-      rafts: [],     // { x, y, ready: bool }
-      beacons: []    // { x, y, active: bool }
+      campfires: [],
+      shelters: [],
+      rafts: [],
+      beacons: []
     },
 
-    // Wildlife
-    wildlife: [], // { type: 'boar'|'crab', x, y, vx, vy, hp, maxHp, angle, speed, aggro }
-
-    // Particles (leaves, wood splinters, rain drops)
+    wildlife: [],
+    fireflies: [],
     particles: [],
 
-    // Inputs
     keys: { up: false, down: false, left: false, right: false }
   };
 
-  // --- World Initialization ---
+  // --- World Generation ---
   function initWorld() {
     // Palm & Vine Trees
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 28; i++) {
       const a = Math.random() * Math.PI * 2;
-      const d = 50 + Math.random() * (ISLAND_RY - 60);
+      const d = 80 + Math.random() * (ISLAND_RY - 100);
       const tx = ISLAND_CX + Math.cos(a) * (d * (ISLAND_RX / ISLAND_RY));
       const ty = ISLAND_CY + Math.sin(a) * d;
       state.trees.push({
@@ -287,9 +289,9 @@
     }
 
     // Granite Boulders
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 18; i++) {
       const a = Math.random() * Math.PI * 2;
-      const d = 70 + Math.random() * (ISLAND_RY - 70);
+      const d = 100 + Math.random() * (ISLAND_RY - 110);
       const rx = ISLAND_CX + Math.cos(a) * (d * (ISLAND_RX / ISLAND_RY));
       const ry = ISLAND_CY + Math.sin(a) * d;
       state.rocks.push({
@@ -301,9 +303,9 @@
     }
 
     // Berry Bushes
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 14; i++) {
       const a = Math.random() * Math.PI * 2;
-      const d = 40 + Math.random() * (ISLAND_RY - 70);
+      const d = 60 + Math.random() * (ISLAND_RY - 120);
       const bx = ISLAND_CX + Math.cos(a) * (d * (ISLAND_RX / ISLAND_RY));
       const by = ISLAND_CY + Math.sin(a) * d;
       state.bushes.push({
@@ -313,33 +315,44 @@
       });
     }
 
-    // Coastal Crabs on beach
-    for (let i = 0; i < 5; i++) {
+    // Coastal Crabs
+    for (let i = 0; i < 8; i++) {
       state.wildlife.push({
         type: 'crab',
-        x: 200 + Math.random() * 560,
-        y: 420 + Math.random() * 40,
+        x: ISLAND_CX - 300 + Math.random() * 600,
+        y: ISLAND_CY + 320 + Math.random() * 60,
         vx: 0,
         vy: 0,
         hp: 15,
         maxHp: 15,
-        speed: 0.8,
+        speed: 0.9,
         aggro: false
       });
     }
 
-    // Jungle Wild Boars
-    for (let i = 0; i < 3; i++) {
+    // Wild Boars
+    for (let i = 0; i < 4; i++) {
       state.wildlife.push({
         type: 'boar',
-        x: 420 + Math.random() * 200,
-        y: 180 + Math.random() * 120,
+        x: ISLAND_CX - 150 + Math.random() * 300,
+        y: ISLAND_CY - 100 + Math.random() * 200,
         vx: 0,
         vy: 0,
         hp: 50,
         maxHp: 50,
-        speed: 1.6,
+        speed: 1.8,
         aggro: false
+      });
+    }
+
+    // Fireflies
+    for (let i = 0; i < 30; i++) {
+      state.fireflies.push({
+        x: ISLAND_CX + (Math.random() - 0.5) * ISLAND_RX * 1.5,
+        y: ISLAND_CY + (Math.random() - 0.5) * ISLAND_RY * 1.5,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        pulse: Math.random() * Math.PI * 2
       });
     }
   }
@@ -354,7 +367,7 @@
       cost: { wood: 2, stone: 3, vines: 1 },
       onCraft: () => {
         state.player.equippedTool = 'Stone Axe';
-        showToast('Crafted Stone Axe! Equipped automatically.');
+        showToast('Crafted Stone Axe! Equipped.');
       }
     },
     {
@@ -364,7 +377,7 @@
       cost: { wood: 3, stone: 1, vines: 2 },
       onCraft: () => {
         state.player.equippedTool = 'Wooden Spear';
-        showToast('Crafted Wooden Spear! Ready to defend and hunt.');
+        showToast('Crafted Wooden Spear! Equipped.');
       }
     },
     {
@@ -374,7 +387,7 @@
       cost: { wood: 2, vines: 2 },
       onCraft: () => {
         state.player.equippedTool = 'Fishing Rod';
-        showToast('Crafted Fishing Rod! Fish at water edges.');
+        showToast('Crafted Fishing Rod! Fish at water shores.');
       }
     },
     {
@@ -421,7 +434,7 @@
           x: state.player.x,
           y: state.player.y
         });
-        showToast('Constructed Shelter! Press [Rest] inside to sleep.');
+        showToast('Constructed Shelter! Press [Rest] to sleep through night.');
       }
     },
     {
@@ -431,17 +444,17 @@
       cost: { wood: 20, vines: 8, leaves: 6, coconuts: 4 },
       onCraft: () => {
         state.structures.rafts.push({
-          x: 480,
-          y: 470,
+          x: ISLAND_CX,
+          y: ISLAND_CY + 400,
           ready: true
         });
-        showToast('Built Seaworthy Escape Raft at the southern shore! Launch when ready!');
+        showToast('Built Seaworthy Escape Raft on the beach! Interact to escape!');
       }
     },
     {
       id: 'radio_beacon',
       title: 'SOS Radio Beacon (Escape)',
-      desc: 'Erect an emergency radio antenna on the high ridge cliff.',
+      desc: 'Erect an emergency radio antenna on the high cliff ridge.',
       cost: { wood: 15, stone: 5, vines: 4 },
       onCraft: () => {
         if (!state.player.hasPlaneBattery) {
@@ -464,7 +477,6 @@
       const card = document.createElement('div');
       card.className = 'craft-card';
 
-      // Check if player has materials
       let canCraft = true;
       const costParts = [];
       for (const [res, amt] of Object.entries(rec.cost)) {
@@ -475,23 +487,16 @@
 
       card.innerHTML = `
         <div>
-          <div class="craft-card-head">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-            </svg>
-            <span class="craft-card-title">${rec.title}</span>
-          </div>
+          <span class="craft-card-title">${rec.title}</span>
           <p class="craft-recipe" style="margin: 6px 0;">${rec.desc}</p>
           <p class="craft-recipe"><strong>Cost:</strong> ${costParts.join(', ')}</p>
         </div>
-        <button class="btn-craft-item" ${canCraft ? '' : 'disabled'}>Craft Item</button>
+        <button class="btn-craft-item" ${canCraft ? '' : 'disabled'}>Craft</button>
       `;
 
-      const btn = card.querySelector('.btn-craft-item');
-      btn.addEventListener('click', () => {
+      card.querySelector('.btn-craft-item').addEventListener('click', () => {
         if (!canCraft) return;
         sound.playCraft();
-        // Deduct cost
         for (const [res, amt] of Object.entries(rec.cost)) {
           state.inventory[res] -= amt;
         }
@@ -506,7 +511,7 @@
     });
   }
 
-  // --- Input & Keyboard Controls ---
+  // --- Keyboard & Input Listeners ---
   window.addEventListener('keydown', e => {
     sound.init();
     const k = e.key.toLowerCase();
@@ -519,15 +524,9 @@
       e.preventDefault();
       performAction();
     }
-    if (k === 'c') {
-      openCraftingModal();
-    }
-    if (k === 'e') {
-      consumeFoodOrWater();
-    }
-    if (k === 'r') {
-      restOrSleep();
-    }
+    if (k === 'c') openCraftingModal();
+    if (k === 'e') consumeFoodOrWater();
+    if (k === 'r') restOrSleep();
   });
 
   window.addEventListener('keyup', e => {
@@ -538,7 +537,7 @@
     if (k === 'd' || k === 'arrowright') state.keys.right = false;
   });
 
-  // Mobile Touch Bindings
+  // Touch Controls
   const bindTouch = (id, onDown, onUp) => {
     const el = document.getElementById(id);
     if (!el) return;
@@ -561,10 +560,7 @@
   bindTouch('btnDown', () => { state.keys.down = true; }, () => { state.keys.down = false; });
   bindTouch('btnLeft', () => { state.keys.left = true; }, () => { state.keys.left = false; });
   bindTouch('btnRight', () => { state.keys.right = true; }, () => { state.keys.right = false; });
-
   bindTouch('touchAction', () => performAction());
-  bindTouch('touchEat', () => consumeFoodOrWater());
-  bindTouch('touchCraft', () => openCraftingModal());
 
   document.getElementById('btnOpenCrafting').addEventListener('click', openCraftingModal);
   document.getElementById('btnEatDrink').addEventListener('click', consumeFoodOrWater);
@@ -576,24 +572,23 @@
     modalCrafting.classList.add('open');
   }
 
-  // --- Core Player Actions (Harvest / Attack / Interact) ---
+  // --- Perform Action (Harvest / Attack / Interact) ---
   function performAction() {
     if (!state.running) return;
     const p = state.player;
-
-    // Check action energy cost
+    p.swinging = 12; // trigger swing animation
     p.energy = Math.max(0, p.energy - 3);
 
     let acted = false;
 
-    // 1. Check near trees (Harvest Wood, Leaves, Coconuts)
+    // 1. Check Trees
     for (let i = state.trees.length - 1; i >= 0; i--) {
       const t = state.trees[i];
-      if (Math.hypot(p.x - t.x, p.y - t.y) < p.radius + 26) {
+      if (Math.hypot(p.x - t.x, p.y - t.y) < p.radius + 32) {
         sound.playChop();
         const damage = p.equippedTool === 'Stone Axe' ? 2 : 1;
         t.hp -= damage;
-        createParticles(t.x, t.y, 6, '#8d6e63');
+        createParticles(t.x, t.y, 8, '#8d6e63');
         if (t.hp <= 0) {
           const woodYield = p.equippedTool === 'Stone Axe' ? 4 : 2;
           state.inventory.wood += woodYield;
@@ -609,24 +604,24 @@
           }
           state.trees.splice(i, 1);
         } else {
-          showToast(`Chopping... (${t.hp}/${t.maxHp})`);
+          showToast(`Chopping tree... (${t.hp}/${t.maxHp})`);
         }
         acted = true;
         break;
       }
     }
 
-    // 2. Check near rocks (Mine Stone)
+    // 2. Check Rocks
     if (!acted) {
       for (let i = state.rocks.length - 1; i >= 0; i--) {
         const r = state.rocks[i];
-        if (Math.hypot(p.x - r.x, p.y - r.y) < p.radius + 24) {
+        if (Math.hypot(p.x - r.x, p.y - r.y) < p.radius + 28) {
           sound.playMine();
           r.hp -= 1;
-          createParticles(r.x, r.y, 6, '#b0bec5');
+          createParticles(r.x, r.y, 8, '#b0bec5');
           if (r.hp <= 0) {
             state.inventory.stone += 3;
-            showToast('Mined boulder! Obtained 3 Stones.');
+            showToast('Mined granite rock! Obtained 3 Stones.');
             state.rocks.splice(i, 1);
           } else {
             showToast(`Mining rock... (${r.hp}/${r.maxHp})`);
@@ -637,11 +632,11 @@
       }
     }
 
-    // 3. Check near bushes (Pick Berries)
+    // 3. Check Berry Bushes
     if (!acted) {
       for (let i = 0; i < state.bushes.length; i++) {
         const b = state.bushes[i];
-        if (Math.hypot(p.x - b.x, p.y - b.y) < p.radius + 22) {
+        if (Math.hypot(p.x - b.x, p.y - b.y) < p.radius + 26) {
           if (b.hasBerries) {
             b.hasBerries = false;
             sound.playEat();
@@ -656,20 +651,20 @@
       }
     }
 
-    // 4. Check near Freshwater Spring (Drink or Fill Flask)
+    // 4. Check Freshwater Spring
     if (!acted) {
-      if (Math.hypot(p.x - state.spring.x, p.y - state.spring.y) < p.radius + state.spring.radius) {
+      if (Math.hypot(p.x - state.spring.x, p.y - state.spring.y) < p.radius + state.spring.radius + 10) {
         sound.playEat();
         p.thirst = 100;
-        showToast('Drank fresh mountain spring water. Thirst fully quenched!');
+        showToast('Drank fresh mountain spring water. Thirst 100%!');
         acted = true;
       }
     }
 
-    // 5. Check near Plane Crash Fuselage (Salvage)
+    // 5. Check Plane Crash Wreckage
     if (!acted) {
       const pw = state.planeWreck;
-      if (Math.hypot(p.x - pw.x, p.y - pw.y) < p.radius + 35) {
+      if (Math.hypot(p.x - pw.x, p.y - pw.y) < p.radius + 40) {
         if (!pw.searched) {
           pw.searched = true;
           p.hasPlaneBattery = true;
@@ -684,10 +679,10 @@
       }
     }
 
-    // 6. Check near Raft (Escape Launch)
+    // 6. Check Raft Escape
     if (!acted) {
       for (const r of state.structures.rafts) {
-        if (Math.hypot(p.x - r.x, p.y - r.y) < 45) {
+        if (Math.hypot(p.x - r.x, p.y - r.y) < 55) {
           triggerEnding('raft');
           acted = true;
           break;
@@ -695,10 +690,10 @@
       }
     }
 
-    // 7. Check near SOS Beacon (Helicopter Launch)
+    // 7. Check SOS Beacon Escape
     if (!acted) {
       for (const b of state.structures.beacons) {
-        if (Math.hypot(p.x - b.x, p.y - b.y) < 45) {
+        if (Math.hypot(p.x - b.x, p.y - b.y) < 55) {
           triggerEnding('helicopter');
           acted = true;
           break;
@@ -706,16 +701,16 @@
       }
     }
 
-    // 8. Check near Wild Boars / Wildlife (Attack / Hunt)
+    // 8. Wildlife Attack / Hunt
     if (!acted) {
       for (let i = state.wildlife.length - 1; i >= 0; i--) {
         const w = state.wildlife[i];
-        if (Math.hypot(p.x - w.x, p.y - w.y) < p.radius + 28) {
+        if (Math.hypot(p.x - w.x, p.y - w.y) < p.radius + 32) {
           sound.playAttack();
           const damage = p.equippedTool === 'Wooden Spear' ? 30 : 12;
           w.hp -= damage;
           w.aggro = true;
-          createParticles(w.x, w.y, 8, '#ff5252');
+          createParticles(w.x, w.y, 10, '#ff5252');
           if (w.hp <= 0) {
             if (w.type === 'boar') {
               state.inventory.meat += 2;
@@ -734,7 +729,7 @@
       }
     }
 
-    // 9. Fishing in the ocean
+    // 9. Fishing in Ocean
     if (!acted && p.equippedTool === 'Fishing Rod') {
       const normX = (p.x - ISLAND_CX) / (ISLAND_RX - 20);
       const normY = (p.y - ISLAND_CY) / (ISLAND_RY - 20);
@@ -753,7 +748,7 @@
     updateUI();
   }
 
-  // --- Consume Food & Water ---
+  // --- Consume Food or Water ---
   function consumeFoodOrWater() {
     const p = state.player;
     sound.init();
@@ -777,10 +772,9 @@
       sound.playEat();
       showToast('Ate juicy berries (+12 Hunger, +8 Thirst)!');
     } else if (state.inventory.fish > 0 || state.inventory.meat > 0) {
-      // Cook at campfire if nearby, otherwise eat raw
       let nearCampfire = false;
       for (const cf of state.structures.campfires) {
-        if (Math.hypot(p.x - cf.x, p.y - cf.y) < 60) {
+        if (Math.hypot(p.x - cf.x, p.y - cf.y) < 70) {
           nearCampfire = true;
           break;
         }
@@ -790,15 +784,14 @@
           state.inventory.meat--;
           state.inventory.cookedFood++;
           sound.playChop();
-          showToast('Cooked raw meat over the campfire! (+1 Cooked Meal)');
+          showToast('Cooked raw meat over campfire! (+1 Cooked Meal)');
         } else {
           state.inventory.fish--;
           state.inventory.cookedFood++;
           sound.playChop();
-          showToast('Grilled fresh fish over the campfire! (+1 Cooked Meal)');
+          showToast('Grilled fresh fish over campfire! (+1 Cooked Meal)');
         }
       } else {
-        // Eat raw with food poisoning risk
         if (state.inventory.fish > 0) state.inventory.fish--;
         else state.inventory.meat--;
         p.hunger = Math.min(100, p.hunger + 18);
@@ -817,32 +810,29 @@
     updateUI();
   }
 
-  // --- Rest & Sleep System ---
+  // --- Rest or Sleep ---
   function restOrSleep() {
     const p = state.player;
     sound.init();
 
-    // Check near shelter
     let nearShelter = false;
     for (const sh of state.structures.shelters) {
-      if (Math.hypot(p.x - sh.x, p.y - sh.y) < 55) {
+      if (Math.hypot(p.x - sh.x, p.y - sh.y) < 65) {
         nearShelter = true;
         break;
       }
     }
 
-    // Check near campfire
     let nearCampfire = false;
     for (const cf of state.structures.campfires) {
-      if (Math.hypot(p.x - cf.x, p.y - cf.y) < 60) {
+      if (Math.hypot(p.x - cf.x, p.y - cf.y) < 70) {
         nearCampfire = true;
         break;
       }
     }
 
     if (nearShelter) {
-      // Sleep through night to dawn
-      state.timeOfDay = 0.05; // dawn
+      state.timeOfDay = 0.05;
       state.day++;
       p.energy = 100;
       p.health = Math.min(100, p.health + 25);
@@ -852,10 +842,7 @@
       sound.playVictory();
       showToast(`Slept safely in shelter! Day ${state.day} begins.`);
 
-      // Check permanent survival milestone
-      if (state.day >= 6) {
-        triggerEnding('castaway');
-      }
+      if (state.day >= 6) triggerEnding('castaway');
     } else if (nearCampfire) {
       p.energy = Math.min(100, p.energy + 35);
       showToast('Rested by the warm campfire (+35 Energy).');
@@ -865,7 +852,7 @@
     updateUI();
   }
 
-  // --- Endings & Victory System ---
+  // --- Trigger Endings ---
   function triggerEnding(type) {
     state.running = false;
     statDays.textContent = state.day;
@@ -901,7 +888,7 @@
       endingTitle.className = 'ending-title defeat';
       endingDesc.innerHTML = `
         <p>Your vital signs plummeted to zero. The harsh wilderness of the uncharted island claimed your life.</p>
-        <p style="margin-top: 10px;">Remember to manage your hunger, drink clean water, and build shelters before night falls.</p>
+        <p style="margin-top: 10px;">Remember to manage hunger, drink clean water, and build shelters before night falls.</p>
       `;
     }
     modalEnding.classList.add('open');
@@ -931,28 +918,25 @@
     }
   }
 
-  // --- Main Update Loop (60 FPS) ---
+  // --- Main 60 FPS Simulation Update ---
   let lastTime = performance.now();
 
   function update(delta) {
     if (!state.running) return;
 
-    // 1. Day / Night Cycle
+    // Time cycle
     state.timeOfDay = (state.timeOfDay + state.timeSpeed * delta) % 1.0;
-    if (state.timeOfDay < 0.01 && delta > 0) {
-      state.day++;
-    }
+    if (state.timeOfDay < 0.01 && delta > 0) state.day++;
 
-    // Time text
     let hour = Math.floor(state.timeOfDay * 24);
     let ampm = hour >= 12 ? 'PM' : 'AM';
     let h12 = hour % 12 || 12;
     timeText.textContent = `${h12}:00 ${ampm}`;
     dayText.textContent = `Day ${state.day}`;
 
-    // 2. Weather System
+    // Weather
     state.weatherTimer += delta;
-    if (state.weatherTimer > 35) {
+    if (state.weatherTimer > 40) {
       state.weatherTimer = 0;
       const roll = Math.random();
       if (roll < 0.5) {
@@ -963,7 +947,6 @@
         state.weather = 'rain';
         weatherText.textContent = 'Rainfall';
         weatherFx.className = 'weather-overlay rain';
-        // Rain quenches thirst slightly
         state.player.thirst = Math.min(100, state.player.thirst + 10);
       } else {
         state.weather = 'storm';
@@ -975,7 +958,7 @@
       }
     }
 
-    // 3. Player Movement
+    // Player Movement
     const p = state.player;
     let dx = 0;
     let dy = 0;
@@ -993,46 +976,46 @@
       p.angle = Math.atan2(dy, dx);
       p.x += dx * p.speed;
       p.y += dy * p.speed;
+      p.walkStep += 0.2;
     }
+
+    if (p.swinging > 0) p.swinging--;
 
     // Constrain inside island bounds
-    const normX = (p.x - ISLAND_CX) / (ISLAND_RX - 15);
-    const normY = (p.y - ISLAND_CY) / (ISLAND_RY - 15);
+    const normX = (p.x - ISLAND_CX) / (ISLAND_RX - 20);
+    const normY = (p.y - ISLAND_CY) / (ISLAND_RY - 20);
     if (normX * normX + normY * normY > 1) {
       const a = Math.atan2(p.y - ISLAND_CY, (p.x - ISLAND_CX) * (ISLAND_RY / ISLAND_RX));
-      p.x = ISLAND_CX + Math.cos(a) * (ISLAND_RX - 15);
-      p.y = ISLAND_CY + Math.sin(a) * (ISLAND_RY - 15);
+      p.x = ISLAND_CX + Math.cos(a) * (ISLAND_RX - 20);
+      p.y = ISLAND_CY + Math.sin(a) * (ISLAND_RY - 20);
     }
 
-    // 4. Vitals Decay
+    // Camera follow player smoothly
+    state.camera.x = p.x - canvas.width / 2;
+    state.camera.y = p.y - canvas.height / 2;
+
+    // Vitals decay
     p.hunger = Math.max(0, p.hunger - 0.7 * delta);
     p.thirst = Math.max(0, p.thirst - 1.1 * delta);
 
-    // Starvation / Dehydration damage
     if (p.hunger <= 0 || p.thirst <= 0) {
       p.health = Math.max(0, p.health - 6 * delta);
     } else if (p.hunger > 70 && p.thirst > 70 && p.health < 100) {
-      // Natural healing
       p.health = Math.min(100, p.health + 1.2 * delta);
     }
 
-    if (p.health <= 0) {
-      triggerEnding('death');
-    }
+    if (p.health <= 0) triggerEnding('death');
 
-    // 5. Wildlife AI Update
+    // Wildlife Update
     state.wildlife.forEach(w => {
       if (w.aggro) {
-        // Chase player
         const a = Math.atan2(p.y - w.y, p.x - w.x);
         w.x += Math.cos(a) * w.speed;
         w.y += Math.sin(a) * w.speed;
-        // Hit player
         if (Math.hypot(p.x - w.x, p.y - w.y) < p.radius + 14) {
           p.health = Math.max(0, p.health - 12 * delta);
         }
       } else {
-        // Wander peacefully
         if (Math.random() < 0.02) {
           w.vx = (Math.random() - 0.5) * w.speed;
           w.vy = (Math.random() - 0.5) * w.speed;
@@ -1042,7 +1025,14 @@
       }
     });
 
-    // 6. Update Particles
+    // Fireflies Update
+    state.fireflies.forEach(ff => {
+      ff.x += ff.vx;
+      ff.y += ff.vy;
+      ff.pulse += 0.05;
+    });
+
+    // Particles
     for (let i = state.particles.length - 1; i >= 0; i--) {
       const pt = state.particles[i];
       pt.x += pt.vx;
@@ -1054,7 +1044,6 @@
     updateUI();
   }
 
-  // Sync DOM HUD
   function updateUI() {
     const p = state.player;
     healthBar.style.width = `${p.health}%`;
@@ -1076,79 +1065,94 @@
     const h = canvas.height;
     ctx.clearRect(0, 0, w, h);
 
-    // 1. Surrounding Ocean with Animated Waves
-    const oceanGrad = ctx.createRadialGradient(ISLAND_CX, ISLAND_CY, 180, ISLAND_CX, ISLAND_CY, 540);
-    oceanGrad.addColorStop(0, '#0277bd');
-    oceanGrad.addColorStop(1, '#013254');
-    ctx.fillStyle = oceanGrad;
-    ctx.fillRect(0, 0, w, h);
+    ctx.save();
+    // Apply Camera Translation
+    ctx.translate(-state.camera.x, -state.camera.y);
 
-    // Animated Ocean Foam Rings
-    const wavePulse = (Math.sin(time / 400) + 1) * 6;
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
-    ctx.lineWidth = 3;
+    // 1. Endless Deep Ocean with Animated Waves
+    const oceanGrad = ctx.createRadialGradient(ISLAND_CX, ISLAND_CY, 200, ISLAND_CX, ISLAND_CY, 900);
+    oceanGrad.addColorStop(0, '#0277bd');
+    oceanGrad.addColorStop(1, '#00294d');
+    ctx.fillStyle = oceanGrad;
+    ctx.fillRect(state.camera.x, state.camera.y, w, h);
+
+    // Shoreline White Foam Pulse
+    const wavePulse = (Math.sin(time / 450) + 1) * 8;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
+    ctx.lineWidth = 4;
     ctx.beginPath();
     ctx.ellipse(ISLAND_CX, ISLAND_CY, ISLAND_RX + 8 + wavePulse, ISLAND_RY + 8 + wavePulse, 0, 0, Math.PI * 2);
     ctx.stroke();
 
-    // 2. Sandy Beach Shore
+    // 2. Sandy Beach Terrain
     ctx.fillStyle = '#dfc282';
     ctx.beginPath();
     ctx.ellipse(ISLAND_CX, ISLAND_CY, ISLAND_RX, ISLAND_RY, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3. Lush Rainforest Interior
+    // 3. Dense Rainforest Grass & Dirt Paths
     ctx.fillStyle = '#2e7d32';
     ctx.beginPath();
-    ctx.ellipse(ISLAND_CX, ISLAND_CY - 10, ISLAND_RX - 65, ISLAND_RY - 55, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#1b5e20';
-    ctx.beginPath();
-    ctx.ellipse(ISLAND_CX, ISLAND_CY - 10, ISLAND_RX - 110, ISLAND_RY - 85, 0, 0, Math.PI * 2);
+    ctx.ellipse(ISLAND_CX, ISLAND_CY - 15, ISLAND_RX - 85, ISLAND_RY - 75, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // 4. Freshwater Lagoon / Spring
+    ctx.fillStyle = '#1b5e20';
+    ctx.beginPath();
+    ctx.ellipse(ISLAND_CX, ISLAND_CY - 15, ISLAND_RX - 150, ISLAND_RY - 120, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 4. Freshwater Lagoon / Mountain Spring
     const sp = state.spring;
     ctx.fillStyle = '#29b6f6';
     ctx.beginPath();
     ctx.arc(sp.x, sp.y, sp.radius, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = '#81d4fa';
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 3;
     ctx.stroke();
 
     // 5. Plane Crash Site Fuselage on Beach
     const pw = state.planeWreck;
-    ctx.fillStyle = '#cfd8dc';
     ctx.save();
     ctx.translate(pw.x, pw.y);
-    ctx.rotate(-0.4);
-    // Fuselage
-    ctx.fillRect(-35, -12, 70, 24);
-    // Wing
+    ctx.rotate(-0.35);
+    ctx.fillStyle = '#cfd8dc';
+    ctx.fillRect(-45, -16, 90, 32);
     ctx.fillStyle = '#90a4ae';
-    ctx.fillRect(-10, -40, 20, 80);
-    // Smoke particles from engine
-    ctx.fillStyle = 'rgba(70, 70, 70, 0.4)';
+    ctx.fillRect(-12, -50, 24, 100);
+    // Smoke particles
+    ctx.fillStyle = 'rgba(80, 80, 80, 0.35)';
     ctx.beginPath();
-    ctx.arc(15, -15 + Math.sin(time / 200) * 4, 8, 0, Math.PI * 2);
+    ctx.arc(20, -20 + Math.sin(time / 200) * 5, 12, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 
-    // 6. Placed Structures (Campfires, Shelters, Rafts, Beacons)
+    // 6. Placed Structures
     // Campfires
     state.structures.campfires.forEach(cf => {
+      // Warm Light Glow
+      const cGlow = ctx.createRadialGradient(cf.x, cf.y, 10, cf.x, cf.y, 120);
+      cGlow.addColorStop(0, 'rgba(255, 140, 0, 0.45)');
+      cGlow.addColorStop(1, 'transparent');
+      ctx.fillStyle = cGlow;
+      ctx.beginPath();
+      ctx.arc(cf.x, cf.y, 120, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Stone ring
       ctx.fillStyle = '#4e342e';
       ctx.beginPath();
-      ctx.arc(cf.x, cf.y, 14, 0, Math.PI * 2);
+      ctx.arc(cf.x, cf.y, 16, 0, Math.PI * 2);
       ctx.fill();
+      // Dancing fire
+      const fH = Math.sin(time / 90) * 4;
       ctx.fillStyle = '#ff7043';
       ctx.beginPath();
-      ctx.arc(cf.x, cf.y, 8, 0, Math.PI * 2);
+      ctx.arc(cf.x, cf.y, 9 + fH * 0.4, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillStyle = '#ffee58';
       ctx.beginPath();
-      ctx.arc(cf.x, cf.y, 4, 0, Math.PI * 2);
+      ctx.arc(cf.x, cf.y, 5, 0, Math.PI * 2);
       ctx.fill();
     });
 
@@ -1156,48 +1160,48 @@
     state.structures.shelters.forEach(sh => {
       ctx.fillStyle = '#5d4037';
       ctx.beginPath();
-      ctx.moveTo(sh.x - 22, sh.y + 18);
-      ctx.lineTo(sh.x, sh.y - 20);
-      ctx.lineTo(sh.x + 22, sh.y + 18);
+      ctx.moveTo(sh.x - 26, sh.y + 22);
+      ctx.lineTo(sh.x, sh.y - 25);
+      ctx.lineTo(sh.x + 26, sh.y + 22);
       ctx.closePath();
       ctx.fill();
       ctx.fillStyle = '#388e3c';
-      ctx.fillRect(sh.x - 16, sh.y, 32, 16);
+      ctx.fillRect(sh.x - 20, sh.y, 40, 20);
     });
 
     // Rafts
     state.structures.rafts.forEach(rf => {
       ctx.fillStyle = '#8d6e63';
-      ctx.fillRect(rf.x - 25, rf.y - 15, 50, 30);
+      ctx.fillRect(rf.x - 30, rf.y - 18, 60, 36);
       ctx.fillStyle = '#fff';
-      ctx.fillRect(rf.x - 2, rf.y - 28, 4, 25);
+      ctx.fillRect(rf.x - 2, rf.y - 35, 4, 30);
       ctx.fillStyle = '#ffe082';
       ctx.beginPath();
-      ctx.moveTo(rf.x + 2, rf.y - 26);
-      ctx.lineTo(rf.x + 18, rf.y - 16);
-      ctx.lineTo(rf.x + 2, rf.y - 6);
+      ctx.moveTo(rf.x + 2, rf.y - 32);
+      ctx.lineTo(rf.x + 24, rf.y - 20);
+      ctx.lineTo(rf.x + 2, rf.y - 8);
       ctx.fill();
     });
 
     // SOS Radio Beacons
     state.structures.beacons.forEach(bc => {
       ctx.fillStyle = '#b0bec5';
-      ctx.fillRect(bc.x - 3, bc.y - 30, 6, 30);
+      ctx.fillRect(bc.x - 4, bc.y - 40, 8, 40);
       ctx.fillStyle = '#ff1744';
       ctx.beginPath();
-      ctx.arc(bc.x, bc.y - 32, 4, 0, Math.PI * 2);
+      ctx.arc(bc.x, bc.y - 42, 5, 0, Math.PI * 2);
       ctx.fill();
     });
 
-    // 7. Rocks & Boulders
+    // 7. Granite Boulders
     state.rocks.forEach(rk => {
       ctx.fillStyle = '#78909c';
       ctx.beginPath();
-      ctx.arc(rk.x, rk.y, 14, 0, Math.PI * 2);
+      ctx.arc(rk.x, rk.y, 16, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillStyle = '#546e7a';
       ctx.beginPath();
-      ctx.arc(rk.x + 3, rk.y - 3, 7, 0, Math.PI * 2);
+      ctx.arc(rk.x + 4, rk.y - 4, 8, 0, Math.PI * 2);
       ctx.fill();
     });
 
@@ -1205,35 +1209,54 @@
     state.bushes.forEach(bs => {
       ctx.fillStyle = '#43a047';
       ctx.beginPath();
-      ctx.arc(bs.x, bs.y, 12, 0, Math.PI * 2);
+      ctx.arc(bs.x, bs.y, 14, 0, Math.PI * 2);
       ctx.fill();
       if (bs.hasBerries) {
         ctx.fillStyle = '#e91e63';
         ctx.beginPath();
-        ctx.arc(bs.x - 4, bs.y - 2, 3, 0, Math.PI * 2);
-        ctx.arc(bs.x + 4, bs.y + 2, 3, 0, Math.PI * 2);
+        ctx.arc(bs.x - 5, bs.y - 3, 3.5, 0, Math.PI * 2);
+        ctx.arc(bs.x + 5, bs.y + 3, 3.5, 0, Math.PI * 2);
         ctx.fill();
       }
     });
 
-    // 9. Trees (Palm & Vine)
+    // 9. Palm Trees with Detailed Multi-Frond Canopies
     state.trees.forEach(tr => {
-      // Trunk
+      // Trunk shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.18)';
+      ctx.beginPath();
+      ctx.ellipse(tr.x + 6, tr.y + 4, 10, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Textured Trunk
       ctx.fillStyle = '#6d4c41';
       ctx.beginPath();
-      ctx.arc(tr.x, tr.y, 7, 0, Math.PI * 2);
+      ctx.arc(tr.x, tr.y, 8, 0, Math.PI * 2);
       ctx.fill();
-      // Foliage Canopy
+
+      // Palm fronds
       ctx.fillStyle = tr.type === 'palm' ? '#2e7d32' : '#1b5e20';
-      ctx.beginPath();
-      ctx.arc(tr.x, tr.y - 8, 22, 0, Math.PI * 2);
-      ctx.fill();
+      for (let fa = 0; fa < Math.PI * 2; fa += Math.PI / 3) {
+        const frondSway = Math.sin(time / 500 + fa) * 4;
+        ctx.beginPath();
+        ctx.moveTo(tr.x, tr.y - 10);
+        ctx.quadraticCurveTo(
+          tr.x + Math.cos(fa) * 20,
+          tr.y - 10 + Math.sin(fa) * 20 + frondSway,
+          tr.x + Math.cos(fa) * 32,
+          tr.y - 10 + Math.sin(fa) * 32 + frondSway
+        );
+        ctx.lineWidth = 9;
+        ctx.strokeStyle = tr.type === 'palm' ? '#2e7d32' : '#1b5e20';
+        ctx.stroke();
+      }
+
+      // Coconuts
       if (tr.type === 'palm') {
-        // Coconuts
         ctx.fillStyle = '#4e342e';
         ctx.beginPath();
-        ctx.arc(tr.x - 4, tr.y - 6, 3.5, 0, Math.PI * 2);
-        ctx.arc(tr.x + 4, tr.y - 6, 3.5, 0, Math.PI * 2);
+        ctx.arc(tr.x - 4, tr.y - 8, 4, 0, Math.PI * 2);
+        ctx.arc(tr.x + 4, tr.y - 8, 4, 0, Math.PI * 2);
         ctx.fill();
       }
     });
@@ -1243,56 +1266,73 @@
       if (wl.type === 'boar') {
         ctx.fillStyle = '#4e342e';
         ctx.beginPath();
-        ctx.ellipse(wl.x, wl.y, 14, 9, 0, 0, Math.PI * 2);
+        ctx.ellipse(wl.x, wl.y, 16, 11, 0, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = '#d7ccc8'; // tusks
-        ctx.fillRect(wl.x + 10, wl.y - 2, 4, 3);
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(wl.x + 12, wl.y - 2, 5, 3); // tusks
       } else {
-        // Crab
         ctx.fillStyle = '#e64a19';
         ctx.beginPath();
-        ctx.arc(wl.x, wl.y, 8, 0, Math.PI * 2);
+        ctx.arc(wl.x, wl.y, 9, 0, Math.PI * 2);
         ctx.fill();
       }
     });
 
-    // 11. Player Character
+    // 11. Player Character (Detailed Sprite with Animation)
     const p = state.player;
     ctx.save();
     ctx.translate(p.x, p.y);
     ctx.rotate(p.angle);
 
-    // Player Body
-    ctx.fillStyle = '#0277bd';
+    // Player Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
     ctx.beginPath();
-    ctx.arc(0, 0, p.radius, 0, Math.PI * 2);
+    ctx.ellipse(0, 0, p.radius * 1.1, p.radius * 0.7, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = '#ffb703';
-    ctx.lineWidth = 2;
-    ctx.stroke();
 
-    // Player Head
+    // Backpack
+    ctx.fillStyle = '#5d4037';
+    ctx.fillRect(-p.radius * 0.9, -6, 6, 12);
+
+    // Torso / Shirt
+    ctx.fillStyle = '#0288d1';
+    ctx.beginPath();
+    ctx.arc(0, 0, p.radius * 0.85, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Head
     ctx.fillStyle = '#ffe0b2';
     ctx.beginPath();
-    ctx.arc(0, 0, p.radius * 0.65, 0, Math.PI * 2);
+    ctx.arc(0, 0, p.radius * 0.55, 0, Math.PI * 2);
     ctx.fill();
 
-    // Hand holding tool
+    // Hair
+    ctx.fillStyle = '#3e2723';
+    ctx.beginPath();
+    ctx.arc(0, -2, p.radius * 0.45, Math.PI, Math.PI * 2);
+    ctx.fill();
+
+    // Tool in Hand with Swing Animation
+    const swingOffset = p.swinging > 0 ? (p.swinging / 12) * Math.PI * 0.6 : 0;
+    ctx.save();
+    ctx.rotate(swingOffset);
+
     if (p.equippedTool === 'Stone Axe') {
       ctx.fillStyle = '#8d6e63';
-      ctx.fillRect(p.radius * 0.7, -2, 12, 4);
+      ctx.fillRect(p.radius * 0.7, -3, 14, 5);
       ctx.fillStyle = '#78909c';
-      ctx.fillRect(p.radius * 0.7 + 10, -6, 6, 12);
+      ctx.fillRect(p.radius * 0.7 + 10, -7, 7, 14);
     } else if (p.equippedTool === 'Wooden Spear') {
       ctx.fillStyle = '#8d6e63';
-      ctx.fillRect(p.radius * 0.7, -2, 22, 3);
+      ctx.fillRect(p.radius * 0.7, -2, 24, 4);
       ctx.fillStyle = '#b0bec5';
       ctx.beginPath();
-      ctx.moveTo(p.radius * 0.7 + 22, -4);
-      ctx.lineTo(p.radius * 0.7 + 28, 0);
-      ctx.lineTo(p.radius * 0.7 + 22, 4);
+      ctx.moveTo(p.radius * 0.7 + 24, -5);
+      ctx.lineTo(p.radius * 0.7 + 32, 0);
+      ctx.lineTo(p.radius * 0.7 + 24, 5);
       ctx.fill();
     }
+    ctx.restore();
 
     ctx.restore();
 
@@ -1304,8 +1344,20 @@
       ctx.fill();
     });
 
-    // 13. Dynamic Day/Night Lighting Overlay
-    // Night is between 0.8 and 1.0 (or 0 to 0.1)
+    // 13. Fireflies Glowing at Dusk / Night
+    if (state.timeOfDay > 0.7 || state.timeOfDay < 0.2) {
+      state.fireflies.forEach(ff => {
+        const glow = (Math.sin(ff.pulse) + 1) * 0.5;
+        ctx.fillStyle = `rgba(180, 255, 50, ${glow * 0.8})`;
+        ctx.beginPath();
+        ctx.arc(ff.x, ff.y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    ctx.restore(); // Restore Camera
+
+    // 14. Day/Night Color Grading Vignette
     let darknessAlpha = 0;
     if (state.timeOfDay > 0.75) {
       darknessAlpha = Math.min(0.85, (state.timeOfDay - 0.75) * 3.5);
@@ -1314,12 +1366,12 @@
     }
 
     if (darknessAlpha > 0) {
-      ctx.fillStyle = `rgba(5, 12, 24, ${darknessAlpha})`;
+      ctx.fillStyle = `rgba(4, 10, 22, ${darknessAlpha})`;
       ctx.fillRect(0, 0, w, h);
     }
   }
 
-  // --- Animation Loop ---
+  // --- Animation Frame Loop ---
   function loop(currentTime) {
     const delta = Math.min(0.1, (currentTime - lastTime) / 1000);
     lastTime = currentTime;
@@ -1331,7 +1383,7 @@
   }
   requestAnimationFrame(loop);
 
-  // --- Modals & Header Control Handlers ---
+  // --- Modal Bindings ---
   document.querySelectorAll('[data-close]').forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.getAttribute('data-close');
@@ -1361,6 +1413,5 @@
     window.location.reload();
   });
 
-  // Initial UI Render
   updateUI();
 })();

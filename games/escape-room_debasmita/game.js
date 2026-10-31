@@ -190,6 +190,13 @@
   // --- DOM Elements ---
   const canvas = document.getElementById('roomCanvas');
   const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
   const timerBox = document.getElementById('timerBox');
   const cryptToast = document.getElementById('cryptToast');
   const inventorySlots = document.getElementById('inventorySlots');
@@ -238,31 +245,35 @@
     });
   }
 
-  function renderRoom(time) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const VW = 960;
+  const VH = 540;
 
-    // 1. Draw Crypt Stone Walls & Floor Perspective
+  function renderRoom(time) {
     const w = canvas.width;
     const h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    ctx.save();
+    ctx.scale(w / VW, h / VH);
 
     // Stone background gradient
-    const wallGrad = ctx.createLinearGradient(0, 0, 0, h);
+    const wallGrad = ctx.createLinearGradient(0, 0, 0, VH);
     wallGrad.addColorStop(0, '#0a0512');
     wallGrad.addColorStop(0.65, '#190e2b');
     wallGrad.addColorStop(1, '#0e0717');
     ctx.fillStyle = wallGrad;
-    ctx.fillRect(0, 0, w, h);
+    ctx.fillRect(0, 0, VW, VH);
 
-    // Stone wall slabs
+    // Stone bricks pattern
     ctx.strokeStyle = 'rgba(78, 41, 116, 0.25)';
     ctx.lineWidth = 2;
-    for (let y = 0; y < 350; y += 45) {
+    for (let y = 60; y < 340; y += 45) {
       ctx.beginPath();
       ctx.moveTo(0, y);
-      ctx.lineTo(w, y);
+      ctx.lineTo(VW, y);
       ctx.stroke();
       const offset = (y / 45) % 2 === 0 ? 0 : 40;
-      for (let x = offset; x < w; x += 90) {
+      for (let x = offset; x < VW; x += 80) {
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.lineTo(x, y + 45);
@@ -270,26 +281,26 @@
       }
     }
 
-    // Crypt Floor perspective lines
-    const horizon = 350;
+    // Cobblestone floor with perspective
+    const horizon = 340;
     ctx.fillStyle = '#0f081c';
-    ctx.fillRect(0, horizon, w, h - horizon);
+    ctx.fillRect(0, horizon, VW, VH - horizon);
 
     ctx.strokeStyle = 'rgba(110, 50, 160, 0.35)';
-    for (let x = -200; x <= w + 200; x += 110) {
+    for (let x = -100; x < VW + 100; x += 60) {
       ctx.beginPath();
-      ctx.moveTo(w / 2, horizon - 50);
-      ctx.lineTo(x, h);
+      ctx.moveTo(VW / 2, horizon - 50);
+      ctx.lineTo(x, VH);
       ctx.stroke();
     }
-    for (let y = horizon; y <= h; y += 35) {
+    for (let y = horizon; y < VH; y += 30) {
       ctx.beginPath();
       ctx.moveTo(0, y);
-      ctx.lineTo(w, y);
+      ctx.lineTo(VW, y);
       ctx.stroke();
     }
 
-    // 2. Central Crypt Gate Arched Alcove
+    // 1. Center Gothic Iron Crypt Gate
     ctx.fillStyle = '#05020a';
     ctx.beginPath();
     ctx.roundRect(390, 110, 180, 240, [90, 90, 0, 0]);
@@ -298,7 +309,7 @@
     ctx.lineWidth = 4;
     ctx.stroke();
 
-    // Moonlight filtering through the gate
+    // Moonbeam through gate
     const moonBeam = ctx.createLinearGradient(480, 110, 480, 450);
     moonBeam.addColorStop(0, 'rgba(0, 242, 254, 0.25)');
     moonBeam.addColorStop(1, 'rgba(0, 242, 254, 0)');
@@ -310,44 +321,40 @@
     ctx.closePath();
     ctx.fill();
 
-    // Gate Bars
+    // Gate vertical bars
     ctx.strokeStyle = state.gateLocks.chains && state.gateLocks.keyhole && state.gateLocks.sigil ? '#38ef7d' : '#443254';
     ctx.lineWidth = 5;
-    for (let bx = 410; bx <= 550; bx += 22) {
+    for (let bx = 415; bx <= 545; bx += 26) {
       ctx.beginPath();
       ctx.moveTo(bx, 130);
       ctx.lineTo(bx, 350);
       ctx.stroke();
     }
 
-    // 3. Bookshelf on the Left
+    // 2. Grimoire Bookshelf (Left)
     ctx.fillStyle = '#221133';
     ctx.fillRect(110, 150, 100, 190);
     ctx.strokeStyle = '#58337a';
     ctx.lineWidth = 3;
     ctx.strokeRect(110, 150, 100, 190);
-    // Shelves
     ctx.fillStyle = '#3c1d5a';
     ctx.fillRect(112, 210, 96, 8);
     ctx.fillRect(112, 275, 96, 8);
-    // Books rendering
-    const bookColors = ['#b71c1c', '#0d47a1', '#1b5e20', '#4a148c'];
-    for (let bi = 0; bi < 4; bi++) {
+    const bookColors = ['#ff3366', '#38ef7d', '#00f2fe', '#9d4edd', '#ff9800'];
+    for (let bi = 0; bi < 5; bi++) {
       ctx.fillStyle = bookColors[bi];
       ctx.fillRect(122 + bi * 18, 168, 14, 42);
+      ctx.fillRect(122 + bi * 18, 233, 14, 42);
     }
 
-    // 4. Cauldron on the Left Floor
-    const cx = 265;
-    const cy = 370;
-    // Cauldron Glow
+    // 3. Alchemical Cauldron (Center-Left)
+    const cx = 240, cy = 345;
     const cGlow = ctx.createRadialGradient(cx, cy, 5, cx, cy, 60);
-    cGlow.addColorStop(0, state.cauldron.brewed ? 'rgba(56, 239, 125, 0.4)' : 'rgba(157, 78, 221, 0.3)');
-    cGlow.addColorStop(1, 'transparent');
+    cGlow.addColorStop(0, state.cauldron.brewed ? 'rgba(56, 239, 125, 0.45)' : 'rgba(157, 78, 221, 0.4)');
+    cGlow.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = cGlow;
     ctx.fillRect(cx - 70, cy - 50, 140, 120);
 
-    // Pot
     ctx.fillStyle = '#1c102a';
     ctx.beginPath();
     ctx.arc(cx, cy + 15, 36, 0, Math.PI);
@@ -356,15 +363,13 @@
     ctx.lineWidth = 3;
     ctx.stroke();
 
-    // Boiling Surface
     ctx.fillStyle = state.cauldron.brewed ? '#38ef7d' : '#9d4edd';
     ctx.beginPath();
     ctx.ellipse(cx, cy + 15, 34, 12, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // 5. Runic Pedestal on the Right Floor
-    const px = 705;
-    const py = 370;
+    // 4. Runic Pedestal (Center-Right)
+    const px = 700, py = 360;
     ctx.fillStyle = '#24143a';
     ctx.beginPath();
     ctx.moveTo(px - 35, py + 35);
@@ -377,29 +382,23 @@
     ctx.lineWidth = 3;
     ctx.stroke();
 
-    // Glowing Disc atop pedestal
     ctx.fillStyle = state.pedestalSolved ? '#00f2fe' : '#ff7700';
     ctx.beginPath();
     ctx.ellipse(px, py - 20, 26, 9, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // 6. Wall Braziers & Torches with dynamic flame flicker
-    const flameFlicker = Math.sin(time / 140) * 4;
+    // 5. Wall Braziers & Flickering Torches
+    const flameFlicker = Math.sin(time * 0.01) * 3;
     const drawTorch = (tx, ty) => {
-      // Bracket
       ctx.fillStyle = '#2e1c42';
       ctx.fillRect(tx - 3, ty, 6, 26);
-      // Flame Glow
       const fGlow = ctx.createRadialGradient(tx, ty - 6, 2, tx, ty - 6, 32);
-      fGlow.addColorStop(0, 'rgba(255, 119, 0, 0.6)');
-      fGlow.addColorStop(0.5, 'rgba(255, 60, 0, 0.25)');
-      fGlow.addColorStop(1, 'transparent');
+      fGlow.addColorStop(0, 'rgba(255, 170, 50, 0.6)');
+      fGlow.addColorStop(1, 'rgba(255, 170, 50, 0)');
       ctx.fillStyle = fGlow;
       ctx.beginPath();
       ctx.arc(tx, ty - 6, 32, 0, Math.PI * 2);
       ctx.fill();
-
-      // Flame
       ctx.fillStyle = '#ffaa32';
       ctx.beginPath();
       ctx.ellipse(tx, ty - 8 + flameFlicker * 0.4, 7, 14 + flameFlicker * 0.5, 0, 0, Math.PI * 2);
@@ -409,27 +408,26 @@
       ctx.ellipse(tx, ty - 5, 3.5, 7, 0, 0, Math.PI * 2);
       ctx.fill();
     };
-
     drawTorch(280, 160);
     drawTorch(680, 160);
 
-    // 7. Cobwebs in the corners
+    // 6. Cobwebs in corners
     ctx.strokeStyle = 'rgba(200, 180, 230, 0.15)';
     ctx.lineWidth = 1;
-    // Top-left
-    for (let r = 20; r <= 80; r += 20) {
+    for (let r = 15; r < 90; r += 20) {
       ctx.beginPath();
       ctx.arc(0, 0, r, 0, Math.PI / 2);
       ctx.stroke();
     }
-    // Top-right
-    for (let r = 20; r <= 80; r += 20) {
+    for (let r = 15; r < 90; r += 20) {
       ctx.beginPath();
-      ctx.arc(w, 0, r, Math.PI / 2, Math.PI);
+      ctx.arc(VW, 0, r, Math.PI / 2, Math.PI);
       ctx.stroke();
     }
 
-    // 8. Atmospheric floating particles
+    ctx.restore();
+
+    // 7. Atmospheric floating particles (in screen space)
     particles.forEach(p => {
       p.x += p.speedX;
       p.y += p.speedY;

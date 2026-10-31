@@ -1,11 +1,9 @@
-/* Island Survival: Lost Beyond the Shore - Styling */
+/* Island Survival: Lost Beyond the Shore - Professional Fullscreen UI */
 :root {
-  --ocean-deep: #06182a;
+  --ocean-blue: #0277bd;
   --sand-gold: #dfc282;
-  --jungle-green: #1b5e20;
-  --wood-brown: #795548;
-  --panel-bg: rgba(12, 28, 44, 0.92);
-  --border-color: #2a527a;
+  --panel-glass: rgba(8, 22, 38, 0.85);
+  --border-glass: rgba(255, 255, 255, 0.15);
   --text-main: #f0f7ff;
   --text-dim: #94b5d6;
   --hp-red: #ff3366;
@@ -24,25 +22,33 @@
   touch-action: manipulation;
 }
 
-body {
-  background: var(--ocean-deep);
-  color: var(--text-main);
-  font-family: var(--font-main);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+html, body {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  position: relative;
+  background: #031322;
+  font-family: var(--font-main);
+  color: var(--text-main);
 }
 
-/* Atmospheric Weather Overlay (Rain / Storm) */
+/* Fullscreen Canvas Stage */
+#islandCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: 1;
+}
+
+/* Atmospheric Weather Overlays */
 .weather-overlay {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 50;
+  z-index: 10;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.4s ease;
 }
 
 .weather-overlay.rain {
@@ -61,14 +67,13 @@ body {
   100% { background-position: 20px 80px; }
 }
 
-/* Lightning Screen Flash */
 .storm-lightning {
   position: fixed;
   inset: 0;
   background: #fff;
   opacity: 0;
   pointer-events: none;
-  z-index: 95;
+  z-index: 15;
   transition: opacity 0.08s ease;
 }
 
@@ -76,68 +81,50 @@ body {
   opacity: 0.85;
 }
 
-/* Top Survival Dashboard Header */
-.survival-header {
-  position: relative;
+/* Floating Sleek Top HUD */
+.hud-topbar {
+  position: fixed;
+  top: 12px;
+  left: 14px;
+  right: 14px;
   z-index: 20;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
-  background: rgba(8, 22, 38, 0.92);
-  border-bottom: 2px solid var(--border-color);
-  backdrop-filter: blur(8px);
+  pointer-events: none;
 }
 
-.brand-area {
+/* Vitals Pod (Left) */
+.vitals-pod {
+  pointer-events: auto;
+  background: var(--panel-glass);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  padding: 6px 14px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-.brand-icon {
-  width: 28px;
-  height: 28px;
-  color: #ffb703;
-  filter: drop-shadow(0 0 6px rgba(255, 183, 3, 0.6));
-}
-
-.brand-text h1 {
-  font-size: 1.05rem;
-  letter-spacing: 0.5px;
-  color: #ffdd80;
-  font-weight: 700;
-}
-
-.brand-text p {
-  font-size: 0.68rem;
-  color: var(--text-dim);
-}
-
-/* 4 Vitals Meters */
-.vitals-dashboard {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.vital-slot {
+.vital-item {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.vital-slot svg {
-  width: 16px;
-  height: 16px;
+.vital-item svg {
+  width: 15px;
+  height: 15px;
 }
 
-.vital-track {
-  width: 80px;
-  height: 10px;
-  background: #0a1b2d;
-  border: 1px solid #254a6e;
-  border-radius: 5px;
+.vital-bar {
+  width: 65px;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
   overflow: hidden;
 }
 
@@ -147,119 +134,72 @@ body {
   transition: width 0.3s ease;
 }
 
-.fill-health { background: linear-gradient(90deg, #ff1744, #ff5252); }
+.fill-hp { background: linear-gradient(90deg, #ff1744, #ff5252); }
 .fill-hunger { background: linear-gradient(90deg, #f57c00, #ffb74d); }
 .fill-thirst { background: linear-gradient(90deg, #0288d1, #4fc3f7); }
 .fill-energy { background: linear-gradient(90deg, #fbc02d, #fff176); }
 
-/* Day / Time & Weather */
-.world-tracker {
+/* Time & Weather Pod (Right) */
+.time-pod {
+  pointer-events: auto;
+  background: var(--panel-glass);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  padding: 6px 14px;
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #0c2035;
-  border: 1px solid #23476d;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: #ffe699;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-.weather-badge {
+.time-pod span {
+  color: #ffdd80;
+}
+
+.icon-btn-mini {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-main);
+  padding: 4px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: 4px;
-  color: #81d4fa;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.weather-badge svg {
+.icon-btn-mini:hover {
+  background: #ffb703;
+  color: #000;
+}
+
+.icon-btn-mini svg {
   width: 14px;
   height: 14px;
 }
 
-.header-buttons {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.btn-icon {
-  background: #112a45;
-  border: 1px solid #274f79;
-  color: var(--text-main);
-  padding: 6px;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.btn-icon:hover {
-  background: #1e456f;
-  border-color: #ffb703;
-}
-
-.btn-icon svg {
-  width: 18px;
-  height: 18px;
-}
-
-/* Main Canvas Game Stage */
-.game-viewport {
-  position: relative;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 1080px;
-  margin: 0 auto;
-  overflow: hidden;
-}
-
-.canvas-frame {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  max-height: 560px;
-  aspect-ratio: 16 / 9;
-  background: #06192d;
-  border: 3px solid #1c3c5d;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 150, 200, 0.2);
-}
-
-#islandCanvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-/* Event Toast Notifications */
+/* Event Notification Banner */
 .event-toast {
-  position: absolute;
-  top: 14px;
+  position: fixed;
+  top: 60px;
   left: 50%;
-  transform: translateX(-50%) translateY(-30px);
-  background: rgba(9, 26, 44, 0.95);
+  transform: translateX(-50%) translateY(-20px);
+  background: rgba(6, 20, 36, 0.95);
   border: 1px solid #ffb703;
   color: #fff3cc;
-  padding: 8px 20px;
+  padding: 8px 22px;
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
   opacity: 0;
   pointer-events: none;
   transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-  z-index: 40;
+  z-index: 30;
 }
 
 .event-toast.active {
@@ -267,107 +207,88 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* Bottom Survival Controls Dock */
-.survival-dock {
-  width: 100%;
-  margin-top: 8px;
-  background: var(--panel-bg);
-  border: 2px solid var(--border-color);
-  border-radius: 10px;
-  padding: 8px 14px;
+/* Floating Sleek Bottom Hotbar & Quick Actions */
+.hud-bottombar {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  background: var(--panel-glass);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(12px);
+  padding: 8px 16px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  max-width: 95vw;
 }
 
-.dock-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.action-btn {
-  background: #133355;
-  border: 1px solid #2a5a8a;
-  color: var(--text-main);
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 600;
+.hotbar-slot {
   display: flex;
   align-items: center;
   gap: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.action-btn:hover {
-  background: #1c4875;
-  border-color: #ffb703;
-}
-
-.action-btn svg {
-  width: 16px;
-  height: 16px;
-  color: #ffb703;
-}
-
-.action-btn.btn-craft {
-  background: linear-gradient(135deg, #f57c00, #e65100);
-  border: none;
-  color: #fff;
-  box-shadow: 0 3px 10px rgba(245, 124, 0, 0.4);
-}
-
-/* Resources Quickbar */
-.resource-quickbar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  overflow-x: auto;
-}
-
-.res-pill {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: #0a1f33;
-  border: 1px solid #1f4266;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: #d1e7fc;
+  color: #e1f0ff;
   white-space: nowrap;
 }
 
-.res-pill svg {
-  width: 14px;
-  height: 14px;
+.hotbar-slot svg {
+  width: 16px;
+  height: 16px;
 }
 
-.dock-hint {
-  font-size: 0.72rem;
-  color: var(--text-dim);
-  max-width: 220px;
-  text-align: right;
-  line-height: 1.3;
+.hotbar-btn {
+  background: #174068;
+  border: 1px solid #2e669e;
+  color: #fff;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
 }
 
-/* Touch Mobile Controls */
-.touch-controls {
-  position: absolute;
-  bottom: 12px;
+.hotbar-btn:hover {
+  background: #ffb703;
+  color: #000;
+  border-color: #ffb703;
+  transform: translateY(-2px);
+}
+
+.hotbar-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.hotbar-btn.btn-craft {
+  background: linear-gradient(135deg, #f57c00, #e65100);
+  border: none;
+}
+
+/* Touch On-Screen Mobile Controls */
+.touch-container {
+  position: fixed;
+  bottom: 80px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 0 16px;
+  padding: 0 20px;
   pointer-events: none;
-  z-index: 30;
+  z-index: 25;
 }
 
 .touch-dpad {
@@ -378,20 +299,21 @@ body {
   pointer-events: auto;
 }
 
-.dpad-key {
-  background: rgba(14, 38, 62, 0.85);
-  border: 1px solid #2b5c8f;
+.dpad-btn {
+  background: rgba(14, 38, 62, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
   border-radius: 8px;
   color: #f0f7ff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.1rem;
   cursor: pointer;
   touch-action: none;
 }
 
-.dpad-key:active {
+.dpad-btn:active {
   background: #ffb703;
   color: #000;
 }
@@ -401,51 +323,34 @@ body {
 .dpad-right { grid-column: 3; grid-row: 2; }
 .dpad-down { grid-column: 2; grid-row: 3; }
 
-.touch-action-cluster {
-  display: flex;
-  gap: 8px;
-  pointer-events: auto;
-}
-
-.touch-round-btn {
-  width: 52px;
-  height: 52px;
+.touch-act-btn {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  background: rgba(18, 44, 72, 0.9);
-  border: 2px solid #ffb703;
-  color: #fff;
+  background: linear-gradient(135deg, #ffb703, #f57c00);
+  border: 2px solid #fff;
+  color: #000;
+  font-weight: bold;
+  font-size: 0.8rem;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
   cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
   touch-action: none;
 }
 
-.touch-round-btn:active {
+.touch-act-btn:active {
   transform: scale(0.92);
-  background: #ffb703;
-  color: #000;
-}
-
-.touch-round-btn svg {
-  width: 20px;
-  height: 20px;
-}
-
-.touch-round-btn span {
-  font-size: 0.58rem;
-  font-weight: bold;
-  text-transform: uppercase;
 }
 
 /* Modals */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(3, 10, 18, 0.88);
-  backdrop-filter: blur(6px);
+  background: rgba(3, 10, 18, 0.85);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -464,13 +369,13 @@ body {
 .modal-dialog {
   background: #0b1f35;
   border: 2px solid #27527f;
-  border-radius: 12px;
-  max-width: 620px;
+  border-radius: 14px;
+  max-width: 600px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 88vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 45px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 150, 220, 0.25);
+  box-shadow: 0 10px 45px rgba(0, 0, 0, 0.9);
   overflow: hidden;
   transform: scale(0.95);
   transition: transform 0.25s ease;
@@ -502,12 +407,6 @@ body {
   border: none;
   color: var(--text-dim);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.modal-close:hover {
-  color: #ff5252;
 }
 
 .modal-close svg {
@@ -529,7 +428,6 @@ body {
   border-top: 1px solid #1a3d63;
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
 }
 
 .btn-primary {
@@ -540,20 +438,13 @@ body {
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.15);
-}
-
-/* Crafting Grid Cards */
+/* Crafting Grid */
 .crafting-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 12px;
-  margin-top: 10px;
 }
 
 .craft-card {
@@ -567,28 +458,15 @@ body {
   gap: 8px;
 }
 
-.craft-card-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.craft-card-head svg {
-  width: 22px;
-  height: 22px;
-  color: #ffb703;
-}
-
 .craft-card-title {
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.95rem;
+  font-weight: bold;
   color: #ffebaa;
 }
 
 .craft-recipe {
   font-size: 0.75rem;
   color: #94bade;
-  line-height: 1.4;
 }
 
 .btn-craft-item {
@@ -600,7 +478,6 @@ body {
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
   align-self: flex-start;
 }
 
@@ -614,7 +491,7 @@ body {
   cursor: not-allowed;
 }
 
-/* Ending Cards */
+/* Endings Card */
 .ending-card {
   text-align: center;
   padding: 24px 16px;
@@ -625,8 +502,8 @@ body {
   margin-bottom: 8px;
 }
 
-.ending-title.victory { color: #38ef7d; text-shadow: 0 0 15px rgba(56, 239, 125, 0.5); }
-.ending-title.defeat { color: #ff3366; text-shadow: 0 0 15px rgba(255, 51, 102, 0.5); }
+.ending-title.victory { color: #38ef7d; }
+.ending-title.defeat { color: #ff3366; }
 
 .ending-stats {
   display: flex;
@@ -635,13 +512,6 @@ body {
   background: #0e2640;
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid #1e4c7a;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
 }
 
 .stat-val {
@@ -656,30 +526,19 @@ body {
   text-transform: uppercase;
 }
 
-/* Responsiveness */
-@media (max-width: 768px) {
-  .survival-header {
+@media (max-width: 680px) {
+  .vitals-pod {
+    padding: 4px 10px;
+    gap: 8px;
+  }
+  .vital-bar {
+    width: 45px;
+  }
+  .hud-bottombar {
+    gap: 8px;
     padding: 6px 10px;
   }
-  .brand-text h1 {
-    font-size: 0.9rem;
-  }
-  .vital-track {
-    width: 50px;
-  }
-  .survival-dock {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .dock-hint {
-    text-align: left;
-  }
-  .touch-dpad {
-    grid-template-columns: repeat(3, 38px);
-    grid-template-rows: repeat(3, 38px);
-  }
-  .touch-round-btn {
-    width: 46px;
-    height: 46px;
+  .hotbar-btn span {
+    display: none;
   }
 }

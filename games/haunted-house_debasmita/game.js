@@ -221,6 +221,13 @@
   // --- DOM References ---
   const canvas = document.getElementById('mansionCanvas');
   const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
   const sanityBar = document.getElementById('sanityBar');
   const batteryBar = document.getElementById('batteryBar');
   const threatBadge = document.getElementById('threatBadge');
@@ -255,10 +262,10 @@
       hotspots: [
         {
           id: 'doormat',
-          top: '72%',
-          left: '46%',
-          width: '90px',
-          height: '55px',
+          top: '80%',
+          left: '43.5%',
+          width: '9%',
+          height: '8%',
           tag: 'Mossy Doormat',
           onClick: () => {
             if (!state.porchKeyFound) {
@@ -273,10 +280,10 @@
         },
         {
           id: 'frontDoor',
-          top: '28%',
-          left: '44%',
-          width: '120px',
-          height: '170px',
+          top: '20%',
+          left: '41%',
+          width: '14%',
+          height: '43%',
           tag: 'Mansion Front Entrance',
           onClick: () => {
             if (!state.foyerDoorUnlocked) {
@@ -297,10 +304,10 @@
         },
         {
           id: 'gargoyle',
-          top: '45%',
-          left: '18%',
-          width: '70px',
-          height: '80px',
+          top: '40%',
+          left: '16%',
+          width: '9%',
+          height: '16%',
           tag: 'Weathered Gargoyle',
           onClick: () => {
             sound.playClick();
@@ -316,10 +323,10 @@
       hotspots: [
         {
           id: 'doorParlor',
-          top: '40%',
-          left: '14%',
-          width: '80px',
-          height: '140px',
+          top: '32%',
+          left: '6%',
+          width: '10%',
+          height: '28%',
           tag: 'Living Room Door',
           onClick: () => {
             unlockRoom('parlor');
@@ -328,10 +335,10 @@
         },
         {
           id: 'doorKitchen',
-          top: '40%',
-          left: '80%',
-          width: '80px',
-          height: '140px',
+          top: '32%',
+          left: '84%',
+          width: '10%',
+          height: '28%',
           tag: 'Kitchen Door',
           onClick: () => {
             unlockRoom('kitchen');
@@ -340,10 +347,10 @@
         },
         {
           id: 'clockFoyer',
-          top: '32%',
-          left: '32%',
-          width: '60px',
-          height: '130px',
+          top: '26%',
+          left: '30%',
+          width: '5.5%',
+          height: '28%',
           tag: 'Grandfather Clock',
           onClick: () => {
             sound.playClick();
@@ -352,10 +359,10 @@
         },
         {
           id: 'staircase',
-          top: '25%',
-          left: '46%',
-          width: '120px',
-          height: '120px',
+          top: '20%',
+          left: '38%',
+          width: '24%',
+          height: '34%',
           tag: 'Grand Staircase (Upstairs)',
           onClick: () => {
             unlockRoom('bedroom');
@@ -364,10 +371,10 @@
         },
         {
           id: 'cellarGrate',
-          top: '76%',
+          top: '70%',
           left: '60%',
-          width: '85px',
-          height: '55px',
+          width: '11%',
+          height: '10%',
           tag: 'Basement Trapdoor',
           onClick: () => {
             if (state.unlockedRooms.includes('basement')) {
@@ -393,10 +400,10 @@
       hotspots: [
         {
           id: 'fireplace',
-          top: '45%',
-          left: '44%',
-          width: '120px',
-          height: '100px',
+          top: '31%',
+          left: '40%',
+          width: '16%',
+          height: '26%',
           tag: 'Cold Fireplace',
           onClick: () => {
             sound.playClick();
@@ -417,10 +424,10 @@
         },
         {
           id: 'gramophone',
-          top: '55%',
-          left: '18%',
-          width: '75px',
-          height: '75px',
+          top: '48%',
+          left: '74%',
+          width: '10%',
+          height: '18%',
           tag: 'Antique Gramophone',
           onClick: () => {
             if (!state.gramophonePlayed) {
@@ -488,10 +495,10 @@
         },
         {
           id: 'doorToFoyer2',
-          top: '42%',
-          left: '86%',
-          width: '75px',
-          height: '130px',
+          top: '32%',
+          left: '4%',
+          width: '8%',
+          height: '26%',
           tag: 'Back to Foyer',
           onClick: () => switchRoom('foyer')
         }
@@ -504,10 +511,10 @@
       hotspots: [
         {
           id: 'kitchenCounter',
-          top: '55%',
-          left: '22%',
-          width: '90px',
-          height: '70px',
+          top: '45%',
+          left: '18%',
+          width: '18%',
+          height: '19%',
           tag: 'Prep Counter',
           onClick: () => {
             if (!state.inventory.includes('matches')) {
@@ -522,10 +529,10 @@
         },
         {
           id: 'pantryCupboard',
-          top: '32%',
-          left: '52%',
-          width: '80px',
-          height: '120px',
+          top: '23%',
+          left: '48%',
+          width: '12%',
+          height: '34%',
           tag: 'Locked Pantry',
           onClick: () => {
             if (!state.saltFound) {
@@ -540,10 +547,10 @@
         },
         {
           id: 'doorToFoyer3',
-          top: '42%',
+          top: '32%',
           left: '86%',
-          width: '75px',
-          height: '130px',
+          width: '8%',
+          height: '26%',
           tag: 'Back to Foyer',
           onClick: () => switchRoom('foyer')
         }
@@ -556,10 +563,10 @@
       hotspots: [
         {
           id: 'vanityMirror',
-          top: '32%',
-          left: '24%',
-          width: '80px',
-          height: '100px',
+          top: '26%',
+          left: '21%',
+          width: '8%',
+          height: '17%',
           tag: 'Ornate Vanity Mirror',
           onClick: () => {
             sound.playJumpscare();
@@ -569,10 +576,10 @@
         },
         {
           id: 'nightstand',
-          top: '58%',
-          left: '48%',
-          width: '65px',
-          height: '60px',
+          top: '33%',
+          left: '44%',
+          width: '22%',
+          height: '27%',
           tag: 'Bedside Music Box',
           onClick: () => {
             if (!state.musicBoxOpened) {
@@ -590,10 +597,10 @@
         },
         {
           id: 'doorToFoyer4',
-          top: '42%',
+          top: '32%',
           left: '86%',
-          width: '75px',
-          height: '130px',
+          width: '8%',
+          height: '26%',
           tag: 'Downstairs to Foyer',
           onClick: () => switchRoom('foyer')
         }
@@ -606,28 +613,28 @@
       hotspots: [
         {
           id: 'breakerBox',
-          top: '35%',
-          left: '16%',
-          width: '65px',
-          height: '85px',
+          top: '26%',
+          left: '14%',
+          width: '8%',
+          height: '19%',
           tag: 'Electrical Breaker Box',
           onClick: () => openModal(modalBreaker)
         },
         {
           id: 'ritualAltar',
-          top: '62%',
-          left: '45%',
-          width: '120px',
-          height: '80px',
+          top: '50%',
+          left: '42%',
+          width: '14%',
+          height: '20%',
           tag: 'Demonic Pentagram Altar',
           onClick: () => openModal(modalAltar)
         },
         {
           id: 'stormDoor',
-          top: '36%',
+          top: '26%',
           left: '78%',
-          width: '90px',
-          height: '140px',
+          width: '10%',
+          height: '28%',
           tag: 'Storm Exit Hatch',
           onClick: () => {
             if (state.breakerEngaged) {
@@ -639,10 +646,10 @@
         },
         {
           id: 'doorToFoyer5',
-          top: '30%',
+          top: '28%',
           left: '3%',
-          width: '65px',
-          height: '120px',
+          width: '7%',
+          height: '24%',
           tag: 'Stairs up to Foyer',
           onClick: () => switchRoom('foyer')
         }
@@ -1043,6 +1050,9 @@
   });
 
   // --- Canvas 60 FPS Room Rendering Loop ---
+  const VW = 1000;
+  const VH = 600;
+
   function renderRoom(time) {
     const w = canvas.width;
     const h = canvas.height;
@@ -1050,18 +1060,20 @@
 
     const rm = state.currentRoom;
 
+    ctx.save();
+    ctx.scale(w / VW, h / VH);
+
     // Room-specific rendering
     if (rm === 'porch') {
-      // 1. Porch Facade
-      const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
+      const skyGrad = ctx.createLinearGradient(0, 0, 0, VH);
       skyGrad.addColorStop(0, '#040208');
       skyGrad.addColorStop(1, '#170c24');
       ctx.fillStyle = skyGrad;
-      ctx.fillRect(0, 0, w, h);
+      ctx.fillRect(0, 0, VW, VH);
 
       // Distant Dead Trees
       ctx.fillStyle = '#08040d';
-      for (let i = 40; i < w; i += 120) {
+      for (let i = 40; i < VW; i += 120) {
         ctx.fillRect(i, 80, 16, 260);
       }
 
@@ -1089,19 +1101,16 @@
       ctx.fillRect(435, 485, 90, 45);
 
     } else if (rm === 'foyer') {
-      // Grand Foyer
       ctx.fillStyle = '#12081f';
-      ctx.fillRect(0, 0, w, h);
+      ctx.fillRect(0, 0, VW, VH);
 
-      // Marble Checkerboard Floor
-      for (let y = 320; y < h; y += 35) {
-        for (let x = 0; x < w; x += 60) {
+      for (let y = 320; y < VH; y += 35) {
+        for (let x = 0; x < VW; x += 60) {
           ctx.fillStyle = (Math.floor(x / 60) + Math.floor(y / 35)) % 2 === 0 ? '#1f0d36' : '#0b0414';
           ctx.fillRect(x, y, 60, 35);
         }
       }
 
-      // Grand Staircase
       ctx.fillStyle = '#2d1347';
       ctx.beginPath();
       ctx.moveTo(380, 120);
@@ -1111,7 +1120,6 @@
       ctx.closePath();
       ctx.fill();
 
-      // Red Carpet on stairs
       ctx.fillStyle = '#7a1c2f';
       ctx.beginPath();
       ctx.moveTo(440, 120);
@@ -1121,132 +1129,110 @@
       ctx.closePath();
       ctx.fill();
 
-      // Grandfather Clock
       ctx.fillStyle = '#3a1f18';
       ctx.fillRect(300, 160, 50, 160);
 
     } else if (rm === 'parlor') {
-      // Living Room
       ctx.fillStyle = '#1f0c18';
-      ctx.fillRect(0, 0, w, h);
+      ctx.fillRect(0, 0, VW, VH);
 
-      // Victorian Wallpaper Damask vertical stripes
       ctx.fillStyle = '#160812';
-      for (let x = 0; x < w; x += 40) {
+      for (let x = 0; x < VW; x += 40) {
         ctx.fillRect(x, 0, 20, 340);
       }
 
-      // Wood floor
       ctx.fillStyle = '#22110c';
-      ctx.fillRect(0, 340, w, h - 340);
+      ctx.fillRect(0, 340, VW, VH - 340);
 
-      // Stone Fireplace in center
       ctx.fillStyle = '#1c171e';
       ctx.fillRect(400, 190, 160, 150);
       ctx.fillStyle = '#0a080c';
       ctx.fillRect(430, 240, 100, 100);
 
-      // Fireplace embers
       ctx.fillStyle = '#ff5500';
       ctx.beginPath();
       ctx.arc(480, 325, 12, 0, Math.PI * 2);
       ctx.fill();
 
-      // Oil Portrait above fireplace
       ctx.fillStyle = '#e5a93b';
       ctx.strokeRect(430, 80, 100, 100);
       ctx.fillStyle = '#0f0814';
       ctx.fillRect(432, 82, 96, 96);
-      // Portrait Eyes following cursor!
-      const eyeDx = Math.max(-3, Math.min(3, (state.mousePos.x - 480) * 0.02));
-      const eyeDy = Math.max(-2, Math.min(2, (state.mousePos.y - 130) * 0.02));
+      const eyeDx = Math.sin(time * 0.003) * 6;
+      const eyeDy = Math.cos(time * 0.002) * 4;
       ctx.fillStyle = '#ff2a55';
       ctx.fillRect(465 + eyeDx, 120 + eyeDy, 3, 3);
       ctx.fillRect(495 + eyeDx, 120 + eyeDy, 3, 3);
 
     } else if (rm === 'library') {
-      // Library
       ctx.fillStyle = '#130d1e';
-      ctx.fillRect(0, 0, w, h);
+      ctx.fillRect(0, 0, VW, VH);
 
-      // Bookshelves filling wall
       ctx.fillStyle = '#261633';
       ctx.fillRect(80, 60, 800, 300);
-      for (let y = 110; y < 360; y += 50) {
+      for (let y = 120; y <= 360; y += 60) {
         ctx.fillStyle = '#3a214d';
         ctx.fillRect(80, y, 800, 8);
-        for (let bx = 90; bx < 870; bx += 18) {
+        for (let bx = 90; bx < 870; bx += 22) {
           ctx.fillStyle = ['#5c1a29', '#194254', '#2b4d24', '#664319'][Math.floor(bx / 18) % 4];
           ctx.fillRect(bx, y - 36, 14, 36);
         }
       }
 
-      // Large Oak Rolltop Desk
       ctx.fillStyle = '#211208';
       ctx.fillRect(480, 290, 240, 110);
 
     } else if (rm === 'kitchen') {
-      // Kitchen
       ctx.fillStyle = '#0e0b12';
-      ctx.fillRect(0, 0, w, h);
+      ctx.fillRect(0, 0, VW, VH);
 
-      // Kitchen Tiled floor
-      for (let y = 320; y < h; y += 30) {
-        for (let x = 0; x < w; x += 40) {
+      for (let y = 340; y < VH; y += 30) {
+        for (let x = 0; x < VW; x += 40) {
           ctx.fillStyle = (Math.floor(x / 40) + Math.floor(y / 30)) % 2 === 0 ? '#1b1622' : '#0e0a13';
           ctx.fillRect(x, y, 40, 30);
         }
       }
 
-      // Prep Counter
       ctx.fillStyle = '#241a33';
       ctx.fillRect(180, 270, 180, 110);
 
-      // Pantry Cupboard
       ctx.fillStyle = '#1d152b';
       ctx.fillRect(480, 140, 120, 200);
 
     } else if (rm === 'bedroom') {
-      // Bedroom
       ctx.fillStyle = '#1a0b1c';
-      ctx.fillRect(0, 0, w, h);
+      ctx.fillRect(0, 0, VW, VH);
 
-      // Four-poster bed
       ctx.fillStyle = '#2d1430';
       ctx.fillRect(440, 200, 220, 160);
       ctx.fillStyle = '#4d1e54';
       ctx.fillRect(440, 120, 12, 240);
       ctx.fillRect(648, 120, 12, 240);
 
-      // Ornate Vanity Table
       ctx.fillStyle = '#261219';
       ctx.fillRect(180, 260, 140, 110);
       ctx.strokeStyle = '#e5a93b';
       ctx.strokeRect(210, 160, 80, 95);
 
     } else if (rm === 'basement') {
-      // Dark Basement
       ctx.fillStyle = '#060408';
-      ctx.fillRect(0, 0, w, h);
+      ctx.fillRect(0, 0, VW, VH);
 
-      // Rough stone masonry
       ctx.strokeStyle = 'rgba(78, 41, 116, 0.2)';
-      for (let y = 0; y < h; y += 40) {
+      for (let y = 50; y < VH; y += 50) {
         ctx.beginPath();
         ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
+        ctx.lineTo(VW, y);
         ctx.stroke();
       }
 
-      // Center Pentagram Altar
       ctx.strokeStyle = state.altarCleansed ? '#00f2fe' : '#ff2a55';
       ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.arc(480, 360, 60, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Hanging bare bulb
-      const bulbSwing = Math.sin(time / 200) * 8;
+      const bulbSwing = Math.sin(time * 0.002) * 30;
       ctx.strokeStyle = '#555';
       ctx.beginPath();
       ctx.moveTo(480, 0);
@@ -1258,19 +1244,21 @@
       ctx.fill();
     }
 
-    // --- Dynamic Flashlight Vignette Cone ---
+    ctx.restore();
+
+    // Dynamic Flashlight Vignette Cone (Screen Coordinates)
     if (state.flashlightOn && state.battery > 0) {
       const flX = state.mousePos.x;
       const flY = state.mousePos.y;
-      const flGrad = ctx.createRadialGradient(flX, flY, 30, flX, flY, 280);
+      const radius = Math.min(w, h) * 0.45 + 50;
+      const flGrad = ctx.createRadialGradient(flX, flY, 30, flX, flY, radius);
       flGrad.addColorStop(0, 'rgba(255, 235, 180, 0.08)');
       flGrad.addColorStop(0.5, 'rgba(0, 0, 0, 0.65)');
       flGrad.addColorStop(1, 'rgba(0, 0, 0, 0.96)');
       ctx.fillStyle = flGrad;
       ctx.fillRect(0, 0, w, h);
     } else {
-      // Flashlight OFF - Deep Dark Fog
-      const darkGrad = ctx.createRadialGradient(w / 2, h / 2, 40, w / 2, h / 2, 380);
+      const darkGrad = ctx.createRadialGradient(w / 2, h / 2, 40, w / 2, h / 2, Math.min(w, h) * 0.55);
       darkGrad.addColorStop(0, 'rgba(0,0,0,0.85)');
       darkGrad.addColorStop(1, 'rgba(0,0,0,0.98)');
       ctx.fillStyle = darkGrad;
