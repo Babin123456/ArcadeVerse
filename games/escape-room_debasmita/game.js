@@ -849,3 +849,4 @@
   // Initial inventory render
   updateInventoryUI();
 })();
+
