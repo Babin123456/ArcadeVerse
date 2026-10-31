@@ -468,6 +468,26 @@ const GAMES_REGISTRY = [
     "releaseDate": "2026-10-31"
   },
   {
+    "id": "lunar-landing-protocol_joitapaul",
+    "title": "Lunar Landing Protocol",
+    "category": "Arcade",
+    "lucideIcon": "rocket",
+    "description": "Balance thrust, fuel, and lateral steering to land a lunar module safely on a narrow surface pad.",
+    "author": "Joita Paul",
+    "github": "joitapaul",
+    "role": "Contributor",
+    "path": "games/lunar-landing-protocol_joitapaul/index.html",
+    "tags": [
+      "Arcade",
+      "Physics",
+      "Space",
+      "Simulation",
+      "NSOC26"
+    ],
+    "stars": 25,
+    "featured": false
+  },
+  {
     "id": "memory-matrix_debasmita",
     "title": "Quantum Memory Matrix",
     "category": "Puzzle",
@@ -888,7 +908,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 220,
+    "commits": 222,
     "gamesCount": 6,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -967,13 +987,14 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "joitapaul",
     "avatarInitial": "J",
     "role": "Active Contributor (NSOC '26)",
-    "commits": 9,
-    "gamesCount": 4,
+    "commits": 10,
+    "gamesCount": 5,
     "mechanicsBonus": 0,
     "platformPRs": 0,
     "qualityPRs": 1,
     "bonusPts": 0,
     "contributions": [
+      "Lunar Landing Protocol",
       "Neon Asteroid Escape",
       "Neon Drift Racer",
       "Prism Pulse: Laser Labyrinth",
