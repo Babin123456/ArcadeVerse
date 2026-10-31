@@ -696,17 +696,17 @@ Audited 40 games: 0 Errors, 0 Warnings
             }
           });
 
-          // Auto-scroll the sidebar container so the active section link stays in view
+          // Auto-scroll strictly within the sidebar container (never scroll main window)
           if (activeLink && sidebar) {
-            const sidebarRect = sidebar.getBoundingClientRect();
-            const linkRect = activeLink.getBoundingClientRect();
-            const isOutOfView = linkRect.top < sidebarRect.top + 20 || linkRect.bottom > sidebarRect.bottom - 20;
+            const linkTop = activeLink.offsetTop;
+            const linkHeight = activeLink.offsetHeight;
+            const sidebarScroll = sidebar.scrollTop;
+            const sidebarHeight = sidebar.clientHeight;
 
-            if (isOutOfView) {
-              activeLink.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'nearest'
+            if (linkTop < sidebarScroll || (linkTop + linkHeight) > (sidebarScroll + sidebarHeight)) {
+              sidebar.scrollTo({
+                top: Math.max(0, linkTop - Math.floor(sidebarHeight / 2) + Math.floor(linkHeight / 2)),
+                behavior: 'smooth'
               });
             }
           }
