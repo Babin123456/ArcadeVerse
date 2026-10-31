@@ -655,30 +655,62 @@ Audited 40 games: 0 Errors, 0 Warnings
         });
       });
 
-      // ScrollSpy for Docs Sidebar TOC
+      // ScrollSpy & Auto-Scroll Navigation for Docs Sidebar TOC
       const sections = document.querySelectorAll('.docs-section');
       const navLinks = document.querySelectorAll('.docs-nav-link');
+      const sidebar = document.querySelector('.docs-sidebar');
+      let currentActiveId = null;
 
       function updateActiveToc() {
-        const scrollY = window.pageYOffset;
-        const navHeight = 90;
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        const navHeight = 100;
+        let matchedId = null;
 
-        sections.forEach(sec => {
-          const top = sec.offsetTop - navHeight - 30;
-          const height = sec.offsetHeight;
-          const id = sec.getAttribute('id');
-
-          if (scrollY >= top && scrollY < top + height) {
-            navLinks.forEach(link => {
-              const href = link.getAttribute('href');
-              if (href === '#' + id) {
-                link.classList.add('active');
-              } else {
-                link.classList.remove('active');
-              }
-            });
+        // Iterate backwards so the lowest active section in viewport takes precedence
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const sec = sections[i];
+          const top = sec.offsetTop - navHeight;
+          if (scrollY >= top) {
+            matchedId = sec.getAttribute('id');
+            break;
           }
-        });
+        }
+
+        if (!matchedId && sections.length > 0) {
+          matchedId = sections[0].getAttribute('id');
+        }
+
+        if (matchedId && matchedId !== currentActiveId) {
+          currentActiveId = matchedId;
+          let activeLink = null;
+
+          navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === '#' + matchedId) {
+              link.classList.add('active');
+              link.setAttribute('aria-current', 'true');
+              activeLink = link;
+            } else {
+              link.classList.remove('active');
+              link.removeAttribute('aria-current');
+            }
+          });
+
+          // Auto-scroll the sidebar container so the active section link stays in view
+          if (activeLink && sidebar) {
+            const sidebarRect = sidebar.getBoundingClientRect();
+            const linkRect = activeLink.getBoundingClientRect();
+            const isOutOfView = linkRect.top < sidebarRect.top + 20 || linkRect.bottom > sidebarRect.bottom - 20;
+
+            if (isOutOfView) {
+              activeLink.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'nearest'
+              });
+            }
+          }
+        }
       }
 
       window.addEventListener('scroll', updateActiveToc, { passive: true });

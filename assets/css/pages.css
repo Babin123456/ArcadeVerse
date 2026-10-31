@@ -352,6 +352,7 @@
   max-height: calc(100vh - 110px);
   overflow-y: auto;
   padding-right: 1rem;
+  scroll-behavior: smooth;
 }
 
 .docs-sidebar::-webkit-scrollbar {
