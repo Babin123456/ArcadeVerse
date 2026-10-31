@@ -612,3 +612,43 @@ html, body {
 .ending-title.good { color: #38ef7d; }
 .ending-title.neutral { color: #ffaa32; }
 .ending-title.bad { color: #ff2a55; }
+
+/* Floating Case Objective Tracker */
+.case-tracker {
+  position: fixed;
+  top: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 24;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(14, 8, 22, 0.92);
+  border: 1px solid rgba(229, 169, 59, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 4px 14px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(229, 169, 59, 0.2);
+  max-width: 90vw;
+  pointer-events: auto;
+}
+
+.case-pill {
+  background: #e5a93b;
+  color: #000;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.case-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #fffae8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

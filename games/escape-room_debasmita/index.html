@@ -46,6 +46,12 @@
     </div>
   </header>
 
+  <!-- Floating Escape Tracker -->
+  <div class="escape-tracker" id="escapeTracker">
+    <span class="escape-pill">GUIDE</span>
+    <span class="escape-text" id="escapeText">Step 1: Inspect the Bookshelf on the left. Pull books: Blood, Dusk, Vine, Void.</span>
+  </div>
+
   <!-- Interactive Room Viewport -->
   <main class="crypt-viewport">
     <div class="room-stage" id="roomStage">
@@ -168,7 +174,7 @@
       <div class="modal-body">
         <p>Four weathered grimoires rest upon the carved mahogany shelf. Above them, a faded riddle is etched into the stone:</p>
         <p style="margin: 10px 0; font-style: italic; color: #ffca65; text-align: center; border-left: 3px solid #ff7700; padding: 6px 12px; background: rgba(255, 119, 0, 0.08);">
-          "Blood precedes the Void; the Toxic Vine creeps after Dusk; the Shadow consumes all."
+          Ritual Order: 1. BLOOD (Red) • 2. DUSK (Blue) • 3. VINE (Green) • 4. VOID (Purple)
         </p>
         <p style="font-size: 0.85rem; color: #b59bd8;">Pull the grimoires in the correct ritual sequence:</p>
         
@@ -243,28 +249,28 @@
       <div class="modal-body">
         <p>Three heavy stone discs are set into the altar. A carving above reads:</p>
         <p style="margin: 10px 0; font-style: italic; color: #ff9e42; text-align: center; border-left: 3px solid #ff9e42; padding: 6px 12px; background: rgba(255, 158, 66, 0.08);">
-          "When the Moon crowns the Pumpkin, Death shall sleep."
+          Celestial Order: Dial 1: MOON • Dial 2: PUMPKIN • Dial 3: SKULL
         </p>
         <p style="font-size: 0.85rem; color: #a48cb5; text-align: center;">Rotate the symbols into alignment:</p>
 
         <div class="runic-dials-row">
           <!-- Dial 1 -->
           <div class="dial-column">
-            <button class="dial-btn" data-dial="0" data-dir="up">▲</button>
+            <button class="dial-btn" data-dial="0" data-dir="up">UP</button>
             <div class="dial-display" id="dialDisplay0"></div>
-            <button class="dial-btn" data-dial="0" data-dir="down">▼</button>
+            <button class="dial-btn" data-dial="0" data-dir="down">DN</button>
           </div>
           <!-- Dial 2 -->
           <div class="dial-column">
-            <button class="dial-btn" data-dial="1" data-dir="up">▲</button>
+            <button class="dial-btn" data-dial="1" data-dir="up">UP</button>
             <div class="dial-display" id="dialDisplay1"></div>
-            <button class="dial-btn" data-dial="1" data-dir="down">▼</button>
+            <button class="dial-btn" data-dial="1" data-dir="down">DN</button>
           </div>
           <!-- Dial 3 -->
           <div class="dial-column">
-            <button class="dial-btn" data-dial="2" data-dir="up">▲</button>
+            <button class="dial-btn" data-dial="2" data-dir="up">UP</button>
             <div class="dial-display" id="dialDisplay2"></div>
-            <button class="dial-btn" data-dial="2" data-dir="down">▼</button>
+            <button class="dial-btn" data-dial="2" data-dir="down">DN</button>
           </div>
         </div>
         <p id="pedestalStatus" style="text-align: center; font-size: 0.9rem; min-height: 1.4rem; color: #00f2fe;"></p>

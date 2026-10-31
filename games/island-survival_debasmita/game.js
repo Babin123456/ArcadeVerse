@@ -179,6 +179,7 @@
   const weatherFx = document.getElementById('weatherFx');
   const lightningFx = document.getElementById('lightningFx');
   const eventToast = document.getElementById('eventToast');
+  const questText = document.getElementById('questText');
 
   const resWood = document.getElementById('resWood');
   const resStone = document.getElementById('resStone');
@@ -234,7 +235,10 @@
       thirst: 75,
       energy: 90,
       equippedTool: 'Bare Hands',
-      hasPlaneBattery: false
+      hasPlaneBattery: false,
+      targetX: null,
+      targetY: null,
+      interactTarget: null
     },
 
     inventory: {
@@ -537,6 +541,52 @@
     if (k === 'd' || k === 'arrowright') state.keys.right = false;
   });
 
+  
+  // --- Canvas Click & Tap to Move / Interact ---
+  canvas.addEventListener('click', e => {
+    sound.init();
+    if (!state.running) return;
+    const rect = canvas.getBoundingClientRect();
+    const clickScreenX = e.clientX - rect.left;
+    const clickScreenY = e.clientY - rect.top;
+    const worldX = clickScreenX + state.camera.x;
+    const worldY = clickScreenY + state.camera.y;
+
+    const p = state.player;
+    let targetObj = null;
+
+    // Check if clicked an interactive object
+    for (const t of state.trees) {
+      if (Math.hypot(worldX - t.x, worldY - t.y) < 40) { targetObj = t; break; }
+    }
+    if (!targetObj) {
+      for (const r of state.rocks) {
+        if (Math.hypot(worldX - r.x, worldY - r.y) < 35) { targetObj = r; break; }
+      }
+    }
+    if (!targetObj) {
+      for (const b of state.bushes) {
+        if (Math.hypot(worldX - b.x, worldY - b.y) < 30) { targetObj = b; break; }
+      }
+    }
+    if (!targetObj && Math.hypot(worldX - state.spring.x, worldY - state.spring.y) < 45) {
+      targetObj = state.spring;
+    }
+    if (!targetObj && Math.hypot(worldX - state.planeWreck.x, worldY - state.planeWreck.y) < 55) {
+      targetObj = state.planeWreck;
+    }
+
+    if (targetObj) {
+      p.targetX = targetObj.x;
+      p.targetY = targetObj.y;
+      p.interactTarget = targetObj;
+    } else {
+      p.targetX = worldX;
+      p.targetY = worldY;
+      p.interactTarget = null;
+    }
+  });
+
   // Touch Controls
   const bindTouch = (id, onDown, onUp) => {
     const el = document.getElementById(id);
@@ -584,7 +634,7 @@
     // 1. Check Trees
     for (let i = state.trees.length - 1; i >= 0; i--) {
       const t = state.trees[i];
-      if (Math.hypot(p.x - t.x, p.y - t.y) < p.radius + 32) {
+      if (Math.hypot(p.x - t.x, p.y - t.y) < p.radius + 50) {
         sound.playChop();
         const damage = p.equippedTool === 'Stone Axe' ? 2 : 1;
         t.hp -= damage;
@@ -615,7 +665,7 @@
     if (!acted) {
       for (let i = state.rocks.length - 1; i >= 0; i--) {
         const r = state.rocks[i];
-        if (Math.hypot(p.x - r.x, p.y - r.y) < p.radius + 28) {
+        if (Math.hypot(p.x - r.x, p.y - r.y) < p.radius + 50) {
           sound.playMine();
           r.hp -= 1;
           createParticles(r.x, r.y, 8, '#b0bec5');
@@ -636,7 +686,7 @@
     if (!acted) {
       for (let i = 0; i < state.bushes.length; i++) {
         const b = state.bushes[i];
-        if (Math.hypot(p.x - b.x, p.y - b.y) < p.radius + 26) {
+        if (Math.hypot(p.x - b.x, p.y - b.y) < p.radius + 45) {
           if (b.hasBerries) {
             b.hasBerries = false;
             sound.playEat();
@@ -958,7 +1008,7 @@
       }
     }
 
-    // Player Movement
+    // Player Movement & Click-to-Move
     const p = state.player;
     let dx = 0;
     let dy = 0;
@@ -967,16 +1017,49 @@
     if (state.keys.left) dx -= 1;
     if (state.keys.right) dx += 1;
 
-    if (dx !== 0 && dy !== 0) {
-      dx *= 0.7071;
-      dy *= 0.7071;
-    }
-
     if (dx !== 0 || dy !== 0) {
+      p.targetX = null;
+      p.targetY = null;
+      p.interactTarget = null;
+      if (dx !== 0 && dy !== 0) {
+        dx *= 0.7071;
+        dy *= 0.7071;
+      }
       p.angle = Math.atan2(dy, dx);
       p.x += dx * p.speed;
       p.y += dy * p.speed;
       p.walkStep += 0.2;
+    } else if (p.targetX !== null && p.targetY !== null) {
+      const dist = Math.hypot(p.targetX - p.x, p.targetY - p.y);
+      const stopDist = p.interactTarget ? 50 : 6;
+      if (dist > stopDist) {
+        p.angle = Math.atan2(p.targetY - p.y, p.targetX - p.x);
+        p.x += Math.cos(p.angle) * p.speed;
+        p.y += Math.sin(p.angle) * p.speed;
+        p.walkStep += 0.2;
+      } else {
+        if (p.interactTarget) {
+          performAction();
+          p.interactTarget = null;
+        }
+        p.targetX = null;
+        p.targetY = null;
+      }
+    }
+
+    // Dynamic Quest Progression Updates
+    if (questText) {
+      if (state.inventory.wood < 4 || state.inventory.stone < 3) {
+        questText.textContent = `Gather Wood (${state.inventory.wood}/4) & Stone (${state.inventory.stone}/3) to craft basic survival tools [SPACE / Click]`;
+      } else if (p.equippedTool === 'Bare Hands') {
+        questText.textContent = 'Open Crafting [C] and forge a Stone Axe to chop wood twice as fast!';
+      } else if (state.structures.campfires.length === 0) {
+        questText.textContent = 'Open Crafting [C] and build a Campfire & Survival Shelter to stay warm and rest [R]!';
+      } else if (!state.planeWreck.searched) {
+        questText.textContent = 'Head West along the beach to search the crashed Plane Fuselage for emergency supplies!';
+      } else {
+        questText.textContent = 'ESCAPE! Craft a Sea Raft at the shore OR build the Cliff SOS Beacon to signal rescue!';
+      }
     }
 
     if (p.swinging > 0) p.swinging--;
@@ -1353,6 +1436,70 @@
         ctx.arc(ff.x, ff.y, 2.5, 0, Math.PI * 2);
         ctx.fill();
       });
+    }
+
+    // 13.5 Floating Action Prompt Indicator over nearby interactive object
+    let nearestPrompt = null;
+    let minDist = 75;
+    const px = state.player.x;
+    const py = state.player.y;
+
+    for (const t of state.trees) {
+      const d = Math.hypot(px - t.x, py - t.y);
+      if (d < minDist) {
+        minDist = d;
+        nearestPrompt = { x: t.x, y: t.y - 45, text: '[SPACE / Click] Chop Wood' };
+      }
+    }
+    for (const r of state.rocks) {
+      const d = Math.hypot(px - r.x, py - r.y);
+      if (d < minDist) {
+        minDist = d;
+        nearestPrompt = { x: r.x, y: r.y - 32, text: '[SPACE / Click] Mine Stone' };
+      }
+    }
+    for (const b of state.bushes) {
+      const d = Math.hypot(px - b.x, py - b.y);
+      if (d < minDist) {
+        minDist = d;
+        nearestPrompt = { x: b.x, y: b.y - 25, text: b.hasBerries ? '[SPACE / Click] Pick Berries' : 'Empty Bush' };
+      }
+    }
+    const dSpring = Math.hypot(px - state.spring.x, py - state.spring.y);
+    if (dSpring < minDist + 15) {
+      minDist = dSpring;
+      nearestPrompt = { x: state.spring.x, y: state.spring.y - 32, text: '[SPACE / Click] Drink Water' };
+    }
+    const dPlane = Math.hypot(px - state.planeWreck.x, py - state.planeWreck.y);
+    if (dPlane < minDist + 25) {
+      minDist = dPlane;
+      nearestPrompt = { x: state.planeWreck.x, y: state.planeWreck.y - 38, text: state.planeWreck.searched ? 'Plane Searched' : '[SPACE / Click] Search Wreckage' };
+    }
+    for (const w of state.wildlife) {
+      const d = Math.hypot(px - w.x, py - w.y);
+      if (d < minDist) {
+        minDist = d;
+        nearestPrompt = { x: w.x, y: w.y - 25, text: '[SPACE / Click] Hunt Animal' };
+      }
+    }
+
+    if (nearestPrompt) {
+      ctx.save();
+      ctx.font = 'bold 12px "Segoe UI", sans-serif';
+      const textWidth = ctx.measureText(nearestPrompt.text).width;
+      ctx.fillStyle = 'rgba(6, 20, 36, 0.9)';
+      ctx.strokeStyle = '#ffb703';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(nearestPrompt.x - textWidth / 2 - 8, nearestPrompt.y - 12, textWidth + 16, 24, 6);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffea00';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(nearestPrompt.text, nearestPrompt.x, nearestPrompt.y);
+      ctx.restore();
     }
 
     ctx.restore(); // Restore Camera

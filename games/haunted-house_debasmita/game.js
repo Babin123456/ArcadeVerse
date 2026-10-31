@@ -231,6 +231,7 @@
   const sanityBar = document.getElementById('sanityBar');
   const batteryBar = document.getElementById('batteryBar');
   const threatBadge = document.getElementById('threatBadge');
+  const caseText = document.getElementById('caseText');
   const panicVignette = document.getElementById('panicVignette');
   const lightningFx = document.getElementById('lightningFx');
   const paranormalBanner = document.getElementById('paranormalBanner');
@@ -1268,6 +1269,17 @@
     requestAnimationFrame(renderRoom);
   }
   requestAnimationFrame(renderRoom);
+
+  
+  // --- Keyboard Shortcuts for Flashlight [F] and Hide [H] ---
+  window.addEventListener('keydown', e => {
+    const k = e.key.toLowerCase();
+    if (k === 'f') {
+      btnFlashlight.click();
+    } else if (k === 'h') {
+      btnHide.click();
+    }
+  });
 
   // --- Real-Time Update Tick (1000ms) ---
   setInterval(() => {

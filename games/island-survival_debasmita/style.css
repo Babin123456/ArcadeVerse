@@ -542,3 +542,49 @@ html, body {
     display: none;
   }
 }
+
+/* Floating Objective & Mission Tracker */
+.quest-tracker {
+  position: fixed;
+  top: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 22;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(6, 20, 36, 0.9);
+  border: 1px solid rgba(255, 183, 3, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 5px 16px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 183, 3, 0.2);
+  pointer-events: auto;
+  max-width: 90vw;
+}
+
+.quest-pill {
+  background: #ffb703;
+  color: #000;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.quest-text {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #fff4d1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 769px) {
+  .touch-container {
+    display: none !important;
+  }
+}

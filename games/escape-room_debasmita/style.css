@@ -752,3 +752,43 @@ body::before {
   }
 }
 
+
+/* Floating Escape Tracker */
+.escape-tracker {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 24;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(14, 8, 24, 0.92);
+  border: 1px solid rgba(255, 119, 0, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 4px 14px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 119, 0, 0.2);
+  max-width: 90vw;
+  pointer-events: auto;
+}
+
+.escape-pill {
+  background: #ff7700;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.escape-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #ffeedb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

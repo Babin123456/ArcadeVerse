@@ -199,6 +199,7 @@
   resizeCanvas();
   const timerBox = document.getElementById('timerBox');
   const cryptToast = document.getElementById('cryptToast');
+  const escapeText = document.getElementById('escapeText');
   const inventorySlots = document.getElementById('inventorySlots');
   const invDetail = document.getElementById('invDetail');
 
@@ -230,6 +231,27 @@
       cryptToast.classList.remove('active');
     }, 3200);
   }
+
+  
+  // --- Smart Contextual Hint System ---
+  document.getElementById('hintBtn').addEventListener('click', () => {
+    sound.playClick();
+    if (!state.bookshelfSolved) {
+      showToast('Hint: Inspect Bookshelf. Pull: Blood (Red), Dusk (Blue), Vine (Green), Void (Purple).');
+    } else if (!state.plantSearched) {
+      showToast('Hint: Click the Dead Nightshade Pot on the bottom-left to dig up Mandrake Root.');
+    } else if (!state.inventory.includes('ash') && !state.cauldron.ash) {
+      showToast('Hint: Inspect the Wall Torches on the upper-right to scrape Cursed Ash with the Silver Dagger.');
+    } else if (!state.cauldron.brewed) {
+      showToast('Hint: Inspect the Cauldron and add Spider Venom, Mandrake Root, and Cursed Ash to brew Acidic Elixir.');
+    } else if (!state.pedestalSolved) {
+      showToast('Hint: Inspect Runic Pedestal on the right. Align symbols: Moon, Pumpkin, Skull.');
+    } else if (!state.inventory.includes('gilded_key') && !state.gateLocks.keyhole) {
+      showToast('Hint: Inspect the Bone Relic Chest on the far right using the Bone Key from the pedestal.');
+    } else {
+      showToast('Hint: Inspect the Iron Crypt Gate and use Acidic Elixir, Gilded Key, and Eye Talisman to escape!');
+    }
+  });
 
   // --- Particle & Canvas Graphic System ---
   const particles = [];
@@ -476,6 +498,26 @@
     }
   }
 
+  
+  function updateEscapeTracker() {
+    if (!escapeText) return;
+    if (!state.bookshelfSolved) {
+      escapeText.textContent = 'Step 1: Inspect the Bookshelf on the left. Pull: Blood, Dusk, Vine, Void.';
+    } else if (!state.plantSearched) {
+      escapeText.textContent = 'Step 2: Inspect the Dead Nightshade Pot on the bottom left for Mandrake Root.';
+    } else if (!state.inventory.includes('ash') && !state.cauldron.ash) {
+      escapeText.textContent = 'Step 3: Inspect Wall Torches to gather Cursed Ash with the Silver Dagger.';
+    } else if (!state.cauldron.brewed) {
+      escapeText.textContent = 'Step 4: Combine Venom, Mandrake, and Ash in the Cauldron to brew Acid.';
+    } else if (!state.pedestalSolved) {
+      escapeText.textContent = 'Step 5: Inspect Runic Pedestal. Align symbols: Moon, Pumpkin, Skull.';
+    } else if (!state.inventory.includes('gilded_key') && !state.gateLocks.keyhole) {
+      escapeText.textContent = 'Step 6: Open the Bone Relic Chest with the Bone Key to get the Master Key.';
+    } else {
+      escapeText.textContent = 'Step 7: Click the Iron Crypt Gate and unlock the 3 seals to escape!';
+    }
+  }
+
   function addItem(itemKey) {
     if (!state.inventory.includes(itemKey)) {
       state.inventory.push(itemKey);
@@ -541,7 +583,7 @@
       }
 
       if (state.bookshelfSequence.length === expectedBookSequence.length) {
-        state.bookshelfSolved = true;
+        state.bookshelfSolved = true; updateEscapeTracker();
         sound.playUnlock();
         bookshelfStatus.textContent = 'A hidden drawer slides open! You found the Silver Dagger and Spider Venom!';
         addItem('dagger');
@@ -561,7 +603,7 @@
   // --- Puzzle 2: Dead Plant Pot (Mandrake Root) ---
   hotspotPlant.addEventListener('click', () => {
     if (!state.plantSearched) {
-      state.plantSearched = true;
+      state.plantSearched = true; updateEscapeTracker();
       addItem('root');
       showToast('You pulled a shriveled Mandrake Root from the dead soil.');
     } else {
@@ -631,7 +673,7 @@
     }
 
     if (state.cauldron.venom && state.cauldron.root && state.cauldron.ash) {
-      state.cauldron.brewed = true;
+      state.cauldron.brewed = true; updateEscapeTracker();
       sound.playBrew();
       sound.playUnlock();
       addItem('acid');
@@ -691,7 +733,7 @@
     }
     // Expected: Moon (1), Pumpkin (2), Skull (0)
     if (state.pedestalDials[0] === 1 && state.pedestalDials[1] === 2 && state.pedestalDials[2] === 0) {
-      state.pedestalSolved = true;
+      state.pedestalSolved = true; updateEscapeTracker();
       sound.playUnlock();
       pedestalStatus.textContent = 'The celestial discs chime in harmony! The pedestal opens to reveal a Gilded Key and Bone Key!';
       addItem('gilded_key');
