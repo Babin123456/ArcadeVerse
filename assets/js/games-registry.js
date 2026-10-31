@@ -362,6 +362,28 @@ const GAMES_REGISTRY = [
     "featured": true
   },
   {
+    "id": "fishing-frenzy_mistu7debnath",
+    "title": "Fishing Frenzy",
+    "category": "Arcade",
+    "lucideIcon": "fish",
+    "description": "Cast your line, read the water ripples, and master timing-based hooks to catch exotic aquatic species in this relaxing yet exhilarating arcade fishing simulator.",
+    "author": "mistu7debnath",
+    "github": "mistu7debnath",
+    "role": "Arcade Developer",
+    "path": "games/fishing-frenzy_mistu7debnath/index.html",
+    "tags": [
+      "Arcade",
+      "Casual",
+      "Simulation",
+      "Timing",
+      "NSOC26"
+    ],
+    "stars": 25,
+    "featured": true,
+    "difficulty": "All Skill Levels",
+    "releaseDate": "2026-10-31"
+  },
+  {
     "id": "flappy-jet_mistu7debnath",
     "title": "Flappy Cyber Jet",
     "category": "Arcade",
@@ -799,7 +821,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 209,
+    "commits": 210,
     "gamesCount": 3,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -855,8 +877,8 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "mistu7debnath",
     "avatarInitial": "M",
     "role": "Contributor (NSOC '26)",
-    "commits": 7,
-    "gamesCount": 5,
+    "commits": 8,
+    "gamesCount": 6,
     "mechanicsBonus": 1,
     "platformPRs": 0,
     "qualityPRs": 0,
@@ -864,6 +886,7 @@ const CONTRIBUTORS_REGISTRY = [
     "contributions": [
       "Bubble Pop: Bubble Burst Arena",
       "Cyber Runner: Neon Rush",
+      "Fishing Frenzy",
       "Flappy Cyber Jet",
       "Neon Grid Defense: Core Protocol",
       "Time Warp: Chrono Shift"
