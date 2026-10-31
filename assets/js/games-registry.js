@@ -816,7 +816,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 139,
+    "commits": 143,
     "gamesCount": 25,
     "mechanicsBonus": 2,
     "platformPRs": 29,
@@ -948,3 +948,9 @@ const CONTRIBUTORS_REGISTRY = [
     ]
   }
 ];
+
+if (typeof window !== 'undefined') {
+  window.GAMES_REGISTRY = GAMES_REGISTRY;
+  window.FEATURES_REGISTRY = FEATURES_REGISTRY;
+  window.CONTRIBUTORS_REGISTRY = CONTRIBUTORS_REGISTRY;
+}

@@ -69,6 +69,14 @@
                   <div class="shortcut-keys"><kbd>L</kbd></div>
                 </div>
                 <div class="shortcut-row">
+                  <span>Documentation</span>
+                  <div class="shortcut-keys"><kbd>D</kbd></div>
+                </div>
+                <div class="shortcut-row">
+                  <span>FAQs & Help</span>
+                  <div class="shortcut-keys"><kbd>Q</kbd></div>
+                </div>
+                <div class="shortcut-row">
                   <span>Category Filter Pills</span>
                   <div class="shortcut-keys"><kbd>1</kbd> ... <kbd>8</kbd></div>
                 </div>
@@ -115,10 +123,20 @@
     },
 
     injectNavbarTrigger() {
-      const actions = document.querySelector('.nav-actions');
-      if (!actions || document.getElementById('shortcuts-trigger-btn')) return;
+      let btn = document.getElementById('shortcuts-trigger-btn');
+      if (btn) {
+        // If already statically present in markup, bind toggle handler once
+        if (!btn.dataset.bound) {
+          btn.addEventListener('click', () => this.toggle());
+          btn.dataset.bound = 'true';
+        }
+        return;
+      }
 
-      const btn = document.createElement('button');
+      const actions = document.querySelector('.nav-actions');
+      if (!actions) return;
+
+      btn = document.createElement('button');
       btn.id = 'shortcuts-trigger-btn';
       btn.className = 'keyboard-shortcuts-btn';
       btn.type = 'button';
@@ -132,7 +150,13 @@
       `;
 
       btn.addEventListener('click', () => this.toggle());
-      actions.prepend(btn);
+      btn.dataset.bound = 'true';
+      const a11y = actions.querySelector('#a11y-trigger-btn');
+      if (a11y) {
+        actions.insertBefore(btn, a11y);
+      } else {
+        actions.prepend(btn);
+      }
     },
 
     open() {
@@ -233,6 +257,48 @@
           return;
         }
 
+        // D: Go to Documentation
+        if (e.key === 'd' || e.key === 'D') {
+          if (!window.location.pathname.endsWith('docs.html')) {
+            window.location.href = 'docs.html';
+          }
+          return;
+        }
+
+        // Q: Go to FAQs
+        if (e.key === 'q' || e.key === 'Q') {
+          if (!window.location.pathname.endsWith('faqs.html')) {
+            window.location.href = 'faqs.html';
+          }
+          return;
+        }
+
+        // F: Toggle Game Fullscreen (when modal is open)
+        if (e.key === 'f' || e.key === 'F') {
+          const gameModal = document.getElementById('game-modal');
+          if (gameModal && gameModal.classList.contains('active')) {
+            const fsBtn = document.getElementById('fullscreen-btn');
+            if (fsBtn) {
+              fsBtn.click();
+              e.preventDefault();
+            }
+          }
+          return;
+        }
+
+        // R: Reload / Restart Game (when modal is open)
+        if (e.key === 'r' || e.key === 'R') {
+          const gameModal = document.getElementById('game-modal');
+          if (gameModal && gameModal.classList.contains('active')) {
+            const reloadBtn = document.getElementById('reload-btn');
+            if (reloadBtn) {
+              reloadBtn.click();
+              e.preventDefault();
+            }
+          }
+          return;
+        }
+
         // 1 to 8: Category pills
         if (e.key >= '1' && e.key <= '8') {
           const pills = document.querySelectorAll('.category-pills .pill');
@@ -246,5 +312,9 @@
   };
 
   window.ArcadeShortcuts = ShortcutsEngine;
-  document.addEventListener('DOMContentLoaded', () => ShortcutsEngine.init());
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => ShortcutsEngine.init());
+  } else {
+    ShortcutsEngine.init();
+  }
 })();

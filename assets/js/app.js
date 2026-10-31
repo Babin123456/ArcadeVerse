@@ -346,6 +346,10 @@ document.addEventListener("DOMContentLoaded", () => {
     gameIframe.src = "";
     document.body.style.overflow = "auto";
     modalWindow.classList.remove("fullscreen");
+    if (gameModal) gameModal.classList.remove("fullscreen-mode");
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+    }
     if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
       lastFocusedElement.focus();
     }

@@ -121,3 +121,66 @@
     width: auto;
   }
 }
+
+
+/* Light Mode High-Contrast Rules */
+[data-theme="light"] .network-toast {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .network-toast.toast-offline {
+  border-color: #d97706;
+  background: #fffbeb;
+  box-shadow: 0 10px 25px rgba(217, 119, 6, 0.15);
+}
+
+[data-theme="light"] .network-toast.toast-online {
+  border-color: #059669;
+  background: #ecfdf5;
+  box-shadow: 0 10px 25px rgba(5, 150, 105, 0.15);
+}
+
+[data-theme="light"] .toast-offline .network-toast-icon {
+  background: rgba(217, 119, 6, 0.18);
+  color: #b45309;
+}
+
+[data-theme="light"] .toast-online .network-toast-icon {
+  background: rgba(5, 150, 105, 0.18);
+  color: #047857;
+}
+
+[data-theme="light"] .network-toast-title {
+  color: #0f172a;
+}
+
+[data-theme="light"] .toast-offline .network-toast-title {
+  color: #92400e;
+}
+
+[data-theme="light"] .toast-online .network-toast-title {
+  color: #065f46;
+}
+
+[data-theme="light"] .network-toast-desc {
+  color: #334155;
+}
+
+[data-theme="light"] .toast-offline .network-toast-desc {
+  color: #78350f;
+}
+
+[data-theme="light"] .toast-online .network-toast-desc {
+  color: #064e3b;
+}
+
+[data-theme="light"] .btn-toast-dismiss {
+  color: #64748b;
+}
+
+[data-theme="light"] .btn-toast-dismiss:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: #0f172a;
+}

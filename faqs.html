@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequently Asked Questions (FAQs) | ArcadeVerse (NSOC '26)</title>
+  <meta name="description" content="Frequently asked questions about ArcadeVerse, NSOC Winter Edition 2026, game contribution guidelines, in-app scoring, and platform architecture.">
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/public/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/public/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/public/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cambria+Math&family=Permanent+Marker&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <link rel="stylesheet" href="assets/css/a11y-engine.css">
+  <link rel="stylesheet" href="assets/css/sound-engine.css">
+  <link rel="stylesheet" href="assets/css/keyboard-shortcuts.css">
+  <link rel="stylesheet" href="assets/css/network-detector.css">
+  <link rel="stylesheet" href="assets/css/trophy-card.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <!-- Ambient background lighting -->
+  <div class="cyber-grid"></div>
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <!-- Header / Navigation -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo" aria-label="ArcadeVerse Home">
+        <img src="assets/public/brand-logo.webp" alt="ArcadeVerse Logo" class="brand-logo-img" width="34" height="34">
+        <span class="logo-text">Arcade<span class="gradient-accent">Verse</span></span>
+        <span class="nsoc-tag">NSOC '26</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-item"><i data-lucide="gamepad-2"></i> Explore Games</a>
+        <a href="leaderboard.html" class="nav-item"><i data-lucide="trophy"></i> Hall of Fame</a>
+        <a href="docs.html" class="nav-item"><i data-lucide="file-code-2"></i> Documentation</a>
+        <a href="faqs.html" class="nav-item active" aria-current="page"><i data-lucide="help-circle"></i> FAQs</a>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="nav-item"><i data-lucide="book-open"></i> Contributor Guide</a>
+      </nav>
+
+      <div class="nav-actions">
+                <button class="keyboard-shortcuts-btn" id="shortcuts-trigger-btn" type="button" aria-label="View keyboard shortcuts cheatsheet (?)" title="Keyboard Shortcuts (?)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+            <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10"></path>
+          </svg>
+        </button>
+        <button class="a11y-btn-trigger" id="a11y-trigger-btn" type="button" aria-label="Open Accessibility Hub" title="Accessibility Hub">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="m4.93 4.93 4.24 4.24"></path>
+            <path d="m14.83 9.17 4.24-4.24"></path>
+            <path d="m14.83 14.83 4.24 4.24"></path>
+            <path d="m9.17 14.83-4.24 4.24"></path>
+            <circle cx="12" cy="12" r="4"></circle>
+          </svg>
+        </button>
+        <button class="theme-toggle-btn" id="theme-toggle-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle dark/light theme">
+          <span class="theme-icon-wrap"><i data-lucide="sun"></i></span>
+        </button>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" title="View repository on GitHub">
+          <span><i data-lucide="star"></i> GitHub</span>
+        </a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
+      <div class="mobile-nav-content">
+        <a href="index.html" class="mobile-nav-item">
+          <span class="mobile-nav-icon"><i data-lucide="gamepad-2"></i></span>
+          <span>Explore Games</span>
+        </a>
+        <a href="leaderboard.html" class="mobile-nav-item">
+          <span class="mobile-nav-icon"><i data-lucide="trophy"></i></span>
+          <span>Hall of Fame</span>
+        </a>
+        <a href="docs.html" class="mobile-nav-item">
+          <span class="mobile-nav-icon"><i data-lucide="file-code-2"></i></span>
+          <span>Documentation</span>
+        </a>
+        <a href="faqs.html" class="mobile-nav-item active" aria-current="page">
+          <span class="mobile-nav-icon"><i data-lucide="help-circle"></i></span>
+          <span>FAQs & Answers</span>
+        </a>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="mobile-nav-item">
+          <span class="mobile-nav-icon"><i data-lucide="book-open"></i></span>
+          <span>Contributor Guide</span>
+        </a>
+        <div class="mobile-nav-divider"></div>
+        <button class="mobile-nav-item theme-toggle-btn" style="width: 100%; border: none; background: transparent; cursor: pointer; text-align: left; padding: 0.75rem 1rem;">
+          <span class="mobile-nav-icon theme-icon-wrap"><i data-lucide="sun"></i></span>
+          <span>Toggle Dark / Light Theme</span>
+        </button>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="mobile-github-btn">
+          <span><i data-lucide="star"></i> Star on GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" tabindex="-1">
+    <div class="page-hero">
+      <div class="page-hero-badge">
+        <span class="pulse-dot"></span> Knowledge Base & Support
+      </div>
+      <h1 class="page-hero-title">Frequently Asked <span class="gradient-text">Questions</span></h1>
+      <p class="page-hero-subtitle">
+        Everything you need to know about ArcadeVerse, game development guidelines, isolated directory standards, scoring metrics, and open-source collaboration in NSOC Winter Edition 2026.
+      </p>
+      <div class="page-meta-row">
+        <span class="page-meta-item"><i data-lucide="check-circle-2"></i> 22 Detailed Answers</span>
+        <span>•</span>
+        <span class="page-meta-item"><i data-lucide="cpu"></i> NSOC 2026 Ready</span>
+        <span>•</span>
+        <span class="page-meta-item"><i data-lucide="zap"></i> Instant Search Filter</span>
+      </div>
+    </div>
+
+    <section class="faq-container-section" style="max-width: 960px; margin: 0 auto; padding: 0 1.5rem 5rem;">
+      <!-- Search Filter Bar -->
+      <div class="faq-search-wrapper">
+        <i data-lucide="search" class="faq-search-icon"></i>
+        <input type="text" id="faq-search-input" class="faq-search-input" placeholder="Search questions, keywords, or guidelines (e.g. scoring, validator, PR, assets)..." aria-label="Search frequently asked questions">
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="faq-filter-pills" role="tablist" aria-label="Filter questions by category">
+        <button class="faq-pill active" data-category="all">All Questions (22)</button>
+        <button class="faq-pill" data-category="general">General & Overview</button>
+        <button class="faq-pill" data-category="contributing">Contributing & Rules</button>
+        <button class="faq-pill" data-category="architecture">Architecture & Tools</button>
+        <button class="faq-pill" data-category="scoring">Scoring & Badges</button>
+        <button class="faq-pill" data-category="features">Engines & Accessibility</button>
+      </div>
+
+      <!-- Accordion Mount (Opens and Closes One at a Time Smoothly) -->
+      <div class="faq-accordion-container" id="faq-accordion-container">
+
+        <!-- Question 1 -->
+        <div class="faq-accordion-item" data-category="general" id="faq-1">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-1">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">General</span>
+              1. What is ArcadeVerse?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-1" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p><strong>ArcadeVerse</strong> is the open-source community arcade gaming station engineered specifically for <em>Nexus Spring of Code (NSOC) – Winter Edition 2026</em>. It showcases playable mini-games created by developers worldwide using standard modern web technologies.</p>
+                <p>The platform is designed around <strong>zero framework fatigue</strong> and <strong>zero merge conflicts</strong>. All games operate inside isolated directories, and the platform provides rich integrated capabilities including a Web Audio sound synthesizer, accessibility hub, live GitHub sync, holographic certificates, and interactive player modals.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="faq-accordion-item" data-category="general" id="faq-2">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-2">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">General</span>
+              2. Which tech stack does ArcadeVerse use?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-2" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>ArcadeVerse adheres strictly to vanilla web fundamentals:</p>
+                <ul>
+                  <li><strong>HTML5 Canvas & Semantic DOM:</strong> For performant 60 FPS graphics, fluid responsive layouts, and standard accessibility.</li>
+                  <li><strong>CSS3 Modern Stylesheet Engine:</strong> Custom property themes, cyber grid textures, glassmorphism, responsive breakpoints, and animations without heavy CSS frameworks.</li>
+                  <li><strong>Vanilla JavaScript (ES6+):</strong> Native modules, LocalStorage, Web Audio API, and Fetch API without React, Vue, webpack, or external bundlers.</li>
+                  <li><strong>Node.js Automation Tools:</strong> Lightweight pre-flight test suites (<code>scripts/validate-games.js</code>) and registry compilation (<code>scripts/build-registry.js</code>).</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="faq-accordion-item" data-category="general" id="faq-3">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-3">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">General</span>
+              3. What is Nexus Spring of Code (NSOC) Winter Edition 2026?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-3" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p><strong>Nexus Spring of Code (NSOC)</strong> is a premier open-source event designed to foster collaboration, learning, and real-world project contributions. The Winter Edition 2026 runs over a 45-day period, giving student developers and experienced engineers an opportunity to build portfolio-grade projects, collaborate on pull requests, and earn recognition in an international community.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="faq-accordion-item" data-category="contributing" id="faq-4">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-4">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Contributing</span>
+              4. How do I contribute a new game to ArcadeVerse?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-4" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>Contributing a new game follows a seamless 6-step workflow:</p>
+                <ol>
+                  <li><strong>Fork & Clone:</strong> Fork <code>DebasmitaBose0/ArcadeVerse</code> on GitHub and clone your fork locally.</li>
+                  <li><strong>Create Branch:</strong> Run <code>git checkout -b feat/game-&lt;your-game-name&gt;</code>.</li>
+                  <li><strong>Create Directory:</strong> Create a folder under <code>games/&lt;game-name&gt;_&lt;your-github-username&gt;/</code>.</li>
+                  <li><strong>Create 4 Mandatory Files:</strong> Include <code>index.html</code>, <code>style.css</code>, <code>game.js</code>, and <code>game.json</code>.</li>
+                  <li><strong>Validate Locally:</strong> Run <code>npm test</code> (or <code>node scripts/validate-games.js</code>) to ensure all tests pass.</li>
+                  <li><strong>Compile & Submit:</strong> Run <code>npm run build</code>, commit your changes, push your branch, and open a Pull Request.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="faq-accordion-item" data-category="architecture" id="faq-5">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-5">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Architecture</span>
+              5. What is the mandatory 4-file game structure?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-5" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>Every game folder under <code>games/&lt;game-name&gt;_&lt;your-name&gt;/</code> must contain exactly these 4 self-contained files:</p>
+                <ul>
+                  <li><code>index.html</code>: Standalone HTML page with your canvas or game UI. Must link only its own <code>style.css</code> and <code>game.js</code>.</li>
+                  <li><code>style.css</code>: Dedicated CSS scoped specifically to your game.</li>
+                  <li><code>game.js</code>: Pure JavaScript gameplay logic, state machine, event listeners, and controls.</li>
+                  <li><code>game.json</code>: Game metadata descriptor containing <code>title</code>, <code>category</code>, <code>author</code>, <code>github</code>, <code>description</code>, <code>tags</code>, and <code>lucideIcon</code>.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="faq-accordion-item" data-category="architecture" id="faq-6">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-6">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Architecture</span>
+              6. Why must community games be kept in isolated directories?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-6" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>The <strong>isolated directory architecture</strong> guarantees:</p>
+                <ul>
+                  <li><strong>Zero Merge Conflicts:</strong> Multiple developers can build and submit games concurrently without modifying shared platform files.</li>
+                  <li><strong>Sandboxed Gameplay:</strong> Games run cleanly inside their own <code>&lt;iframe&gt;</code> player modals, preventing global variable collision, CSS leakage, and audio context conflicts.</li>
+                  <li><strong>Automated Ingestion:</strong> The registry build script automatically indexes your <code>game.json</code> to register your game into the catalog and assign leaderboard credit.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="faq-accordion-item" data-category="architecture" id="faq-7">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-7">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Architecture</span>
+              7. What is the Pre-Flight Game Validator and how do I run it?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-7" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>The Pre-Flight Game Validator (<code>scripts/validate-games.js</code>) is an automated CLI tool that audits all games in the <code>games/</code> directory before pull requests are submitted. It checks:</p>
+                <ul>
+                  <li>Naming conventions (<code>&lt;game-name&gt;_&lt;github-username&gt;</code>)</li>
+                  <li>Presence and syntax of all 4 required files (<code>index.html</code>, <code>style.css</code>, <code>game.js</code>, <code>game.json</code>)</li>
+                  <li>Schema integrity and valid fields in <code>game.json</code></li>
+                  <li>Relative asset paths ensuring games do not break across different deployment paths</li>
+                </ul>
+                <p>You can execute the validator anytime by running: <code>npm test</code>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="faq-accordion-item" data-category="scoring" id="faq-8">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-8">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Scoring</span>
+              8. How does the in-app Arcade Scoring engine calculate points?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-8" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>ArcadeVerse features a transparent, client-side algorithmic scoring formula:</p>
+                <ul>
+                  <li><strong>Verified Game:</strong> <code>+100 pts</code> per playable game integrated under <code>games/</code></li>
+                  <li><strong>Mechanics & Physics Bonus:</strong> <code>+25 pts</code> per advanced simulation (Canvas 2D, AI opponent, particle systems, procedural sound)</li>
+                  <li><strong>Platform Feature PR:</strong> <code>+50 pts</code> per merged architectural feature or UI tool</li>
+                  <li><strong>Quality & Bug Fix PR:</strong> <code>+25 pts</code> per merged maintenance or bug fix</li>
+                  <li><strong>Verified Git Commits:</strong> <code>+5 pts</code> per merged git commit (rewards sustained development)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="faq-accordion-item" data-category="scoring" id="faq-9">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-9">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Scoring</span>
+              9. What is the difference between In-App Points and official NSOC PR points?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-9" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p><strong>In-App Arcade Points</strong> and <strong>Official NSOC Evaluation Points</strong> serve two distinct purposes:</p>
+                <ul>
+                  <li><strong>Official NSOC Evaluation:</strong> Managed by project administrators through GitHub PR labels (<em>Level 1: 3 pts</em>, <em>Level 2: 5 pts</em>, <em>Level 3: 10 pts</em>). These determine your official NSOC certificate and competition standings.</li>
+                  <li><strong>In-App Arcade Score:</strong> A platform gamification engine that rewards sustained open-source craftsmanship, commits, multiple games, and unlocks holographic Hall of Fame badges.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="faq-accordion-item" data-category="scoring" id="faq-10">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-10">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Scoring</span>
+              10. How do I unlock Hall of Fame rank badges?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-10" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>Badges are assigned dynamically across two concurrent recognition tracks:</p>
+                <ol>
+                  <li><strong>Games Dedicated Track:</strong> Evaluated by count of verified games:
+                    <ul>
+                      <li><em>Novice Game Creator:</em> 1 Verified Game</li>
+                      <li><em>Junior Game Crafter:</em> 2 Verified Games</li>
+                      <li><em>Arcade Developer:</em> 3–4 Verified Games</li>
+                      <li><em>Senior Arcade Developer:</em> 5–6 Verified Games</li>
+                      <li><em>Hyper Game Developer:</em> 7–9 Verified Games</li>
+                      <li><em>Veteran Game Developer:</em> 10–14 Verified Games</li>
+                      <li><em>Master Game Architect:</em> 15–24 Verified Games</li>
+                      <li><em>Grandmaster Game Designer:</em> 25–34 Verified Games</li>
+                      <li><em>Mythic Game Creator:</em> 35–49 Verified Games</li>
+                      <li><em>Legendary Game Architect:</em> 50+ Verified Games</li>
+                    </ul>
+                  </li>
+                  <li><strong>Platform & Universal Score Track:</strong> Based on cumulative Arcade XP (from <em>Apprentice Contributor</em> at 1 pt up to <em>Immortal Arcade Legend</em> at 5,000+ pts).</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="faq-accordion-item" data-category="scoring" id="faq-11">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-11">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Scoring</span>
+              11. How can I earn the highest rank badges like Master Game Architect or Immortal Legend?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-11" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>To reach top-tier badges:</p>
+                <ul>
+                  <li>Build and submit multiple diverse arcade mini-games across different categories (Puzzle, Action, Physics, Rhythm, Retro).</li>
+                  <li>Incorporate advanced HTML5 Canvas mechanics, custom sound synthesis, and particle effects to secure physics multipliers.</li>
+                  <li>Contribute to platform-level subsystems (UI engines, accessibility features, testing tools) to collect feature points.</li>
+                  <li>Keep contributing regularly; every merged git commit adds points to your cumulative standing!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="faq-accordion-item" data-category="features" id="faq-12">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-12">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Features</span>
+              12. How does the Daily Mystery Quest work and when does it rotate?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-12" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>The <strong>Daily Arcade Mission</strong> is a deterministic quest generator. Every 24 hours at <code>00:00 UTC</code>, it pseudo-randomly selects a featured game from the registry and sets a target score challenge.</p>
+                <p>Playing the daily game awards streak progression, and the 24-hour countdown timer indicates time remaining before the next mission rotates.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="faq-accordion-item" data-category="features" id="faq-13">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-13">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Features</span>
+              13. What is the Holographic Certificate / Trophy Card and how do I download it?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-13" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>The <strong>Trophy Card Generator</strong> renders an ultra high-resolution <code>1200x750</code> credential directly in your browser using the native Canvas API. It features:</p>
+                <ul>
+                  <li>Your GitHub profile avatar and verified username handle</li>
+                  <li>Official NSOC '26 rosette seal and Project Lead signature</li>
+                  <li>Your highest earned Hall of Fame rank and total arcade score</li>
+                  <li>One-click high-resolution PNG download and instant clipboard copying</li>
+                </ul>
+                <p>Click the <em>Trophy Certificate</em> button on any contributor card in the Hall of Fame to generate your certificate.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="faq-accordion-item" data-category="features" id="faq-14">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-14">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Features</span>
+              14. How does Quick Resume / Recently Played history work?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-14" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>Whenever you launch a game inside the modal player, the <strong>Recently Played Engine</strong> automatically records the game ID and timestamp to your browser's LocalStorage (up to 6 recent titles). The Quick Resume drawer lets you jump straight back into your latest games with one click, or clear your history at any time.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="faq-accordion-item" data-category="features" id="faq-15">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-15">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Features</span>
+              15. What keyboard shortcuts are supported throughout the platform?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-15" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>ArcadeVerse supports a comprehensive set of keyboard navigation shortcuts:</p>
+                <ul>
+                  <li><kbd>?</kbd> or <kbd>Shift</kbd>+<kbd>/</kbd>: Open Keyboard Shortcuts Cheatsheet</li>
+                  <li><kbd>/</kbd>: Instantly focus game catalog search input</li>
+                  <li><kbd>H</kbd>: Navigate to Home / Explore Games page</li>
+                  <li><kbd>L</kbd>: Navigate to Hall of Fame & Leaderboard page</li>
+                  <li><kbd>D</kbd>: Navigate to Developer Documentation</li>
+                  <li><kbd>Q</kbd>: Navigate to Frequently Asked Questions</li>
+                  <li><kbd>T</kbd>: Toggle Dark / Light visual theme</li>
+                  <li><kbd>M</kbd>: Toggle procedural UI sound synthesis</li>
+                  <li><kbd>Esc</kbd>: Close modal player, cheatsheet, or accessibility drawer</li>
+                  <li><kbd>1</kbd>–<kbd>8</kbd>: Filter catalog by game category</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="faq-accordion-item" data-category="features" id="faq-16">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-16">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Features</span>
+              16. How does the Universal Accessibility (a11y) Hub work?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-16" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>Clicking the accessibility icon in the top navbar opens the <strong>Universal a11y Hub</strong>, providing WCAG 2.1 AA compliant adjustments:</p>
+                <ul>
+                  <li><strong>Reduced Motion:</strong> Eliminates non-essential animations, spins, and parallax transitions.</li>
+                  <li><strong>High Contrast Mode:</strong> Enhances text borders, buttons, and card separation.</li>
+                  <li><strong>Large Text:</strong> Increases font sizes proportionally across the entire UI.</li>
+                  <li><strong>Enhanced Focus Indicators:</strong> High-visibility outlines for keyboard-only navigation.</li>
+                </ul>
+                <p>All preferences are saved to LocalStorage and persist seamlessly across sessions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="faq-accordion-item" data-category="features" id="faq-17">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-17">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Features</span>
+              17. How does the Web Audio procedural sound synthesizer work?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-17" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>Instead of downloading large <code>.mp3</code> or <code>.wav</code> files, ArcadeVerse uses the native <strong>Web Audio API</strong> to generate procedural mechanical switch clicks, hover cues, and modal sounds mathematically using oscillators and gain ramps. It requires zero network bandwidth and operates completely offline!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="faq-accordion-item" data-category="features" id="faq-18">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-18">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Features</span>
+              18. How do community 5-star ratings work?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-18" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>Every game card in the catalog features an interactive 5-star rating widget. When you click any star rating, your vote is recorded instantly in LocalStorage. You can sort the catalog by <em>Community Rating (High to Low)</em> to discover the top-rated community games.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="faq-accordion-item" data-category="contributing" id="faq-19">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-19">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Contributing</span>
+              19. Can I use external frameworks like React, Vue, Phaser, or Three.js?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-19" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p><strong>No.</strong> ArcadeVerse strictly enforces <strong>pure vanilla HTML5, CSS3, and JavaScript</strong>. Heavy client-side frameworks (React, Vue, Angular, Svelte) and heavyweight game engines (Phaser, Babylon.js, Three.js) are not permitted.</p>
+                <p>This standard ensures ultra-fast load times, zero bundler dependencies, and allows developers to hone fundamental JavaScript and Canvas API skills.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="faq-accordion-item" data-category="contributing" id="faq-20">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-20">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Contributing</span>
+              20. Are external game assets, fonts, and audio allowed?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-20" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>Yes, subject to strict open-source criteria:</p>
+                <ul>
+                  <li><strong>License Compliance:</strong> All images, audio, or fonts must be public domain (CC0) or open source (MIT/SIL OFL) with proper attribution.</li>
+                  <li><strong>Local Storage:</strong> Assets must be stored inside your own game directory (e.g. <code>games/&lt;your-game&gt;/assets/</code>) so the game works offline.</li>
+                  <li><strong>File Size Budget:</strong> Total game assets should remain lightweight (under 2 MB) to preserve instant modal launch speeds.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 21 -->
+        <div class="faq-accordion-item" data-category="contributing" id="faq-21">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-21">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Contributing</span>
+              21. What should I do if my game encounters a bug or merge conflict?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-21" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>If you encounter issues:</p>
+                <ul>
+                  <li>Ensure your branch is rebased on latest upstream: <code>git fetch upstream &amp;&amp; git rebase upstream/main</code>.</li>
+                  <li>Verify that you only modified files inside your own <code>games/&lt;your-game&gt;/</code> directory plus running <code>npm run build</code>.</li>
+                  <li>Check browser DevTools console (F12) for iframe communication errors or missing asset paths.</li>
+                  <li>Open an issue on GitHub with your error logs and reproduction steps.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="faq-accordion-item" data-category="contributing" id="faq-22">
+          <button class="faq-accordion-trigger" type="button" aria-expanded="false" aria-controls="faq-ans-22">
+            <span class="faq-question-text">
+              <span class="faq-category-badge">Contributing</span>
+              22. How are Pull Requests reviewed, evaluated, and merged?
+            </span>
+            <i data-lucide="chevron-down" class="faq-chevron"></i>
+          </button>
+          <div class="faq-accordion-content" id="faq-ans-22" role="region">
+            <div class="faq-accordion-inner">
+              <div class="faq-answer-text">
+                <p>Every pull request is reviewed manually by Project Lead <strong>Debasmita Bose</strong> and core maintainers:</p>
+                <ul>
+                  <li><strong>Automated CI Verification:</strong> GitHub Actions runs <code>npm test</code> on every PR to verify game files.</li>
+                  <li><strong>Manual Gameplay & Responsiveness Check:</strong> Maintainers test your game modal across desktop and mobile screens.</li>
+                  <li><strong>PR Label Assignment:</strong> Merged PRs receive official NSOC evaluation tags (Level 1, Level 2, Level 3) according to difficulty, gameplay polish, and architectural complexity.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Help & Issues CTA Banner -->
+      <div class="faq-cta-banner">
+        <h3 style="font-family: var(--font-heading); font-size: 1.6rem; color: var(--text-primary); margin-bottom: 0.75rem;">Still Have Questions?</h3>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto 1.5rem; font-size: 1rem; line-height: 1.6;">
+          Can't find what you're looking for? Reach out on GitHub Issues, start a discussion with fellow contributors, or review our detailed documentation.
+        </p>
+        <div style="display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap;">
+          <a href="docs.html" class="btn btn-primary">
+            <span><i data-lucide="file-code-2"></i> Browse Documentation</span>
+          </a>
+          <a href="https://github.com/DebasmitaBose0/ArcadeVerse/issues/new" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+            <span><i data-lucide="help-circle"></i> Ask a Question on GitHub</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="logo">
+          <img src="assets/public/brand-logo.webp" alt="ArcadeVerse Logo" class="brand-logo-img" width="34" height="34">
+          <span class="logo-text">Arcade<span class="gradient-accent">Verse</span></span>
+        </div>
+        <p class="footer-desc">An open-source flagship gaming initiative for NSOC Winter Edition 2026. Designed for seamless, conflict-free manual open source contributions.</p>
+        <div class="footer-cta-wrapper" style="margin-top: 1.4rem;">
+          <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="btn btn-github-highlight" title="Star and view ArcadeVerse on GitHub">
+            <span class="github-star-icon"><i data-lucide="star"></i></span>
+            <span class="github-btn-text">GitHub</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Explore Platform</h4>
+        <ul class="footer-list">
+          <li><a href="index.html"><i data-lucide="gamepad-2"></i> Explore All Games</a></li>
+          <li><a href="leaderboard.html"><i data-lucide="trophy"></i> Hall of Fame</a></li>
+          <li><a href="docs.html"><i data-lucide="file-code-2"></i> Documentation</a></li>
+          <li><a href="faqs.html"><i data-lucide="help-circle"></i> FAQs</a></li>
+          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer"><i data-lucide="book-open"></i> Contributor Guidelines</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal & Policies</h4>
+        <ul class="footer-list">
+          <li><a href="terms.html"><i data-lucide="file-text"></i> Terms of Service</a></li>
+          <li><a href="privacy.html"><i data-lucide="shield"></i> Privacy Policy</a></li>
+          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CODE_OF_CONDUCT.md" target="_blank" rel="noopener noreferrer"><i data-lucide="heart-handshake"></i> Code of Conduct</a></li>
+          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer"><i data-lucide="lock"></i> Security Policy</a></li>
+          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><i data-lucide="file-check"></i> MIT License</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Project Administration</h4>
+        <div class="admin-badge-card">
+          <span class="admin-title">Project Admin</span>
+          <strong class="admin-name">Debasmita Bose</strong>
+          <span class="admin-event">NSOC Winter Edition 2026</span>
+          <span class="status-indicator"><span class="status-dot"></span> Accepting Manual PRs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p>© 2026 ArcadeVerse • Open Source under MIT License • NSOC Winter Edition 2026</p>
+        <div class="footer-bottom-links">
+          <a href="terms.html">Terms</a>
+          <span>•</span>
+          <a href="privacy.html">Privacy</a>
+          <span>•</span>
+          <a href="docs.html">Docs</a>
+          <span>•</span>
+          <a href="faqs.html">FAQs</a>
+          <span>•</span>
+          <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Page Transition Circular Loader -->
+  <div id="page-transition-loader" class="page-loader-overlay" aria-hidden="true">
+    <div class="loader-spinner-wrap">
+      <div class="loader-spinner-circle"></div>
+      <span class="loader-text">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Back to Top Floating Button -->
+  <button class="back-to-top-btn" id="back-to-top-btn" type="button" aria-label="Back to top" title="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m18 15-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <!-- Scripts -->
+  <script src="assets/js/navbar.js"></script>
+  <script src="assets/js/a11y-engine.js"></script>
+  <script src="assets/js/sound-engine.js"></script>
+  <script src="assets/js/keyboard-shortcuts.js"></script>
+  <script src="assets/js/network-detector.js"></script>
+  <script>
+    // Accordion Engine: Smooth open and close ONE AT A TIME with smooth scroll to top of active section
+    document.addEventListener('DOMContentLoaded', () => {
+      const accordionItems = document.querySelectorAll('.faq-accordion-item');
+      const searchInput = document.getElementById('faq-search-input');
+      const pills = document.querySelectorAll('.faq-pill');
+      let currentFilter = 'all';
+      let searchQuery = '';
+
+      function filterItems() {
+        accordionItems.forEach(item => {
+          const category = item.dataset.category || '';
+          const text = item.textContent.toLowerCase();
+          const matchesCategory = (currentFilter === 'all' || category === currentFilter);
+          const matchesSearch = (!searchQuery || text.includes(searchQuery));
+
+          if (matchesCategory && matchesSearch) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      }
+
+      // Pill filter clicks
+      pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          pills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          currentFilter = pill.dataset.category || 'all';
+          filterItems();
+        });
+      });
+
+      // Search input filtering
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          searchQuery = e.target.value.toLowerCase().trim();
+          filterItems();
+        });
+      }
+
+      // Accordion toggle: Open/close strictly one at a time
+      accordionItems.forEach(item => {
+        const trigger = item.querySelector('.faq-accordion-trigger');
+        if (!trigger) return;
+
+        trigger.addEventListener('click', () => {
+          const isOpen = item.classList.contains('active');
+
+          // Close all other items smoothly first
+          accordionItems.forEach(other => {
+            if (other !== item) {
+              other.classList.remove('active');
+              const otherTrigger = other.querySelector('.faq-accordion-trigger');
+              if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+            }
+          });
+
+          // Toggle the clicked item
+          if (isOpen) {
+            item.classList.remove('active');
+            trigger.setAttribute('aria-expanded', 'false');
+          } else {
+            item.classList.add('active');
+            trigger.setAttribute('aria-expanded', 'true');
+
+            // Sound feedback if sound engine enabled
+            if (window.SoundEngine && typeof window.SoundEngine.playClick === 'function') {
+              window.SoundEngine.playClick();
+            }
+
+            // Item toggled in place naturally without unwanted screen jumping
+          }
+        });
+      });
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+  </script>
+</body>
+</html>
+

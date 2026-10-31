@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Documentation | ArcadeVerse (NSOC '26)</title>
+  <meta name="description" content="Official developer documentation, architecture specifications, game creation standards, and contribution guide for ArcadeVerse in NSOC Winter Edition 2026.">
+  <!-- Favicon and Brand Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/public/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/public/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/public/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/public/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cambria+Math&family=Permanent+Marker&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <link rel="stylesheet" href="assets/css/a11y-engine.css">
+  <link rel="stylesheet" href="assets/css/sound-engine.css">
+  <link rel="stylesheet" href="assets/css/keyboard-shortcuts.css">
+  <link rel="stylesheet" href="assets/css/network-detector.css">
+  <link rel="stylesheet" href="assets/css/trophy-card.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="cyber-grid"></div>
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+
+  <!-- Header / Navigation -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo" aria-label="ArcadeVerse Home">
+        <img src="assets/public/brand-logo.webp" alt="ArcadeVerse Logo" class="brand-logo-img" width="34" height="34">
+        <span class="logo-text">Arcade<span class="gradient-accent">Verse</span></span>
+        <span class="nsoc-tag">NSOC '26</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-item"><i data-lucide="gamepad-2"></i> Explore Games</a>
+        <a href="leaderboard.html" class="nav-item"><i data-lucide="trophy"></i> Hall of Fame</a>
+        <a href="docs.html" class="nav-item active" aria-current="page"><i data-lucide="file-code-2"></i> Documentation</a>
+        <a href="faqs.html" class="nav-item"><i data-lucide="help-circle"></i> FAQs</a>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="nav-item"><i data-lucide="book-open"></i> Contributor Guide</a>
+      </nav>
+
+      <div class="nav-actions">
+                <button class="keyboard-shortcuts-btn" id="shortcuts-trigger-btn" type="button" aria-label="View keyboard shortcuts cheatsheet (?)" title="Keyboard Shortcuts (?)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+            <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10"></path>
+          </svg>
+        </button>
+        <button class="a11y-btn-trigger" id="a11y-trigger-btn" type="button" aria-label="Open Accessibility Hub" title="Accessibility Hub">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="m4.93 4.93 4.24 4.24"></path>
+            <path d="m14.83 9.17 4.24-4.24"></path>
+            <path d="m14.83 14.83 4.24 4.24"></path>
+            <path d="m9.17 14.83-4.24 4.24"></path>
+            <circle cx="12" cy="12" r="4"></circle>
+          </svg>
+        </button>
+        <button class="theme-toggle-btn" id="theme-toggle-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle dark/light theme">
+          <span class="theme-icon-wrap"><i data-lucide="sun"></i></span>
+        </button>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" title="View repository on GitHub">
+          <span><i data-lucide="star"></i> GitHub</span>
+        </a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
+      <div class="mobile-nav-content">
+        <a href="index.html" class="mobile-nav-item">
+          <span class="mobile-nav-icon"><i data-lucide="gamepad-2"></i></span>
+          <span>Explore Games</span>
+        </a>
+        <a href="leaderboard.html" class="mobile-nav-item">
+          <span class="mobile-nav-icon"><i data-lucide="trophy"></i></span>
+          <span>Hall of Fame</span>
+        </a>
+        <a href="docs.html" class="mobile-nav-item active" aria-current="page">
+          <span class="mobile-nav-icon"><i data-lucide="file-code-2"></i></span>
+          <span>Documentation</span>
+        </a>
+        <a href="faqs.html" class="mobile-nav-item">
+          <span class="mobile-nav-icon"><i data-lucide="help-circle"></i></span>
+          <span>FAQs</span>
+        </a>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="mobile-nav-item">
+          <span class="mobile-nav-icon"><i data-lucide="book-open"></i></span>
+          <span>Contributor Guide</span>
+        </a>
+        <div class="mobile-nav-divider"></div>
+        <button class="mobile-nav-item theme-toggle-btn" style="width: 100%; border: none; background: transparent; cursor: pointer; text-align: left; padding: 0.75rem 1rem;">
+          <span class="mobile-nav-icon theme-icon-wrap"><i data-lucide="sun"></i></span>
+          <span>Toggle Dark / Light Theme</span>
+        </button>
+        <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="mobile-github-btn">
+          <span><i data-lucide="star"></i> Star on GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main id="main-content" tabindex="-1">
+    <div class="page-hero">
+      <div class="page-hero-badge">
+        <span class="pulse-dot"></span> Architectural Reference Manual
+      </div>
+      <h1 class="page-hero-title">Developer <span class="gradient-text">Documentation</span></h1>
+      <p class="page-hero-subtitle">
+        Comprehensive guide to the ArcadeVerse platform architecture, isolated directory standards, validation tooling, in-app scoring, and client-side subsystems.
+      </p>
+      <div class="page-meta-row">
+        <span class="page-meta-item"><i data-lucide="layers"></i> Architecture 1.2.0</span>
+        <span>•</span>
+        <span class="page-meta-item"><i data-lucide="git-branch"></i> Zero-Conflict Standards</span>
+        <span>•</span>
+        <span class="page-meta-item"><i data-lucide="cpu"></i> Pure Vanilla Web Stack</span>
+      </div>
+    </div>
+
+    <!-- 2-Column Documentation Wrapper with Sticky TOC Sidebar -->
+    <div class="docs-wrapper">
+      <!-- Sticky Sidebar Navigation -->
+      <aside class="docs-sidebar" aria-label="Documentation Navigation">
+        <div class="docs-sidebar-header">
+          <span class="docs-sidebar-title">Table of Contents</span>
+        </div>
+
+        <nav>
+          <div class="docs-nav-group">
+            <span class="docs-nav-group-title">1. Getting Started</span>
+            <ul class="docs-nav-list">
+              <li><a href="#overview" class="docs-nav-link active"><i data-lucide="compass"></i> Platform Overview</a></li>
+              <li><a href="#philosophy" class="docs-nav-link"><i data-lucide="zap"></i> Design Philosophy</a></li>
+            </ul>
+          </div>
+
+          <div class="docs-nav-group">
+            <span class="docs-nav-group-title">2. Game Architecture</span>
+            <ul class="docs-nav-list">
+              <li><a href="#four-file-spec" class="docs-nav-link"><i data-lucide="file-code"></i> Mandatory 4-File Spec</a></li>
+              <li><a href="#game-json-schema" class="docs-nav-link"><i data-lucide="braces"></i> game.json Schema</a></li>
+              <li><a href="#isolation-rules" class="docs-nav-link"><i data-lucide="shield-check"></i> Isolation Standards</a></li>
+            </ul>
+          </div>
+
+          <div class="docs-nav-group">
+            <span class="docs-nav-group-title">3. Developer Workflow</span>
+            <ul class="docs-nav-list">
+              <li><a href="#git-workflow" class="docs-nav-link"><i data-lucide="git-pull-request"></i> Git & PR Workflow</a></li>
+              <li><a href="#preflight-validator" class="docs-nav-link"><i data-lucide="check-circle-2"></i> Pre-Flight Validator CLI</a></li>
+              <li><a href="#build-registry" class="docs-nav-link"><i data-lucide="refresh-cw"></i> Registry Compilation</a></li>
+            </ul>
+          </div>
+
+          <div class="docs-nav-group">
+            <span class="docs-nav-group-title">4. Platform Subsystems</span>
+            <ul class="docs-nav-list">
+              <li><a href="#sound-engine" class="docs-nav-link"><i data-lucide="volume-2"></i> Sound Synthesizer</a></li>
+              <li><a href="#a11y-hub" class="docs-nav-link"><i data-lucide="eye"></i> Accessibility Engine</a></li>
+              <li><a href="#trophy-engine" class="docs-nav-link"><i data-lucide="award"></i> Trophy Certificate Canvas</a></li>
+              <li><a href="#shortcuts-engine" class="docs-nav-link"><i data-lucide="keyboard"></i> Keyboard Shortcuts</a></li>
+              <li><a href="#recently-played" class="docs-nav-link"><i data-lucide="clock"></i> Quick Resume Engine</a></li>
+              <li><a href="#daily-quest" class="docs-nav-link"><i data-lucide="flame"></i> Daily Quest Engine</a></li>
+              <li><a href="#scoring-engine" class="docs-nav-link"><i data-lucide="cpu"></i> Scoring & Leaderboard</a></li>
+            </ul>
+          </div>
+
+          <div class="docs-nav-group">
+            <span class="docs-nav-group-title">5. Policies & Standards</span>
+            <ul class="docs-nav-list">
+              <li><a href="#code-standards" class="docs-nav-link"><i data-lucide="sliders"></i> Coding Standards</a></li>
+              <li><a href="#assets-rules" class="docs-nav-link"><i data-lucide="image"></i> Asset Licensing</a></li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Main Documentation Content -->
+      <article class="docs-content">
+
+        <!-- 1. Platform Overview -->
+        <section class="docs-section" id="overview">
+          <span class="docs-section-tag">01 / Getting Started</span>
+          <h2 class="docs-section-title">Platform Overview </h2>
+          <p class="docs-lead">
+            <strong>ArcadeVerse</strong> is an open-source community arcade station engineered for <em>Nexus Spring of Code (NSOC) – Winter Edition 2026</em>. It unifies dozens of independently built mini-games into a single modern, distraction-free player experience.
+          </p>
+          <p class="docs-paragraph">
+            The platform is constructed on modern web standards (HTML5, CSS3, Vanilla ES6+ JavaScript) with zero runtime bundler friction. Developers build their games in complete directory isolation, submit pull requests without git conflicts, and receive instant algorithmic credit on the live Hall of Fame leaderboard.
+          </p>
+
+          <div class="arch-grid-cards">
+            <div class="arch-card">
+              <div class="arch-card-icon"><i data-lucide="box"></i></div>
+              <h3 class="arch-card-title">Directory Isolation</h3>
+              <p class="arch-card-desc">Every game lives inside <code>games/&lt;game-name&gt;_&lt;your-handle&gt;/</code>, eliminating code collisions.</p>
+            </div>
+            <div class="arch-card">
+              <div class="arch-card-icon"><i data-lucide="zap"></i></div>
+              <h3 class="arch-card-title">Zero Frameworks</h3>
+              <p class="arch-card-desc">Pure HTML5, CSS3, and JavaScript. Lightning-fast 60 FPS Canvas execution without dependency bloat.</p>
+            </div>
+            <div class="arch-card">
+              <div class="arch-card-icon"><i data-lucide="trophy"></i></div>
+              <h3 class="arch-card-title">Live Gamification</h3>
+              <p class="arch-card-desc">Algorithmic in-app scoring, dual-track prestige badges, and high-resolution trophy certificates.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Design Philosophy -->
+        <section class="docs-section" id="philosophy">
+          <span class="docs-section-tag">01 / Getting Started</span>
+          <h2 class="docs-section-title">Design Philosophy </h2>
+          <p class="docs-paragraph">
+            ArcadeVerse follows four foundational tenets designed to make open source participation pleasant, educational, and sustainable:
+          </p>
+          <ul>
+            <li><strong>Zero Merge Conflict Architecture:</strong> In large-scale open-source hackathons, dozens of developers simultaneously edit shared registries, causing constant git merge conflicts. ArcadeVerse solves this by deriving the entire catalog dynamically from isolated <code>game.json</code> files.</li>
+            <li><strong>Sandboxed Runtime Execution:</strong> When a user launches a game, it is mounted inside an isolated <code>&lt;iframe&gt;</code> sandbox. This prevents global variables, CSS styling, keyboard event listeners, and audio states from contaminating other games or the host shell.</li>
+            <li><strong>Deterministic Algorithmic Evaluation:</strong> Contributor rankings, badges, and scores are computed transparently from verified repository files and live GitHub commits.</li>
+            <li><strong>Accessibility by Default:</strong> Built-in WCAG 2.1 AA toggles (reduced motion, high contrast, text scaling, focus rings) ensure the arcade is inclusive to all players.</li>
+          </ul>
+
+          <div class="docs-callout tip">
+            <div class="docs-callout-icon"><i data-lucide="lightbulb"></i></div>
+            <div>
+              <strong>Pro-Tip for Contributors:</strong> Because the platform runs natively in any browser without a build step, you can develop and test your game simply by opening <code>index.html</code> directly or launching a local server with <code>npx serve</code> or VS Code Live Server.
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Mandatory 4-File Spec -->
+        <section class="docs-section" id="four-file-spec">
+          <span class="docs-section-tag">02 / Game Architecture</span>
+          <h2 class="docs-section-title">Mandatory 4-File Game Specification </h2>
+          <p class="docs-lead">
+            Every game submitted to ArcadeVerse must reside in its own dedicated directory following the exact convention: <code>games/&lt;game-name&gt;_&lt;your-github-username&gt;/</code>.
+          </p>
+          <p class="docs-paragraph">
+            Within this directory, exactly 4 files are mandatory for pre-flight verification:
+          </p>
+
+          <div class="file-tree-box">
+            <div><span class="folder">games/neon-runner_babin/</span></div>
+            <div>├── <span class="file">index.html</span> <span class="comment"># Standalone entrypoint (canvas markup, loads only local style.css &amp; game.js)</span></div>
+            <div>├── <span class="file">style.css</span>  <span class="comment"># Dedicated stylesheets scoped to your game canvas and HUD</span></div>
+            <div>├── <span class="file">game.js</span>    <span class="comment"># Core gameplay logic, loop, state management, and input</span></div>
+            <div>└── <span class="file">game.json</span>  <span class="comment"># Machine-readable descriptor ingested by the registry builder</span></div>
+          </div>
+
+          <div class="docs-callout note">
+            <div class="docs-callout-icon"><i data-lucide="info"></i></div>
+            <div>
+              <strong>Directory Naming Rule:</strong> Use lowercase alphanumeric characters and hyphens for the game name, followed by an underscore <code>_</code> and your exact GitHub username (e.g. <code>quantum-minesweeper_babin</code>).
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. game.json Schema -->
+        <section class="docs-section" id="game-json-schema">
+          <span class="docs-section-tag">02 / Game Architecture</span>
+          <h2 class="docs-section-title">game.json Descriptor Schema </h2>
+          <p class="docs-paragraph">
+            The <code>game.json</code> file informs the platform catalog about your title, author credentials, category classification, and Lucide brand icon. Below is an authentic reference configuration:
+          </p>
+
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span class="code-block-lang">JSON</span>
+              <button class="btn-copy-code" type="button"><i data-lucide="copy"></i> Copy</button>
+            </div>
+            <pre class="code-pre"><code>{
+  "title": "Neon Beat Runner",
+  "category": "Rhythm",
+  "lucideIcon": "music",
+  "description": "Sprint across neon synthwave tracks, hopping over frequency obstacles in sync with pulsing electronic beats.",
+  "author": "Babin Bid",
+  "github": "Babin123456",
+  "role": "Arcade Developer",
+  "tags": [
+    "Rhythm",
+    "Audio",
+    "Runner",
+    "Synthwave",
+    "NSOC26"
+  ],
+  "stars": 48,
+  "featured": true,
+  "difficulty": "Intermediate"
+}</code></pre>
+          </div>
+
+          <h3 style="font-size: 1.25rem; color: var(--text-primary); margin: 1.5rem 0 0.75rem;">Supported Categories</h3>
+          <p class="docs-paragraph">
+            ArcadeVerse organizes titles into 7 primary categories: <code>Puzzle</code>, <code>Arcade</code>, <code>Retro</code>, <code>Action</code>, <code>Strategy</code>, <code>Rhythm</code>, and <code>Physics</code>. Set your category to one of these values to ensure your game appears under category filter pills.
+          </p>
+        </section>
+
+        <!-- 5. Isolation Standards -->
+        <section class="docs-section" id="isolation-rules">
+          <span class="docs-section-tag">02 / Game Architecture</span>
+          <h2 class="docs-section-title">Isolation & Sandbox Standards </h2>
+          <p class="docs-paragraph">
+            To ensure zero cross-game interference, all community games must adhere to the following isolation rules:
+          </p>
+          <ul>
+            <li><strong>Relative Linking Only:</strong> In your <code>index.html</code>, link assets using relative paths: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code> and <code>&lt;script src="game.js"&gt;&lt;/script&gt;</code>. Never use absolute paths (e.g. <code>/assets/</code> or <code>/games/</code>).</li>
+            <li><strong>Self-Contained Storage Keys:</strong> If your game stores high scores or game states in LocalStorage, prefix keys with your game ID (e.g. <code>localStorage.setItem('neon_runner_highscore', score)</code>) to avoid overwriting other games' records.</li>
+            <li><strong>Keyboard Listener Cleanup:</strong> Bind game controls within your canvas or document, and ensure the player can use standard arrow keys, WASD, or Spacebar.</li>
+            <li><strong>Responsive Canvas Scaling:</strong> Set your canvas or UI to scale cleanly within its iframe container (<code>width: 100%; height: 100%; max-width: 800px;</code>).</li>
+          </ul>
+        </section>
+
+        <!-- 6. Git & PR Workflow -->
+        <section class="docs-section" id="git-workflow">
+          <span class="docs-section-tag">03 / Developer Workflow</span>
+          <h2 class="docs-section-title">Git & Pull Request Workflow </h2>
+          <p class="docs-lead">
+            ArcadeVerse uses a standard GitHub Flow with automated verification.
+          </p>
+
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span class="code-block-lang">Bash / Terminal</span>
+              <button class="btn-copy-code" type="button"><i data-lucide="copy"></i> Copy</button>
+            </div>
+            <pre class="code-pre"><code># 1. Fork repository on GitHub, then clone locally:
+git clone https://github.com/&lt;your-username&gt;/ArcadeVerse.git
+cd ArcadeVerse
+
+# 2. Add upstream remote to keep your fork synced:
+git remote add upstream https://github.com/DebasmitaBose0/ArcadeVerse.git
+
+# 3. Create a descriptive feature branch:
+git checkout -b feat/game-cyber-pong-yourname
+
+# 4. Develop your game under games/cyber-pong_yourname/
+# (Create index.html, style.css, game.js, game.json)
+
+# 5. Run the validator test suite:
+npm test
+
+# 6. Rebuild the platform games registry:
+npm run build
+
+# 7. Commit your changes:
+git add games/ assets/js/games-registry.js
+git commit -m "feat(game): add Cyber Pong arcade mini-game"
+
+# 8. Push to your fork:
+git push -u origin feat/game-cyber-pong-yourname
+
+# 9. Open Pull Request to upstream main on GitHub!</code></pre>
+          </div>
+        </section>
+
+        <!-- 7. Pre-Flight Validator CLI -->
+        <section class="docs-section" id="preflight-validator">
+          <span class="docs-section-tag">03 / Developer Workflow</span>
+          <h2 class="docs-section-title">Pre-Flight Game Validator CLI </h2>
+          <p class="docs-paragraph">
+            The platform includes an automated pre-flight testing script: <code>scripts/validate-games.js</code>. Run it anytime via <code>npm test</code>.
+          </p>
+
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span class="code-block-lang">Terminal Output</span>
+              <button class="btn-copy-code" type="button"><i data-lucide="copy"></i> Copy</button>
+            </div>
+            <pre class="code-pre"><code>&gt; arcadeverse@1.2.0 test
+&gt; node scripts/validate-games.js
+
+========================================================
+   ArcadeVerse Pre-Flight Contributor Game Validator
+========================================================
+
+Found 40 community games to audit...
+
+  ✅ [PASS] astro-infinite-jumper_pragna7
+  ✅ [PASS] bubble-burst-arena_mistu7debnath
+  ✅ [PASS] circuit-connect_arshi
+  ✅ [PASS] cosmic-orbit-slingshot_babin
+  ...
+========================================================
+Audited 40 games: 0 Errors, 0 Warnings
+========================================================
+✨ All community games pass pre-flight verification!</code></pre>
+          </div>
+
+          <p class="docs-paragraph">
+            If validation fails, the validator will report the exact missing file, malformed JSON key, or path violation so you can rectify it before opening your pull request.
+          </p>
+        </section>
+
+        <!-- 8. Registry Compilation -->
+        <section class="docs-section" id="build-registry">
+          <span class="docs-section-tag">03 / Developer Workflow</span>
+          <h2 class="docs-section-title">Registry Build System </h2>
+          <p class="docs-paragraph">
+            Whenever a new game is created or updated, execute: <code>npm run build</code> (or <code>node scripts/build-registry.js</code>).
+          </p>
+          <p class="docs-paragraph">
+            This script traverses all <code>games/*/game.json</code> descriptors, audits git shortlog for live contributor commit counts, calculates score rankings, and compiles <code>assets/js/games-registry.js</code> automatically.
+          </p>
+        </section>
+
+        <!-- 9. Platform Subsystems -->
+        <section class="docs-section" id="sound-engine">
+          <span class="docs-section-tag">04 / Platform Subsystems</span>
+          <h2 class="docs-section-title">Procedural Web Audio Sound Engine </h2>
+          <p class="docs-paragraph">
+            Implemented in <code>assets/js/sound-engine.js</code>, this subsystem provides procedural acoustic synthesis using the browser's native <strong>Web Audio API</strong> without external sound files.
+          </p>
+          <ul>
+            <li><strong>Mechanical Pop:</strong> Dual-frequency oscillator (1750 Hz down to 75 Hz) mimicking real mechanical blue keyboard switches.</li>
+            <li><strong>Acoustic Thump:</strong> Sub-bass sine wave (160 Hz down to 40 Hz) simulating keycap bottom-out reverberation.</li>
+            <li><strong>Tactile Hover Tick:</strong> Rapid 35ms micro-pitch sine wave providing subtle UI feedback.</li>
+          </ul>
+        </section>
+
+        <!-- 10. Accessibility Hub -->
+        <section class="docs-section" id="a11y-hub">
+          <span class="docs-section-tag">04 / Platform Subsystems</span>
+          <h2 class="docs-section-title">Universal Accessibility (a11y) Hub </h2>
+          <p class="docs-paragraph">
+            Implemented in <code>assets/js/a11y-engine.js</code>, the accessibility engine applies WCAG 2.1 AA compliant class toggles directly to <code>&lt;html&gt;</code>:
+          </p>
+          <ul>
+            <li><code>.a11y-reduced-motion</code>: Overrides all animation durations and transitions to <code>0.001ms</code>.</li>
+            <li><code>.a11y-high-contrast</code>: Boosts border contrasts to <code>#ffffff</code> and deepens dark backgrounds.</li>
+            <li><code>.a11y-large-text</code>: Scales base typography up by 15% across all headings, cards, and buttons.</li>
+            <li><code>.a11y-focus-highlight</code>: Applies a 3px neon high-visibility outline to all keyboard-focused interactive elements.</li>
+          </ul>
+        </section>
+
+        <!-- 11. Trophy Certificate Engine -->
+        <section class="docs-section" id="trophy-engine">
+          <span class="docs-section-tag">04 / Platform Subsystems</span>
+          <h2 class="docs-section-title">Holographic Trophy Certificate Canvas </h2>
+          <p class="docs-paragraph">
+            Implemented in <code>assets/js/trophy-card.js</code>, this engine dynamically draws a high-resolution <code>1200x750</code> certificate on an offscreen <code>&lt;canvas&gt;</code>.
+          </p>
+          <p class="docs-paragraph">
+            It renders cyber matrix grids, luxury gradient borders, user GitHub profile avatar with CORS resolution, verified NSOC 2026 seal, Project Lead signature, and provides instant PNG download and clipboard copying.
+          </p>
+        </section>
+
+        <!-- 12. Keyboard Shortcuts -->
+        <section class="docs-section" id="shortcuts-engine">
+          <span class="docs-section-tag">04 / Platform Subsystems</span>
+          <h2 class="docs-section-title">Keyboard Shortcuts Engine </h2>
+          <p class="docs-paragraph">
+            Implemented in <code>assets/js/keyboard-shortcuts.js</code>, it injects a keyboard icon in the navbar and captures global hotkeys:
+          </p>
+          <ul>
+            <li><kbd>?</kbd> or <kbd>Shift</kbd>+<kbd>/</kbd>: Toggle Shortcuts Cheatsheet Modal</li>
+            <li><kbd>/</kbd>: Jump focus to game search bar</li>
+            <li><kbd>H</kbd> / <kbd>L</kbd> / <kbd>D</kbd> / <kbd>Q</kbd>: Rapid navigation to Home, Leaderboard, Docs, or FAQs</li>
+            <li><kbd>T</kbd>: Instant dark/light theme switch</li>
+            <li><kbd>M</kbd>: Instant audio mute/unmute toggle</li>
+            <li><kbd>Esc</kbd>: Close modal player, cheatsheet, or accessibility hub</li>
+          </ul>
+        </section>
+
+        <!-- 13. Recently Played -->
+        <section class="docs-section" id="recently-played">
+          <span class="docs-section-tag">04 / Platform Subsystems</span>
+          <h2 class="docs-section-title">Quick Resume & Recently Played Engine </h2>
+          <p class="docs-paragraph">
+            Implemented in <code>assets/js/recently-played.js</code>, this subsystem maintains a FIFO queue of recently launched titles in LocalStorage (key: <code>arcadeverse_recently_played_v2</code>). It displays recent game chips with time-ago metrics and a one-click history clearing option.
+          </p>
+        </section>
+
+        <!-- 14. Daily Quest -->
+        <section class="docs-section" id="daily-quest">
+          <span class="docs-section-tag">04 / Platform Subsystems</span>
+          <h2 class="docs-section-title">Daily Mystery Quest Engine </h2>
+          <p class="docs-paragraph">
+            Implemented in <code>assets/js/daily-challenge.js</code>, the daily quest hashes the current UTC date string (<code>YYYY-MM-DD</code>) into a deterministic integer seed. This seed picks a game from the registry and sets a target score. It tracks player streaks in LocalStorage and runs a real-time countdown to the next 00:00 UTC rotation.
+          </p>
+        </section>
+
+        <!-- 15. Scoring & Leaderboard -->
+        <section class="docs-section" id="scoring-engine">
+          <span class="docs-section-tag">04 / Platform Subsystems</span>
+          <h2 class="docs-section-title">Live GitHub Sync & Scoring Engine </h2>
+          <p class="docs-paragraph">
+            Implemented in <code>assets/js/leaderboard.js</code>, this engine queries the GitHub REST API (<code>/repos/DebasmitaBose0/ArcadeVerse/contributors</code>) with a 30-minute LocalStorage TTL cache to protect against rate limits. It computes:
+          </p>
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span class="code-block-lang">Scoring Formula</span>
+            </div>
+            <pre class="code-pre"><code>Arcade Points = (Verified Games × 100)
+              + (Mechanics Bonus × 25)
+              + (Platform Feature PRs × 50)
+              + (Bug Fix / Quality PRs × 25)
+              + (Merged Git Commits × 5)
+              + (Bonus Multipliers)</code></pre>
+          </div>
+        </section>
+
+        <!-- 16. Coding Standards -->
+        <section class="docs-section" id="code-standards">
+          <span class="docs-section-tag">05 / Policies & Standards</span>
+          <h2 class="docs-section-title">Coding Standards & Quality Rules </h2>
+          <p class="docs-paragraph">
+            To ensure code longevity, maintainability, and clean PR evaluations:
+          </p>
+          <ul>
+            <li><strong>Strict Mode:</strong> All JavaScript should run in strict mode (<code>'use strict';</code>) or modern ES modules.</li>
+            <li><strong>Zero Console Pollution:</strong> Remove all temporary <code>console.log()</code> statements before submitting PRs.</li>
+            <li><strong>Clean Event Delegation:</strong> Remove any window-level event listeners when your game resets or unmounts.</li>
+            <li><strong>No Inline Inline Styles in HTML:</strong> Keep CSS in <code>style.css</code>.</li>
+          </ul>
+        </section>
+
+        <!-- 17. Asset Rules -->
+        <section class="docs-section" id="assets-rules">
+          <span class="docs-section-tag">05 / Policies & Standards</span>
+          <h2 class="docs-section-title">Asset Licensing & Copyright </h2>
+          <p class="docs-paragraph">
+            ArcadeVerse is licensed under the <strong>MIT License</strong>. All assets integrated into community games must be compatible with MIT redistribution. Plagiarized copyrighted sprites, proprietary game ROMs, commercial soundtracks, or telemetry trackers will lead to immediate rejection of your pull request.
+          </p>
+        </section>
+
+      </article>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="logo">
+          <img src="assets/public/brand-logo.webp" alt="ArcadeVerse Logo" class="brand-logo-img" width="34" height="34">
+          <span class="logo-text">Arcade<span class="gradient-accent">Verse</span></span>
+        </div>
+        <p class="footer-desc">An open-source flagship gaming initiative for NSOC Winter Edition 2026. Designed for seamless, conflict-free manual open source contributions.</p>
+        <div class="footer-cta-wrapper" style="margin-top: 1.4rem;">
+          <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer" class="btn btn-github-highlight" title="Star and view ArcadeVerse on GitHub">
+            <span class="github-star-icon"><i data-lucide="star"></i></span>
+            <span class="github-btn-text">GitHub</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Explore Platform</h4>
+        <ul class="footer-list">
+          <li><a href="index.html"><i data-lucide="gamepad-2"></i> Explore All Games</a></li>
+          <li><a href="leaderboard.html"><i data-lucide="trophy"></i> Hall of Fame</a></li>
+          <li><a href="docs.html"><i data-lucide="file-code-2"></i> Documentation</a></li>
+          <li><a href="faqs.html"><i data-lucide="help-circle"></i> FAQs</a></li>
+          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer"><i data-lucide="book-open"></i> Contributor Guidelines</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal & Policies</h4>
+        <ul class="footer-list">
+          <li><a href="terms.html"><i data-lucide="file-text"></i> Terms of Service</a></li>
+          <li><a href="privacy.html"><i data-lucide="shield"></i> Privacy Policy</a></li>
+          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/CODE_OF_CONDUCT.md" target="_blank" rel="noopener noreferrer"><i data-lucide="heart-handshake"></i> Code of Conduct</a></li>
+          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer"><i data-lucide="lock"></i> Security Policy</a></li>
+          <li><a href="https://github.com/DebasmitaBose0/ArcadeVerse/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><i data-lucide="file-check"></i> MIT License</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Project Administration</h4>
+        <div class="admin-badge-card">
+          <span class="admin-title">Project Admin</span>
+          <strong class="admin-name">Debasmita Bose</strong>
+          <span class="admin-event">NSOC Winter Edition 2026</span>
+          <span class="status-indicator"><span class="status-dot"></span> Accepting Manual PRs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p>© 2026 ArcadeVerse • Open Source under MIT License • NSOC Winter Edition 2026</p>
+        <div class="footer-bottom-links">
+          <a href="terms.html">Terms</a>
+          <span>•</span>
+          <a href="privacy.html">Privacy</a>
+          <span>•</span>
+          <a href="docs.html">Docs</a>
+          <span>•</span>
+          <a href="faqs.html">FAQs</a>
+          <span>•</span>
+          <a href="https://github.com/DebasmitaBose0/ArcadeVerse" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Page Transition Circular Loader -->
+  <div id="page-transition-loader" class="page-loader-overlay" aria-hidden="true">
+    <div class="loader-spinner-wrap">
+      <div class="loader-spinner-circle"></div>
+      <span class="loader-text">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Back to Top Floating Button -->
+  <button class="back-to-top-btn" id="back-to-top-btn" type="button" aria-label="Back to top" title="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m18 15-6-6-6 6"/>
+    </svg>
+  </button>
+
+  <!-- Scripts -->
+  <script src="assets/js/navbar.js"></script>
+  <script src="assets/js/a11y-engine.js"></script>
+  <script src="assets/js/sound-engine.js"></script>
+  <script src="assets/js/keyboard-shortcuts.js"></script>
+  <script src="assets/js/network-detector.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Copy code snippet buttons
+      document.querySelectorAll('.btn-copy-code').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const wrapper = btn.closest('.code-block-wrapper');
+          if (!wrapper) return;
+          const pre = wrapper.querySelector('pre code');
+          if (!pre) return;
+          try {
+            await navigator.clipboard.writeText(pre.textContent);
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="check"></i> Copied!';
+            if (window.lucide) lucide.createIcons();
+            setTimeout(() => {
+              btn.innerHTML = originalHTML;
+              if (window.lucide) lucide.createIcons();
+            }, 2000);
+          } catch (_) {}
+        });
+      });
+
+      // ScrollSpy for Docs Sidebar TOC
+      const sections = document.querySelectorAll('.docs-section');
+      const navLinks = document.querySelectorAll('.docs-nav-link');
+
+      function updateActiveToc() {
+        const scrollY = window.pageYOffset;
+        const navHeight = 90;
+
+        sections.forEach(sec => {
+          const top = sec.offsetTop - navHeight - 30;
+          const height = sec.offsetHeight;
+          const id = sec.getAttribute('id');
+
+          if (scrollY >= top && scrollY < top + height) {
+            navLinks.forEach(link => {
+              const href = link.getAttribute('href');
+              if (href === '#' + id) {
+                link.classList.add('active');
+              } else {
+                link.classList.remove('active');
+              }
+            });
+          }
+        });
+      }
+
+      window.addEventListener('scroll', updateActiveToc, { passive: true });
+      updateActiveToc();
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+  </script>
+</body>
+</html>
+
