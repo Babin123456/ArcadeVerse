@@ -116,7 +116,16 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (currentCategory === "favorites") {
         matchesCategory = favs.has(item.id);
       } else {
+        if (currentCategory.toLowerCase() === "halloween") {
+        matchesCategory = (item.tags && item.tags.some(t => t.toLowerCase() === "halloween")) ||
+          item.category.toLowerCase().includes("horror") ||
+          item.title.toLowerCase().includes("halloween") ||
+          item.id.toLowerCase().includes("haunted") ||
+          item.id.toLowerCase().includes("escape-room") ||
+          item.id.toLowerCase().includes("island-survival");
+      } else {
         matchesCategory = item.category.toLowerCase() === currentCategory.toLowerCase();
+      }
       }
 
       const matchesSearch = 
@@ -497,6 +506,23 @@ document.addEventListener("DOMContentLoaded", () => {
   if (randomGameBtn) {
     randomGameBtn.addEventListener("click", launchRandomGame);
   }
+
+  // Halloween cards Play Now buttons click handler
+  document.querySelectorAll(".btn-halloween-play").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const gameId = btn.getAttribute("data-game-id");
+      if (typeof GAMES_REGISTRY !== "undefined") {
+        const game = GAMES_REGISTRY.find((g) => g.id === gameId);
+        if (game) {
+          openGameModal(game, btn);
+        }
+      }
+    });
+  });
+
+  // Global export
+  window.openGameModal = openGameModal;
 
   // Initial render
   renderGames();
