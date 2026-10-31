@@ -1179,3 +1179,64 @@
     transition: none !important;
   }
 }
+
+/* ==========================================================================
+   9. Guaranteed Light/Dark Mode High-Contrast Overrides
+   ========================================================================== */
+html[data-theme="light"] #halloween-games h2.halloween-title,
+body[data-theme="light"] #halloween-games h2.halloween-title,
+[data-theme="light"] #halloween-games .halloween-title {
+  color: #ff7700 !important;
+  text-shadow: 0 0 18px rgba(255, 119, 0, 0.85), 0 0 40px rgba(255, 60, 0, 0.55), 0 2px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
+html[data-theme="light"] #halloween-games p.halloween-subtitle,
+body[data-theme="light"] #halloween-games p.halloween-subtitle,
+[data-theme="light"] #halloween-games .halloween-subtitle {
+  color: #f1f5f9 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+html[data-theme="light"] #halloween-games .halloween-card .halloween-card-title,
+html[data-theme="light"] #halloween-games h3.halloween-card-title,
+body[data-theme="light"] #halloween-games .halloween-card .halloween-card-title,
+body[data-theme="light"] #halloween-games h3.halloween-card-title,
+[data-theme="light"] .halloween-card-title,
+[data-theme="light"] h3.halloween-card-title,
+.halloween-card-title {
+  color: #ffffff !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95), 0 0 12px rgba(255, 170, 50, 0.25) !important;
+}
+
+html[data-theme="light"] #halloween-games .halloween-card .halloween-card-desc,
+html[data-theme="light"] #halloween-games p.halloween-card-desc,
+body[data-theme="light"] #halloween-games .halloween-card .halloween-card-desc,
+body[data-theme="light"] #halloween-games p.halloween-card-desc,
+[data-theme="light"] .halloween-card-desc,
+[data-theme="light"] p.halloween-card-desc,
+.halloween-card-desc {
+  color: #e2e8f0 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95) !important;
+}
+
+html[data-theme="light"] #halloween-games .halloween-card .halloween-card-category,
+body[data-theme="light"] #halloween-games .halloween-card .halloween-card-category,
+[data-theme="light"] .halloween-card-category,
+.halloween-card-category {
+  color: #fb923c !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+html[data-theme="light"] #halloween-games .halloween-card .halloween-author-name,
+body[data-theme="light"] #halloween-games .halloween-card .halloween-author-name,
+[data-theme="light"] .halloween-author-name,
+.halloween-author-name {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme="light"] #halloween-games .halloween-card .halloween-author-name strong,
+body[data-theme="light"] #halloween-games .halloween-card .halloween-author-name strong,
+[data-theme="light"] .halloween-author-name strong,
+.halloween-author-name strong {
+  color: #ffaa32 !important;
+}

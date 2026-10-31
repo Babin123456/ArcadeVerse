@@ -215,8 +215,79 @@
     musicBoxOpened: false,
     saltFound: false,
     altarCleansed: false,
-    gameEnded: false
+    gameEnded: false,
+
+    // Dynamic Atmosphere & Animation State
+    cameraOffset: { x: 0, y: 0 },
+    dustMotes: [],
+    fireplaceSparks: [],
+    waterRipples: [],
+    porchLeaves: [],
+    waterDrops: [],
+    rainStreaks: [],
+    floatingTexts: [],
+    dripTimer: 0
   };
+
+  // Helper: Spawn floating text popup
+  function spawnFloatText(text, color = '#ffaa32', x = 500, y = 300) {
+    state.floatingTexts.push({
+      text,
+      color,
+      x: x + (Math.random() - 0.5) * 40,
+      y,
+      vy: -0.85,
+      alpha: 1.0,
+      life: 0,
+      maxLife: 75
+    });
+  }
+
+  // Helper: Initialize Dynamic Weather & Particles
+  function initAtmosphere() {
+    // Dust motes
+    state.dustMotes = [];
+    for (let i = 0; i < 40; i++) {
+      state.dustMotes.push({
+        x: Math.random() * 1000,
+        y: Math.random() * 600,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: -0.15 - Math.random() * 0.3,
+        size: 1 + Math.random() * 2.2,
+        alpha: 0.15 + Math.random() * 0.45,
+        wobble: Math.random() * Math.PI * 2
+      });
+    }
+
+    // Autumn porch leaves
+    state.porchLeaves = [];
+    const leafColors = ['#c2410c', '#ea580c', '#b45309', '#78350f', '#991b1b'];
+    for (let i = 0; i < 20; i++) {
+      state.porchLeaves.push({
+        x: Math.random() * 1000,
+        y: Math.random() * 600,
+        vx: -1.2 - Math.random() * 1.8,
+        vy: 0.6 + Math.random() * 1.0,
+        rot: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.08,
+        size: 3.5 + Math.random() * 3.5,
+        color: leafColors[Math.floor(Math.random() * leafColors.length)]
+      });
+    }
+
+    // Rain streaks
+    state.rainStreaks = [];
+    for (let i = 0; i < 55; i++) {
+      state.rainStreaks.push({
+        x: Math.random() * 1100,
+        y: Math.random() * 650,
+        speed: 12 + Math.random() * 7,
+        length: 12 + Math.random() * 14,
+        alpha: 0.15 + Math.random() * 0.3
+      });
+    }
+  }
+  initAtmosphere();
 
   // --- DOM References ---
   const canvas = document.getElementById('mansionCanvas');
@@ -747,6 +818,8 @@
   }
 
   function addItem(itemKey) {
+    const itemName = ITEM_DATA[itemKey] ? ITEM_DATA[itemKey].name : itemKey;
+    spawnFloatText('+ ' + itemName, '#38ef7d', 500, 280);
     if (!state.inventory.includes(itemKey)) {
       state.inventory.push(itemKey);
       sound.playClick();
@@ -769,6 +842,7 @@
 
   // --- Case Journal System ---
   function addJournalEntry(title, content) {
+    spawnFloatText('Clue: ' + title, '#c084fc', 500, 240);
     if (!state.journal.some(j => j.title === title)) {
       state.journal.push({ title, content });
       sound.playClick();
@@ -797,6 +871,7 @@
   }
 
   function triggerPanic() {
+    spawnFloatText('PARANORMAL ENTITY DETECTED!', '#ef4444', 500, 220);
     state.threatLevel = 'danger';
     threatBadge.textContent = 'DANGER!';
     threatBadge.className = 'threat-badge danger';
@@ -1061,50 +1136,191 @@
 
     const rm = state.currentRoom;
 
+    // --- Dynamic 2.5D Camera Parallax ---
+    const targetCamX = ((state.mousePos.x / (w || 1)) - 0.5) * -22;
+    const targetCamY = ((state.mousePos.y / (h || 1)) - 0.5) * -16;
+    state.cameraOffset.x += (targetCamX - state.cameraOffset.x) * 0.08;
+    state.cameraOffset.y += (targetCamY - state.cameraOffset.y) * 0.08;
+
+    // Shift hotspots overlay slightly for authentic 2.5D depth
+    if (hotspotsLayer) {
+      hotspotsLayer.style.transform = `translate(${state.cameraOffset.x * 0.35}px, ${state.cameraOffset.y * 0.35}px)`;
+    }
+
     ctx.save();
+    // Apply camera parallax
+    ctx.translate(state.cameraOffset.x, state.cameraOffset.y);
     ctx.scale(w / VW, h / VH);
 
-    // Room-specific rendering
+    // ==========================================
+    // ROOM 1: PORCH (Victorian Exterior Nocturne)
+    // ==========================================
     if (rm === 'porch') {
       const skyGrad = ctx.createLinearGradient(0, 0, 0, VH);
-      skyGrad.addColorStop(0, '#040208');
+      skyGrad.addColorStop(0, '#020105');
+      skyGrad.addColorStop(0.65, '#0a0514');
       skyGrad.addColorStop(1, '#170c24');
       ctx.fillStyle = skyGrad;
-      ctx.fillRect(0, 0, VW, VH);
+      ctx.fillRect(-40, -40, VW + 80, VH + 80);
 
-      // Distant Dead Trees
+      // Distant Gnarled Trees with wind sway
       ctx.fillStyle = '#08040d';
-      for (let i = 40; i < VW; i += 120) {
-        ctx.fillRect(i, 80, 16, 260);
+      for (let i = 20; i < VW + 40; i += 110) {
+        const sway = Math.sin(time * 0.0018 + i) * 6;
+        ctx.beginPath();
+        ctx.moveTo(i, 360);
+        ctx.lineTo(i + 8 + sway, 90);
+        ctx.lineTo(i + 24 + sway, 360);
+        ctx.fill();
+        // Spindly branches
+        ctx.strokeStyle = '#08040d';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(i + 12 + sway, 200);
+        ctx.lineTo(i - 20 + sway * 1.5, 140);
+        ctx.moveTo(i + 16 + sway, 160);
+        ctx.lineTo(i + 40 + sway * 1.5, 120);
+        ctx.stroke();
       }
 
       // Mansion Stone Facade
       ctx.fillStyle = '#1c102b';
-      ctx.fillRect(200, 40, 560, 500);
+      ctx.fillRect(180, 30, 600, 520);
+      ctx.strokeStyle = '#2d1845';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(180, 30, 600, 520);
+
+      // Second floor gothic arched windows with candlelight flicker
+      for (let wx = 240; wx <= 660; wx += 140) {
+        const winGlow = ctx.createRadialGradient(wx + 30, 110, 5, wx + 30, 110, 45);
+        winGlow.addColorStop(0, 'rgba(255, 170, 50, 0.45)');
+        winGlow.addColorStop(1, 'rgba(255, 170, 50, 0)');
+        ctx.fillStyle = winGlow;
+        ctx.fillRect(wx, 60, 60, 100);
+
+        ctx.fillStyle = '#0a0512';
+        ctx.beginPath();
+        ctx.roundRect(wx, 70, 60, 90, [30, 30, 0, 0]);
+        ctx.fill();
+        ctx.strokeStyle = '#3a2052';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Candle flicker inside window
+        const cFlicker = Math.sin(time * 0.008 + wx) * 3;
+        ctx.fillStyle = '#ffaa32';
+        ctx.beginPath();
+        ctx.arc(wx + 30, 120 + cFlicker, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
       // Gothic Entrance Arch
       ctx.fillStyle = '#0d0617';
       ctx.beginPath();
-      ctx.roundRect(410, 120, 140, 260, [70, 70, 0, 0]);
+      ctx.roundRect(400, 120, 160, 270, [80, 80, 0, 0]);
       ctx.fill();
-      ctx.strokeStyle = '#3d1f56';
-      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#4c266b';
+      ctx.lineWidth = 5;
       ctx.stroke();
+
+      // Front Door Oak Panels
+      ctx.fillStyle = '#1e1124';
+      ctx.fillRect(415, 170, 130, 220);
+      ctx.strokeStyle = '#351c40';
+      ctx.strokeRect(425, 185, 48, 85);
+      ctx.strokeRect(487, 185, 48, 85);
+      ctx.strokeRect(425, 290, 48, 85);
+      ctx.strokeRect(487, 290, 48, 85);
+
+      // Brass door knocker / handle
+      ctx.fillStyle = '#d4af37';
+      ctx.beginPath();
+      ctx.arc(445, 280, 4, 0, Math.PI * 2);
+      ctx.fill();
 
       // Stone Porch Steps
       ctx.fillStyle = '#2a163d';
-      ctx.fillRect(160, 440, 640, 100);
+      ctx.fillRect(150, 430, 660, 110);
       ctx.fillStyle = '#190a29';
-      ctx.fillRect(180, 475, 600, 65);
+      ctx.fillRect(170, 470, 620, 70);
 
       // Porch Doormat
       ctx.fillStyle = state.porchKeyFound ? '#3d2516' : '#2d3319';
       ctx.fillRect(435, 485, 90, 45);
+      ctx.strokeStyle = '#5a3d24';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(435, 485, 90, 45);
 
+      // Porch Lanterns (Left and Right of Door)
+      const drawPorchLantern = (lx, ly) => {
+        const lf = Math.sin(time * 0.01 + lx) * 3;
+        const lGlow = ctx.createRadialGradient(lx, ly, 4, lx, ly, 50);
+        lGlow.addColorStop(0, 'rgba(255, 170, 50, 0.55)');
+        lGlow.addColorStop(1, 'rgba(255, 170, 50, 0)');
+        ctx.fillStyle = lGlow;
+        ctx.fillRect(lx - 50, ly - 50, 100, 100);
+
+        ctx.fillStyle = '#ffaa32';
+        ctx.beginPath();
+        ctx.arc(lx, ly + lf * 0.5, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#372045';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(lx - 8, ly - 14, 16, 26);
+      };
+      drawPorchLantern(360, 240);
+      drawPorchLantern(600, 240);
+
+      // Dynamic Angled Rain Streaks
+      ctx.strokeStyle = 'rgba(160, 190, 230, 0.28)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      state.rainStreaks.forEach(r => {
+        r.y += r.speed;
+        r.x -= r.speed * 0.35;
+        if (r.y > VH + 20) {
+          r.y = -20;
+          r.x = Math.random() * (VW + 300);
+        }
+        ctx.moveTo(r.x, r.y);
+        ctx.lineTo(r.x - r.length * 0.35, r.y + r.length);
+      });
+      ctx.stroke();
+
+      // Dynamic Autumn Leaves Tumbling in Wind
+      state.porchLeaves.forEach(leaf => {
+        leaf.x += leaf.vx;
+        leaf.y += leaf.vy + Math.sin(time * 0.003 + leaf.x) * 0.5;
+        leaf.rot += leaf.rotSpeed;
+        if (leaf.x < -30 || leaf.y > VH + 30) {
+          leaf.x = VW + 20;
+          leaf.y = Math.random() * (VH - 100);
+        }
+        ctx.save();
+        ctx.translate(leaf.x, leaf.y);
+        ctx.rotate(leaf.rot);
+        ctx.fillStyle = leaf.color;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, leaf.size, leaf.size * 0.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+    // ==========================================
+    // ROOM 2: FOYER (Grand Staircase & Clock)
+    // ==========================================
     } else if (rm === 'foyer') {
       ctx.fillStyle = '#12081f';
-      ctx.fillRect(0, 0, VW, VH);
+      ctx.fillRect(-20, -20, VW + 40, VH + 40);
 
+      // Victorian damask wall stripes
+      for (let x = 0; x < VW; x += 50) {
+        ctx.fillStyle = (x / 50) % 2 === 0 ? '#180a29' : '#12071f';
+        ctx.fillRect(x, 0, 50, 320);
+      }
+
+      // Checkerboard marble floor with perspective
       for (let y = 320; y < VH; y += 35) {
         for (let x = 0; x < VW; x += 60) {
           ctx.fillStyle = (Math.floor(x / 60) + Math.floor(y / 35)) % 2 === 0 ? '#1f0d36' : '#0b0414';
@@ -1112,6 +1328,7 @@
         }
       }
 
+      // Grand Staircase
       ctx.fillStyle = '#2d1347';
       ctx.beginPath();
       ctx.moveTo(380, 120);
@@ -1121,6 +1338,7 @@
       ctx.closePath();
       ctx.fill();
 
+      // Crimson Carpet Runner
       ctx.fillStyle = '#7a1c2f';
       ctx.beginPath();
       ctx.moveTo(440, 120);
@@ -1130,147 +1348,600 @@
       ctx.closePath();
       ctx.fill();
 
-      ctx.fillStyle = '#3a1f18';
-      ctx.fillRect(300, 160, 50, 160);
+      // Stair Bannisters & Balusters
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(380, 110);
+      ctx.lineTo(300, 310);
+      ctx.moveTo(580, 110);
+      ctx.lineTo(660, 310);
+      ctx.stroke();
 
+      // --- Animated Grandfather Clock (Left Wall) ---
+      const clockX = 325, clockY = 240;
+      // Wood Case
+      ctx.fillStyle = '#2e150a';
+      ctx.fillRect(clockX - 25, clockY - 110, 50, 220);
+      ctx.strokeStyle = '#4a2614';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(clockX - 25, clockY - 110, 50, 220);
+
+      // Dial Face
+      ctx.fillStyle = '#fef3c7';
+      ctx.beginPath();
+      ctx.arc(clockX, clockY - 75, 18, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#1e1124';
+      ctx.stroke();
+
+      // Clock Hands (Minute & Hour)
+      ctx.strokeStyle = '#111';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(clockX, clockY - 75);
+      ctx.lineTo(clockX + 8, clockY - 78);
+      ctx.moveTo(clockX, clockY - 75);
+      ctx.lineTo(clockX - 5, clockY - 84);
+      ctx.stroke();
+
+      // Pendulum Window & Swinging Brass Pendulum
+      ctx.fillStyle = '#110804';
+      ctx.fillRect(clockX - 16, clockY - 40, 32, 95);
+      ctx.strokeStyle = '#4a2614';
+      ctx.strokeRect(clockX - 16, clockY - 40, 32, 95);
+
+      const pendAngle = Math.sin(time * 0.003) * 0.22;
+      ctx.save();
+      ctx.translate(clockX, clockY - 35);
+      ctx.rotate(pendAngle);
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, 70);
+      ctx.stroke();
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.arc(0, 70, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // --- Swaying Crystal Chandelier (Center Ceiling) ---
+      const chanSway = Math.sin(time * 0.0015) * 6;
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(480, 0);
+      ctx.lineTo(480 + chanSway, 70);
+      ctx.stroke();
+
+      // Chandelier Body
+      ctx.fillStyle = '#d4af37';
+      ctx.beginPath();
+      ctx.arc(480 + chanSway, 72, 28, 0, Math.PI);
+      ctx.fill();
+
+      // Chandelier Candle Flames
+      for (let ci = -2; ci <= 2; ci++) {
+        const cx = 480 + chanSway + ci * 14;
+        const cy = 60;
+        const cGlow = ctx.createRadialGradient(cx, cy, 2, cx, cy, 25);
+        cGlow.addColorStop(0, 'rgba(255, 180, 50, 0.45)');
+        cGlow.addColorStop(1, 'rgba(255, 180, 50, 0)');
+        ctx.fillStyle = cGlow;
+        ctx.fillRect(cx - 25, cy - 25, 50, 50);
+
+        const cf = Math.sin(time * 0.01 + ci * 2) * 2;
+        ctx.fillStyle = '#ffaa32';
+        ctx.beginPath();
+        ctx.arc(cx, cy + cf * 0.5, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+    // ==========================================
+    // ROOM 3: PARLOR (Roaring Fireplace & Vinyl)
+    // ==========================================
     } else if (rm === 'parlor') {
       ctx.fillStyle = '#1f0c18';
-      ctx.fillRect(0, 0, VW, VH);
+      ctx.fillRect(-20, -20, VW + 40, VH + 40);
 
+      // Victorian striped wallpaper
       ctx.fillStyle = '#160812';
       for (let x = 0; x < VW; x += 40) {
         ctx.fillRect(x, 0, 20, 340);
       }
 
+      // Parquet floor
       ctx.fillStyle = '#22110c';
       ctx.fillRect(0, 340, VW, VH - 340);
 
+      // --- Roaring Brick Fireplace (Center) ---
+      const fpx = 480, fpy = 270;
+      // Fireplace Mantle & Hearth
       ctx.fillStyle = '#1c171e';
-      ctx.fillRect(400, 190, 160, 150);
+      ctx.fillRect(fpx - 90, fpy - 90, 180, 170);
+      ctx.strokeStyle = '#382e3c';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(fpx - 90, fpy - 90, 180, 170);
+
+      // Hearth Cavity
       ctx.fillStyle = '#0a080c';
-      ctx.fillRect(430, 240, 100, 100);
+      ctx.fillRect(fpx - 60, fpy - 30, 120, 110);
 
-      ctx.fillStyle = '#ff5500';
-      ctx.beginPath();
-      ctx.arc(480, 325, 12, 0, Math.PI * 2);
-      ctx.fill();
+      // Ambient Fire Glow
+      const fireGlow = ctx.createRadialGradient(fpx, fpy + 45, 10, fpx, fpy + 45, 130);
+      fireGlow.addColorStop(0, 'rgba(255, 120, 20, 0.55)');
+      fireGlow.addColorStop(0.6, 'rgba(255, 60, 0, 0.2)');
+      fireGlow.addColorStop(1, 'rgba(255, 40, 0, 0)');
+      ctx.fillStyle = fireGlow;
+      ctx.fillRect(fpx - 140, fpy - 50, 280, 220);
 
+      // Burning Wood Logs
+      ctx.fillStyle = '#3a1e12';
+      ctx.fillRect(fpx - 45, fpy + 62, 90, 14);
+      ctx.fillStyle = '#5c2c15';
+      ctx.fillRect(fpx - 35, fpy + 54, 70, 10);
+
+      // Multi-layer Animated Procedural Flame Tongues
+      for (let f = 0; f < 8; f++) {
+        const fx = fpx - 36 + f * 10;
+        const fh = 26 + Math.sin(time * 0.015 + f * 1.6) * 14 + Math.cos(time * 0.025 + f) * 8;
+        const grad = ctx.createLinearGradient(fx, fpy + 65, fx, fpy + 65 - fh);
+        grad.addColorStop(0, '#ff3300');
+        grad.addColorStop(0.5, '#ff9900');
+        grad.addColorStop(1, '#ffee55');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.moveTo(fx - 7, fpy + 65);
+        ctx.quadraticCurveTo(fx + Math.sin(time * 0.02 + f) * 5, fpy + 65 - fh * 0.6, fx, fpy + 65 - fh);
+        ctx.quadraticCurveTo(fx + 7, fpy + 65 - fh * 0.5, fx + 7, fpy + 65);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // Fireplace Rising Sparks
+      if (Math.random() < 0.35) {
+        state.fireplaceSparks.push({
+          x: fpx + (Math.random() - 0.5) * 50,
+          y: fpy + 50,
+          vx: (Math.random() - 0.5) * 1.2,
+          vy: -1.5 - Math.random() * 2.2,
+          size: 1.2 + Math.random() * 2,
+          life: 0,
+          maxLife: 35 + Math.random() * 20
+        });
+      }
+
+      ctx.fillStyle = '#ffd700';
+      for (let i = state.fireplaceSparks.length - 1; i >= 0; i--) {
+        const sp = state.fireplaceSparks[i];
+        sp.x += sp.vx;
+        sp.y += sp.vy;
+        sp.life++;
+        if (sp.life > sp.maxLife) {
+          state.fireplaceSparks.splice(i, 1);
+          continue;
+        }
+        ctx.globalAlpha = 1 - (sp.life / sp.maxLife);
+        ctx.beginPath();
+        ctx.arc(sp.x, sp.y, sp.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1.0;
+
+      // Cursed Portrait with Shifting Eyes above Fireplace
       ctx.fillStyle = '#e5a93b';
       ctx.strokeRect(430, 80, 100, 100);
       ctx.fillStyle = '#0f0814';
       ctx.fillRect(432, 82, 96, 96);
+
       const eyeDx = Math.sin(time * 0.003) * 6;
       const eyeDy = Math.cos(time * 0.002) * 4;
       ctx.fillStyle = '#ff2a55';
-      ctx.fillRect(465 + eyeDx, 120 + eyeDy, 3, 3);
-      ctx.fillRect(495 + eyeDx, 120 + eyeDy, 3, 3);
+      ctx.beginPath();
+      ctx.arc(465 + eyeDx, 122 + eyeDy, 3, 0, Math.PI * 2);
+      ctx.arc(495 + eyeDx, 122 + eyeDy, 3, 0, Math.PI * 2);
+      ctx.fill();
 
+      // Vintage Gramophone (Right Side)
+      const gx = 740, gy = 330;
+      ctx.fillStyle = '#422115';
+      ctx.fillRect(gx - 35, gy - 25, 70, 45);
+
+      // Spinning Vinyl Record
+      const spinAngle = (time * 0.004) % (Math.PI * 2);
+      ctx.save();
+      ctx.translate(gx, gy - 26);
+      ctx.scale(1, 0.45);
+      ctx.rotate(spinAngle);
+      ctx.fillStyle = '#111';
+      ctx.beginPath();
+      ctx.arc(0, 0, 26, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#444';
+      ctx.stroke();
+      ctx.fillStyle = '#d4af37';
+      ctx.beginPath();
+      ctx.arc(0, 0, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Brass Morning Glory Horn
+      ctx.fillStyle = '#d4af37';
+      ctx.beginPath();
+      ctx.moveTo(gx - 10, gy - 26);
+      ctx.lineTo(gx - 45, gy - 75);
+      ctx.lineTo(gx - 75, gy - 55);
+      ctx.closePath();
+      ctx.fill();
+
+      // Musical resonance waves if playing
+      if (state.gramophonePlayed) {
+        ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)';
+        ctx.lineWidth = 1.5;
+        const rWave = (time * 0.04) % 35;
+        ctx.beginPath();
+        ctx.arc(gx - 60, gy - 65, rWave, -Math.PI * 0.7, -Math.PI * 0.2);
+        ctx.stroke();
+      }
+
+    // ==========================================
+    // ROOM 4: LIBRARY (Grimoires & Stained Glass)
+    // ==========================================
     } else if (rm === 'library') {
       ctx.fillStyle = '#130d1e';
-      ctx.fillRect(0, 0, VW, VH);
+      ctx.fillRect(-20, -20, VW + 40, VH + 40);
 
+      // Floorboards
+      ctx.fillStyle = '#1c100a';
+      ctx.fillRect(0, 360, VW, VH - 360);
+
+      // Massive Bookshelves
       ctx.fillStyle = '#261633';
-      ctx.fillRect(80, 60, 800, 300);
-      for (let y = 120; y <= 360; y += 60) {
+      ctx.fillRect(70, 50, 840, 310);
+      for (let y = 110; y <= 350; y += 60) {
         ctx.fillStyle = '#3a214d';
-        ctx.fillRect(80, y, 800, 8);
-        for (let bx = 90; bx < 870; bx += 22) {
-          ctx.fillStyle = ['#5c1a29', '#194254', '#2b4d24', '#664319'][Math.floor(bx / 18) % 4];
+        ctx.fillRect(70, y, 840, 8);
+        for (let bx = 80; bx < 890; bx += 22) {
+          ctx.fillStyle = ['#5c1a29', '#194254', '#2b4d24', '#664319', '#4a154b'][Math.floor(bx / 18) % 5];
           ctx.fillRect(bx, y - 36, 14, 36);
         }
       }
 
-      ctx.fillStyle = '#211208';
-      ctx.fillRect(480, 290, 240, 110);
+      // Arched Victorian Window (Right side)
+      const wx = 760, wy = 70;
+      ctx.fillStyle = '#06030a';
+      ctx.beginPath();
+      ctx.roundRect(wx, wy, 110, 170, [55, 55, 0, 0]);
+      ctx.fill();
+      ctx.strokeStyle = '#4a2b66';
+      ctx.lineWidth = 3;
+      ctx.stroke();
 
-    } else if (rm === 'kitchen') {
-      ctx.fillStyle = '#0e0b12';
-      ctx.fillRect(0, 0, VW, VH);
+      // Moonbeam through window
+      const libBeam = ctx.createLinearGradient(wx + 55, wy, 450, 480);
+      libBeam.addColorStop(0, 'rgba(180, 220, 255, 0.22)');
+      libBeam.addColorStop(1, 'rgba(180, 220, 255, 0)');
+      ctx.fillStyle = libBeam;
+      ctx.beginPath();
+      ctx.moveTo(wx, wy + 40);
+      ctx.lineTo(wx + 110, wy + 40);
+      ctx.lineTo(580, 480);
+      ctx.lineTo(380, 480);
+      ctx.closePath();
+      ctx.fill();
 
-      for (let y = 340; y < VH; y += 30) {
-        for (let x = 0; x < VW; x += 40) {
-          ctx.fillStyle = (Math.floor(x / 40) + Math.floor(y / 30)) % 2 === 0 ? '#1b1622' : '#0e0a13';
-          ctx.fillRect(x, y, 40, 30);
-        }
+      // Rain droplets on window glass
+      ctx.strokeStyle = 'rgba(200, 220, 255, 0.4)';
+      ctx.lineWidth = 1;
+      for (let d = 0; d < 7; d++) {
+        const dy = wy + 40 + ((time * 0.05 + d * 30) % 110);
+        ctx.beginPath();
+        ctx.moveTo(wx + 20 + d * 12, dy);
+        ctx.lineTo(wx + 20 + d * 12, dy + 6);
+        ctx.stroke();
       }
 
-      ctx.fillStyle = '#241a33';
-      ctx.fillRect(180, 270, 180, 110);
+      // Reading Desk
+      ctx.fillStyle = '#211208';
+      ctx.fillRect(440, 310, 220, 110);
+      ctx.fillStyle = '#331a0b';
+      ctx.fillRect(430, 300, 240, 14);
 
-      ctx.fillStyle = '#1d152b';
-      ctx.fillRect(480, 140, 120, 200);
+      // Desk Green Banker's Lamp
+      ctx.fillStyle = '#166534';
+      ctx.beginPath();
+      ctx.roundRect(520, 275, 45, 14, 5);
+      ctx.fill();
+      const lampGlow = ctx.createRadialGradient(542, 285, 4, 542, 330, 65);
+      lampGlow.addColorStop(0, 'rgba(187, 247, 208, 0.45)');
+      lampGlow.addColorStop(1, 'rgba(187, 247, 208, 0)');
+      ctx.fillStyle = lampGlow;
+      ctx.fillRect(480, 280, 125, 90);
 
+    // ==========================================
+    // ROOM 5: BEDROOM (Four-Poster & Specter)
+    // ==========================================
     } else if (rm === 'bedroom') {
       ctx.fillStyle = '#1a0b1c';
-      ctx.fillRect(0, 0, VW, VH);
+      ctx.fillRect(-20, -20, VW + 40, VH + 40);
 
+      // Floorboards
+      ctx.fillStyle = '#180a14';
+      ctx.fillRect(0, 340, VW, VH - 340);
+
+      // Four-poster Bed with velvet canopy
       ctx.fillStyle = '#2d1430';
-      ctx.fillRect(440, 200, 220, 160);
-      ctx.fillStyle = '#4d1e54';
-      ctx.fillRect(440, 120, 12, 240);
-      ctx.fillRect(648, 120, 12, 240);
+      ctx.fillRect(430, 210, 240, 150);
+      // Velvet Headboard & Curtains
+      ctx.fillStyle = '#4a1532';
+      ctx.fillRect(430, 140, 240, 70);
+      ctx.fillStyle = '#3a1228';
+      ctx.fillRect(440, 230, 220, 120);
 
+      // Bedposts
+      ctx.fillStyle = '#58245f';
+      ctx.fillRect(430, 110, 14, 250);
+      ctx.fillRect(656, 110, 14, 250);
+
+      // Vanity Dresser & Oval Mirror (Left)
       ctx.fillStyle = '#261219';
-      ctx.fillRect(180, 260, 140, 110);
+      ctx.fillRect(170, 270, 150, 100);
       ctx.strokeStyle = '#e5a93b';
-      ctx.strokeRect(210, 160, 80, 95);
+      ctx.lineWidth = 3;
+      ctx.strokeRect(200, 160, 90, 110);
 
+      // Mirror reflection with shifting ghostly apparition
+      const mirrorGlow = ctx.createRadialGradient(245, 215, 5, 245, 215, 50);
+      mirrorGlow.addColorStop(0, 'rgba(147, 197, 253, 0.35)');
+      mirrorGlow.addColorStop(1, 'rgba(15, 8, 20, 0.95)');
+      ctx.fillStyle = mirrorGlow;
+      ctx.fillRect(202, 162, 86, 106);
+
+      // Ghostly specter in mirror
+      const ghostPulse = 0.2 + Math.sin(time * 0.0025) * 0.18;
+      ctx.fillStyle = `rgba(216, 180, 254, ${ghostPulse})`;
+      ctx.beginPath();
+      ctx.arc(245, 200, 16, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(230, 212);
+      ctx.lineTo(260, 212);
+      ctx.lineTo(255, 245);
+      ctx.lineTo(235, 245);
+      ctx.closePath();
+      ctx.fill();
+
+      // Swirling cold floor mist
+      ctx.fillStyle = 'rgba(192, 132, 252, 0.08)';
+      for (let mx = 0; mx < VW; mx += 100) {
+        const my = 420 + Math.sin(time * 0.002 + mx * 0.02) * 20;
+        ctx.beginPath();
+        ctx.ellipse(mx, my, 80, 25, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+    // ==========================================
+    // ROOM 6: BASEMENT / CRYPT (Water Ripples & Altar)
+    // ==========================================
     } else if (rm === 'basement') {
       ctx.fillStyle = '#060408';
-      ctx.fillRect(0, 0, VW, VH);
+      ctx.fillRect(-20, -20, VW + 40, VH + 40);
 
+      // Rough stone masonry
       ctx.strokeStyle = 'rgba(78, 41, 116, 0.2)';
-      for (let y = 50; y < VH; y += 50) {
+      ctx.lineWidth = 2;
+      for (let y = 50; y < VH; y += 45) {
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(VW, y);
         ctx.stroke();
       }
 
-      ctx.strokeStyle = state.altarCleansed ? '#00f2fe' : '#ff2a55';
+      // Overhead rusty dripping pipe
+      ctx.fillStyle = '#261a15';
+      ctx.fillRect(0, 45, VW, 12);
+      ctx.strokeStyle = '#3d2b24';
+      ctx.strokeRect(0, 45, VW, 12);
+
+      // Water Drips from Pipe into Stone Floor Puddle
+      state.dripTimer = (state.dripTimer || 0) + 1;
+      if (state.dripTimer > 75) {
+        state.dripTimer = 0;
+        state.waterDrops.push({ x: 260 + (Math.random() - 0.5) * 15, y: 57, vy: 4.5 });
+      }
+
+      // Update & render falling drops
+      ctx.fillStyle = '#67e8f9';
+      for (let i = state.waterDrops.length - 1; i >= 0; i--) {
+        const d = state.waterDrops[i];
+        d.y += d.vy;
+        d.vy += 0.25;
+        ctx.beginPath();
+        ctx.ellipse(d.x, d.y, 2, 4.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        if (d.y > 480) {
+          state.waterRipples.push({ x: d.x, y: 480, r: 2, maxR: 28, alpha: 0.8 });
+          state.waterDrops.splice(i, 1);
+        }
+      }
+
+      // Floor puddle with expanding concentric ripples
+      const pudGlow = ctx.createRadialGradient(260, 480, 5, 260, 480, 50);
+      pudGlow.addColorStop(0, 'rgba(6, 182, 212, 0.25)');
+      pudGlow.addColorStop(1, 'rgba(6, 182, 212, 0)');
+      ctx.fillStyle = pudGlow;
+      ctx.fillRect(200, 440, 120, 80);
+
+      for (let i = state.waterRipples.length - 1; i >= 0; i--) {
+        const rp = state.waterRipples[i];
+        rp.r += 0.55;
+        rp.alpha -= 0.016;
+        if (rp.alpha <= 0) {
+          state.waterRipples.splice(i, 1);
+          continue;
+        }
+        ctx.strokeStyle = `rgba(103, 232, 249, ${rp.alpha})`;
+        ctx.lineWidth = 1.4;
+        ctx.save();
+        ctx.translate(rp.x, rp.y);
+        ctx.scale(1, 0.35);
+        ctx.beginPath();
+        ctx.arc(0, 0, rp.r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // --- Occult Pentagram Ritual Altar (Center) ---
+      const altX = 500, altY = 380;
+      const altColor = state.altarCleansed ? '#38ef7d' : '#ef4444';
+      const altGlow = state.altarCleansed ? 'rgba(56, 239, 125, ' : 'rgba(239, 68, 68, ';
+      const runePulse = 0.55 + Math.sin(time * 0.004) * 0.25;
+
+      // Altar Circle Aura
+      const aGrad = ctx.createRadialGradient(altX, altY, 20, altX, altY, 110);
+      aGrad.addColorStop(0, altGlow + (0.35 * runePulse) + ')');
+      aGrad.addColorStop(1, altGlow + '0)');
+      ctx.fillStyle = aGrad;
+      ctx.fillRect(altX - 120, altY - 80, 240, 160);
+
+      // Floor Sigil Rings & Pentagram
+      ctx.save();
+      ctx.translate(altX, altY);
+      ctx.scale(1, 0.45);
+      ctx.strokeStyle = altColor;
       ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.arc(480, 360, 60, 0, Math.PI * 2);
+      ctx.arc(0, 0, 75, 0, Math.PI * 2);
       ctx.stroke();
 
-      const bulbSwing = Math.sin(time * 0.002) * 30;
-      ctx.strokeStyle = '#555';
+      // Inner Inscribed 5-point Star
       ctx.beginPath();
-      ctx.moveTo(480, 0);
-      ctx.lineTo(480 + bulbSwing, 120);
+      for (let p = 0; p < 5; p++) {
+        const a1 = (p * 4 * Math.PI) / 5 - Math.PI / 2;
+        const px = Math.cos(a1) * 75;
+        const py = Math.sin(a1) * 75;
+        if (p === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
       ctx.stroke();
+      ctx.restore();
+
+      // Hanging Inspection Bulb with dynamic swing
+      const bulbSwing = Math.sin(time * 0.0022) * 32;
+      ctx.strokeStyle = '#555';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(500, 0);
+      ctx.lineTo(500 + bulbSwing, 120);
+      ctx.stroke();
+
       ctx.fillStyle = state.breakerEngaged ? '#ffeeaa' : '#554422';
       ctx.beginPath();
-      ctx.arc(480 + bulbSwing, 125, 8, 0, Math.PI * 2);
+      ctx.arc(500 + bulbSwing, 125, 9, 0, Math.PI * 2);
       ctx.fill();
+
+      if (state.breakerEngaged) {
+        const bGlow = ctx.createRadialGradient(500 + bulbSwing, 125, 5, 500 + bulbSwing, 125, 80);
+        bGlow.addColorStop(0, 'rgba(255, 238, 170, 0.4)');
+        bGlow.addColorStop(1, 'rgba(255, 238, 170, 0)');
+        ctx.fillStyle = bGlow;
+        ctx.fillRect(500 + bulbSwing - 80, 45, 160, 160);
+      }
     }
 
     ctx.restore();
 
-    // Dynamic Flashlight Vignette Cone (Screen Coordinates)
+    // ==========================================
+    // DYNAMIC FLASHLIGHT, DUST MOTES & ATMOSPHERE
+    // ==========================================
+    const flX = state.mousePos.x;
+    const flY = state.mousePos.y;
+
     if (state.flashlightOn && state.battery > 0) {
-      const flX = state.mousePos.x;
-      const flY = state.mousePos.y;
-      const radius = Math.min(w, h) * 0.45 + 50;
-      const flGrad = ctx.createRadialGradient(flX, flY, 30, flX, flY, radius);
-      flGrad.addColorStop(0, 'rgba(255, 235, 180, 0.08)');
-      flGrad.addColorStop(0.5, 'rgba(0, 0, 0, 0.65)');
-      flGrad.addColorStop(1, 'rgba(0, 0, 0, 0.96)');
+      // Voltage jitter when battery is low or panic is active
+      const isLowBattery = state.battery < 30;
+      const isFlickering = (isLowBattery && Math.random() < 0.12) || (state.threatLevel === 'danger' && Math.random() < 0.2);
+      const beamAlpha = isFlickering ? 0.02 : 0.08;
+
+      const radius = Math.min(w, h) * 0.42 + 40;
+      const flGrad = ctx.createRadialGradient(flX, flY, 25, flX, flY, radius);
+      flGrad.addColorStop(0, `rgba(255, 240, 190, ${beamAlpha})`);
+      flGrad.addColorStop(0.5, 'rgba(0, 0, 0, 0.68)');
+      flGrad.addColorStop(1, 'rgba(0, 0, 0, 0.97)');
       ctx.fillStyle = flGrad;
       ctx.fillRect(0, 0, w, h);
+
+      // Render floating dust motes caught in beam cone
+      state.dustMotes.forEach(m => {
+        m.x += m.vx;
+        m.y += m.vy;
+        m.wobble += 0.02;
+        m.x += Math.sin(m.wobble) * 0.2;
+        if (m.y < 0) {
+          m.y = h;
+          m.x = Math.random() * w;
+        }
+        if (m.x < 0) m.x = w;
+        if (m.x > w) m.x = 0;
+
+        const dist = Math.hypot(m.x - flX, m.y - flY);
+        if (dist < radius * 0.85) {
+          const intensity = (1 - dist / (radius * 0.85)) * m.alpha;
+          ctx.fillStyle = `rgba(255, 245, 210, ${intensity})`;
+          ctx.beginPath();
+          ctx.arc(m.x, m.y, m.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
     } else {
-      const darkGrad = ctx.createRadialGradient(w / 2, h / 2, 40, w / 2, h / 2, Math.min(w, h) * 0.55);
-      darkGrad.addColorStop(0, 'rgba(0,0,0,0.85)');
-      darkGrad.addColorStop(1, 'rgba(0,0,0,0.98)');
+      // Total darkness with minimal eye dilation
+      const darkGrad = ctx.createRadialGradient(w / 2, h / 2, 30, w / 2, h / 2, Math.min(w, h) * 0.52);
+      darkGrad.addColorStop(0, 'rgba(0,0,0,0.88)');
+      darkGrad.addColorStop(1, 'rgba(0,0,0,0.99)');
       ctx.fillStyle = darkGrad;
       ctx.fillRect(0, 0, w, h);
+    }
+
+    // Low Sanity Heartbeat Blood Vignette
+    if (state.sanity < 50) {
+      const pulseSpeed = state.threatLevel === 'danger' ? 0.012 : 0.006;
+      const pulse = 0.5 + Math.sin(time * pulseSpeed) * 0.45;
+      const bloodAlpha = ((50 - state.sanity) / 50) * 0.45 * pulse;
+      const redVig = ctx.createRadialGradient(w / 2, h / 2, w * 0.3, w / 2, h / 2, w * 0.7);
+      redVig.addColorStop(0, 'rgba(239, 68, 68, 0)');
+      redVig.addColorStop(1, `rgba(185, 28, 28, ${bloodAlpha})`);
+      ctx.fillStyle = redVig;
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    // Render Floating Text Notifications
+    for (let i = state.floatingTexts.length - 1; i >= 0; i--) {
+      const ft = state.floatingTexts[i];
+      ft.y += ft.vy;
+      ft.life++;
+      ft.alpha = 1 - (ft.life / ft.maxLife);
+      if (ft.life >= ft.maxLife) {
+        state.floatingTexts.splice(i, 1);
+        continue;
+      }
+      ctx.save();
+      ctx.font = 'bold 15px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = `rgba(0, 0, 0, ${ft.alpha * 0.75})`;
+      ctx.fillText(ft.text, ft.x + 1, ft.y + 1);
+      ctx.fillStyle = ft.color;
+      ctx.globalAlpha = ft.alpha;
+      ctx.fillText(ft.text, ft.x, ft.y);
+      ctx.restore();
     }
 
     requestAnimationFrame(renderRoom);
   }
   requestAnimationFrame(renderRoom);
 
-  
   // --- Keyboard Shortcuts for Flashlight [F] and Hide [H] ---
   window.addEventListener('keydown', e => {
     const k = e.key.toLowerCase();
