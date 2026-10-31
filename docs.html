@@ -696,20 +696,7 @@ Audited 40 games: 0 Errors, 0 Warnings
             }
           });
 
-          // Auto-scroll strictly within the sidebar container (never scroll main window)
-          if (activeLink && sidebar) {
-            const linkTop = activeLink.offsetTop;
-            const linkHeight = activeLink.offsetHeight;
-            const sidebarScroll = sidebar.scrollTop;
-            const sidebarHeight = sidebar.clientHeight;
-
-            if (linkTop < sidebarScroll || (linkTop + linkHeight) > (sidebarScroll + sidebarHeight)) {
-              sidebar.scrollTo({
-                top: Math.max(0, linkTop - Math.floor(sidebarHeight / 2) + Math.floor(linkHeight / 2)),
-                behavior: 'smooth'
-              });
-            }
-          }
+          // Sidebar flows naturally with the page layout; update active navigation states seamlessly
         }
       }
 
