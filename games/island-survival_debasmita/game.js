@@ -1,6 +1,6 @@
 /**
- * Cursed Island: Halloween Survival
- * Pure Vanilla JavaScript & HTML5 Canvas Top-Down Survival
+ * Island Survival: Lost Beyond the Shore
+ * High-Fidelity Fullscreen 2D Sandbox Survival Adventure
  * Author: Debasmita Bose (DebasmitaBose0)
  */
 
@@ -24,50 +24,50 @@
       }
     }
 
-    playShoot() {
-      if (this.muted) return;
-      this.init();
-      if (!this.ctx) return;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(480, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(120, this.ctx.currentTime + 0.12);
-      gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.12);
-    }
-
-    playHit() {
-      if (this.muted) return;
-      this.init();
-      if (!this.ctx) return;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(140, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 0.18);
-      gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.18);
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.18);
-    }
-
-    playPickup() {
+    playChop() {
       if (this.muted) return;
       this.init();
       if (!this.ctx) return;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(783.99, this.ctx.currentTime + 0.14);
+      osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(60, this.ctx.currentTime + 0.09);
+      gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.09);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.09);
+    }
+
+    playMine() {
+      if (this.muted) return;
+      this.init();
+      if (!this.ctx) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(750, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.08);
       gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.08);
+    }
+
+    playEat() {
+      if (this.muted) return;
+      this.init();
+      if (!this.ctx) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(320, this.ctx.currentTime);
+      osc.frequency.linearRampToValueAtTime(450, this.ctx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.14);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -75,49 +75,54 @@
       osc.stop(this.ctx.currentTime + 0.14);
     }
 
-    playFuel() {
+    playCraft() {
       if (this.muted) return;
       this.init();
       if (!this.ctx) return;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(220, this.ctx.currentTime);
-      osc.frequency.linearRampToValueAtTime(550, this.ctx.currentTime + 0.3);
-      gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.35);
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.35);
+      [0, 0.11].forEach(delay => {
+        setTimeout(() => {
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(540, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(180, this.ctx.currentTime + 0.07);
+          gain.gain.setValueAtTime(0.14, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.07);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.07);
+        }, delay * 1000);
+      });
     }
 
-    playBloodMoonAlarm() {
+    playAttack() {
       if (this.muted) return;
       this.init();
       if (!this.ctx) return;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(110, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.8);
-      gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.8);
+      osc.frequency.setValueAtTime(340, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(90, this.ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.8);
+      osc.stop(this.ctx.currentTime + 0.15);
     }
 
-    playGameOver() {
+    playThunder() {
       if (this.muted) return;
       this.init();
       if (!this.ctx) return;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(180, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(45, this.ctx.currentTime + 1.2);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(90, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(25, this.ctx.currentTime + 1.2);
       gain.gain.setValueAtTime(0.35, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 1.2);
       osc.connect(gain);
@@ -125,84 +130,392 @@
       osc.start();
       osc.stop(this.ctx.currentTime + 1.2);
     }
+
+    playVictory() {
+      if (this.muted) return;
+      this.init();
+      if (!this.ctx) return;
+      const notes = [392, 523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((freq, idx) => {
+        setTimeout(() => {
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.22, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.45);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.45);
+        }, idx * 160);
+      });
+    }
   }
 
   const sound = new SoundEngine();
 
-  // --- Canvas & DOM Setup ---
-  const canvas = document.getElementById('gameCanvas');
+  // --- Canvas Setup & Fullscreen Resizing ---
+  const canvas = document.getElementById('islandCanvas');
   const ctx = canvas.getContext('2d');
 
-  const hpBarFill = document.getElementById('hpBarFill');
-  const bonfireBarFill = document.getElementById('bonfireBarFill');
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  // DOM Elements
+  const healthBar = document.getElementById('healthBar');
+  const hungerBar = document.getElementById('hungerBar');
+  const thirstBar = document.getElementById('thirstBar');
+  const energyBar = document.getElementById('energyBar');
+
+  const dayText = document.getElementById('dayText');
+  const timeText = document.getElementById('timeText');
+  const weatherText = document.getElementById('weatherText');
+  const weatherFx = document.getElementById('weatherFx');
+  const lightningFx = document.getElementById('lightningFx');
+  const eventToast = document.getElementById('eventToast');
+  const questText = document.getElementById('questText');
+
   const resWood = document.getElementById('resWood');
-  const resEmbers = document.getElementById('resEmbers');
-  const waveCount = document.getElementById('waveCount');
-  const cyclePhaseText = document.getElementById('cyclePhaseText');
-  const cycleBarFill = document.getElementById('cycleBarFill');
+  const resStone = document.getElementById('resStone');
+  const resVines = document.getElementById('resVines');
+  const resLeaves = document.getElementById('resLeaves');
+  const resFood = document.getElementById('resFood');
+  const equippedTool = document.getElementById('equippedTool');
 
   // Modals
+  const modalCrafting = document.getElementById('modalCrafting');
+  const craftingGrid = document.getElementById('craftingGrid');
   const modalHelp = document.getElementById('modalHelp');
-  const modalGameOver = document.getElementById('modalGameOver');
-  const statNights = document.getElementById('statNights');
-  const statSlain = document.getElementById('statSlain');
+  const modalEnding = document.getElementById('modalEnding');
+  const endingTitle = document.getElementById('endingTitle');
+  const endingDesc = document.getElementById('endingDesc');
+  const statDays = document.getElementById('statDays');
+  const statCrafted = document.getElementById('statCrafted');
   const statScore = document.getElementById('statScore');
-  const goTitle = document.getElementById('goTitle');
-  const goMessage = document.getElementById('goMessage');
 
-  // Island Dimensions & Center Bonfire
-  const ISLAND_CX = 480;
-  const ISLAND_CY = 290;
-  const ISLAND_RX = 420;
-  const ISLAND_RY = 240;
+  // --- World Constants ---
+  const WORLD_W = 1600;
+  const WORLD_H = 1100;
+  const ISLAND_CX = WORLD_W / 2;
+  const ISLAND_CY = WORLD_H / 2;
+  const ISLAND_RX = 680;
+  const ISLAND_RY = 440;
 
   // --- Game State ---
   const state = {
     running: true,
-    nightNumber: 1,
-    cycleTimer: 0,
-    cyclePhase: 'twilight', // 'twilight' or 'bloodmoon'
-    phaseDuration: 28, // seconds per phase
-    score: 0,
-    slainCount: 0,
+    day: 1,
+    timeOfDay: 0.35, // 0=dawn, 0.25=noon, 0.75=dusk, 0.85-1=night
+    timeSpeed: 0.015,
+    weather: 'clear',
+    weatherTimer: 0,
+    statsCrafted: 0,
+    statsScore: 0,
+
+    camera: { x: 0, y: 0 },
 
     player: {
-      x: ISLAND_CX,
-      y: ISLAND_CY + 80,
+      x: ISLAND_CX - 150,
+      y: ISLAND_CY + 280,
       vx: 0,
       vy: 0,
-      speed: 3.4,
+      angle: 0,
+      speed: 3.5,
       radius: 16,
-      hp: 100,
-      maxHp: 100,
-      angle: -Math.PI / 2,
+      walkStep: 0,
+      swinging: 0,
+      health: 100,
+      hunger: 85,
+      thirst: 75,
+      energy: 90,
+      equippedTool: 'Bare Hands',
+      hasPlaneBattery: false,
+      targetX: null,
+      targetY: null,
+      interactTarget: null
+    },
+
+    inventory: {
       wood: 4,
-      embers: 2
+      stone: 3,
+      vines: 1,
+      leaves: 5,
+      coconuts: 2,
+      berries: 2,
+      fish: 0,
+      meat: 0,
+      cookedFood: 0,
+      waterBottles: 0
     },
 
-    bonfire: {
-      x: ISLAND_CX,
-      y: ISLAND_CY,
-      fuel: 100, // 0 to 100
-      maxFuel: 100,
-      radius: 22
+    trees: [],
+    rocks: [],
+    bushes: [],
+    spring: { x: ISLAND_CX + 20, y: ISLAND_CY - 60, radius: 36 },
+    planeWreck: { x: ISLAND_CX - 280, y: ISLAND_CY + 320, searched: false },
+    radioCliff: { x: ISLAND_CX + 440, y: ISLAND_CY - 220 },
+
+    structures: {
+      campfires: [],
+      shelters: [],
+      rafts: [],
+      beacons: []
     },
 
-    resources: [], // { type: 'wood'|'ember', x, y, radius }
-    projectiles: [], // { x, y, vx, vy, radius, life }
-    enemies: [], // { type, x, y, hp, maxHp, speed, radius, attackCooldown }
-    wards: [], // { x, y, radius, damage, life }
-    particles: [], // visual sparks
+    wildlife: [],
+    fireflies: [],
+    particles: [],
 
-    keys: {
-      up: false,
-      down: false,
-      left: false,
-      right: false
-    }
+    keys: { up: false, down: false, left: false, right: false }
   };
 
-  // --- Input Listeners ---
+  // --- World Generation ---
+  function initWorld() {
+    // Palm & Vine Trees
+    for (let i = 0; i < 28; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const d = 80 + Math.random() * (ISLAND_RY - 100);
+      const tx = ISLAND_CX + Math.cos(a) * (d * (ISLAND_RX / ISLAND_RY));
+      const ty = ISLAND_CY + Math.sin(a) * d;
+      state.trees.push({
+        x: tx,
+        y: ty,
+        hp: 3,
+        maxHp: 3,
+        type: Math.random() > 0.35 ? 'palm' : 'vine'
+      });
+    }
+
+    // Granite Boulders
+    for (let i = 0; i < 18; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const d = 100 + Math.random() * (ISLAND_RY - 110);
+      const rx = ISLAND_CX + Math.cos(a) * (d * (ISLAND_RX / ISLAND_RY));
+      const ry = ISLAND_CY + Math.sin(a) * d;
+      state.rocks.push({
+        x: rx,
+        y: ry,
+        hp: 4,
+        maxHp: 4
+      });
+    }
+
+    // Berry Bushes
+    for (let i = 0; i < 14; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const d = 60 + Math.random() * (ISLAND_RY - 120);
+      const bx = ISLAND_CX + Math.cos(a) * (d * (ISLAND_RX / ISLAND_RY));
+      const by = ISLAND_CY + Math.sin(a) * d;
+      state.bushes.push({
+        x: bx,
+        y: by,
+        hasBerries: true
+      });
+    }
+
+    // Coastal Crabs
+    for (let i = 0; i < 8; i++) {
+      state.wildlife.push({
+        type: 'crab',
+        x: ISLAND_CX - 300 + Math.random() * 600,
+        y: ISLAND_CY + 320 + Math.random() * 60,
+        vx: 0,
+        vy: 0,
+        hp: 15,
+        maxHp: 15,
+        speed: 0.9,
+        aggro: false
+      });
+    }
+
+    // Wild Boars
+    for (let i = 0; i < 4; i++) {
+      state.wildlife.push({
+        type: 'boar',
+        x: ISLAND_CX - 150 + Math.random() * 300,
+        y: ISLAND_CY - 100 + Math.random() * 200,
+        vx: 0,
+        vy: 0,
+        hp: 50,
+        maxHp: 50,
+        speed: 1.8,
+        aggro: false
+      });
+    }
+
+    // Fireflies
+    for (let i = 0; i < 30; i++) {
+      state.fireflies.push({
+        x: ISLAND_CX + (Math.random() - 0.5) * ISLAND_RX * 1.5,
+        y: ISLAND_CY + (Math.random() - 0.5) * ISLAND_RY * 1.5,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        pulse: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  initWorld();
+
+  // --- Crafting Recipes System ---
+  const CRAFTING_RECIPES = [
+    {
+      id: 'stone_axe',
+      title: 'Stone Axe',
+      desc: 'Chops trees in 2 hits instead of 6. Yields extra wood.',
+      cost: { wood: 2, stone: 3, vines: 1 },
+      onCraft: () => {
+        state.player.equippedTool = 'Stone Axe';
+        showToast('Crafted Stone Axe! Equipped.');
+      }
+    },
+    {
+      id: 'wooden_spear',
+      title: 'Wooden Spear',
+      desc: 'Formidable weapon for hunting wild boars and catching fish.',
+      cost: { wood: 3, stone: 1, vines: 2 },
+      onCraft: () => {
+        state.player.equippedTool = 'Wooden Spear';
+        showToast('Crafted Wooden Spear! Equipped.');
+      }
+    },
+    {
+      id: 'fishing_rod',
+      title: 'Fishing Rod',
+      desc: 'Catch fresh ocean and lagoon fish for high protein.',
+      cost: { wood: 2, vines: 2 },
+      onCraft: () => {
+        state.player.equippedTool = 'Fishing Rod';
+        showToast('Crafted Fishing Rod! Fish at water shores.');
+      }
+    },
+    {
+      id: 'water_container',
+      title: 'Water Container',
+      desc: 'Carries clean freshwater gathered from the spring.',
+      cost: { coconuts: 2, vines: 2 },
+      onCraft: () => {
+        state.inventory.waterBottles += 2;
+        showToast('Crafted 2 Clean Water Flasks!');
+      }
+    },
+    {
+      id: 'bandages',
+      title: 'Herbal Bandages',
+      desc: 'Treat wounds and restore 35 Health instantly.',
+      cost: { leaves: 4, vines: 1 },
+      onCraft: () => {
+        state.player.health = Math.min(100, state.player.health + 35);
+        showToast('Applied Herbal Bandages (+35 Health)!');
+      }
+    },
+    {
+      id: 'campfire',
+      title: 'Campfire',
+      desc: 'Places a campfire. Cooks raw food and warms you at night.',
+      cost: { wood: 4, stone: 3 },
+      onCraft: () => {
+        state.structures.campfires.push({
+          x: state.player.x,
+          y: state.player.y,
+          fuel: 100
+        });
+        showToast('Built Campfire! Standing near it restores energy.');
+      }
+    },
+    {
+      id: 'basic_shelter',
+      title: 'Basic Shelter',
+      desc: 'A palm lean-to. Protects from tropical storms and allows sleep.',
+      cost: { wood: 10, leaves: 8 },
+      onCraft: () => {
+        state.structures.shelters.push({
+          x: state.player.x,
+          y: state.player.y
+        });
+        showToast('Constructed Shelter! Press [Rest] to sleep through night.');
+      }
+    },
+    {
+      id: 'escape_raft',
+      title: 'Seaworthy Raft (Escape)',
+      desc: 'Construct a sturdy raft on the beach to sail to civilization.',
+      cost: { wood: 20, vines: 8, leaves: 6, coconuts: 4 },
+      onCraft: () => {
+        state.structures.rafts.push({
+          x: ISLAND_CX,
+          y: ISLAND_CY + 400,
+          ready: true
+        });
+        showToast('Built Seaworthy Escape Raft on the beach! Interact to escape!');
+      }
+    },
+    {
+      id: 'radio_beacon',
+      title: 'SOS Radio Beacon (Escape)',
+      desc: 'Erect an emergency radio antenna on the high cliff ridge.',
+      cost: { wood: 15, stone: 5, vines: 4 },
+      onCraft: () => {
+        if (!state.player.hasPlaneBattery) {
+          showToast('You still need the Aircraft Radio Battery from the plane crash!');
+          return;
+        }
+        state.structures.beacons.push({
+          x: state.radioCliff.x,
+          y: state.radioCliff.y,
+          active: true
+        });
+        showToast('Erected SOS Beacon! Emergency distress signals sent!');
+      }
+    }
+  ];
+
+  function renderCraftingManual() {
+    craftingGrid.innerHTML = '';
+    CRAFTING_RECIPES.forEach(rec => {
+      const card = document.createElement('div');
+      card.className = 'craft-card';
+
+      let canCraft = true;
+      const costParts = [];
+      for (const [res, amt] of Object.entries(rec.cost)) {
+        const available = state.inventory[res] || 0;
+        costParts.push(`${amt} ${res.toUpperCase()} (${available})`);
+        if (available < amt) canCraft = false;
+      }
+
+      card.innerHTML = `
+        <div>
+          <span class="craft-card-title">${rec.title}</span>
+          <p class="craft-recipe" style="margin: 6px 0;">${rec.desc}</p>
+          <p class="craft-recipe"><strong>Cost:</strong> ${costParts.join(', ')}</p>
+        </div>
+        <button class="btn-craft-item" ${canCraft ? '' : 'disabled'}>Craft</button>
+      `;
+
+      card.querySelector('.btn-craft-item').addEventListener('click', () => {
+        if (!canCraft) return;
+        sound.playCraft();
+        for (const [res, amt] of Object.entries(rec.cost)) {
+          state.inventory[res] -= amt;
+        }
+        state.statsCrafted++;
+        state.statsScore += 80;
+        rec.onCraft();
+        updateUI();
+        renderCraftingManual();
+      });
+
+      craftingGrid.appendChild(card);
+    });
+  }
+
+  // --- Keyboard & Input Listeners ---
   window.addEventListener('keydown', e => {
     sound.init();
     const k = e.key.toLowerCase();
@@ -210,16 +523,14 @@
     if (k === 's' || k === 'arrowdown') state.keys.down = true;
     if (k === 'a' || k === 'arrowleft') state.keys.left = true;
     if (k === 'd' || k === 'arrowright') state.keys.right = true;
+
     if (e.code === 'Space') {
       e.preventDefault();
-      fireProjectile();
+      performAction();
     }
-    if (k === 'f') {
-      feedBonfire();
-    }
-    if (k === 'e') {
-      placeWard();
-    }
+    if (k === 'c') openCraftingModal();
+    if (k === 'e') consumeFoodOrWater();
+    if (k === 'r') restOrSleep();
   });
 
   window.addEventListener('keyup', e => {
@@ -230,197 +541,474 @@
     if (k === 'd' || k === 'arrowright') state.keys.right = false;
   });
 
-  // Mobile Touch Controls
+  
+  // --- Canvas Click & Tap to Move / Interact ---
+  canvas.addEventListener('click', e => {
+    sound.init();
+    if (!state.running) return;
+    const rect = canvas.getBoundingClientRect();
+    const clickScreenX = e.clientX - rect.left;
+    const clickScreenY = e.clientY - rect.top;
+    const worldX = clickScreenX + state.camera.x;
+    const worldY = clickScreenY + state.camera.y;
+
+    const p = state.player;
+    let targetObj = null;
+
+    // Check if clicked an interactive object
+    for (const t of state.trees) {
+      if (Math.hypot(worldX - t.x, worldY - t.y) < 40) { targetObj = t; break; }
+    }
+    if (!targetObj) {
+      for (const r of state.rocks) {
+        if (Math.hypot(worldX - r.x, worldY - r.y) < 35) { targetObj = r; break; }
+      }
+    }
+    if (!targetObj) {
+      for (const b of state.bushes) {
+        if (Math.hypot(worldX - b.x, worldY - b.y) < 30) { targetObj = b; break; }
+      }
+    }
+    if (!targetObj && Math.hypot(worldX - state.spring.x, worldY - state.spring.y) < 45) {
+      targetObj = state.spring;
+    }
+    if (!targetObj && Math.hypot(worldX - state.planeWreck.x, worldY - state.planeWreck.y) < 55) {
+      targetObj = state.planeWreck;
+    }
+
+    if (targetObj) {
+      p.targetX = targetObj.x;
+      p.targetY = targetObj.y;
+      p.interactTarget = targetObj;
+    } else {
+      p.targetX = worldX;
+      p.targetY = worldY;
+      p.interactTarget = null;
+    }
+  });
+
+  // Touch Controls
   const bindTouch = (id, onDown, onUp) => {
     const el = document.getElementById(id);
     if (!el) return;
-    const start = e => {
+    const down = e => {
       e.preventDefault();
       sound.init();
       onDown();
     };
-    const end = e => {
+    const up = e => {
       e.preventDefault();
       if (onUp) onUp();
     };
-    el.addEventListener('touchstart', start, { passive: false });
-    el.addEventListener('touchend', end, { passive: false });
-    el.addEventListener('mousedown', start);
-    el.addEventListener('mouseup', end);
+    el.addEventListener('touchstart', down, { passive: false });
+    el.addEventListener('touchend', up, { passive: false });
+    el.addEventListener('mousedown', down);
+    el.addEventListener('mouseup', up);
   };
 
   bindTouch('btnUp', () => { state.keys.up = true; }, () => { state.keys.up = false; });
   bindTouch('btnDown', () => { state.keys.down = true; }, () => { state.keys.down = false; });
   bindTouch('btnLeft', () => { state.keys.left = true; }, () => { state.keys.left = false; });
   bindTouch('btnRight', () => { state.keys.right = true; }, () => { state.keys.right = false; });
-  bindTouch('btnAttack', () => { fireProjectile(); });
-  bindTouch('btnFuel', () => { feedBonfire(); });
-  bindTouch('btnWard', () => { placeWard(); });
+  bindTouch('touchAction', () => performAction());
 
-  // Action: Fire projectile (Jack-o'-Lantern Fireball)
-  function fireProjectile() {
-    if (!state.running) return;
-    const p = state.player;
-    sound.playShoot();
-    const speed = 7.5;
-    state.projectiles.push({
-      x: p.x + Math.cos(p.angle) * p.radius,
-      y: p.y + Math.sin(p.angle) * p.radius,
-      vx: Math.cos(p.angle) * speed,
-      vy: Math.sin(p.angle) * speed,
-      radius: 7,
-      life: 65
-    });
+  document.getElementById('btnOpenCrafting').addEventListener('click', openCraftingModal);
+  document.getElementById('btnEatDrink').addEventListener('click', consumeFoodOrWater);
+  document.getElementById('btnRest').addEventListener('click', restOrSleep);
+
+  function openCraftingModal() {
+    sound.playCraft();
+    renderCraftingManual();
+    modalCrafting.classList.add('open');
   }
 
-  // Action: Feed Bonfire
-  function feedBonfire() {
+  // --- Perform Action (Harvest / Attack / Interact) ---
+  function performAction() {
     if (!state.running) return;
     const p = state.player;
-    const distToBonfire = Math.hypot(p.x - state.bonfire.x, p.y - state.bonfire.y);
-    if (distToBonfire <= 110) {
-      if (p.wood >= 2) {
-        p.wood -= 2;
-        state.bonfire.fuel = Math.min(100, state.bonfire.fuel + 35);
-        state.score += 50;
-        sound.playFuel();
-        createSparkParticles(state.bonfire.x, state.bonfire.y, 25, '#ff9900');
+    p.swinging = 12; // trigger swing animation
+    p.energy = Math.max(0, p.energy - 3);
+
+    let acted = false;
+
+    // 1. Check Trees
+    for (let i = state.trees.length - 1; i >= 0; i--) {
+      const t = state.trees[i];
+      if (Math.hypot(p.x - t.x, p.y - t.y) < p.radius + 50) {
+        sound.playChop();
+        const damage = p.equippedTool === 'Stone Axe' ? 2 : 1;
+        t.hp -= damage;
+        createParticles(t.x, t.y, 8, '#8d6e63');
+        if (t.hp <= 0) {
+          const woodYield = p.equippedTool === 'Stone Axe' ? 4 : 2;
+          state.inventory.wood += woodYield;
+          state.inventory.leaves += 2;
+          if (t.type === 'palm' && Math.random() < 0.7) {
+            state.inventory.coconuts += 1;
+            showToast(`Chopped tree! Obtained ${woodYield} Wood, 2 Leaves, and a Coconut.`);
+          } else if (t.type === 'vine') {
+            state.inventory.vines += 2;
+            showToast(`Chopped vine tree! Obtained ${woodYield} Wood and 2 Jungle Vines.`);
+          } else {
+            showToast(`Chopped tree! Obtained ${woodYield} Wood.`);
+          }
+          state.trees.splice(i, 1);
+        } else {
+          showToast(`Chopping tree... (${t.hp}/${t.maxHp})`);
+        }
+        acted = true;
+        break;
       }
     }
+
+    // 2. Check Rocks
+    if (!acted) {
+      for (let i = state.rocks.length - 1; i >= 0; i--) {
+        const r = state.rocks[i];
+        if (Math.hypot(p.x - r.x, p.y - r.y) < p.radius + 50) {
+          sound.playMine();
+          r.hp -= 1;
+          createParticles(r.x, r.y, 8, '#b0bec5');
+          if (r.hp <= 0) {
+            state.inventory.stone += 3;
+            showToast('Mined granite rock! Obtained 3 Stones.');
+            state.rocks.splice(i, 1);
+          } else {
+            showToast(`Mining rock... (${r.hp}/${r.maxHp})`);
+          }
+          acted = true;
+          break;
+        }
+      }
+    }
+
+    // 3. Check Berry Bushes
+    if (!acted) {
+      for (let i = 0; i < state.bushes.length; i++) {
+        const b = state.bushes[i];
+        if (Math.hypot(p.x - b.x, p.y - b.y) < p.radius + 45) {
+          if (b.hasBerries) {
+            b.hasBerries = false;
+            sound.playEat();
+            state.inventory.berries += 3;
+            showToast('Gathered 3 Ripe Jungle Berries!');
+          } else {
+            showToast('This bush has no ripe berries right now.');
+          }
+          acted = true;
+          break;
+        }
+      }
+    }
+
+    // 4. Check Freshwater Spring
+    if (!acted) {
+      if (Math.hypot(p.x - state.spring.x, p.y - state.spring.y) < p.radius + state.spring.radius + 10) {
+        sound.playEat();
+        p.thirst = 100;
+        showToast('Drank fresh mountain spring water. Thirst 100%!');
+        acted = true;
+      }
+    }
+
+    // 5. Check Plane Crash Wreckage
+    if (!acted) {
+      const pw = state.planeWreck;
+      if (Math.hypot(p.x - pw.x, p.y - pw.y) < p.radius + 40) {
+        if (!pw.searched) {
+          pw.searched = true;
+          p.hasPlaneBattery = true;
+          state.inventory.coconuts += 2;
+          state.inventory.cookedFood += 2;
+          sound.playCraft();
+          showToast('Salvaged Aircraft Emergency Battery & Canned Rations from the wreckage!');
+        } else {
+          showToast('The aircraft fuselage is stripped of useful parts.');
+        }
+        acted = true;
+      }
+    }
+
+    // 6. Check Raft Escape
+    if (!acted) {
+      for (const r of state.structures.rafts) {
+        if (Math.hypot(p.x - r.x, p.y - r.y) < 55) {
+          triggerEnding('raft');
+          acted = true;
+          break;
+        }
+      }
+    }
+
+    // 7. Check SOS Beacon Escape
+    if (!acted) {
+      for (const b of state.structures.beacons) {
+        if (Math.hypot(p.x - b.x, p.y - b.y) < 55) {
+          triggerEnding('helicopter');
+          acted = true;
+          break;
+        }
+      }
+    }
+
+    // 8. Wildlife Attack / Hunt
+    if (!acted) {
+      for (let i = state.wildlife.length - 1; i >= 0; i--) {
+        const w = state.wildlife[i];
+        if (Math.hypot(p.x - w.x, p.y - w.y) < p.radius + 32) {
+          sound.playAttack();
+          const damage = p.equippedTool === 'Wooden Spear' ? 30 : 12;
+          w.hp -= damage;
+          w.aggro = true;
+          createParticles(w.x, w.y, 10, '#ff5252');
+          if (w.hp <= 0) {
+            if (w.type === 'boar') {
+              state.inventory.meat += 2;
+              showToast('Defeated wild boar! Obtained 2 Raw Meat.');
+            } else {
+              state.inventory.meat += 1;
+              showToast('Caught coastal crab! Obtained 1 Crab Meat.');
+            }
+            state.wildlife.splice(i, 1);
+          } else {
+            showToast(`Attacked ${w.type}! (${w.hp}/${w.maxHp} HP)`);
+          }
+          acted = true;
+          break;
+        }
+      }
+    }
+
+    // 9. Fishing in Ocean
+    if (!acted && p.equippedTool === 'Fishing Rod') {
+      const normX = (p.x - ISLAND_CX) / (ISLAND_RX - 20);
+      const normY = (p.y - ISLAND_CY) / (ISLAND_RY - 20);
+      if (normX * normX + normY * normY > 0.85) {
+        sound.playMine();
+        if (Math.random() < 0.65) {
+          state.inventory.fish += 1;
+          showToast('Reeled in a fresh ocean fish!');
+        } else {
+          showToast('The fish nibbled the bait and slipped away.');
+        }
+        acted = true;
+      }
+    }
+
+    updateUI();
   }
 
-  // Action: Place Ward
-  function placeWard() {
-    if (!state.running) return;
+  // --- Consume Food or Water ---
+  function consumeFoodOrWater() {
     const p = state.player;
-    if (p.embers >= 2) {
-      p.embers -= 2;
-      sound.playPickup();
-      state.wards.push({
-        x: p.x,
-        y: p.y,
-        radius: 20,
-        damage: 80,
-        life: 600
-      });
-      createSparkParticles(p.x, p.y, 15, '#00f2fe');
+    sound.init();
+
+    if (state.inventory.cookedFood > 0) {
+      state.inventory.cookedFood--;
+      p.hunger = Math.min(100, p.hunger + 40);
+      p.health = Math.min(100, p.health + 20);
+      sound.playEat();
+      showToast('Ate Cooked Meal (+40 Hunger, +20 Health)!');
+    } else if (state.inventory.coconuts > 0) {
+      state.inventory.coconuts--;
+      p.hunger = Math.min(100, p.hunger + 15);
+      p.thirst = Math.min(100, p.thirst + 25);
+      sound.playEat();
+      showToast('Cracked fresh coconut (+15 Hunger, +25 Thirst)!');
+    } else if (state.inventory.berries > 0) {
+      state.inventory.berries--;
+      p.hunger = Math.min(100, p.hunger + 12);
+      p.thirst = Math.min(100, p.thirst + 8);
+      sound.playEat();
+      showToast('Ate juicy berries (+12 Hunger, +8 Thirst)!');
+    } else if (state.inventory.fish > 0 || state.inventory.meat > 0) {
+      let nearCampfire = false;
+      for (const cf of state.structures.campfires) {
+        if (Math.hypot(p.x - cf.x, p.y - cf.y) < 70) {
+          nearCampfire = true;
+          break;
+        }
+      }
+      if (nearCampfire) {
+        if (state.inventory.meat > 0) {
+          state.inventory.meat--;
+          state.inventory.cookedFood++;
+          sound.playChop();
+          showToast('Cooked raw meat over campfire! (+1 Cooked Meal)');
+        } else {
+          state.inventory.fish--;
+          state.inventory.cookedFood++;
+          sound.playChop();
+          showToast('Grilled fresh fish over campfire! (+1 Cooked Meal)');
+        }
+      } else {
+        if (state.inventory.fish > 0) state.inventory.fish--;
+        else state.inventory.meat--;
+        p.hunger = Math.min(100, p.hunger + 18);
+        p.health = Math.max(0, p.health - 8);
+        sound.playEat();
+        showToast('Ate raw meat without cooking (-8 Health)! Build a campfire to cook safely.');
+      }
+    } else if (state.inventory.waterBottles > 0) {
+      state.inventory.waterBottles--;
+      p.thirst = 100;
+      sound.playEat();
+      showToast('Drank from clean water flask. Thirst 100%!');
+    } else {
+      showToast('No food or water in inventory! Forage coconuts or berries.');
     }
+    updateUI();
   }
 
-  // Spawn random resource
-  function spawnResource() {
-    if (state.resources.length >= 16) return;
-    // Generate inside island bounds
-    const angle = Math.random() * Math.PI * 2;
-    const dist = 60 + Math.random() * (ISLAND_RY - 80);
-    const rx = ISLAND_CX + Math.cos(angle) * (dist * (ISLAND_RX / ISLAND_RY));
-    const ry = ISLAND_CY + Math.sin(angle) * dist;
+  // --- Rest or Sleep ---
+  function restOrSleep() {
+    const p = state.player;
+    sound.init();
 
-    const type = Math.random() > 0.4 ? 'wood' : 'ember';
-    state.resources.push({
-      type,
-      x: rx,
-      y: ry,
-      radius: 12
-    });
-  }
-
-  // Spawn monster
-  function spawnMonster() {
-    if (!state.running || state.cyclePhase !== 'bloodmoon') return;
-    // Spawn from perimeter water
-    const angle = Math.random() * Math.PI * 2;
-    const mx = ISLAND_CX + Math.cos(angle) * (ISLAND_RX + 20);
-    const my = ISLAND_CY + Math.sin(angle) * (ISLAND_RY + 20);
-
-    const typeRoll = Math.random();
-    let type = 'scarecrow';
-    let hp = 40 + state.nightNumber * 10;
-    let speed = 1.2 + Math.random() * 0.4;
-    let radius = 16;
-
-    if (typeRoll > 0.65) {
-      type = 'bat';
-      hp = 25 + state.nightNumber * 6;
-      speed = 2.4 + Math.random() * 0.5;
-      radius = 12;
-    } else if (typeRoll > 0.4) {
-      type = 'phantom';
-      hp = 35 + state.nightNumber * 8;
-      speed = 1.6;
-      radius = 14;
+    let nearShelter = false;
+    for (const sh of state.structures.shelters) {
+      if (Math.hypot(p.x - sh.x, p.y - sh.y) < 65) {
+        nearShelter = true;
+        break;
+      }
     }
 
-    state.enemies.push({
-      type,
-      x: mx,
-      y: my,
-      hp,
-      maxHp: hp,
-      speed,
-      radius,
-      attackCooldown: 0
-    });
+    let nearCampfire = false;
+    for (const cf of state.structures.campfires) {
+      if (Math.hypot(p.x - cf.x, p.y - cf.y) < 70) {
+        nearCampfire = true;
+        break;
+      }
+    }
+
+    if (nearShelter) {
+      state.timeOfDay = 0.05;
+      state.day++;
+      p.energy = 100;
+      p.health = Math.min(100, p.health + 25);
+      p.hunger = Math.max(0, p.hunger - 20);
+      p.thirst = Math.max(0, p.thirst - 20);
+      state.statsScore += 150;
+      sound.playVictory();
+      showToast(`Slept safely in shelter! Day ${state.day} begins.`);
+
+      if (state.day >= 6) triggerEnding('castaway');
+    } else if (nearCampfire) {
+      p.energy = Math.min(100, p.energy + 35);
+      showToast('Rested by the warm campfire (+35 Energy).');
+    } else {
+      showToast('Cannot rest safely in the open wild! Stand near a campfire or shelter.');
+    }
+    updateUI();
   }
 
-  function createSparkParticles(x, y, count, color) {
+  // --- Trigger Endings ---
+  function triggerEnding(type) {
+    state.running = false;
+    statDays.textContent = state.day;
+    statCrafted.textContent = state.statsCrafted;
+    statScore.textContent = state.statsScore;
+
+    if (type === 'raft') {
+      sound.playVictory();
+      endingTitle.textContent = 'ENDING 1: OCEAN VOYAGER';
+      endingTitle.className = 'ending-title victory';
+      endingDesc.innerHTML = `
+        <p>You launched the seaworthy raft into the calm turquoise waves with packed provisions.</p>
+        <p style="margin-top: 10px;">After two days adrift, an international cargo freighter spotted your sail on the horizon and hoisted you aboard! You are going home!</p>
+      `;
+    } else if (type === 'helicopter') {
+      sound.playVictory();
+      endingTitle.textContent = 'ENDING 2: RESCUED BY AIR';
+      endingTitle.className = 'ending-title victory';
+      endingDesc.innerHTML = `
+        <p>The emergency SOS radio beacon echoed across military search frequencies.</p>
+        <p style="margin-top: 10px;">At daybreak, a Coast Guard search & rescue helicopter circled the island and landed on the beach. You survived!</p>
+      `;
+    } else if (type === 'castaway') {
+      sound.playVictory();
+      endingTitle.textContent = 'ENDING 3: ISLAND SOVEREIGN';
+      endingTitle.className = 'ending-title victory';
+      endingDesc.innerHTML = `
+        <p>You adapted to the wild, built shelters, mastered fire, and conquered the island's wilderness.</p>
+        <p style="margin-top: 10px;">You are no longer a castaway—you are the sovereign master of this tropical paradise!</p>
+      `;
+    } else {
+      endingTitle.textContent = 'ENDING 4: CLAIMED BY THE WILD';
+      endingTitle.className = 'ending-title defeat';
+      endingDesc.innerHTML = `
+        <p>Your vital signs plummeted to zero. The harsh wilderness of the uncharted island claimed your life.</p>
+        <p style="margin-top: 10px;">Remember to manage hunger, drink clean water, and build shelters before night falls.</p>
+      `;
+    }
+    modalEnding.classList.add('open');
+  }
+
+  function showToast(msg) {
+    eventToast.textContent = msg;
+    eventToast.classList.add('active');
+    setTimeout(() => {
+      eventToast.classList.remove('active');
+    }, 3200);
+  }
+
+  function createParticles(x, y, count, color) {
     for (let i = 0; i < count; i++) {
       const a = Math.random() * Math.PI * 2;
-      const spd = 1 + Math.random() * 3;
+      const spd = 1 + Math.random() * 2.5;
       state.particles.push({
         x,
         y,
         vx: Math.cos(a) * spd,
         vy: Math.sin(a) * spd,
+        radius: 2 + Math.random() * 2.5,
         color,
-        radius: 2 + Math.random() * 3,
-        life: 25 + Math.random() * 15
+        life: 20
       });
     }
   }
 
-  // --- Initial Resource Fill ---
-  for (let i = 0; i < 9; i++) spawnResource();
-
-  // --- Main Game Update Loop (60 FPS) ---
+  // --- Main 60 FPS Simulation Update ---
   let lastTime = performance.now();
 
   function update(delta) {
     if (!state.running) return;
 
-    // 1. Day / Night Cycle Timer
-    state.cycleTimer += delta;
-    if (state.cycleTimer >= state.phaseDuration) {
-      state.cycleTimer = 0;
-      if (state.cyclePhase === 'twilight') {
-        state.cyclePhase = 'bloodmoon';
-        sound.playBloodMoonAlarm();
-        cyclePhaseText.textContent = `Night ${state.nightNumber} - Blood Moon Siege!`;
+    // Time cycle
+    state.timeOfDay = (state.timeOfDay + state.timeSpeed * delta) % 1.0;
+    if (state.timeOfDay < 0.01 && delta > 0) state.day++;
+
+    let hour = Math.floor(state.timeOfDay * 24);
+    let ampm = hour >= 12 ? 'PM' : 'AM';
+    let h12 = hour % 12 || 12;
+    timeText.textContent = `${h12}:00 ${ampm}`;
+    dayText.textContent = `Day ${state.day}`;
+
+    // Weather
+    state.weatherTimer += delta;
+    if (state.weatherTimer > 40) {
+      state.weatherTimer = 0;
+      const roll = Math.random();
+      if (roll < 0.5) {
+        state.weather = 'clear';
+        weatherText.textContent = 'Clear';
+        weatherFx.className = 'weather-overlay';
+      } else if (roll < 0.82) {
+        state.weather = 'rain';
+        weatherText.textContent = 'Rainfall';
+        weatherFx.className = 'weather-overlay rain';
+        state.player.thirst = Math.min(100, state.player.thirst + 10);
       } else {
-        state.cyclePhase = 'twilight';
-        state.nightNumber++;
-        state.score += 200;
-        waveCount.textContent = state.nightNumber;
-        cyclePhaseText.textContent = `Twilight Phase (Gathering)`;
-        // Replenish resources on new day
-        for (let i = 0; i < 6; i++) spawnResource();
+        state.weather = 'storm';
+        weatherText.textContent = 'Storm';
+        weatherFx.className = 'weather-overlay storm';
+        sound.playThunder();
+        lightningFx.classList.add('flash');
+        setTimeout(() => lightningFx.classList.remove('flash'), 100);
       }
     }
 
-    const phasePct = Math.max(0, 100 - (state.cycleTimer / state.phaseDuration) * 100);
-    cycleBarFill.style.width = `${phasePct}%`;
-
-    // 2. Bonfire Fuel Decay
-    const fuelDecayRate = state.cyclePhase === 'bloodmoon' ? 2.5 : 1.2;
-    state.bonfire.fuel = Math.max(0, state.bonfire.fuel - fuelDecayRate * delta);
-    bonfireBarFill.style.width = `${state.bonfire.fuel}%`;
-
-    // If bonfire is dead, darkness damages player!
-    if (state.bonfire.fuel <= 0) {
-      state.player.hp -= 14 * delta;
-    }
-
-    // 3. Player Movement & Angle
+    // Player Movement & Click-to-Move
     const p = state.player;
     let dx = 0;
     let dy = 0;
@@ -429,426 +1017,409 @@
     if (state.keys.left) dx -= 1;
     if (state.keys.right) dx += 1;
 
-    if (dx !== 0 && dy !== 0) {
-      dx *= 0.7071;
-      dy *= 0.7071;
-    }
-
     if (dx !== 0 || dy !== 0) {
+      p.targetX = null;
+      p.targetY = null;
+      p.interactTarget = null;
+      if (dx !== 0 && dy !== 0) {
+        dx *= 0.7071;
+        dy *= 0.7071;
+      }
       p.angle = Math.atan2(dy, dx);
+      p.x += dx * p.speed;
+      p.y += dy * p.speed;
+      p.walkStep += 0.2;
+    } else if (p.targetX !== null && p.targetY !== null) {
+      const dist = Math.hypot(p.targetX - p.x, p.targetY - p.y);
+      const stopDist = p.interactTarget ? 50 : 6;
+      if (dist > stopDist) {
+        p.angle = Math.atan2(p.targetY - p.y, p.targetX - p.x);
+        p.x += Math.cos(p.angle) * p.speed;
+        p.y += Math.sin(p.angle) * p.speed;
+        p.walkStep += 0.2;
+      } else {
+        if (p.interactTarget) {
+          performAction();
+          p.interactTarget = null;
+        }
+        p.targetX = null;
+        p.targetY = null;
+      }
     }
 
-    p.x += dx * p.speed;
-    p.y += dy * p.speed;
+    // Dynamic Quest Progression Updates
+    if (questText) {
+      if (state.inventory.wood < 4 || state.inventory.stone < 3) {
+        questText.textContent = `Gather Wood (${state.inventory.wood}/4) & Stone (${state.inventory.stone}/3) to craft basic survival tools [SPACE / Click]`;
+      } else if (p.equippedTool === 'Bare Hands') {
+        questText.textContent = 'Open Crafting [C] and forge a Stone Axe to chop wood twice as fast!';
+      } else if (state.structures.campfires.length === 0) {
+        questText.textContent = 'Open Crafting [C] and build a Campfire & Survival Shelter to stay warm and rest [R]!';
+      } else if (!state.planeWreck.searched) {
+        questText.textContent = 'Head West along the beach to search the crashed Plane Fuselage for emergency supplies!';
+      } else {
+        questText.textContent = 'ESCAPE! Craft a Sea Raft at the shore OR build the Cliff SOS Beacon to signal rescue!';
+      }
+    }
 
-    // Constrain player inside island ellipse
-    const normX = (p.x - ISLAND_CX) / (ISLAND_RX - 25);
-    const normY = (p.y - ISLAND_CY) / (ISLAND_RY - 25);
+    if (p.swinging > 0) p.swinging--;
+
+    // Constrain inside island bounds
+    const normX = (p.x - ISLAND_CX) / (ISLAND_RX - 20);
+    const normY = (p.y - ISLAND_CY) / (ISLAND_RY - 20);
     if (normX * normX + normY * normY > 1) {
       const a = Math.atan2(p.y - ISLAND_CY, (p.x - ISLAND_CX) * (ISLAND_RY / ISLAND_RX));
-      p.x = ISLAND_CX + Math.cos(a) * (ISLAND_RX - 25);
-      p.y = ISLAND_CY + Math.sin(a) * (ISLAND_RY - 25);
+      p.x = ISLAND_CX + Math.cos(a) * (ISLAND_RX - 20);
+      p.y = ISLAND_CY + Math.sin(a) * (ISLAND_RY - 20);
     }
 
-    // 4. Resource Pickups
-    for (let i = state.resources.length - 1; i >= 0; i--) {
-      const r = state.resources[i];
-      if (Math.hypot(p.x - r.x, p.y - r.y) < p.radius + r.radius) {
-        sound.playPickup();
-        if (r.type === 'wood') {
-          p.wood++;
-          createSparkParticles(r.x, r.y, 8, '#cfa870');
-        } else {
-          p.embers++;
-          createSparkParticles(r.x, r.y, 8, '#00f2fe');
+    // Camera follow player smoothly
+    state.camera.x = p.x - canvas.width / 2;
+    state.camera.y = p.y - canvas.height / 2;
+
+    // Vitals decay
+    p.hunger = Math.max(0, p.hunger - 0.7 * delta);
+    p.thirst = Math.max(0, p.thirst - 1.1 * delta);
+
+    if (p.hunger <= 0 || p.thirst <= 0) {
+      p.health = Math.max(0, p.health - 6 * delta);
+    } else if (p.hunger > 70 && p.thirst > 70 && p.health < 100) {
+      p.health = Math.min(100, p.health + 1.2 * delta);
+    }
+
+    if (p.health <= 0) triggerEnding('death');
+
+    // Wildlife Update
+    state.wildlife.forEach(w => {
+      if (w.aggro) {
+        const a = Math.atan2(p.y - w.y, p.x - w.x);
+        w.x += Math.cos(a) * w.speed;
+        w.y += Math.sin(a) * w.speed;
+        if (Math.hypot(p.x - w.x, p.y - w.y) < p.radius + 14) {
+          p.health = Math.max(0, p.health - 12 * delta);
         }
-        state.score += 15;
-        state.resources.splice(i, 1);
-      }
-    }
-
-    // Periodic Resource Spawning during twilight
-    if (state.cyclePhase === 'twilight' && Math.random() < 0.02) {
-      spawnResource();
-    }
-
-    // 5. Monster Spawning during Blood Moon
-    if (state.cyclePhase === 'bloodmoon') {
-      const spawnRate = 0.035 + state.nightNumber * 0.008;
-      if (Math.random() < spawnRate && state.enemies.length < 18 + state.nightNumber * 2) {
-        spawnMonster();
-      }
-    }
-
-    // 6. Update Projectiles
-    for (let i = state.projectiles.length - 1; i >= 0; i--) {
-      const proj = state.projectiles[i];
-      proj.x += proj.vx;
-      proj.y += proj.vy;
-      proj.life--;
-
-      // Check collision with enemies
-      let hit = false;
-      for (let j = state.enemies.length - 1; j >= 0; j--) {
-        const en = state.enemies[j];
-        if (Math.hypot(proj.x - en.x, proj.y - en.y) < proj.radius + en.radius) {
-          en.hp -= 35;
-          sound.playHit();
-          createSparkParticles(proj.x, proj.y, 10, '#ff7700');
-          hit = true;
-          if (en.hp <= 0) {
-            state.score += 40;
-            state.slainCount++;
-            createSparkParticles(en.x, en.y, 18, '#ff2a55');
-            // Chance to drop soul ember
-            if (Math.random() < 0.35) {
-              state.resources.push({ type: 'ember', x: en.x, y: en.y, radius: 12 });
-            }
-            state.enemies.splice(j, 1);
-          }
-          break;
+      } else {
+        if (Math.random() < 0.02) {
+          w.vx = (Math.random() - 0.5) * w.speed;
+          w.vy = (Math.random() - 0.5) * w.speed;
         }
+        w.x += w.vx;
+        w.y += w.vy;
       }
+    });
 
-      if (hit || proj.life <= 0) {
-        state.projectiles.splice(i, 1);
-      }
-    }
+    // Fireflies Update
+    state.fireflies.forEach(ff => {
+      ff.x += ff.vx;
+      ff.y += ff.vy;
+      ff.pulse += 0.05;
+    });
 
-    // 7. Update Wards
-    for (let i = state.wards.length - 1; i >= 0; i--) {
-      const ward = state.wards[i];
-      ward.life--;
-      // Check if monster trips ward
-      for (let j = state.enemies.length - 1; j >= 0; j--) {
-        const en = state.enemies[j];
-        if (Math.hypot(ward.x - en.x, ward.y - en.y) < ward.radius + en.radius) {
-          sound.playHit();
-          createSparkParticles(ward.x, ward.y, 30, '#00f2fe');
-          // AoE Blast
-          state.enemies.forEach(otherEn => {
-            if (Math.hypot(ward.x - otherEn.x, ward.y - otherEn.y) < 70) {
-              otherEn.hp -= ward.damage;
-            }
-          });
-          ward.life = 0;
-          break;
-        }
-      }
-      if (ward.life <= 0) {
-        state.wards.splice(i, 1);
-      }
-    }
-
-    // 8. Update Enemies AI
-    for (let i = state.enemies.length - 1; i >= 0; i--) {
-      const en = state.enemies[i];
-      en.attackCooldown = Math.max(0, en.attackCooldown - delta);
-
-      // Target selection: player or bonfire (whichever is closer)
-      const distToPlayer = Math.hypot(p.x - en.x, p.y - en.y);
-      const distToBonfire = Math.hypot(state.bonfire.x - en.x, state.bonfire.y - en.y);
-
-      let targetX = p.x;
-      let targetY = p.y;
-      if (distToBonfire < distToPlayer) {
-        targetX = state.bonfire.x;
-        targetY = state.bonfire.y;
-      }
-
-      const angle = Math.atan2(targetY - en.y, targetX - en.x);
-      en.x += Math.cos(angle) * en.speed;
-      en.y += Math.sin(angle) * en.speed;
-
-      // Attack Player
-      if (distToPlayer < p.radius + en.radius && en.attackCooldown <= 0) {
-        p.hp -= 16;
-        en.attackCooldown = 0.8;
-        sound.playHit();
-        createSparkParticles(p.x, p.y, 10, '#ff2a55');
-      }
-
-      // Attack Bonfire
-      if (distToBonfire < state.bonfire.radius + en.radius && en.attackCooldown <= 0) {
-        state.bonfire.fuel = Math.max(0, state.bonfire.fuel - 8);
-        en.attackCooldown = 0.8;
-        sound.playHit();
-        createSparkParticles(state.bonfire.x, state.bonfire.y, 12, '#ffaa32');
-      }
-    }
-
-    // 9. Update Particles
+    // Particles
     for (let i = state.particles.length - 1; i >= 0; i--) {
       const pt = state.particles[i];
       pt.x += pt.vx;
       pt.y += pt.vy;
       pt.life--;
-      if (pt.life <= 0) {
-        state.particles.splice(i, 1);
-      }
+      if (pt.life <= 0) state.particles.splice(i, 1);
     }
 
-    // 10. Sync HUD UI
-    hpBarFill.style.width = `${Math.max(0, p.hp)}%`;
-    resWood.textContent = p.wood;
-    resEmbers.textContent = p.embers;
-
-    // Check Death / Game Over
-    if (p.hp <= 0) {
-      gameOver();
-    }
+    updateUI();
   }
 
-  function gameOver() {
-    state.running = false;
-    sound.playGameOver();
-    statNights.textContent = state.nightNumber;
-    statSlain.textContent = state.slainCount;
-    statScore.textContent = state.score;
-    if (state.bonfire.fuel <= 0) {
-      goTitle.textContent = 'BONFIRE EXTINGUISHED';
-      goMessage.textContent = 'Without the sacred pumpkin flame, the night mist consumed your soul.';
-    } else {
-      goTitle.textContent = 'FALLEN TO THE SWARM';
-      goMessage.textContent = 'The blood moon horrors overwhelmed your defenses on Halloween night.';
-    }
-    modalGameOver.classList.add('open');
+  function updateUI() {
+    const p = state.player;
+    healthBar.style.width = `${p.health}%`;
+    hungerBar.style.width = `${p.hunger}%`;
+    thirstBar.style.width = `${p.thirst}%`;
+    energyBar.style.width = `${p.energy}%`;
+
+    resWood.textContent = state.inventory.wood;
+    resStone.textContent = state.inventory.stone;
+    resVines.textContent = state.inventory.vines;
+    resLeaves.textContent = state.inventory.leaves;
+    resFood.textContent = state.inventory.coconuts + state.inventory.berries + state.inventory.fish + state.inventory.meat + state.inventory.cookedFood;
+    equippedTool.textContent = p.equippedTool;
   }
 
-  // --- Rendering Loop (Canvas) ---
+  // --- Canvas 2D Rendering Engine ---
   function render(time) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     const w = canvas.width;
     const h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
 
-    // 1. Draw Surrounding Dark Ocean with Animated Mist & Waves
-    const oceanGrad = ctx.createRadialGradient(ISLAND_CX, ISLAND_CY, 200, ISLAND_CX, ISLAND_CY, 550);
-    if (state.cyclePhase === 'bloodmoon') {
-      oceanGrad.addColorStop(0, '#2a0815');
-      oceanGrad.addColorStop(1, '#080104');
-    } else {
-      oceanGrad.addColorStop(0, '#150926');
-      oceanGrad.addColorStop(1, '#05020c');
-    }
+    ctx.save();
+    // Apply Camera Translation
+    ctx.translate(-state.camera.x, -state.camera.y);
+
+    // 1. Endless Deep Ocean with Animated Waves
+    const oceanGrad = ctx.createRadialGradient(ISLAND_CX, ISLAND_CY, 200, ISLAND_CX, ISLAND_CY, 900);
+    oceanGrad.addColorStop(0, '#0277bd');
+    oceanGrad.addColorStop(1, '#00294d');
     ctx.fillStyle = oceanGrad;
-    ctx.fillRect(0, 0, w, h);
+    ctx.fillRect(state.camera.x, state.camera.y, w, h);
 
-    // Ocean ripples
-    ctx.strokeStyle = state.cyclePhase === 'bloodmoon' ? 'rgba(255, 42, 85, 0.15)' : 'rgba(0, 242, 254, 0.12)';
-    ctx.lineWidth = 1.5;
-    for (let r = 240; r <= 520; r += 45) {
-      ctx.beginPath();
-      ctx.ellipse(ISLAND_CX, ISLAND_CY, r * (ISLAND_RX / ISLAND_RY), r, 0, 0, Math.PI * 2);
-      ctx.stroke();
-    }
+    // Shoreline White Foam Pulse
+    const wavePulse = (Math.sin(time / 450) + 1) * 8;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.ellipse(ISLAND_CX, ISLAND_CY, ISLAND_RX + 8 + wavePulse, ISLAND_RY + 8 + wavePulse, 0, 0, Math.PI * 2);
+    ctx.stroke();
 
-    // 2. Draw Cursed Island Landmass
-    ctx.fillStyle = state.cyclePhase === 'bloodmoon' ? '#24101c' : '#1c112b';
+    // 2. Sandy Beach Terrain
+    ctx.fillStyle = '#dfc282';
     ctx.beginPath();
     ctx.ellipse(ISLAND_CX, ISLAND_CY, ISLAND_RX, ISLAND_RY, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = state.cyclePhase === 'bloodmoon' ? '#5a1c2f' : '#4a256b';
-    ctx.lineWidth = 5;
-    ctx.stroke();
 
-    // Sandy Shoreline Ring
-    ctx.strokeStyle = 'rgba(150, 100, 60, 0.25)';
-    ctx.lineWidth = 8;
+    // 3. Dense Rainforest Grass & Dirt Paths
+    ctx.fillStyle = '#2e7d32';
     ctx.beginPath();
-    ctx.ellipse(ISLAND_CX, ISLAND_CY, ISLAND_RX - 8, ISLAND_RY - 8, 0, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // 3. Draw Resources on Ground
-    state.resources.forEach(res => {
-      if (res.type === 'wood') {
-        // Wood log
-        ctx.fillStyle = '#9b7140';
-        ctx.fillRect(res.x - 10, res.y - 4, 20, 8);
-        ctx.fillStyle = '#5c3a16';
-        ctx.fillRect(res.x - 7, res.y - 2, 14, 4);
-      } else {
-        // Soul Ember
-        const eGlow = ctx.createRadialGradient(res.x, res.y, 2, res.x, res.y, 14);
-        eGlow.addColorStop(0, '#00f2fe');
-        eGlow.addColorStop(1, 'transparent');
-        ctx.fillStyle = eGlow;
-        ctx.beginPath();
-        ctx.arc(res.x, res.y, 14, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = '#e0ffff';
-        ctx.beginPath();
-        ctx.arc(res.x, res.y, 4, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    });
-
-    // 4. Draw Wards
-    state.wards.forEach(w => {
-      ctx.fillStyle = '#ff7700';
-      ctx.beginPath();
-      ctx.arc(w.x, w.y, 14, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#00f2fe';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    });
-
-    // 5. Draw Central Hallowed Pumpkin Bonfire
-    const bf = state.bonfire;
-    const flameIntensity = bf.fuel / 100;
-    const lightRadius = 120 + flameIntensity * 240;
-
-    // Bonfire Radial Glow / Protective Light Area
-    const bfGlow = ctx.createRadialGradient(bf.x, bf.y, 10, bf.x, bf.y, lightRadius);
-    bfGlow.addColorStop(0, 'rgba(255, 140, 0, 0.45)');
-    bfGlow.addColorStop(0.6, 'rgba(255, 80, 0, 0.15)');
-    bfGlow.addColorStop(1, 'transparent');
-    ctx.fillStyle = bfGlow;
-    ctx.beginPath();
-    ctx.arc(bf.x, bf.y, lightRadius, 0, Math.PI * 2);
+    ctx.ellipse(ISLAND_CX, ISLAND_CY - 15, ISLAND_RX - 85, ISLAND_RY - 75, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // Bonfire Pumpkin Altar Base
-    ctx.fillStyle = '#1c0c28';
+    ctx.fillStyle = '#1b5e20';
     ctx.beginPath();
-    ctx.arc(bf.x, bf.y, bf.radius + 6, 0, Math.PI * 2);
+    ctx.ellipse(ISLAND_CX, ISLAND_CY - 15, ISLAND_RX - 150, ISLAND_RY - 120, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = '#6e3599';
+
+    // 4. Freshwater Lagoon / Mountain Spring
+    const sp = state.spring;
+    ctx.fillStyle = '#29b6f6';
+    ctx.beginPath();
+    ctx.arc(sp.x, sp.y, sp.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#81d4fa';
     ctx.lineWidth = 3;
     ctx.stroke();
 
-    // Great Carved Jack-o'-Lantern at Center
-    ctx.fillStyle = '#ff7700';
+    // 5. Plane Crash Site Fuselage on Beach
+    const pw = state.planeWreck;
+    ctx.save();
+    ctx.translate(pw.x, pw.y);
+    ctx.rotate(-0.35);
+    ctx.fillStyle = '#cfd8dc';
+    ctx.fillRect(-45, -16, 90, 32);
+    ctx.fillStyle = '#90a4ae';
+    ctx.fillRect(-12, -50, 24, 100);
+    // Smoke particles
+    ctx.fillStyle = 'rgba(80, 80, 80, 0.35)';
     ctx.beginPath();
-    ctx.arc(bf.x, bf.y, bf.radius, 0, Math.PI * 2);
+    ctx.arc(20, -20 + Math.sin(time / 200) * 5, 12, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
 
-    // Jack-o-Lantern Carved Face
-    ctx.fillStyle = '#fff4cc';
-    // Eyes
-    ctx.beginPath();
-    ctx.moveTo(bf.x - 10, bf.y - 6);
-    ctx.lineTo(bf.x - 4, bf.y - 2);
-    ctx.lineTo(bf.x - 10, bf.y + 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(bf.x + 10, bf.y - 6);
-    ctx.lineTo(bf.x + 4, bf.y - 2);
-    ctx.lineTo(bf.x + 10, bf.y + 2);
-    ctx.fill();
-    // Jagged grin
-    ctx.beginPath();
-    ctx.arc(bf.x, bf.y + 6, 8, 0, Math.PI);
-    ctx.fill();
+    // 6. Placed Structures
+    // Campfires
+    state.structures.campfires.forEach(cf => {
+      // Warm Light Glow
+      const cGlow = ctx.createRadialGradient(cf.x, cf.y, 10, cf.x, cf.y, 120);
+      cGlow.addColorStop(0, 'rgba(255, 140, 0, 0.45)');
+      cGlow.addColorStop(1, 'transparent');
+      ctx.fillStyle = cGlow;
+      ctx.beginPath();
+      ctx.arc(cf.x, cf.y, 120, 0, Math.PI * 2);
+      ctx.fill();
 
-    // Bonfire Flame Tongue
-    const flameH = 14 + Math.sin(time / 100) * 6;
-    ctx.fillStyle = '#ffbb00';
-    ctx.beginPath();
-    ctx.moveTo(bf.x - 8, bf.y - 12);
-    ctx.quadraticCurveTo(bf.x, bf.y - 20 - flameH, bf.x + 8, bf.y - 12);
-    ctx.fill();
-
-    // 6. Draw Enemies
-    state.enemies.forEach(en => {
-      ctx.save();
-      ctx.translate(en.x, en.y);
-
-      if (en.type === 'scarecrow') {
-        // Scarecrow
-        ctx.fillStyle = '#5c4832';
-        ctx.fillRect(-6, -14, 12, 28);
-        ctx.fillStyle = '#9b8259';
-        ctx.beginPath();
-        ctx.arc(0, -14, 8, 0, Math.PI * 2);
-        ctx.fill();
-        // Glowing red eyes
-        ctx.fillStyle = '#ff2a55';
-        ctx.fillRect(-3, -16, 2, 2);
-        ctx.fillRect(1, -16, 2, 2);
-      } else if (en.type === 'bat') {
-        // Shadow Bat
-        ctx.fillStyle = '#220b33';
-        const wingFlap = Math.sin(time / 80) * 10;
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(-14, wingFlap);
-        ctx.lineTo(0, -6);
-        ctx.lineTo(14, wingFlap);
-        ctx.closePath();
-        ctx.fill();
-        ctx.fillStyle = '#ff2a55';
-        ctx.beginPath();
-        ctx.arc(0, -2, 2, 0, Math.PI * 2);
-        ctx.fill();
-      } else {
-        // Phantom
-        ctx.fillStyle = 'rgba(157, 78, 221, 0.75)';
-        ctx.beginPath();
-        ctx.arc(0, 0, en.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#00f2fe';
-        ctx.beginPath();
-        ctx.arc(-3, -2, 2, 0, Math.PI * 2);
-        ctx.arc(3, -2, 2, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // HP Bar above enemy
-      if (en.hp < en.maxHp) {
-        ctx.fillStyle = 'rgba(0,0,0,0.6)';
-        ctx.fillRect(-12, -26, 24, 4);
-        ctx.fillStyle = '#ff2a55';
-        ctx.fillRect(-12, -26, (en.hp / en.maxHp) * 24, 4);
-      }
-
-      ctx.restore();
+      // Stone ring
+      ctx.fillStyle = '#4e342e';
+      ctx.beginPath();
+      ctx.arc(cf.x, cf.y, 16, 0, Math.PI * 2);
+      ctx.fill();
+      // Dancing fire
+      const fH = Math.sin(time / 90) * 4;
+      ctx.fillStyle = '#ff7043';
+      ctx.beginPath();
+      ctx.arc(cf.x, cf.y, 9 + fH * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffee58';
+      ctx.beginPath();
+      ctx.arc(cf.x, cf.y, 5, 0, Math.PI * 2);
+      ctx.fill();
     });
 
-    // 7. Draw Player
+    // Shelters
+    state.structures.shelters.forEach(sh => {
+      ctx.fillStyle = '#5d4037';
+      ctx.beginPath();
+      ctx.moveTo(sh.x - 26, sh.y + 22);
+      ctx.lineTo(sh.x, sh.y - 25);
+      ctx.lineTo(sh.x + 26, sh.y + 22);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#388e3c';
+      ctx.fillRect(sh.x - 20, sh.y, 40, 20);
+    });
+
+    // Rafts
+    state.structures.rafts.forEach(rf => {
+      ctx.fillStyle = '#8d6e63';
+      ctx.fillRect(rf.x - 30, rf.y - 18, 60, 36);
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(rf.x - 2, rf.y - 35, 4, 30);
+      ctx.fillStyle = '#ffe082';
+      ctx.beginPath();
+      ctx.moveTo(rf.x + 2, rf.y - 32);
+      ctx.lineTo(rf.x + 24, rf.y - 20);
+      ctx.lineTo(rf.x + 2, rf.y - 8);
+      ctx.fill();
+    });
+
+    // SOS Radio Beacons
+    state.structures.beacons.forEach(bc => {
+      ctx.fillStyle = '#b0bec5';
+      ctx.fillRect(bc.x - 4, bc.y - 40, 8, 40);
+      ctx.fillStyle = '#ff1744';
+      ctx.beginPath();
+      ctx.arc(bc.x, bc.y - 42, 5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // 7. Granite Boulders
+    state.rocks.forEach(rk => {
+      ctx.fillStyle = '#78909c';
+      ctx.beginPath();
+      ctx.arc(rk.x, rk.y, 16, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#546e7a';
+      ctx.beginPath();
+      ctx.arc(rk.x + 4, rk.y - 4, 8, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // 8. Berry Bushes
+    state.bushes.forEach(bs => {
+      ctx.fillStyle = '#43a047';
+      ctx.beginPath();
+      ctx.arc(bs.x, bs.y, 14, 0, Math.PI * 2);
+      ctx.fill();
+      if (bs.hasBerries) {
+        ctx.fillStyle = '#e91e63';
+        ctx.beginPath();
+        ctx.arc(bs.x - 5, bs.y - 3, 3.5, 0, Math.PI * 2);
+        ctx.arc(bs.x + 5, bs.y + 3, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+
+    // 9. Palm Trees with Detailed Multi-Frond Canopies
+    state.trees.forEach(tr => {
+      // Trunk shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.18)';
+      ctx.beginPath();
+      ctx.ellipse(tr.x + 6, tr.y + 4, 10, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Textured Trunk
+      ctx.fillStyle = '#6d4c41';
+      ctx.beginPath();
+      ctx.arc(tr.x, tr.y, 8, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Palm fronds
+      ctx.fillStyle = tr.type === 'palm' ? '#2e7d32' : '#1b5e20';
+      for (let fa = 0; fa < Math.PI * 2; fa += Math.PI / 3) {
+        const frondSway = Math.sin(time / 500 + fa) * 4;
+        ctx.beginPath();
+        ctx.moveTo(tr.x, tr.y - 10);
+        ctx.quadraticCurveTo(
+          tr.x + Math.cos(fa) * 20,
+          tr.y - 10 + Math.sin(fa) * 20 + frondSway,
+          tr.x + Math.cos(fa) * 32,
+          tr.y - 10 + Math.sin(fa) * 32 + frondSway
+        );
+        ctx.lineWidth = 9;
+        ctx.strokeStyle = tr.type === 'palm' ? '#2e7d32' : '#1b5e20';
+        ctx.stroke();
+      }
+
+      // Coconuts
+      if (tr.type === 'palm') {
+        ctx.fillStyle = '#4e342e';
+        ctx.beginPath();
+        ctx.arc(tr.x - 4, tr.y - 8, 4, 0, Math.PI * 2);
+        ctx.arc(tr.x + 4, tr.y - 8, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+
+    // 10. Wildlife
+    state.wildlife.forEach(wl => {
+      if (wl.type === 'boar') {
+        ctx.fillStyle = '#4e342e';
+        ctx.beginPath();
+        ctx.ellipse(wl.x, wl.y, 16, 11, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(wl.x + 12, wl.y - 2, 5, 3); // tusks
+      } else {
+        ctx.fillStyle = '#e64a19';
+        ctx.beginPath();
+        ctx.arc(wl.x, wl.y, 9, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+
+    // 11. Player Character (Detailed Sprite with Animation)
     const p = state.player;
     ctx.save();
     ctx.translate(p.x, p.y);
     ctx.rotate(p.angle);
 
-    // Player Cloak & Body
-    ctx.fillStyle = '#6a1b9a';
+    // Player Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
     ctx.beginPath();
-    ctx.arc(0, 0, p.radius, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = '#9d4edd';
-    ctx.lineWidth = 2.5;
-    ctx.stroke();
-
-    // Survivor Hat / Hood
-    ctx.fillStyle = '#31144a';
-    ctx.beginPath();
-    ctx.arc(0, 0, p.radius * 0.65, 0, Math.PI * 2);
+    ctx.ellipse(0, 0, p.radius * 1.1, p.radius * 0.7, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // Lantern in hand
-    ctx.fillStyle = '#ffaa32';
+    // Backpack
+    ctx.fillStyle = '#5d4037';
+    ctx.fillRect(-p.radius * 0.9, -6, 6, 12);
+
+    // Torso / Shirt
+    ctx.fillStyle = '#0288d1';
     ctx.beginPath();
-    ctx.arc(p.radius * 0.8, p.radius * 0.7, 4, 0, Math.PI * 2);
+    ctx.arc(0, 0, p.radius * 0.85, 0, Math.PI * 2);
     ctx.fill();
+
+    // Head
+    ctx.fillStyle = '#ffe0b2';
+    ctx.beginPath();
+    ctx.arc(0, 0, p.radius * 0.55, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Hair
+    ctx.fillStyle = '#3e2723';
+    ctx.beginPath();
+    ctx.arc(0, -2, p.radius * 0.45, Math.PI, Math.PI * 2);
+    ctx.fill();
+
+    // Tool in Hand with Swing Animation
+    const swingOffset = p.swinging > 0 ? (p.swinging / 12) * Math.PI * 0.6 : 0;
+    ctx.save();
+    ctx.rotate(swingOffset);
+
+    if (p.equippedTool === 'Stone Axe') {
+      ctx.fillStyle = '#8d6e63';
+      ctx.fillRect(p.radius * 0.7, -3, 14, 5);
+      ctx.fillStyle = '#78909c';
+      ctx.fillRect(p.radius * 0.7 + 10, -7, 7, 14);
+    } else if (p.equippedTool === 'Wooden Spear') {
+      ctx.fillStyle = '#8d6e63';
+      ctx.fillRect(p.radius * 0.7, -2, 24, 4);
+      ctx.fillStyle = '#b0bec5';
+      ctx.beginPath();
+      ctx.moveTo(p.radius * 0.7 + 24, -5);
+      ctx.lineTo(p.radius * 0.7 + 32, 0);
+      ctx.lineTo(p.radius * 0.7 + 24, 5);
+      ctx.fill();
+    }
+    ctx.restore();
 
     ctx.restore();
 
-    // 8. Draw Projectiles
-    state.projectiles.forEach(pr => {
-      ctx.fillStyle = '#ffaa32';
-      ctx.beginPath();
-      ctx.arc(pr.x, pr.y, pr.radius, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#ff3300';
-      ctx.beginPath();
-      ctx.arc(pr.x, pr.y, pr.radius * 0.5, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    // 9. Draw Particles
+    // 12. Particles
     state.particles.forEach(pt => {
       ctx.fillStyle = pt.color;
       ctx.beginPath();
@@ -856,17 +1427,98 @@
       ctx.fill();
     });
 
-    // 10. Blood Moon Sky / Vignette Atmosphere
-    if (state.cyclePhase === 'bloodmoon') {
-      const moonVignette = ctx.createRadialGradient(ISLAND_CX, ISLAND_CY, 100, ISLAND_CX, ISLAND_CY, 500);
-      moonVignette.addColorStop(0, 'rgba(255, 30, 60, 0.08)');
-      moonVignette.addColorStop(1, 'rgba(120, 10, 30, 0.45)');
-      ctx.fillStyle = moonVignette;
+    // 13. Fireflies Glowing at Dusk / Night
+    if (state.timeOfDay > 0.7 || state.timeOfDay < 0.2) {
+      state.fireflies.forEach(ff => {
+        const glow = (Math.sin(ff.pulse) + 1) * 0.5;
+        ctx.fillStyle = `rgba(180, 255, 50, ${glow * 0.8})`;
+        ctx.beginPath();
+        ctx.arc(ff.x, ff.y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    // 13.5 Floating Action Prompt Indicator over nearby interactive object
+    let nearestPrompt = null;
+    let minDist = 75;
+    const px = state.player.x;
+    const py = state.player.y;
+
+    for (const t of state.trees) {
+      const d = Math.hypot(px - t.x, py - t.y);
+      if (d < minDist) {
+        minDist = d;
+        nearestPrompt = { x: t.x, y: t.y - 45, text: '[SPACE / Click] Chop Wood' };
+      }
+    }
+    for (const r of state.rocks) {
+      const d = Math.hypot(px - r.x, py - r.y);
+      if (d < minDist) {
+        minDist = d;
+        nearestPrompt = { x: r.x, y: r.y - 32, text: '[SPACE / Click] Mine Stone' };
+      }
+    }
+    for (const b of state.bushes) {
+      const d = Math.hypot(px - b.x, py - b.y);
+      if (d < minDist) {
+        minDist = d;
+        nearestPrompt = { x: b.x, y: b.y - 25, text: b.hasBerries ? '[SPACE / Click] Pick Berries' : 'Empty Bush' };
+      }
+    }
+    const dSpring = Math.hypot(px - state.spring.x, py - state.spring.y);
+    if (dSpring < minDist + 15) {
+      minDist = dSpring;
+      nearestPrompt = { x: state.spring.x, y: state.spring.y - 32, text: '[SPACE / Click] Drink Water' };
+    }
+    const dPlane = Math.hypot(px - state.planeWreck.x, py - state.planeWreck.y);
+    if (dPlane < minDist + 25) {
+      minDist = dPlane;
+      nearestPrompt = { x: state.planeWreck.x, y: state.planeWreck.y - 38, text: state.planeWreck.searched ? 'Plane Searched' : '[SPACE / Click] Search Wreckage' };
+    }
+    for (const w of state.wildlife) {
+      const d = Math.hypot(px - w.x, py - w.y);
+      if (d < minDist) {
+        minDist = d;
+        nearestPrompt = { x: w.x, y: w.y - 25, text: '[SPACE / Click] Hunt Animal' };
+      }
+    }
+
+    if (nearestPrompt) {
+      ctx.save();
+      ctx.font = 'bold 12px "Segoe UI", sans-serif';
+      const textWidth = ctx.measureText(nearestPrompt.text).width;
+      ctx.fillStyle = 'rgba(6, 20, 36, 0.9)';
+      ctx.strokeStyle = '#ffb703';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.roundRect(nearestPrompt.x - textWidth / 2 - 8, nearestPrompt.y - 12, textWidth + 16, 24, 6);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffea00';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(nearestPrompt.text, nearestPrompt.x, nearestPrompt.y);
+      ctx.restore();
+    }
+
+    ctx.restore(); // Restore Camera
+
+    // 14. Day/Night Color Grading Vignette
+    let darknessAlpha = 0;
+    if (state.timeOfDay > 0.75) {
+      darknessAlpha = Math.min(0.85, (state.timeOfDay - 0.75) * 3.5);
+    } else if (state.timeOfDay < 0.15) {
+      darknessAlpha = Math.max(0, 0.85 - (state.timeOfDay / 0.15) * 0.85);
+    }
+
+    if (darknessAlpha > 0) {
+      ctx.fillStyle = `rgba(4, 10, 22, ${darknessAlpha})`;
       ctx.fillRect(0, 0, w, h);
     }
   }
 
-  // --- Main Animation Loop ---
+  // --- Animation Frame Loop ---
   function loop(currentTime) {
     const delta = Math.min(0.1, (currentTime - lastTime) / 1000);
     lastTime = currentTime;
@@ -878,7 +1530,7 @@
   }
   requestAnimationFrame(loop);
 
-  // --- Header / Modal Control Handlers ---
+  // --- Modal Bindings ---
   document.querySelectorAll('[data-close]').forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.getAttribute('data-close');
@@ -904,7 +1556,9 @@
     }
   });
 
-  document.getElementById('restartBtn').addEventListener('click', () => {
+  document.getElementById('btnRestartGame').addEventListener('click', () => {
     window.location.reload();
   });
+
+  updateUI();
 })();

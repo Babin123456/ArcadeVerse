@@ -2,42 +2,83 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cursed Island: Halloween Survival</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Island Survival: Lost Beyond the Shore</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header HUD -->
-  <header class="survival-header">
-    <div class="title-area">
-      <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 2c1.5 3 4 5 4 8a4 4 0 0 1-8 0c0-3 2.5-5 4-8z"></path>
-        <path d="M12 18c-3 0-5-2-5-5 0-2 1-3.5 2.5-4.5"></path>
-      </svg>
-      <div class="title-text">
-        <h1>CURSED ISLAND</h1>
-        <p>Halloween Night Survival</p>
-      </div>
-    </div>
+  <!-- Fullscreen Canvas -->
+  <canvas id="islandCanvas"></canvas>
 
-    <!-- Cycle Phase (Twilight Gathering vs Blood Moon Siege) -->
-    <div class="header-status">
-      <div class="cycle-indicator">
-        <span class="cycle-label" id="cyclePhaseText">Twilight Phase (Gather)</span>
-        <div class="cycle-bar-container">
-          <div class="cycle-bar-fill" id="cycleBarFill"></div>
+  <!-- Atmospheric Weather Overlays -->
+  <div class="storm-lightning" id="lightningFx"></div>
+  <div class="weather-overlay" id="weatherFx"></div>
+
+  <!-- Notification Banner -->
+  <div class="event-toast" id="eventToast">
+    You woke up on the sandy shore after a harrowing crash.
+  </div>
+
+  <!-- Floating Sleek Top HUD -->
+  <header class="hud-topbar">
+    <!-- Vitals Pod (Left) -->
+    <div class="vitals-pod">
+      <!-- Health -->
+      <div class="vital-item" title="Health">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ff1744" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <div class="vital-bar">
+          <div class="vital-fill fill-hp" id="healthBar" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- Hunger -->
+      <div class="vital-item" title="Hunger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#f57c00" stroke-width="2">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 7v5l3 3"></path>
+        </svg>
+        <div class="vital-bar">
+          <div class="vital-fill fill-hunger" id="hungerBar" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- Thirst -->
+      <div class="vital-item" title="Thirst">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0288d1" stroke-width="2">
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+        </svg>
+        <div class="vital-bar">
+          <div class="vital-fill fill-thirst" id="thirstBar" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- Energy -->
+      <div class="vital-item" title="Energy / Stamina">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fbc02d" stroke-width="2">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        <div class="vital-bar">
+          <div class="vital-fill fill-energy" id="energyBar" style="width: 100%;"></div>
         </div>
       </div>
     </div>
 
-    <div class="header-controls">
-      <button class="btn-icon" id="soundToggle" title="Toggle Sound">
+    <!-- Time & Weather Pod (Right) -->
+    <div class="time-pod">
+      <span id="dayText">Day 1</span>
+      <span>•</span>
+      <span id="timeText">12:00 PM</span>
+      <span>•</span>
+      <span id="weatherText">Clear</span>
+      <button class="icon-btn-mini" id="soundToggle" title="Toggle Sound">
         <svg id="soundIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
           <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
         </svg>
       </button>
-      <button class="btn-icon" id="helpBtn" title="How to Play">
+      <button class="icon-btn-mini" id="helpBtn" title="Help Guide">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"></circle>
           <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
@@ -47,107 +88,112 @@
     </div>
   </header>
 
-  <!-- Game Viewport -->
-  <main class="survival-viewport">
-    <div class="canvas-container">
-      <canvas id="gameCanvas" width="960" height="580"></canvas>
+  <!-- Floating Quest & Objective Guide -->
+  <div class="quest-tracker" id="questTracker">
+    <span class="quest-pill">MISSION</span>
+    <span class="quest-text" id="questText">Gather 4 Wood & 3 Stones (Chop Trees / Mine Rocks with [SPACE] or by Clicking)</span>
+  </div>
 
-      <!-- In-Game HUD overlay -->
-      <div class="hud-overlay">
-        <!-- Health & Bonfire Bars -->
-        <div class="stat-bars">
-          <!-- Player Health -->
-          <div class="stat-row">
-            <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="#ff2a55" stroke-width="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-            <div class="stat-bar-track">
-              <div class="stat-bar-fill hp-fill" id="hpBarFill" style="width: 100%;"></div>
-            </div>
-          </div>
-          <!-- Bonfire Fuel -->
-          <div class="stat-row">
-            <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="#ff7700" stroke-width="2">
-              <path d="M12 2c1.5 3 4 5 4 8a4 4 0 0 1-8 0c0-3 2.5-5 4-8z"></path>
-            </svg>
-            <div class="stat-bar-track">
-              <div class="stat-bar-fill bonfire-fill" id="bonfireBarFill" style="width: 100%;"></div>
-            </div>
-          </div>
-        </div>
+  <!-- Touch On-Screen Controls -->
+  <div class="touch-container">
+    <div class="touch-dpad">
+      <button class="dpad-btn dpad-up" id="btnUp">UP</button>
+      <button class="dpad-btn dpad-left" id="btnLeft">LEFT</button>
+      <button class="dpad-btn dpad-right" id="btnRight">RIGHT</button>
+      <button class="dpad-btn dpad-down" id="btnDown">DOWN</button>
+    </div>
 
-        <!-- Resources & Day Count -->
-        <div class="resource-counter">
-          <div class="res-item" title="Cursed Wood">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#cfa870" stroke-width="2">
-              <line x1="18" y1="2" x2="6" y2="22"></line>
-              <line x1="6" y1="2" x2="18" y2="22"></line>
-            </svg>
-            <span id="resWood">0</span>
-          </div>
+    <button class="touch-act-btn" id="touchAction" title="Interact / Harvest / Attack">
+      ACT
+    </button>
+  </div>
 
-          <div class="res-item" title="Soul Embers">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2">
-              <polygon points="12 2 15 8 22 9 17 14 18 21 12 17 6 21 7 14 2 9 9 8 12 2"></polygon>
-            </svg>
-            <span id="resEmbers">0</span>
-          </div>
+  <!-- Floating Sleek Bottom Hotbar -->
+  <footer class="hud-bottombar">
+    <button class="hotbar-btn btn-craft" id="btnOpenCrafting">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+      </svg>
+      <span>Craft [C]</span>
+    </button>
 
-          <div class="res-item" title="Night Wave">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#ffaa32" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="6" x2="12" y2="12"></line>
-              <line x1="12" y1="12" x2="16" y2="14"></line>
-            </svg>
-            <span>Night <span id="waveCount">1</span></span>
-          </div>
-        </div>
+    <button class="hotbar-btn" id="btnEatDrink">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+      </svg>
+      <span>Eat [E]</span>
+    </button>
+
+    <button class="hotbar-btn" id="btnRest">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M2 4v16"></path>
+        <path d="M2 8h18a2 2 0 0 1 2 2v10"></path>
+        <path d="M2 17h20"></path>
+      </svg>
+      <span>Rest [R]</span>
+    </button>
+
+    <!-- Resources Quick Readout -->
+    <div class="hotbar-slot" title="Wood">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#8d6e63" stroke-width="2"><line x1="18" y1="2" x2="6" y2="22"></line><line x1="6" y1="2" x2="18" y2="22"></line></svg>
+      <span id="resWood">0</span>
+    </div>
+
+    <div class="hotbar-slot" title="Stone">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#b0bec5" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon></svg>
+      <span id="resStone">0</span>
+    </div>
+
+    <div class="hotbar-slot" title="Vines">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#66bb6a" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><path d="M12 2v14"></path></svg>
+      <span id="resVines">0</span>
+    </div>
+
+    <div class="hotbar-slot" title="Leaves">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#26a69a" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path></svg>
+      <span id="resLeaves">0</span>
+    </div>
+
+    <div class="hotbar-slot" title="Food Stored">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ffca28" stroke-width="2"><circle cx="12" cy="12" r="9"></circle></svg>
+      <span id="resFood">0</span>
+    </div>
+
+    <div class="hotbar-slot" title="Active Tool">
+      <span id="equippedTool" style="color: #ffdd80;">Bare Hands</span>
+    </div>
+  </footer>
+
+  <!-- Modals -->
+
+  <!-- Crafting Book Modal -->
+  <div class="modal-overlay" id="modalCrafting">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+          Survival Crafting Manual
+        </h3>
+        <button class="modal-close" data-close="modalCrafting">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
-
-      <!-- Touch Screen Mobile Controls -->
-      <div class="touch-controls">
-        <!-- Virtual D-Pad -->
-        <div class="touch-dpad">
-          <button class="dpad-btn dpad-up" id="btnUp">▲</button>
-          <button class="dpad-btn dpad-left" id="btnLeft">◀</button>
-          <button class="dpad-btn dpad-right" id="btnRight">▶</button>
-          <button class="dpad-btn dpad-down" id="btnDown">▼</button>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="touch-actions">
-          <!-- Attack / Fireball -->
-          <button class="action-btn" id="btnAttack" title="Attack with Fireball">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-            </svg>
-            <span>Attack</span>
-          </button>
-
-          <!-- Fuel Bonfire -->
-          <button class="action-btn action-fuel" id="btnFuel" title="Feed Bonfire (+Wood)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2c1.5 3 4 5 4 8a4 4 0 0 1-8 0c0-3 2.5-5 4-8z"></path>
-            </svg>
-            <span>Fuel</span>
-          </button>
-
-          <!-- Drop Pumpkin Ward -->
-          <button class="action-btn action-ward" id="btnWard" title="Place Pumpkin Ward (-2 Embers)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="9"></circle>
-              <path d="M12 3v3m-3 6l1 1-1 1m6-2l-1 1 1 1"></path>
-            </svg>
-            <span>Ward</span>
-          </button>
-        </div>
+      <div class="modal-body">
+        <p style="font-size: 0.8rem; color: #94bade; margin-bottom: 12px;">Combine harvested resources to craft tools, defensive structures, and escape equipment:</p>
+        <div class="crafting-grid" id="craftingGrid"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" data-close="modalCrafting">Close Manual</button>
       </div>
     </div>
-  </main>
+  </div>
 
   <!-- How to Play Modal -->
   <div class="modal-overlay" id="modalHelp">
-    <div class="modal-box">
+    <div class="modal-dialog">
       <div class="modal-header">
         <h3>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -155,64 +201,60 @@
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
             <line x1="12" y1="17" x2="12.01" y2="17"></line>
           </svg>
-          How to Play: Cursed Island
+          Castaway Survival Guide
         </h3>
         <button class="modal-close" data-close="modalHelp">
           <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
       <div class="modal-body">
-        <h4 style="color: #ffaa32; margin-bottom: 6px;">The Survival Objective:</h4>
-        <p>You are trapped on a haunted island under the Blood Moon. Maintain the sacred <strong>Hallowed Pumpkin Bonfire</strong> at the island's center and survive the onslaught of nightmare monsters!</p>
+        <h4 style="color: #ffdd80; margin-bottom: 6px;">The Objective:</h4>
+        <p>You crashed onto an uncharted tropical island. Manage your four vitals (Health, Hunger, Thirst, Energy), gather resources, construct shelters, and find a way to escape back to civilization.</p>
 
-        <h4 style="color: #ffaa32; margin: 12px 0 6px;">Day/Night Cycle:</h4>
+        <h4 style="color: #ffdd80; margin: 12px 0 6px;">Controls:</h4>
         <ul style="margin-left: 20px; font-size: 0.85rem; line-height: 1.6;">
-          <li><strong>Twilight Phase (30s):</strong> Monsters are dormant. Scour the island shores to gather <strong>Cursed Driftwood</strong> and <strong>Soul Embers</strong>.</li>
-          <li><strong>Blood Moon Phase (30s):</strong> The crimson eclipse begins! Zombie Scarecrows and Shadow Bats assault your bonfire. Repel them!</li>
+          <li><strong>Movement:</strong> WASD / Arrow Keys or Touch D-pad.</li>
+          <li><strong>Action:</strong> Spacebar or [ACT] button (chops trees, mines rocks, picks berries, drinks water, hunts wildlife).</li>
+          <li><strong>Crafting:</strong> [C] key or [Craft] button.</li>
+          <li><strong>Consume:</strong> [E] key or [Eat] button.</li>
+          <li><strong>Rest / Sleep:</strong> [R] key or [Rest] button near a campfire or shelter.</li>
         </ul>
 
-        <h4 style="color: #ffaa32; margin: 12px 0 6px;">Controls:</h4>
-        <ul style="margin-left: 20px; font-size: 0.85rem; line-height: 1.6;">
-          <li><strong>Movement:</strong> WASD or Arrow Keys (or On-Screen Touch D-pad).</li>
-          <li><strong>Attack:</strong> Spacebar or Touch Attack button (hurls Pumpkin Fireballs).</li>
-          <li><strong>Fuel Bonfire:</strong> Press <strong>F</strong> or Touch Fuel button when near the Bonfire. (Consumes 2 Wood to replenish flame).</li>
-          <li><strong>Place Ward:</strong> Press <strong>E</strong> or Touch Ward button. (Consumes 2 Embers to place an explosive pumpkin trap).</li>
-        </ul>
-
-        <h4 style="color: #ffaa32; margin: 12px 0 6px;">Critical Warning:</h4>
-        <p style="font-size: 0.85rem; color: #ff5983;">
-          If the Bonfire fuel drops to 0%, the protective light circle will collapse and the encroaching shadow mist will swiftly devour you!
+        <h4 style="color: #ffdd80; margin: 12px 0 6px;">Escape Routes:</h4>
+        <p style="font-size: 0.85rem; color: #81d4fa;">
+          1. <strong>The Seaworthy Raft:</strong> Craft a raft and launch from the shore.<br>
+          2. <strong>The SOS Radio Beacon:</strong> Salvage the plane's battery and erect an antenna on the high cliff!
         </p>
       </div>
       <div class="modal-footer">
-        <button class="btn-primary" data-close="modalHelp">Begin Survival</button>
+        <button class="btn-primary" data-close="modalHelp">Back to Island</button>
       </div>
     </div>
   </div>
 
-  <!-- Game Over Modal -->
-  <div class="modal-overlay" id="modalGameOver">
-    <div class="modal-box">
-      <div class="modal-body gameover-card">
-        <h2 class="gameover-title" id="goTitle">CONSUMED BY DARKNESS</h2>
-        <p style="color: #c9a7eb;" id="goMessage">The hallowed flame extinguished, leaving the cursed island in eternal shadow.</p>
+  <!-- Endings Modal -->
+  <div class="modal-overlay" id="modalEnding">
+    <div class="modal-dialog">
+      <div class="modal-body ending-card">
+        <h2 class="ending-title" id="endingTitle">RESCUED!</h2>
+        <div style="font-size: 0.95rem; color: #d1e7fc; line-height: 1.6; margin: 14px 0;" id="endingDesc"></div>
 
-        <div class="gameover-stats">
+        <div class="ending-stats">
           <div class="stat-item">
-            <span class="stat-val" id="statNights">1</span>
-            <span class="stat-lbl">Nights Survived</span>
+            <span class="stat-val" id="statDays">1</span>
+            <span class="stat-lbl">Days Survived</span>
           </div>
           <div class="stat-item">
-            <span class="stat-val" id="statSlain">0</span>
-            <span class="stat-lbl">Monsters Slain</span>
+            <span class="stat-val" id="statCrafted">0</span>
+            <span class="stat-lbl">Items Crafted</span>
           </div>
           <div class="stat-item">
             <span class="stat-val" id="statScore">0</span>
-            <span class="stat-lbl">Final Score</span>
+            <span class="stat-lbl">Survival Score</span>
           </div>
         </div>
 
-        <button class="btn-primary" id="restartBtn" style="width: 100%; padding: 12px; font-size: 1.05rem;">Play Again</button>
+        <button class="btn-primary" id="btnRestartGame" style="width: 100%; padding: 10px; font-size: 1rem;">Play Again</button>
       </div>
     </div>
   </div>
