@@ -424,10 +424,10 @@ const GAMES_REGISTRY = [
   },
   {
     "id": "haunted-house_debasmita",
-    "title": "Haunted House: Phantom Manor",
+    "title": "Haunted House: The Curse Within",
     "category": "Adventure / Horror",
     "lucideIcon": "ghost",
-    "description": "Explore the shadowy corridors of Phantom Manor on Halloween night. Use your dynamic flashlight beam to banish vengeful spirits, collect cursed relic keys, and escape before your sanity fades.",
+    "description": "You wake up inside an abandoned Victorian mansion with no memory of how you arrived. Explore mysterious rooms, search for keys and secret passages, discover torn diary entries, solve cryptic puzzles, evade wandering paranormal entities, and uncover the dark history of the Blackwood curse before the house claims your soul.",
     "author": "Debasmita Bose",
     "github": "DebasmitaBose0",
     "role": "Project Admin & Lead",
@@ -435,13 +435,13 @@ const GAMES_REGISTRY = [
     "tags": [
       "Halloween",
       "Horror",
-      "Action",
-      "Survival",
+      "Mystery",
+      "Escape Room",
       "NSOC26"
     ],
     "stars": 30,
     "featured": true,
-    "difficulty": "Medium",
+    "difficulty": "Hard",
     "releaseDate": "2026-10-31"
   },
   {
@@ -887,7 +887,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "DebasmitaBose0",
     "avatarInitial": "D",
     "role": "Project Admin & Lead (NSOC '26)",
-    "commits": 213,
+    "commits": 218,
     "gamesCount": 6,
     "mechanicsBonus": 2,
     "platformPRs": 2,
@@ -898,7 +898,7 @@ const CONTRIBUTORS_REGISTRY = [
       "Cursed Island: Halloween Survival",
       "Cyber Neon Pong",
       "Halloween Escape: Witch's Crypt",
-      "Haunted House: Phantom Manor",
+      "Haunted House: The Curse Within",
       "Quantum Memory Matrix"
     ]
   },
@@ -907,7 +907,7 @@ const CONTRIBUTORS_REGISTRY = [
     "github": "Babin123456",
     "avatarInitial": "B",
     "role": "Arcade Developer (NSOC '26)",
-    "commits": 145,
+    "commits": 151,
     "gamesCount": 25,
     "mechanicsBonus": 2,
     "platformPRs": 29,

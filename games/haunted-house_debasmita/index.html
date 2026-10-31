@@ -3,165 +3,339 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Haunted House: Phantom Manor - ArcadeVerse</title>
+  <title>Haunted House: The Curse Within</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="hh-container">
-    <div class="hh-ambient-fog" aria-hidden="true"></div>
+  <!-- Ambient & FX Overlays -->
+  <div class="lightning-flash" id="lightningFx"></div>
+  <div class="panic-vignette" id="panicVignette"></div>
+  <div class="horror-overlay"></div>
 
-    <!-- Arcade HUD -->
-    <header class="hh-hud">
-      <div class="hh-brand-group">
-        <svg class="hh-pumpkin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 2v3m-3-1 2 2m4-2-2 2"></path>
-          <path d="M12 21a9 9 0 0 0 9-8c0-4.5-3.5-7-9-7s-9 2.5-9 7a9 9 0 0 0 9 8z"></path>
-          <path d="M9 13v.01M15 13v.01M9 17c1 1 2 1.5 3 1.5s2-.5 3-1.5"></path>
-        </svg>
-        <div class="hh-title-wrap">
-          <h1>Phantom Manor</h1>
-        </div>
-        <span class="hh-tag">Halloween '26</span>
-      </div>
-
-      <div class="hh-stats-row">
-        <!-- Sanity Meter -->
-        <div class="hh-stat-item" title="Sanity Level - decreases when ghosts are near!">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
-          </svg>
-          <div class="hh-sanity-bar-wrap">
-            <div id="hh-sanity-fill" class="hh-sanity-fill"></div>
-          </div>
-        </div>
-
-        <!-- Relic Keys Collected -->
-        <div class="hh-stat-item" title="Cursed Relic Keys Collected">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="7.5" cy="15.5" r="5.5"></circle>
-            <path d="m21 2-9.6 9.6m5.6-3.6 2 2m-4 0 2 2"></path>
-          </svg>
-          <div class="hh-keys-pill">
-            <span id="hh-keys-count">0</span> / 3
-          </div>
-        </div>
-
-        <!-- Spirits Banished Score -->
-        <div class="hh-stat-item" title="Ghosts Banished">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18h6m-3-4v8m-5-8a7 7 0 1 1 10 0v2H7v-2Z"></path>
-          </svg>
-          <span id="hh-score">0</span> PTS
-        </div>
-      </div>
-
-      <div class="hh-hud-actions">
-        <button id="hh-btn-sound" class="hh-btn-icon" type="button" aria-label="Toggle Sound" title="Sound: ON">
-          <svg id="hh-sound-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07m3.54-10.61a10 10 0 0 1 0 14.14"></path>
-          </svg>
-        </button>
-        <button id="hh-btn-help" class="hh-btn-icon" type="button" aria-label="How to Play" title="How to Play">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3m.08 4h.01"></path>
-          </svg>
-        </button>
-      </div>
-    </header>
-
-    <!-- Canvas Simulation Area -->
-    <main class="hh-canvas-wrapper">
-      <canvas id="hh-canvas"></canvas>
-
-      <!-- Mobile Touch Controls Overlay -->
-      <div class="hh-mobile-controls" id="hh-mobile-controls">
-        <div class="hh-dpad">
-          <button class="hh-dpad-btn up" id="hh-touch-up" type="button" aria-label="Move Up">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>
-          </button>
-          <button class="hh-dpad-btn left" id="hh-touch-left" type="button" aria-label="Move Left">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
-          </button>
-          <button class="hh-dpad-btn down" id="hh-touch-down" type="button" aria-label="Move Down">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
-          </button>
-          <button class="hh-dpad-btn right" id="hh-touch-right" type="button" aria-label="Move Right">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
-          </button>
-        </div>
-
-        <div class="hh-action-buttons">
-          <button class="hh-touch-btn" id="hh-touch-burst" type="button">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/></svg>
-            <span>UV BURST</span>
-          </button>
-        </div>
-      </div>
-    </main>
-
-    <!-- Start / How to Play Modal Screen -->
-    <div class="hh-overlay" id="hh-modal-instructions">
-      <div class="hh-modal-card">
-        <span class="hh-modal-badge">Halloween 2026 Special</span>
-        <h2>HAUNTED HOUSE: PHANTOM MANOR</h2>
-        <p class="hh-modal-sub">Trapped inside a haunted Victorian manor on Halloween night. Vengeful phantoms lurk in the dark corridors. Find the 3 relic keys and escape before your sanity breaks!</p>
-
-        <div class="hh-instructions-grid">
-          <div class="hh-inst-card">
-            <h4>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-              Flashlight & UV Beam
-            </h4>
-            <p>Your flashlight automatically points where you move. Aim your light cone directly at ghosts to vaporize them!</p>
-          </div>
-
-          <div class="hh-inst-card">
-            <h4>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="15.5" r="5.5"></circle><path d="m21 2-9.6 9.6m5.6-3.6 2 2m-4 0 2 2"></path></svg>
-              3 Cursed Keys
-            </h4>
-            <p>Explore the manor rooms to uncover 3 glowing Relic Keys. Once collected, rush to the golden Exit Gate!</p>
-          </div>
-
-          <div class="hh-inst-card">
-            <h4>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
-              Sanity & Candlesticks
-            </h4>
-            <p>Being near ghosts drains your sanity. Touch glowing salt candlesticks and Jack-o'-Lanterns to restore sanity!</p>
-          </div>
-
-          <div class="hh-inst-card">
-            <h4>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
-              Controls
-            </h4>
-            <p><strong>Move:</strong> WASD or Arrow Keys / Touch D-Pad.<br><strong>Burst:</strong> Spacebar or UV Burst Button.</p>
-          </div>
-        </div>
-
-        <button id="hh-btn-start" class="hh-btn-primary" type="button">
-          <span>ENTER THE MANOR</span>
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
-        </button>
+  <!-- Header HUD -->
+  <header class="mansion-header">
+    <div class="title-box">
+      <svg class="title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 21h18"></path>
+        <path d="M5 21V7l7-4 7 4v14"></path>
+        <path d="M9 10h2v3H9z"></path>
+        <path d="M13 10h2v3h-2z"></path>
+        <path d="M10 21v-4h4v4"></path>
+      </svg>
+      <div>
+        <h1>BLACKWOOD MANOR</h1>
+        <p>The Curse Within - 1898</p>
       </div>
     </div>
 
-    <!-- Game Over / Victory Modal -->
-    <div class="hh-overlay hidden" id="hh-modal-gameover">
-      <div class="hh-modal-card">
-        <span class="hh-modal-badge" id="hh-go-badge">Expedition Complete</span>
-        <h2 id="hh-go-title">MANOR ESCAPED!</h2>
-        <p class="hh-modal-sub" id="hh-go-desc">You banished the dark spirits, unlocked the gates, and survived the night.</p>
-        <div style="margin-bottom: 1.5rem; font-size: 1.8rem; font-weight: 800; color: var(--hh-orange);">
-          Score: <span id="hh-final-score">0</span> PTS
+    <!-- Meters & Threat Status -->
+    <div class="header-meters">
+      <!-- Sanity Meter -->
+      <div class="meter-group" title="Mental Sanity">
+        <span class="meter-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#80deea" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 8v4m0 4h.01"></path>
+          </svg>
+          Sanity
+        </span>
+        <div class="meter-track">
+          <div class="meter-fill-sanity" id="sanityBar" style="width: 100%;"></div>
         </div>
-        <button id="hh-btn-restart" class="hh-btn-primary" type="button">
-          <span>PLAY AGAIN</span>
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
+      </div>
+
+      <!-- Flashlight Battery Meter -->
+      <div class="meter-group" title="Flashlight Battery">
+        <span class="meter-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffb703" stroke-width="2">
+            <rect x="2" y="7" width="16" height="10" rx="2" ry="2"></rect>
+            <line x1="22" y1="11" x2="22" y2="13"></line>
+          </svg>
+          Power
+        </span>
+        <div class="meter-track">
+          <div class="meter-fill-battery" id="batteryBar" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- Paranormal Threat Indicator -->
+      <div class="threat-badge" id="threatBadge">Quiet</div>
+    </div>
+
+    <!-- Controls -->
+    <div class="header-actions">
+      <button class="btn-icon" id="soundToggle" title="Audio Toggle">
+        <svg id="soundIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+      </button>
+      <button class="btn-icon" id="helpBtn" title="Investigator's Guide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Room Navigation Bar -->
+  <nav class="rooms-nav" id="roomsNav">
+    <span class="nav-label">Locations:</span>
+    <button class="room-tab active" data-room="porch">Entrance Porch</button>
+    <button class="room-tab locked" data-room="foyer" id="tabFoyer">Grand Foyer</button>
+    <button class="room-tab locked" data-room="parlor" id="tabParlor">Living Room</button>
+    <button class="room-tab locked" data-room="library" id="tabLibrary">Library</button>
+    <button class="room-tab locked" data-room="kitchen" id="tabKitchen">Kitchen</button>
+    <button class="room-tab locked" data-room="bedroom" id="tabBedroom">Master Bedroom</button>
+    <button class="room-tab locked" data-room="basement" id="tabBasement">Dark Basement</button>
+  </nav>
+
+  <!-- Main Horror Viewport -->
+  <main class="stage-viewport">
+    <div class="mansion-frame" id="mansionFrame">
+      <!-- 2D Canvas Scene Rendering -->
+      <canvas id="mansionCanvas" width="960" height="540"></canvas>
+
+      <!-- Interactive Hotspots Layer (dynamically populated by room) -->
+      <div class="hotspots-layer" id="hotspotsLayer"></div>
+
+      <!-- Paranormal Threat Alert -->
+      <div class="paranormal-banner" id="paranormalBanner">
+        A COLD SHADOW IS APPROACHING! HIDE IMMEDIATELY!
+      </div>
+    </div>
+
+    <!-- Bottom Action & Inventory Dock -->
+    <div class="bottom-dock">
+      <div class="dock-actions">
+        <!-- Flashlight Button -->
+        <button class="dock-btn" id="btnFlashlight" title="Toggle Flashlight Beam">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span id="lightLabel">Light: ON</span>
         </button>
+
+        <!-- Hide Button -->
+        <button class="dock-btn btn-hide" id="btnHide" title="Hide from lurking entities">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span id="hideLabel">Hide</span>
+        </button>
+
+        <!-- Evidence Journal Button -->
+        <button class="dock-btn" id="btnJournal" title="View Discovered Notes & Lore">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <span>Case Journal</span>
+        </button>
+      </div>
+
+      <!-- Inventory Tray (6 Slots) -->
+      <div class="inventory-tray" id="inventoryTray">
+        <!-- Built by JS -->
+      </div>
+
+      <div class="dock-hint" id="dockHint">
+        Search the overgrown grounds to find a way inside the locked mansion.
+      </div>
+    </div>
+  </main>
+
+  <!-- Modals -->
+
+  <!-- Case Journal Modal -->
+  <div class="modal-backdrop" id="modalJournal">
+    <div class="modal-window">
+      <div class="modal-head">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          Blackwood Case Journal
+        </h3>
+        <button class="modal-close-btn" data-close="modalJournal">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-content" id="journalContent">
+        <p style="color: #a894bd; font-style: italic;">No evidence discovered yet. Search diaries, photographs, and records throughout the manor.</p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-primary" data-close="modalJournal">Close Journal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Living Room Safe Dial Modal -->
+  <div class="modal-backdrop" id="modalSafe">
+    <div class="modal-window">
+      <div class="modal-head">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <circle cx="12" cy="16" r="2"></circle>
+          </svg>
+          Lord Blackwood's Wall Safe
+        </h3>
+        <button class="modal-close-btn" data-close="modalSafe">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-content">
+        <p>A heavy brass dial safe hidden behind the torn family painting. A small handwritten clue is taped below the tumbler:</p>
+        <p style="text-align: center; font-style: italic; color: #ffca7a; margin: 12px 0; border-left: 3px solid #ffca7a; padding: 6px 12px; background: rgba(255, 202, 122, 0.08);">
+          "The year Eleanor drew her final breath..." (Check the diary records)
+        </p>
+
+        <div class="combo-dial-row">
+          <div class="combo-digit-box">
+            <button class="digit-btn" data-dial="0" data-dir="up">▲</button>
+            <div class="digit-display" id="safeDigit0">1</div>
+            <button class="digit-btn" data-dial="0" data-dir="down">▼</button>
+          </div>
+          <div class="combo-digit-box">
+            <button class="digit-btn" data-dial="1" data-dir="up">▲</button>
+            <div class="digit-display" id="safeDigit1">8</div>
+            <button class="digit-btn" data-dial="1" data-dir="down">▼</button>
+          </div>
+          <div class="combo-digit-box">
+            <button class="digit-btn" data-dial="2" data-dir="up">▲</button>
+            <div class="digit-display" id="safeDigit2">9</div>
+            <button class="digit-btn" data-dial="2" data-dir="down">▼</button>
+          </div>
+          <div class="combo-digit-box">
+            <button class="digit-btn" data-dial="3" data-dir="up">▲</button>
+            <div class="digit-display" id="safeDigit3">0</div>
+            <button class="digit-btn" data-dial="3" data-dir="down">▼</button>
+          </div>
+        </div>
+        <p id="safeStatus" style="text-align: center; color: #ffaa32; min-height: 1.2rem;"></p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-primary" id="btnUnlockSafe">Turn Tumbler</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Basement Breaker / Fusebox Modal -->
+  <div class="modal-backdrop" id="modalBreaker">
+    <div class="modal-window">
+      <div class="modal-head">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          Electrical Breaker Box
+        </h3>
+        <button class="modal-close-btn" data-close="modalBreaker">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-content">
+        <p>The auxiliary circuit breaker controls the basement lights and the electromagnetic release on the storm escape door.</p>
+        <p style="color: #80deea; margin: 10px 0;">Align the switches to balance the electrical charge:</p>
+
+        <div style="display: flex; justify-content: center; gap: 14px; margin: 20px 0;" id="breakerSwitchesRow">
+          <!-- Switches built by JS -->
+        </div>
+        <p id="breakerStatus" style="text-align: center; color: #ffca7a; min-height: 1.2rem;"></p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-primary" id="btnEngageBreaker">Engage Master Lever</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ritual Altar Modal (Ending 2) -->
+  <div class="modal-backdrop" id="modalAltar">
+    <div class="modal-window">
+      <div class="modal-head">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          Crypt Ritual Pentagram
+        </h3>
+        <button class="modal-close-btn" data-close="modalAltar">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-content">
+        <p>Carved into the cold flagstones is the demonic pentagram where Lord Blackwood bound the dark entity in 1898. To cleanse the curse, three sacred components must be consecrated:</p>
+        <ul style="margin: 12px 0 12px 20px; font-size: 0.85rem; line-height: 1.8;">
+          <li id="altarReqLocket">1. <strong>Eleanor's Golden Locket</strong> (found in the Master Bedroom Music Box)</li>
+          <li id="altarReqCandles">2. <strong>Light 4 Sacred Black Candles</strong> (requires Matches)</li>
+          <li id="altarReqSalt">3. <strong>Consecrated Salt Circle</strong> (found in the Kitchen Pantry)</li>
+        </ul>
+        <p id="altarStatus" style="text-align: center; color: #00f2fe; min-height: 1.4rem; font-weight: bold;"></p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-secondary" id="btnQuickEscape">Flee Through Storm Door</button>
+        <button class="btn-primary" id="btnPerformRitual">Perform Exorcism</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- How to Play Modal -->
+  <div class="modal-backdrop" id="modalHelp">
+    <div class="modal-window">
+      <div class="modal-head">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          Investigator's Survival Guide
+        </h3>
+        <button class="modal-close-btn" data-close="modalHelp">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-content">
+        <h4 style="color: #ffca7a; margin-bottom: 6px;">The Premise:</h4>
+        <p>A boy wakes inside Blackwood Manor on Halloween night. The front door is sealed shut, strange whispers echo down the halls, and a dark entity lurks in the shadows.</p>
+
+        <h4 style="color: #ffca7a; margin: 12px 0 6px;">Exploration & Puzzles:</h4>
+        <ul style="margin-left: 20px; font-size: 0.85rem; line-height: 1.6;">
+          <li><strong>Navigation:</strong> Use the top Room Tabs to move between discovered rooms.</li>
+          <li><strong>Hotspots:</strong> Move your cursor/touch over objects in the room to inspect them. Collect keys, diary entries, and tools.</li>
+          <li><strong>Inventory:</strong> Tap an item to select it, then interact with locks and mechanisms.</li>
+          <li><strong>Flashlight:</strong> Keep light on to inspect dark corners, but watch battery depletion. Find spare batteries in the kitchen.</li>
+        </ul>
+
+        <h4 style="color: #ffca7a; margin: 12px 0 6px;">Surviving Paranormal Encounters:</h4>
+        <p style="font-size: 0.85rem; color: #ff8595;">
+          When a cold chill sweeps through the room and the panic vignette pulses red:
+          <strong>Immediately tap the "HIDE" button or turn off your flashlight!</strong> Failing to hide before the entity arrives causes severe sanity damage.
+        </p>
+
+        <h4 style="color: #ffca7a; margin: 12px 0 6px;">Multiple Endings:</h4>
+        <p style="font-size: 0.85rem; color: #bca0d6;">
+          Depending on whether you escape through the storm door or cleanse the ritual altar, you will discover one of multiple distinct story endings!
+        </p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-primary" data-close="modalHelp">Enter the Manor</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Endings Modal -->
+  <div class="modal-backdrop" id="modalEnding">
+    <div class="modal-window">
+      <div class="modal-content ending-card">
+        <h2 class="ending-title" id="endingTitle">ESCAPE</h2>
+        <div class="ending-desc" id="endingText"></div>
+        <button class="btn-primary" id="btnRestartGame" style="padding: 10px 24px; font-size: 1rem;">Play Again</button>
       </div>
     </div>
   </div>
