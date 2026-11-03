@@ -133,6 +133,94 @@ A huge thank you to all the amazing developers building, contributing, and refin
   <img src="https://contrib.rocks/image?repo=DebasmitaBose0/ArcadeVerse" alt="ArcadeVerse Contributors" />
 </a>
 
+<br><br>
+<table>
+  <tr>
+    <td align="center" width="20%">
+      <a href="https://github.com/DebasmitaBose0">
+        <img src="https://github.com/DebasmitaBose0.png?size=100" width="80px" alt="Debasmita Bose" style="border-radius: 50%;" /><br />
+        <sub><b>Debasmita Bose</b></sub>
+      </a><br />
+      <sub>👑 Project Admin & Lead</sub><br />
+      <a href="https://github.com/DebasmitaBose0"><sub>@DebasmitaBose0</sub></a>
+    </td>
+    <td align="center" width="20%">
+      <a href="https://github.com/Babin123456">
+        <img src="https://github.com/Babin123456.png?size=100" width="80px" alt="Babin Bid" style="border-radius: 50%;" /><br />
+        <sub><b>Babin Bid</b></sub>
+      </a><br />
+      <sub>🎮 Arcade Developer</sub><br />
+      <a href="https://github.com/Babin123456"><sub>@Babin123456</sub></a>
+    </td>
+    <td align="center" width="20%">
+      <a href="https://github.com/joitapaul">
+        <img src="https://github.com/joitapaul.png?size=100" width="80px" alt="Joita Paul" style="border-radius: 50%;" /><br />
+        <sub><b>Joita Paul</b></sub>
+      </a><br />
+      <sub>🕹️ Active Contributor</sub><br />
+      <a href="https://github.com/joitapaul"><sub>@joitapaul</sub></a>
+    </td>
+    <td align="center" width="20%">
+      <a href="https://github.com/mistu7debnath">
+        <img src="https://github.com/mistu7debnath.png?size=100" width="80px" alt="Manisha Debnath" style="border-radius: 50%;" /><br />
+        <sub><b>Manisha Debnath</b></sub>
+      </a><br />
+      <sub>🕹️ Contributor</sub><br />
+      <a href="https://github.com/mistu7debnath"><sub>@mistu7debnath</sub></a>
+    </td>
+    <td align="center" width="20%">
+      <a href="https://github.com/hrshjswniii">
+        <img src="https://github.com/hrshjswniii.png?size=100" width="80px" alt="Harsh Jaiswani" style="border-radius: 50%;" /><br />
+        <sub><b>Harsh Jaiswani</b></sub>
+      </a><br />
+      <sub>🌱 Active Contributor</sub><br />
+      <a href="https://github.com/hrshjswniii"><sub>@hrshjswniii</sub></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="20%">
+      <a href="https://github.com/chanchall26">
+        <img src="https://github.com/chanchall26.png?size=100" width="80px" alt="Chanchal Gupta" style="border-radius: 50%;" /><br />
+        <sub><b>Chanchal Gupta</b></sub>
+      </a><br />
+      <sub>🎮 Arcade Developer</sub><br />
+      <a href="https://github.com/chanchall26"><sub>@chanchall26</sub></a>
+    </td>
+    <td align="center" width="20%">
+      <a href="https://github.com/pratikadamas">
+        <img src="https://github.com/pratikadamas.png?size=100" width="80px" alt="Pratik Giri" style="border-radius: 50%;" /><br />
+        <sub><b>Pratik Giri</b></sub>
+      </a><br />
+      <sub>⚡ Contributor</sub><br />
+      <a href="https://github.com/pratikadamas"><sub>@pratikadamas</sub></a>
+    </td>
+    <td align="center" width="20%">
+      <a href="https://github.com/pragna7">
+        <img src="https://github.com/pragna7.png?size=100" width="80px" alt="Pragna Seetha" style="border-radius: 50%;" /><br />
+        <sub><b>Pragna Seetha</b></sub>
+      </a><br />
+      <sub>🕹️ Contributor</sub><br />
+      <a href="https://github.com/pragna7"><sub>@pragna7</sub></a>
+    </td>
+    <td align="center" width="20%">
+      <a href="https://github.com/ArshiBansal">
+        <img src="https://github.com/ArshiBansal.png?size=100" width="80px" alt="Arshi Bansal" style="border-radius: 50%;" /><br />
+        <sub><b>Arshi Bansal</b></sub>
+      </a><br />
+      <sub>🧩 Puzzle Developer</sub><br />
+      <a href="https://github.com/ArshiBansal"><sub>@ArshiBansal</sub></a>
+    </td>
+    <td align="center" width="20%">
+      <a href="https://github.com/Anshuu2004">
+        <img src="https://github.com/Anshuu2004.png?size=100" width="80px" alt="Abhishek" style="border-radius: 50%;" /><br />
+        <sub><b>Abhishek</b></sub>
+      </a><br />
+      <sub>🌱 Contributor</sub><br />
+      <a href="https://github.com/Anshuu2004"><sub>@Anshuu2004</sub></a>
+    </td>
+  </tr>
+</table>
+
 <p align="center">
   <b>Want to be featured here?</b> Read our <a href="CONTRIBUTING.md"><b>Contribution Guide</b></a>, pick an open issue, and submit your Pull Request! 🚀
 </p>
